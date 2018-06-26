@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple Incremental</title>
+</head>
+
+<style type="text/css">
+
+	#inventory {
+		display: none;
+	}
+
+	#buyShop {
+		display: none;
+	}
+
+	html {
+		background-color: #eee;
+	}
+
+	body {
+		background-color: white;
+		font-family: sans-serif;
+		width: 300px;
+		margin: 0 auto;
+		text-align: center;
+		height: 100vh;
+	}
+
+	#inc {
+		font-size: 40px;
+	}
+
+	section {
+		margin: 10px;
+		padding: 10px;
+		background-color: white;
+		border: 1px solid #ddd;
+	}
+
+	#tabmenu {
+		padding: 0;
+	}
+
+	#tabmenu li {
+		display: inline-block;
+		list-style-type: none;
+		padding: 0 10px 0 5px;
+	}
+
+	#tabmenu li:not(:last-of-type) {
+		border-right: 1px solid #999;
+	}
+	
+	a {
+		color: cornflowerblue;
+		cursor: pointer;
+	}
+
+	#log {
+		margin: 5px;
+		padding: 0;
+		list-style-type: none;
+		display: flex;
+		flex-direction: column-reverse;
+		list-style-type: none;
+		padding: 0;
+	}
+
+	#log li:nth-last-child(n+10) {
+		display: none;
+	}
+
+	.button {
+		background-color: white;
+		border: 1px solid #666;
+		color: black;
+		padding: 5px 10px;
+		margin: 10px;
+		font-size: 1em;
+	}
+
+	.margin {
+		padding: 10px;
+	}
+
+	#logo {
+		display: block;
+		margin: 0 auto;
+		width: 150px;
+		height: 150px;
+		background-size: cover;
+		opacity: 0.8;
+		padding-top: 10px;
+		pointer-events: none;
+	}
+
+	h1, h3 {
+		margin: 0;
+		padding: 10px;
+		font-family: "Tahoma", serif;
+		color: #444;
+	}
+
+	h3 {
+		padding: 0;
+	}
+</style>
+
+<script type="text/javascript">
+	function dispClicker() {
+		document.getElementById("clicker").style.display = "block";
+		document.getElementById("inventory").style.display = "none";
+		document.getElementById("tabClicker").style.fontWeight = "bold";
+		document.getElementById("tabInventory").style.fontWeight = "normal";
+	}
+
+	function dispInventory() {
+		document.getElementById("clicker").style.display = "none";
+		document.getElementById("inventory").style.display = "block";
+		document.getElementById("tabClicker").style.fontWeight = "normal";
+		document.getElementById("tabInventory").style.fontWeight = "bold";
+	}
+
+	var clicks = 0;
+	var coins = 0;
+	var shops = 0;
+	var shopCost = 10;
+
+	function add() {
+		clicks++;
+		document.getElementById("inc").innerHTML = clicks;
+	}
+
+	function randCoin() {
+		if (Math.random() * 100 <= 10) {
+		var coinArray = [1, 2, 3, 4, 5];
+		var coinCount = coinArray[Math.floor(Math.random() * coinArray.length)];
+			coins = coins + coinCount;
+			document.getElementById("coins").innerHTML = coins;
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			li.appendChild(document.createTextNode("You gain "));
+			li.appendChild(document.createTextNode(coinCount));
+			li.style.color = "orange";
+			li.appendChild(document.createTextNode(" coins."));
+			ul.appendChild(li);
+		}
+	}
+
+	function buyShop() {
+		if (clicks >= shopCost) {
+			shops++;
+			clicks = clicks - shopCost;
+			shopCost = Math.floor(10 * Math.pow(1.05,shops));
+			document.getElementById("inc").innerHTML = clicks;
+			document.getElementById("shops").innerHTML = shops;
+			document.getElementById("shopCost").innerHTML = shopCost;
+		}
+	}
+
+	function shop() {
+		if (shops >= 1) {
+			clicks = clicks + shops;
+			document.getElementById("inc").innerHTML = clicks;
+		}
+	}
+
+	window.setInterval(function(){
+		shop();
+	}, 10000);
+
+	function walk() {
+		var ul = document.getElementById("log");
+		var li = document.createElement("li");
+		var myArray = ["You wander a bit further.", "Nothing happens.", "You take another step.", "Your feet move forward.", "You keep walking.", "You move forward.", "All is quiet.", "Your wandering continues"];
+		var char1 = myArray[Math.floor(Math.random() * myArray.length)];
+		li.appendChild(document.createTextNode(char1));
+		ul.appendChild(li);
+	}
+
+	function clearLog() {
+	var ul = document.getElementById("log");
+	var li = document.createElement("li");
+	ul.innerHTML = "";
+	li.appendChild(document.createTextNode("Log cleared."));
+	ul.appendChild(li);
+	}
+
+	function seeShop() {
+		if (clicks >= 5) {
+			document.getElementById("buyShop").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		seeShop();
+	}, 10);
+
+	function total(){
+		var total = ((0.1 * shops)).toFixed(1);
+		document.getElementById("total").innerHTML = total;
+	};
+
+	window.setInterval(function(){
+		total();
+	}, 10);
+</script>
+<body>
+	<h1>Questers</h1>
+	<span>Guy Briggs 2018</span>
+	
+<ul id="tabmenu">
+	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
+	<li><a id="tabInventory" onclick="dispInventory()">Inventory</a></li>
+</ul>
+
+<div id="clicker">
+	<section>
+		<div id="inc">0</div>
+		<span>Acclaim</span>
+		<div class="margin"><a class="button" onclick="add(), walk(), randCoin()">Fight</a></div>
+		<div><span id="total">0</span> aps</div>
+	</section>
+
+	<section>
+		<a onclick="clearLog()">Clear Log</a>
+		<ul id="log">
+			<li>Your adventure begins.</li>
+		</ul>
+	</section>
+
+	<section>
+		<h3>Barracks</h3>
+		<section id="buyShop">
+			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
+			<div title="acclaim per second">Power: 0.1 aps</div>
+			<div>Rogue Cost: <span id="shopCost">10</span></div>
+		</section>
+	</section>
+
+	<section>
+		<h3>Market</h3>
+		<div>Coins: <span id="coins">0</span>
+	</section>
+</div>
+
+<div id="inventory">
+	<section>
+		<div>Work in Progress!</div>
+	</section>
+</div>
+
+</body>
+</html>
