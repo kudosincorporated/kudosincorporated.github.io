@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Simple Incremental</title>
+	<title>Questers</title>
 </head>
 
 <style type="text/css">
@@ -10,7 +10,11 @@
 		display: none;
 	}
 
-	#buyShop {
+	#barracks {
+		display: none;
+	}
+
+	#market {
 		display: none;
 	}
 
@@ -105,6 +109,15 @@
 	h3 {
 		padding: 0;
 	}
+
+	#footer {
+		position: absolute;
+		bottom: 10px;
+		display: block;
+		width: 300px;
+		color: #aaa;
+		font-size: 12px;
+	}
 </style>
 
 <script type="text/javascript">
@@ -173,7 +186,7 @@
 	function walk() {
 		var ul = document.getElementById("log");
 		var li = document.createElement("li");
-		var myArray = ["You wander a bit further.", "Nothing happens.", "You take another step.", "Your feet move forward.", "You keep walking.", "You move forward.", "All is quiet.", "Your wandering continues"];
+		var myArray = ["You wander a bit further.", "You move to the next room.", "The fight is over.", "Your hands are bloodstained.", "The next door beckons.", "You fight with vigour.", "Your armour is battle-worn.", "You fight endlessly.", "You smell battle.", "You walk down a hallway.", "The door slams behind you.", "You smell treasure.", "All is quiet, finally."];
 		var char1 = myArray[Math.floor(Math.random() * myArray.length)];
 		li.appendChild(document.createTextNode(char1));
 		ul.appendChild(li);
@@ -187,14 +200,24 @@
 	ul.appendChild(li);
 	}
 
-	function seeShop() {
+	function seeBarracks() {
 		if (clicks >= 5) {
-			document.getElementById("buyShop").style.display = "block";
+			document.getElementById("barracks").style.display = "block";
 		}
 	}
 
 	window.setInterval(function(){
-		seeShop();
+		seeBarracks();
+	}, 10);
+
+	function seeMarket() {
+		if (coins >= 1) {
+			document.getElementById("market").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		seeMarket();
 	}, 10);
 
 	function total(){
@@ -208,7 +231,7 @@
 </script>
 <body>
 	<h1>Questers</h1>
-	<span>Guy Briggs 2018</span>
+	<div>An incremental... dungeon-crawler?</div>
 	
 <ul id="tabmenu">
 	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
@@ -226,22 +249,22 @@
 	<section>
 		<a onclick="clearLog()">Clear Log</a>
 		<ul id="log">
-			<li>Your adventure begins.</li>
+			<li>You enter the dungeon.</li>
 		</ul>
 	</section>
 
-	<section>
+	<section id="barracks">
 		<h3>Barracks</h3>
-		<section id="buyShop">
+		<section>
 			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
 			<div title="acclaim per second">Power: 0.1 aps</div>
 			<div>Rogue Cost: <span id="shopCost">10</span></div>
 		</section>
 	</section>
 
-	<section>
+	<section id="market">
 		<h3>Market</h3>
-		<div>Coins: <span id="coins">0</span>
+			<div>Coins: <span id="coins">0</span></div>
 	</section>
 </div>
 
@@ -250,6 +273,8 @@
 		<div>Work in Progress!</div>
 	</section>
 </div>
+
+<div id="footer">Guy Briggs 2018</div>
 
 </body>
 </html>
