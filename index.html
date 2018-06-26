@@ -18,6 +18,7 @@
 	}
 
 	body {
+		height: 100vh;
 		margin: 0;
 		background-color: #eee;
 		font-family: sans-serif;
@@ -25,13 +26,14 @@
 
 	#cover {
 		background-color: white;
-		width: 300px;
+		width: 350px;
 		margin: 0 auto;
 		text-align: center;
-		height: 100vh;
+		height: 100%;
+		position: relative;
 	}
 
-	@media screen and (max-width: 720px) {
+	@media screen and (max-width: 1000px) {
 		#cover {
 			width: 100%;
 		}
@@ -75,19 +77,26 @@
 		flex-direction: column-reverse;
 		list-style-type: none;
 		padding: 0;
+		min-height: 165px;
 	}
 
 	#log li:nth-last-child(n+10) {
 		display: none;
 	}
 
-	.button {
+	.button, .sb {
 		background-color: white;
 		border: 1px solid #666;
 		color: black;
 		padding: 5px 10px;
 		margin: 10px;
 		font-size: 1em;
+	}
+
+	.sb {
+		padding: 2px 5px;
+		font-size: 0.9em;
+		margin: 0;
 	}
 
 	.margin {
@@ -108,7 +117,7 @@
 	h1, h3 {
 		margin: 0;
 		padding: 10px;
-		font-family: "Tahoma", serif;
+		font-family: "Tahoma", sans-serif;
 		color: #444;
 	}
 
@@ -120,7 +129,10 @@
 		position: absolute;
 		bottom: 10px;
 		display: block;
-		width: 300px;
+		width: 100%;
+	}
+
+	.grey {
 		color: #aaa;
 		font-size: 12px;
 	}
@@ -207,7 +219,7 @@
 	}
 
 	function seeBarracks() {
-		if (clicks >= 5) {
+		if (clicks >= 10 || shops >= 1) {
 			document.getElementById("barracks").style.display = "block";
 		}
 	}
@@ -234,8 +246,41 @@
 	window.setInterval(function(){
 		total();
 	}, 10);
+
+	function save() {
+		var save = {
+			clicks: clicks,
+			coins: coins,
+			shops: shops,
+			shopCost: shopCost
+		};
+		localStorage.setItem("save",JSON.stringify(save));
+	}
+
+	window.setInterval(function(){
+		save();
+	}, 100);
+
+	function load() {
+		var savegame = JSON.parse(localStorage.getItem("save"));
+
+		if (typeof savegame.clicks !== "undefined") clicks = savegame.clicks;
+		if (typeof savegame.coins !== "undefined") coins = savegame.coins;
+		if (typeof savegame.shops !== "undefined") shops = savegame.shops;
+		if (typeof savegame.shopCost !== "undefined") shopCost = savegame.shopCost;
+
+		document.getElementById("inc").innerHTML = clicks;
+		document.getElementById("coins").innerHTML = coins;
+		document.getElementById("shops").innerHTML = shops;
+		document.getElementById("shopCost").innerHTML = shopCost;
+	}
+
+	function del() {
+		localStorage.removeItem("save");
+		location.reload();
+	}
 </script>
-<body>
+<body onload="load()">
 <div id="cover">
 
 	<h1>Questers</h1>
@@ -251,7 +296,7 @@
 		<div id="inc">0</div>
 		<span>Acclaim</span>
 		<div class="margin"><a class="button" onclick="add(), walk(), randCoin()">Fight</a></div>
-		<div><span id="total">0</span> aps</div>
+		<div><span id="total">0.0</span> aps</div>
 	</section>
 
 	<section>
@@ -282,7 +327,15 @@
 	</section>
 </div>
 
-<div id="footer">Guy Briggs 2018</div>
+	<span title="These processes are done automatically!">
+		<a class="sb" onclick="save()">Save</a>
+		<a class="sb" onclick="load()">Load</a>
+	</span>
+	<span title="Reloads the page.">
+		<a class="sb" onclick="del()">Delete</a>
+	</span>
+
+<div id="footer" class="grey">Guy Briggs 2018</div>
 
 </div>
 </body>
