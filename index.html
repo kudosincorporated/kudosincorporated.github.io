@@ -247,13 +247,21 @@
 		total();
 	}, 10);
 
+	//saving
+
+	window.onload = setTimeout( function() {
+		setInterval( function() {
+			save();
+		}, 10);
+	}, 3000);
+
 	function save() {
-		var save = {
-			clicks: clicks,
-			coins: coins,
-			shops: shops,
-			shopCost: shopCost
-		};
+	var save = {
+		clicks: clicks,
+		coins: coins,
+		shops: shops,
+		shopCost: shopCost
+	};
 		localStorage.setItem("save",JSON.stringify(save));
 	}
 
