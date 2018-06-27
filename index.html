@@ -16,9 +16,12 @@
 	#market {
 		display: none;
 	}
+	
+	#knightCover {
+		display: none;
+	}
 
 	body {
-		height: 100vh;
 		margin: 0;
 		background-color: #eee;
 		font-family: sans-serif;
@@ -29,8 +32,8 @@
 		width: 350px;
 		margin: 0 auto;
 		text-align: center;
+		min-height: 100vh;
 		height: 100%;
-		position: relative;
 	}
 
 	@media screen and (max-width: 1000px) {
@@ -156,7 +159,9 @@
 	var clicks = 0;
 	var coins = 0;
 	var shops = 0;
-	var shopCost = 10;
+	var shopCost = 15;
+	var knights = 0;
+	var knightCost = 100;
 
 	function add() {
 		clicks++;
@@ -183,7 +188,7 @@
 		if (clicks >= shopCost) {
 			shops++;
 			clicks = clicks - shopCost;
-			shopCost = Math.floor(10 * Math.pow(1.05,shops));
+			shopCost = Math.floor(15 * Math.pow(1.05,shops));
 			document.getElementById("inc").innerHTML = clicks;
 			document.getElementById("shops").innerHTML = shops;
 			document.getElementById("shopCost").innerHTML = shopCost;
@@ -200,6 +205,28 @@
 	window.setInterval(function(){
 		shop();
 	}, 10000);
+	
+	function buyKnight() {
+		if (clicks >= knightCost) {
+			knights++;
+			clicks = clicks - knightCost;
+			knightCost = Math.floor(100 * Math.pow(1.05,knights));
+			document.getElementById("inc").innerHTML = clicks;
+			document.getElementById("knights").innerHTML = knights;
+			document.getElementById("knightCost").innerHTML = knightCost;
+		}
+	}
+
+	function knight() {
+		if (knights >= 1) {
+			clicks = clicks + knights;
+			document.getElementById("inc").innerHTML = clicks;
+		}
+	}
+
+	window.setInterval(function(){
+		knight();
+	}, 2000);
 
 	function walk() {
 		var ul = document.getElementById("log");
@@ -237,9 +264,19 @@
 	window.setInterval(function(){
 		seeMarket();
 	}, 10);
+	
+	function seeKnights() {
+		if (clicks >= 50 || shops >= 1) {
+			document.getElementById("knightCover").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		seeKnights();
+	}, 10);
 
 	function total(){
-		var total = ((0.1 * shops)).toFixed(1);
+		var total = ((0.1 * shops) + (0.5 * knights)).toFixed(1);
 		document.getElementById("total").innerHTML = total;
 	};
 
@@ -252,7 +289,7 @@
 	window.onload = setTimeout( function() {
 		setInterval( function() {
 			save();
-		}, 10);
+		}, 1000);
 	}, 1000);
 
 	function save() {
@@ -260,7 +297,9 @@
 		clicks: clicks,
 		coins: coins,
 		shops: shops,
-		shopCost: shopCost
+		shopCost: shopCost,
+		knights: knights,
+		knightCost: knightCost
 	};
 		localStorage.setItem("save",JSON.stringify(save));
 	}
@@ -272,11 +311,15 @@
 		if (typeof savegame.coins !== "undefined") coins = savegame.coins;
 		if (typeof savegame.shops !== "undefined") shops = savegame.shops;
 		if (typeof savegame.shopCost !== "undefined") shopCost = savegame.shopCost;
+		if (typeof savegame.knights !== "undefined") knights = savegame.knights;
+		if (typeof savegame.knightCost !== "undefined") knightCost = savegame.knightCost;
 
 		document.getElementById("inc").innerHTML = clicks;
 		document.getElementById("coins").innerHTML = coins;
 		document.getElementById("shops").innerHTML = shops;
 		document.getElementById("shopCost").innerHTML = shopCost;
+		document.getElementById("knights").innerHTML = knights;
+		document.getElementById("knightCost").innerHTML = knightCost;
 	}
 
 	function del() {
@@ -315,7 +358,12 @@
 		<section>
 			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
 			<div title="acclaim per second">Power: 0.1 aps</div>
-			<div>Rogue Cost: <span id="shopCost">10</span></div>
+			<div>Rogue Cost: <span id="shopCost">15</span></div>
+		</section>
+		<section id="knightCover">
+			<div class="margin"><a class="button" onclick="buyKnight()">Hire Knight (<span id="knights">0</span>)</a></div>
+			<div title="acclaim per second">Power: 0.5 aps</div>
+			<div>Knight Cost: <span id="knightCost">100</span></div>
 		</section>
 	</section>
 
@@ -336,11 +384,11 @@
 		<a class="sb" onclick="load()">Load</a>
 	</span>
 	<span title="Reloads the page.">
-		<a class="sb" onclick="del()">Delete</a>
+		<a class="sb" onclick="del()">Reset</a>
 	</span>
 
 <div class="margin">
-	<div class="grey">version 1.5</div>
+	<div class="grey">version 1.6</div>
 	<div class="grey">Guy Briggs 2018</div>
 </div>
 
