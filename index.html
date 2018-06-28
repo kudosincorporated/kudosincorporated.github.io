@@ -145,19 +145,13 @@
 		padding: 0;
 		list-style-type: none;
 	}
-	
+
 	#list li {
+		font-weight: bold;
 		display: inline-block;
-		width: 50px;
-		height: 50px;
-		background-color: #eee;
-		overflow: hidden;
-		transition: 300ms;
-	}
-	
-	#list li:hover {
-		width: 200px;
-		height: 50px;
+		padding: 5px;
+		border: 1px solid #ddd;
+		margin: 2px;
 	}
 </style>
 
@@ -305,6 +299,7 @@
 	}, 10);
 
 	//saving
+	// loading
 
 	window.onload = setTimeout( function() {
 		setInterval( function() {
@@ -320,8 +315,16 @@
 		shopCost: shopCost,
 		knights: knights,
 		knightCost: knightCost
-	};
+		};
 		localStorage.setItem("save",JSON.stringify(save));
+
+			//the list
+
+		var items = document.querySelectorAll("#list li");
+		var array = Array.prototype.map.call(items, function(item) {
+			return item.textContent;
+		});
+		localStorage.setItem("list", JSON.stringify(array));
 	}
 
 	function load() {
@@ -340,13 +343,25 @@
 		document.getElementById("shopCost").innerHTML = shopCost;
 		document.getElementById("knights").innerHTML = knights;
 		document.getElementById("knightCost").innerHTML = knightCost;
+
+		//the list
+
+		var saved = JSON.parse(localStorage.getItem("list")) || [];
+		saved.forEach(addLi);
+	}
+
+	function addLi(text) {
+		var ul = document.getElementById("list");
+		var li = document.createElement("li");
+		li.appendChild(document.createTextNode(text));
+		ul.appendChild(li);
 	}
 
 	function del() {
 		localStorage.removeItem("save");
 		location.reload();
 	}
-	
+
 	//items
 	
 	function item() {
@@ -360,19 +375,173 @@
 		var ulList = document.getElementById("list");
 		var liList = document.createElement("li");
 	
-		var adjArray = ["Battleworn", "Magical"];
+		var adjArray = [
+"Broken",
+"Weak",
+"Dull",
+"Shoddy",
+"Awkward",
+
+"Large",
+"Dangerous",
+"Savage",
+"Sharp",
+"Tiny",
+"Bulky",
+"Heavy",
+"Light",
+"Rapid",
+"Hasty",
+"Intimidating",
+"Powerful",
+"Strong",
+"Intense",
+"Furious",
+"Quick",
+"Hurtful",
+
+"Keen",
+"Superior",
+"Forceful",
+"Deadly",
+"Agile",
+"Nimble",
+"Murderous",
+"Manic",
+"Sighted",
+"Unpleasant",
+"Arcane",
+"Adept",
+
+"Mystic",
+"Ruthless",
+"Frenzying",
+"Masterful",
+"Demonic",
+"Celestial",
+"Legendary",
+"Unreal",
+"Mythical",
+
+"Godly"
+		];
 		var adj = adjArray[Math.floor(Math.random() * adjArray.length)];
 		
-		var itemArray = ["Dagger", "Sword"];
+		var itemArray = [
+"Bola",
+"Boomerang",
+"Bow",
+"Crossbow",
+"Longbow",
+"Slingshot",
+"Dagger",
+"Tomahawk",
+
+"Spear",
+"Club",
+"Halberd",
+"Lance",
+"Sabre",
+"Sword",
+"Longsword",
+"Sheild",
+
+"Spellbook",
+"Runestone",
+"Gemstone",
+"Orbstone",
+"Staff",
+"Wand",
+"Scepter",
+"Robes"
+		];
 		var item = itemArray[Math.floor(Math.random() * itemArray.length)];
-		
+
 		liList.appendChild(document.createTextNode(adj + " " + item));
-		if (adj == "Battleworn") {
+
+		if (
+adj == "Broken" ||
+adj == "Weak" ||
+adj == "Dull" ||
+adj == "Shoddy" ||
+adj == "Awkward"
+		) {
+			liList.style.color = "gray";
+			liList.style.fontWeight = "normal";
+		}
+
+		if (
+adj == "Large" ||
+adj == "Dangerous" ||
+adj == "Savage" ||
+adj == "Sharp" ||
+adj == "Tiny" ||
+adj == "Bulky" ||
+adj == "Heavy" ||
+adj == "Light" ||
+adj == "Hurtful" ||
+adj == "Rapid" ||
+adj == "Hasty" ||
+adj == "Intimidating" ||
+adj == "Powerful" ||
+adj == "Strong" ||
+adj == "Intense" ||
+adj == "Furious" ||
+adj == "Quick"
+		) {
+			liList.style.color = "limegreen";
+		}
+
+		if (
+adj == "Keen" ||
+adj == "Superior" ||
+adj == "Forceful" ||
+adj == "Deadly" ||
+adj == "Agile" ||
+adj == "Nimble" ||
+adj == "Adept"
+		) {
+			liList.style.color = "turquoise";
+		}
+
+		if (
+adj == "Murderous" ||
+adj == "Manic" ||
+adj == "Sighted" ||
+adj == "Unpleasant" ||
+adj == "Arcane" ||
+adj == "Mystic" ||
+adj == "Ruthless"
+		) {
+			liList.style.color = "dodgerblue";
+		}
+
+		if (
+adj == "Frenzying" ||
+adj == "Masterful" ||
+adj == "Demonic" ||
+adj == "Unreal"
+		) {
 			liList.style.color = "coral";
 		}
-		if (adj == "Magical") {
-			liList.style.color = "cornflowerblue";
+
+		if (
+adj == "Legendary" ||
+adj == "Celestial" ||
+adj == "Mythical"
+		) {
+			liList.style.color = "orchid";
+			liList.style.fontStyle = "italic";
 		}
+
+		if (
+adj == "Godly"
+		) {
+			liList.style.color = "gold";
+			liList.style.fontStyle = "italic";
+			liList.style.textDecoration = "underline";
+		}
+
 		ulList.appendChild(liList);
 	}
 </script>
@@ -426,8 +595,10 @@
 
 <div id="inventory">
 	<section>
-		<ul id="list">
-		</ul>
+		<div id="listCover">
+			<ul id="list">
+			</ul>
+		</div>
 	</section>
 </div>
 
@@ -440,7 +611,7 @@
 	</span>
 
 <div class="margin">
-	<div class="grey">version 1.7</div>
+	<div class="grey">version 1.8</div>
 	<div class="grey">Guy Briggs 2018</div>
 </div>
 
