@@ -1,3 +1,6 @@
+
+
+function colorise() {
 	window.$(document).ready(function(){
 		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
 		.css({
@@ -50,6 +53,7 @@
 			"textDecoration" : "underline"
 		});
 	});
+}
 
 	function dispClicker() {
 		document.getElementById("clicker").style.display = "block";
