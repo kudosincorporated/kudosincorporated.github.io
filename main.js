@@ -1,58 +1,43 @@
-
-
 function colorise() {
-	window.$(document).ready(function(){
+
 		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
 		.css({
 			"color" : "gray",
 			"fontWeight" : "normal"
 		});
-	});
 
-	window.$(document).ready(function(){
 		$("li:contains(Large), li:contains(Dangerous), li:contains(Savage), li:contains(Sharp), li:contains(Tiny), li:contains(Bulky), li:contains(Heavy), li:contains(Light), li:contains(Rapid), li:contains(Hasty), li:contains(Intimidating), li:contains(Powerful), li:contains(Strong), li:contains(Intense), li:contains(Furious), li:contains(Quick)")
 		.css({
 			"color" : "limegreen"
 		});
-	});
 
-	window.$(document).ready(function(){
 		$("li:contains(Keen), li:contains(Superior), li:contains(Forceful), li:contains(Deadly), li:contains(Agile), li:contains(Nimble), li:contains(Adept)")
 		.css({
 			"color" : "turquoise"
 		});
-	});
 
-	window.$(document).ready(function(){
 		$("li:contains(Murderous), li:contains(Manic), li:contains(Sighted), li:contains(Unpleasant), li:contains(Mystic), li:contains(Ruthless)")
 		.css({
 			"color" : "dodgerblue"
 		});
-	});
 
-	window.$(document).ready(function(){
 		$("li:contains(Arcane), li:contains(Frenzying), li:contains(Masterful), li:contains(Demonic), li:contains(Unreal)")
 		.css({
 			"color" : "coral"
 		});
-	});
 
-	window.$(document).ready(function(){
 		$("li:contains(Legendary), li:contains(Celestial), li:contains(Mythical)")
 		.css({
 			"color" : "orchid",
 			"fontStyle" : "italic"
 		});
-	});
 
-	window.$(document).ready(function(){
 		$("li:contains(Godly)")
 		.css({
 			"color" : "gold",
 			"fontWeight" : "bold",
 			"textDecoration" : "underline"
 		});
-	});
 }
 
 	function dispClicker() {
