@@ -2,275 +2,7 @@
 <html>
 <head>
 	<title>Questers</title>
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-</head>
 
-<style type="text/css">
-	#inventory {
-		display: none;
-	}
-
-	#barracks {
-		display: none;
-	}
-
-	#market {
-		display: none;
-	}
-	
-	#knightCover {
-		display: none;
-	}
-
-	body {
-		margin: 0;
-		background-color: #eee;
-		font-family: sans-serif;
-		overflow-y: scroll;
-	}
-
-	#cover {
-		background-color: white;
-		width: 350px;
-		margin: 0 auto;
-		text-align: center;
-		min-height: 100vh;
-		height: 100%;
-		box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-	}
-
-	@media screen and (max-width: 1000px) {
-		#cover {
-			width: 100%;
-		}
-	}
-
-	#inc {
-		font-size: 40px;
-	}
-
-	section {
-		margin: 10px;
-		padding: 10px;
-		background-color: white;
-		border: 1px solid #ddd;
-	}
-
-	#tabmenu {
-		padding: 0;
-	}
-
-	#tabmenu li {
-		display: inline-block;
-		list-style-type: none;
-		padding: 0 10px 0 5px;
-	}
-
-	#tabmenu li:not(:last-of-type) {
-		border-right: 1px solid #999;
-	}
-	
-	a {
-		color: cornflowerblue;
-		cursor: pointer;
-	}
-
-	#log {
-		margin: 5px;
-		padding: 0;
-		list-style-type: none;
-		display: flex;
-		flex-direction: column-reverse;
-		list-style-type: none;
-	}
-
-	#log li:nth-last-child(n+10) {
-		display: none;
-	}
-
-	.button, .sb {
-		background-color: white;
-		border: 1px solid #666;
-		color: black;
-		padding: 5px 10px;
-		margin: 10px;
-		font-size: 1em;
-	}
-
-	.sb {
-		padding: 2px 5px;
-		font-size: 0.9em;
-		margin: 0;
-	}
-
-	.margin {
-		padding: 10px;
-	}
-
-	#logo {
-		display: block;
-		margin: 0 auto;
-		width: 150px;
-		height: 150px;
-		background-size: cover;
-		opacity: 0.8;
-		padding-top: 10px;
-		pointer-events: none;
-	}
-
-	h1, h3 {
-		margin: 0;
-		padding: 10px;
-		font-family: "Tahoma", sans-serif;
-		color: #444;
-	}
-
-	h3 {
-		padding: 0;
-	}
-
-	#footer {
-		position: absolute;
-		bottom: 10px;
-		display: block;
-		width: 100%;
-	}
-
-	.grey {
-		color: #aaa;
-		font-size: 12px;
-	}
-	
-	#list {
-		margin: 0;
-		padding: 0;
-		list-style-type: none;
-	}
-
-	#list li {
-		font-weight: bold;
-		display: inline-block;
-		padding: 5px;
-		border: 1px solid #ddd;
-		margin: 2px;
-	}
-
-	.broken {
-		color: gray;
-		font-weight: normal;
-	}
-	.common {
-		color: limegreen;
-		font-weight: bold;
-	}
-	.uncommon {
-		color: turquoise;
-		font-weight: bold;
-	}
-	.scarce {
-		color: dodgerblue;
-		font-weight: bold;
-	}
-	.rare {
-		color: coral;
-		font-weight: bold;
-	}
-	.legendary {
-		color: orchid;
-		font-weight: bold;
-		font-style: italic;
-	}
-	.godly {
-		color: gold;
-		font-weight: bold;
-		font-style: italic;
-		text-decoration: underline;
-	}
-</style>
-
-<body onload="load()">
-<div id="cover">
-
-	<h1>Questers</h1>
-	<div>An incremental... dungeon-crawler?</div>
-
-	<p id="phrase">Here are some words</p>
-	
-<ul id="tabmenu">
-	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
-	<li><a id="tabInventory" onclick="dispInventory()">Inventory</a></li>
-</ul>
-
-<div id="clicker">
-	<section>
-		<div id="inc">0</div>
-		<span>Acclaim</span>
-		<div class="margin"><a class="button" onclick="add(), walk(), randCoin()">Fight</a></div>
-		<div title="acclaim per second"><span id="total">0.0</span> aps</div>
-	</section>
-
-	<section>
-		<a onclick="clearLog()">Clear Log</a>
-		<ul id="log">
-			<li>You enter the dungeon.</li>
-		</ul>
-	</section>
-
-	<section id="barracks">
-		<h3>Barracks</h3>
-		<section>
-			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
-			<div title="acclaim per second">Power: 0.1 aps</div>
-			<div>Rogue Cost: <span id="shopCost">15</span></div>
-		</section>
-		<section id="knightCover">
-			<div class="margin"><a class="button" onclick="buyKnight()">Hire Knight (<span id="knights">0</span>)</a></div>
-			<div title="acclaim per second">Power: 0.5 aps</div>
-			<div>Knight Cost: <span id="knightCost">100</span></div>
-		</section>
-	</section>
-
-	<section id="market">
-		<h3>Market</h3>
-			<div>Coins: <span id="coins">0</span></div>
-	</section>
-</div>
-
-<div id="inventory">
-	<section>
-		<h3>Items</h3>
-			<ul id="list">
-			</ul>
-	</section>
-
-	<section>
-		<h3>Key</h3>
-		<div>Broken <span class="broken">(R0)</span></div>
-		<div>Common <span class="common">(R1)</span></div>
-		<div>Uncommon <span class="uncommon">(R2)</span></div>
-		<div>Scarce <span class="scarce">(R3)</span></div>
-		<div>Rare <span class="rare">(R4)</span></div>
-		<div>Legendary <span class="legendary">(R5)</span></div>
-		<div>Godly <span class="godly">(R6)</span></div>
-	</section>
-</div>
-
-	<span title="These processes are done automatically!">
-		<a class="sb" onclick="save()">Save</a>
-		<a class="sb" onclick="load()">Load</a>
-	</span>
-	<span title="Reloads the page.">
-		<a class="sb" onclick="del()">Reset</a>
-	</span>
-
-<div class="margin">
-	<div class="grey">version 4.1</div>
-	<div class="grey">if this fricking thing could work thatd be great</div>
-	<div class="grey">Guy Briggs 2018</div>
-</div>
-
-</div>
-	
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 	window.$(document).ready(function(){
@@ -718,5 +450,271 @@ adj == "Godly"
 			ul.appendChild(li);
 	}
 </script>
+
+</head>
+
+<style type="text/css">
+	#inventory {
+		display: none;
+	}
+
+	#barracks {
+		display: none;
+	}
+
+	#market {
+		display: none;
+	}
+	
+	#knightCover {
+		display: none;
+	}
+
+	body {
+		margin: 0;
+		background-color: #eee;
+		font-family: sans-serif;
+		overflow-y: scroll;
+	}
+
+	#cover {
+		background-color: white;
+		width: 350px;
+		margin: 0 auto;
+		text-align: center;
+		min-height: 100vh;
+		height: 100%;
+		box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+	}
+
+	@media screen and (max-width: 1000px) {
+		#cover {
+			width: 100%;
+		}
+	}
+
+	#inc {
+		font-size: 40px;
+	}
+
+	section {
+		margin: 10px;
+		padding: 10px;
+		background-color: white;
+		border: 1px solid #ddd;
+	}
+
+	#tabmenu {
+		padding: 0;
+	}
+
+	#tabmenu li {
+		display: inline-block;
+		list-style-type: none;
+		padding: 0 10px 0 5px;
+	}
+
+	#tabmenu li:not(:last-of-type) {
+		border-right: 1px solid #999;
+	}
+	
+	a {
+		color: cornflowerblue;
+		cursor: pointer;
+	}
+
+	#log {
+		margin: 5px;
+		padding: 0;
+		list-style-type: none;
+		display: flex;
+		flex-direction: column-reverse;
+		list-style-type: none;
+	}
+
+	#log li:nth-last-child(n+10) {
+		display: none;
+	}
+
+	.button, .sb {
+		background-color: white;
+		border: 1px solid #666;
+		color: black;
+		padding: 5px 10px;
+		margin: 10px;
+		font-size: 1em;
+	}
+
+	.sb {
+		padding: 2px 5px;
+		font-size: 0.9em;
+		margin: 0;
+	}
+
+	.margin {
+		padding: 10px;
+	}
+
+	#logo {
+		display: block;
+		margin: 0 auto;
+		width: 150px;
+		height: 150px;
+		background-size: cover;
+		opacity: 0.8;
+		padding-top: 10px;
+		pointer-events: none;
+	}
+
+	h1, h3 {
+		margin: 0;
+		padding: 10px;
+		font-family: "Tahoma", sans-serif;
+		color: #444;
+	}
+
+	h3 {
+		padding: 0;
+	}
+
+	#footer {
+		position: absolute;
+		bottom: 10px;
+		display: block;
+		width: 100%;
+	}
+
+	.grey {
+		color: #aaa;
+		font-size: 12px;
+	}
+	
+	#list {
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+	}
+
+	#list li {
+		font-weight: bold;
+		display: inline-block;
+		padding: 5px;
+		border: 1px solid #ddd;
+		margin: 2px;
+	}
+
+	.broken {
+		color: gray;
+		font-weight: normal;
+	}
+	.common {
+		color: limegreen;
+		font-weight: bold;
+	}
+	.uncommon {
+		color: turquoise;
+		font-weight: bold;
+	}
+	.scarce {
+		color: dodgerblue;
+		font-weight: bold;
+	}
+	.rare {
+		color: coral;
+		font-weight: bold;
+	}
+	.legendary {
+		color: orchid;
+		font-weight: bold;
+		font-style: italic;
+	}
+	.godly {
+		color: gold;
+		font-weight: bold;
+		font-style: italic;
+		text-decoration: underline;
+	}
+</style>
+
+<body onload="load()">
+<div id="cover">
+
+	<h1>Questers</h1>
+	<div>An incremental... dungeon-crawler?</div>
+	
+<ul id="tabmenu">
+	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
+	<li><a id="tabInventory" onclick="dispInventory()">Inventory</a></li>
+</ul>
+
+<div id="clicker">
+	<section>
+		<div id="inc">0</div>
+		<span>Acclaim</span>
+		<div class="margin"><a class="button" onclick="add(), walk(), randCoin()">Fight</a></div>
+		<div title="acclaim per second"><span id="total">0.0</span> aps</div>
+	</section>
+
+	<section>
+		<a onclick="clearLog()">Clear Log</a>
+		<ul id="log">
+			<li>You enter the dungeon.</li>
+		</ul>
+	</section>
+
+	<section id="barracks">
+		<h3>Barracks</h3>
+		<section>
+			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
+			<div title="acclaim per second">Power: 0.1 aps</div>
+			<div>Rogue Cost: <span id="shopCost">15</span></div>
+		</section>
+		<section id="knightCover">
+			<div class="margin"><a class="button" onclick="buyKnight()">Hire Knight (<span id="knights">0</span>)</a></div>
+			<div title="acclaim per second">Power: 0.5 aps</div>
+			<div>Knight Cost: <span id="knightCost">100</span></div>
+		</section>
+	</section>
+
+	<section id="market">
+		<h3>Market</h3>
+			<div>Coins: <span id="coins">0</span></div>
+	</section>
+</div>
+
+<div id="inventory">
+	<section>
+		<h3>Items</h3>
+			<ul id="list">
+			</ul>
+	</section>
+
+	<section>
+		<h3>Key</h3>
+		<div>Broken <span class="broken">(R0)</span></div>
+		<div>Common <span class="common">(R1)</span></div>
+		<div>Uncommon <span class="uncommon">(R2)</span></div>
+		<div>Scarce <span class="scarce">(R3)</span></div>
+		<div>Rare <span class="rare">(R4)</span></div>
+		<div>Legendary <span class="legendary">(R5)</span></div>
+		<div>Godly <span class="godly">(R6)</span></div>
+	</section>
+</div>
+
+	<span title="These processes are done automatically!">
+		<a class="sb" onclick="save()">Save</a>
+		<a class="sb" onclick="load()">Load</a>
+	</span>
+	<span title="Reloads the page.">
+		<a class="sb" onclick="del()">Reset</a>
+	</span>
+
+<div class="margin">
+	<div class="grey">version 4.2</div>
+	<div class="grey">if this fricking thing could work thatd be great</div>
+	<div class="grey">Guy Briggs 2018</div>
+</div>
+
+</div>
 </body>
 </html>
