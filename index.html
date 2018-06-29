@@ -188,8 +188,91 @@
 	}
 </style>
 
-<script type="text/javascript">
+<body onload="load()">
+<div id="cover">
 
+	<h1>Questers</h1>
+	<div>An incremental... dungeon-crawler?</div>
+
+	<p id="phrase">Here are some words</p>
+	
+<ul id="tabmenu">
+	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
+	<li><a id="tabInventory" onclick="dispInventory()">Inventory</a></li>
+</ul>
+
+<div id="clicker">
+	<section>
+		<div id="inc">0</div>
+		<span>Acclaim</span>
+		<div class="margin"><a class="button" onclick="add(), walk(), randCoin()">Fight</a></div>
+		<div title="acclaim per second"><span id="total">0.0</span> aps</div>
+	</section>
+
+	<section>
+		<a onclick="clearLog()">Clear Log</a>
+		<ul id="log">
+			<li>You enter the dungeon.</li>
+		</ul>
+	</section>
+
+	<section id="barracks">
+		<h3>Barracks</h3>
+		<section>
+			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
+			<div title="acclaim per second">Power: 0.1 aps</div>
+			<div>Rogue Cost: <span id="shopCost">15</span></div>
+		</section>
+		<section id="knightCover">
+			<div class="margin"><a class="button" onclick="buyKnight()">Hire Knight (<span id="knights">0</span>)</a></div>
+			<div title="acclaim per second">Power: 0.5 aps</div>
+			<div>Knight Cost: <span id="knightCost">100</span></div>
+		</section>
+	</section>
+
+	<section id="market">
+		<h3>Market</h3>
+			<div>Coins: <span id="coins">0</span></div>
+	</section>
+</div>
+
+<div id="inventory">
+	<section>
+		<h3>Items</h3>
+			<ul id="list">
+			</ul>
+	</section>
+
+	<section>
+		<h3>Key</h3>
+		<div>Broken <span class="broken">(R0)</span></div>
+		<div>Common <span class="common">(R1)</span></div>
+		<div>Uncommon <span class="uncommon">(R2)</span></div>
+		<div>Scarce <span class="scarce">(R3)</span></div>
+		<div>Rare <span class="rare">(R4)</span></div>
+		<div>Legendary <span class="legendary">(R5)</span></div>
+		<div>Godly <span class="godly">(R6)</span></div>
+	</section>
+</div>
+
+	<span title="These processes are done automatically!">
+		<a class="sb" onclick="save()">Save</a>
+		<a class="sb" onclick="load()">Load</a>
+	</span>
+	<span title="Reloads the page.">
+		<a class="sb" onclick="del()">Reset</a>
+	</span>
+
+<div class="margin">
+	<div class="grey">version 4</div>
+	<div class="grey">if this fucking thing could work thatd be great</div>
+	<div class="grey">Guy Briggs 2018</div>
+</div>
+
+</div>
+	
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
 	window.$(document).ready(function(){
 		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
 		.css({
@@ -635,87 +718,5 @@ adj == "Godly"
 			ul.appendChild(li);
 	}
 </script>
-<body onload="load()">
-<div id="cover">
-
-	<h1>Questers</h1>
-	<div>An incremental... dungeon-crawler?</div>
-
-	<p id="phrase">Here are some words</p>
-	
-<ul id="tabmenu">
-	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
-	<li><a id="tabInventory" onclick="dispInventory()">Inventory</a></li>
-</ul>
-
-<div id="clicker">
-	<section>
-		<div id="inc">0</div>
-		<span>Acclaim</span>
-		<div class="margin"><a class="button" onclick="add(), walk(), randCoin()">Fight</a></div>
-		<div title="acclaim per second"><span id="total">0.0</span> aps</div>
-	</section>
-
-	<section>
-		<a onclick="clearLog()">Clear Log</a>
-		<ul id="log">
-			<li>You enter the dungeon.</li>
-		</ul>
-	</section>
-
-	<section id="barracks">
-		<h3>Barracks</h3>
-		<section>
-			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
-			<div title="acclaim per second">Power: 0.1 aps</div>
-			<div>Rogue Cost: <span id="shopCost">15</span></div>
-		</section>
-		<section id="knightCover">
-			<div class="margin"><a class="button" onclick="buyKnight()">Hire Knight (<span id="knights">0</span>)</a></div>
-			<div title="acclaim per second">Power: 0.5 aps</div>
-			<div>Knight Cost: <span id="knightCost">100</span></div>
-		</section>
-	</section>
-
-	<section id="market">
-		<h3>Market</h3>
-			<div>Coins: <span id="coins">0</span></div>
-	</section>
-</div>
-
-<div id="inventory">
-	<section>
-		<h3>Items</h3>
-			<ul id="list">
-			</ul>
-	</section>
-
-	<section>
-		<h3>Key</h3>
-		<div>Broken <span class="broken">(R0)</span></div>
-		<div>Common <span class="common">(R1)</span></div>
-		<div>Uncommon <span class="uncommon">(R2)</span></div>
-		<div>Scarce <span class="scarce">(R3)</span></div>
-		<div>Rare <span class="rare">(R4)</span></div>
-		<div>Legendary <span class="legendary">(R5)</span></div>
-		<div>Godly <span class="godly">(R6)</span></div>
-	</section>
-</div>
-
-	<span title="These processes are done automatically!">
-		<a class="sb" onclick="save()">Save</a>
-		<a class="sb" onclick="load()">Load</a>
-	</span>
-	<span title="Reloads the page.">
-		<a class="sb" onclick="del()">Reset</a>
-	</span>
-
-<div class="margin">
-	<div class="grey">version 4</div>
-	<div class="grey">if this fucking thing could work thatd be great</div>
-	<div class="grey">Guy Briggs 2018</div>
-</div>
-
-</div>
 </body>
 </html>
