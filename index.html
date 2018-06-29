@@ -2,60 +2,7 @@
 <html>
 <head>
 	<title>Questers</title>
-	<script src="https://code.jquery.com/jquery-1.10.1.min.js">
-	$(document).ready(function(){
-		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
-		.css({
-			"color" : "gray",
-			"fontWeight" : "normal"
-		});
-	});
-
-	$(document).ready(function(){
-		$("li:contains(Large), li:contains(Dangerous), li:contains(Savage), li:contains(Sharp), li:contains(Tiny), li:contains(Bulky), li:contains(Heavy), li:contains(Light), li:contains(Rapid), li:contains(Hasty), li:contains(Intimidating), li:contains(Powerful), li:contains(Strong), li:contains(Intense), li:contains(Furious), li:contains(Quick)")
-		.css({
-			"color" : "limegreen"
-		});
-	});
-
-	$(document).ready(function(){
-		$("li:contains(Keen), li:contains(Superior), li:contains(Forceful), li:contains(Deadly), li:contains(Agile), li:contains(Nimble), li:contains(Adept)")
-		.css({
-			"color" : "turquoise"
-		});
-	});
-
-	$(document).ready(function(){
-		$("li:contains(Murderous), li:contains(Manic), li:contains(Sighted), li:contains(Unpleasant), li:contains(Mystic), li:contains(Ruthless)")
-		.css({
-			"color" : "dodgerblue"
-		});
-	});
-
-	$(document).ready(function(){
-		$("li:contains(Arcane), li:contains(Frenzying), li:contains(Masterful), li:contains(Demonic), li:contains(Unreal)")
-		.css({
-			"color" : "coral"
-		});
-	});
-
-	$(document).ready(function(){
-		$("li:contains(Legendary), li:contains(Celestial), li:contains(Mythical)")
-		.css({
-			"color" : "orchid",
-			"fontStyle" : "italic"
-		});
-	});
-
-	$(document).ready(function(){
-		$("li:contains(Godly)")
-		.css({
-			"color" : "gold",
-			"fontWeight" : "bold",
-			"textDecoration" : "underline"
-		});
-	});
-	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <style type="text/css">
@@ -242,6 +189,59 @@
 </style>
 
 <script type="text/javascript">
+
+	$(document).ready(function(){
+		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
+		.css({
+			"color" : "gray",
+			"fontWeight" : "normal"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Large), li:contains(Dangerous), li:contains(Savage), li:contains(Sharp), li:contains(Tiny), li:contains(Bulky), li:contains(Heavy), li:contains(Light), li:contains(Rapid), li:contains(Hasty), li:contains(Intimidating), li:contains(Powerful), li:contains(Strong), li:contains(Intense), li:contains(Furious), li:contains(Quick)")
+		.css({
+			"color" : "limegreen"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Keen), li:contains(Superior), li:contains(Forceful), li:contains(Deadly), li:contains(Agile), li:contains(Nimble), li:contains(Adept)")
+		.css({
+			"color" : "turquoise"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Murderous), li:contains(Manic), li:contains(Sighted), li:contains(Unpleasant), li:contains(Mystic), li:contains(Ruthless)")
+		.css({
+			"color" : "dodgerblue"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Arcane), li:contains(Frenzying), li:contains(Masterful), li:contains(Demonic), li:contains(Unreal)")
+		.css({
+			"color" : "coral"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Legendary), li:contains(Celestial), li:contains(Mythical)")
+		.css({
+			"color" : "orchid",
+			"fontStyle" : "italic"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Godly)")
+		.css({
+			"color" : "gold",
+			"fontWeight" : "bold",
+			"textDecoration" : "underline"
+		});
+	});
 
 	function dispClicker() {
 		document.getElementById("clicker").style.display = "block";
@@ -711,7 +711,7 @@ adj == "Godly"
 	</span>
 
 <div class="margin">
-	<div class="grey">version 2.3</div>
+	<div class="grey">version 2.5</div>
 	<div class="grey">Guy Briggs 2018</div>
 </div>
 
