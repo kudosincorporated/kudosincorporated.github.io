@@ -153,9 +153,97 @@
 		border: 1px solid #ddd;
 		margin: 2px;
 	}
+
+	.broken {
+		color: gray;
+		font-weight: normal;
+	}
+	.common {
+		color: limegreen;
+		font-weight: bold;
+	}
+	.uncommon {
+		color: turquoise;
+		font-weight: bold;
+	}
+	.scarce {
+		color: dodgerblue;
+		font-weight: bold;
+	}
+	.rare {
+		color: coral;
+		font-weight: bold;
+	}
+	.legendary {
+		color: orchid;
+		font-weight: bold;
+		font-style: italic;
+	}
+	.godly {
+		color: gold;
+		font-weight: bold;
+		font-style: italic;
+		text-decoration: underline;
+	}
 </style>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 <script type="text/javascript">
+
+	$(document).ready(function(){
+		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
+		.css({
+			"color" : "gray",
+			"fontWeight" : "normal"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Large), li:contains(Dangerous), li:contains(Savage), li:contains(Sharp), li:contains(Tiny), li:contains(Bulky), li:contains(Heavy), li:contains(Light), li:contains(Rapid), li:contains(Hasty), li:contains(Intimidating), li:contains(Powerful), li:contains(Strong), li:contains(Intense), li:contains(Furious), li:contains(Quick)")
+		.css({
+			"color" : "limegreen"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Keen), li:contains(Superior), li:contains(Forceful), li:contains(Deadly), li:contains(Agile), li:contains(Nimble), li:contains(Adept)")
+		.css({
+			"color" : "turquoise"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Murderous), li:contains(Manic), li:contains(Sighted), li:contains(Unpleasant), li:contains(Mystic), li:contains(Ruthless)")
+		.css({
+			"color" : "dodgerblue"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Arcane), li:contains(Frenzying), li:contains(Masterful), li:contains(Demonic), li:contains(Unreal)")
+		.css({
+			"color" : "coral"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Legendary), li:contains(Celestial), li:contains(Mythical)")
+		.css({
+			"color" : "orchid",
+			"fontStyle" : "italic"
+		});
+	});
+
+	$(document).ready(function(){
+		$("li:contains(Godly)")
+		.css({
+			"color" : "gold",
+			"fontWeight" : "bold",
+			"textDecoration" : "underline"
+		});
+	});
+
 	function dispClicker() {
 		document.getElementById("clicker").style.display = "block";
 		document.getElementById("inventory").style.display = "none";
@@ -192,8 +280,8 @@
 			var li = document.createElement("li");
 			li.appendChild(document.createTextNode("You gain "));
 			li.appendChild(document.createTextNode(coinCount));
-			li.style.color = "orange";
 			li.appendChild(document.createTextNode(" coins."));
+			li.style.color = "orangered";
 			ul.appendChild(li);
 		}
 	}
@@ -243,12 +331,18 @@
 	}, 2000);
 
 	function walk() {
+	var rand = Math.floor(Math.random() * 100);
+	if (rand <= 5) {
+		genItem();
+	}
+	else {
 		var ul = document.getElementById("log");
 		var li = document.createElement("li");
 		var myArray = ["You wander a bit further.", "You move to the next room.", "The fight is over.", "Your hands are bloodstained.", "The next door beckons.", "You fight with vigour.", "Your armour is battle-worn.", "You fight endlessly.", "You smell battle.", "You walk down a hallway.", "The door slams behind you.", "You smell treasure.", "All is quiet, finally."];
 		var char1 = myArray[Math.floor(Math.random() * myArray.length)];
 		li.appendChild(document.createTextNode(char1));
 		ul.appendChild(li);
+	}
 	}
 
 	function clearLog() {
@@ -364,14 +458,7 @@
 
 	//items
 	
-	function item() {
-		var rand = Math.floor(Math.random() * 100);
-		if (rand <= 100) {
-			common();
-		}
-	}
-	
-	function common() {
+	function genItem() {
 		var ulList = document.getElementById("list");
 		var liList = document.createElement("li");
 	
@@ -398,7 +485,6 @@
 "Intense",
 "Furious",
 "Quick",
-"Hurtful",
 
 "Keen",
 "Superior",
@@ -469,7 +555,6 @@ adj == "Awkward"
 			liList.style.color = "gray";
 			liList.style.fontWeight = "normal";
 		}
-
 		if (
 adj == "Large" ||
 adj == "Dangerous" ||
@@ -491,7 +576,6 @@ adj == "Quick"
 		) {
 			liList.style.color = "limegreen";
 		}
-
 		if (
 adj == "Keen" ||
 adj == "Superior" ||
@@ -503,7 +587,6 @@ adj == "Adept"
 		) {
 			liList.style.color = "turquoise";
 		}
-
 		if (
 adj == "Murderous" ||
 adj == "Manic" ||
@@ -515,7 +598,6 @@ adj == "Ruthless"
 		) {
 			liList.style.color = "dodgerblue";
 		}
-
 		if (
 adj == "Frenzying" ||
 adj == "Masterful" ||
@@ -524,7 +606,6 @@ adj == "Unreal"
 		) {
 			liList.style.color = "coral";
 		}
-
 		if (
 adj == "Legendary" ||
 adj == "Celestial" ||
@@ -533,7 +614,6 @@ adj == "Mythical"
 			liList.style.color = "orchid";
 			liList.style.fontStyle = "italic";
 		}
-
 		if (
 adj == "Godly"
 		) {
@@ -542,16 +622,27 @@ adj == "Godly"
 			liList.style.textDecoration = "underline";
 		}
 
-		ulList.appendChild(liList);
+			ulList.appendChild(liList);
+
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+
+			li.appendChild(document.createTextNode("You loot a "));
+			li.appendChild(document.createTextNode(liList.innerHTML));
+			li.appendChild(document.createTextNode("."));
+			li.style.color = "orange";
+			li.style.textShadow = "0px 0px 2px gold";
+
+			ul.appendChild(li);
 	}
 </script>
 <body onload="load()">
 <div id="cover">
 
-	<button onclick="item()">item()</button>
-
 	<h1>Questers</h1>
 	<div>An incremental... dungeon-crawler?</div>
+
+	<p id="phrase">Here are some words</p>
 	
 <ul id="tabmenu">
 	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
@@ -595,10 +686,20 @@ adj == "Godly"
 
 <div id="inventory">
 	<section>
-		<div id="listCover">
+		<h3>Items</h3>
 			<ul id="list">
 			</ul>
-		</div>
+	</section>
+
+	<section>
+		<h3>Key</h3>
+		<div>Broken <span class="broken">(R0)</span></div>
+		<div>Common <span class="common">(R1)</span></div>
+		<div>Uncommon <span class="uncommon">(R2)</span></div>
+		<div>Scarce <span class="scarce">(R3)</span></div>
+		<div>Rare <span class="rare">(R4)</span></div>
+		<div>Legendary <span class="legendary">(R5)</span></div>
+		<div>Godly <span class="godly">(R6)</span></div>
 	</section>
 </div>
 
