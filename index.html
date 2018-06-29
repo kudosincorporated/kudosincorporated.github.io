@@ -6,6 +6,41 @@
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 
+	function colorise() {
+		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
+		.css({
+			"color" : "gray",
+			"fontWeight" : "normal"
+		});
+		$("li:contains(Large), li:contains(Dangerous), li:contains(Savage), li:contains(Sharp), li:contains(Tiny), li:contains(Bulky), li:contains(Heavy), li:contains(Light), li:contains(Rapid), li:contains(Hasty), li:contains(Intimidating), li:contains(Powerful), li:contains(Strong), li:contains(Intense), li:contains(Furious), li:contains(Quick)")
+		.css({
+			"color" : "limegreen"
+		});
+		$("li:contains(Keen), li:contains(Superior), li:contains(Forceful), li:contains(Deadly), li:contains(Agile), li:contains(Nimble), li:contains(Adept)")
+		.css({
+			"color" : "turquoise"
+		});
+		$("li:contains(Murderous), li:contains(Manic), li:contains(Sighted), li:contains(Unpleasant), li:contains(Mystic), li:contains(Ruthless)")
+		.css({
+			"color" : "dodgerblue"
+		});
+		$("li:contains(Arcane), li:contains(Frenzying), li:contains(Masterful), li:contains(Demonic), li:contains(Unreal)")
+		.css({
+			"color" : "coral"
+		});
+		$("li:contains(Legendary), li:contains(Celestial), li:contains(Mythical)")
+		.css({
+			"color" : "orchid",
+			"fontStyle" : "italic"
+		});
+		$("li:contains(Godly)")
+		.css({
+			"color" : "gold",
+			"fontWeight" : "bold",
+			"textDecoration" : "underline"
+		});
+	}
+
 	$(document).ready(function(){
 		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
 		.css({
@@ -640,12 +675,14 @@ adj == "Godly"
 <body onload="load()">
 <div id="cover">
 
+	<button onclick="colorise()">colorise()</button>
+
 	<h1>Questers</h1>
 	<div>An incremental... dungeon-crawler?</div>
 	
 <ul id="tabmenu">
 	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
-	<li><a id="tabInventory" onclick="dispInventory()">Inventory</a></li>
+	<li><a id="tabInventory" onclick="dispInventory(), colorise()">Inventory</a></li>
 </ul>
 
 <div id="clicker">
@@ -711,8 +748,8 @@ adj == "Godly"
 	</span>
 
 <div class="margin">
-	<div class="grey">version 4.3</div>
-	<div class="grey">items working?</div>
+	<div class="grey">version 4.4</div>
+	<div class="grey">yeet boy</div>
 	<div class="grey">Guy Briggs 2018</div>
 </div>
 
