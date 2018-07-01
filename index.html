@@ -210,6 +210,17 @@
 			li.appendChild(document.createTextNode(char1));
 			ul.appendChild(li);
 		}
+
+		if (document.getElementById("playerHealth").value == 0) {
+			clicks = 0;
+		
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			ul.innerHTML = "";
+			li.appendChild(document.createTextNode("You're dead! Heal up!"));
+			li.style.color = "red";
+			ul.appendChild(li);
+		}
 	}
 
 	function clearLog() {
@@ -231,7 +242,7 @@
 	}, 10);
 
 	function seeMarket() {
-		if (coins >= 1 || gems >= 1) {
+		if (coins >= 1) {
 			document.getElementById("market").style.display = "block";
 		}
 	}
@@ -240,6 +251,16 @@
 		seeMarket();
 	}, 10);
 	
+	function seeTradingPost() {
+		if (gems >= 1) {
+			document.getElementById("tradingPost").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		seeTradingPost();
+	}, 10);
+
 	function seeKnights() {
 		if (clicks >= 50 || shops >= 1) {
 			document.getElementById("knightCover").style.display = "block";
@@ -438,7 +459,30 @@
 			ul.appendChild(li);
 
 			colorise();
+
 	}
+
+var delItem = function() {
+	$("#list li").click(function() {
+		$(this).closest("li").remove();
+		gems = gems + 1;
+		document.getElementById("gems").innerHTML = gems;
+	});
+}
+
+window.setInterval(delItem, 1000);
+
+function healthPotion() {
+	if (coins >= 5 && document.getElementById("playerHealth").value < 100) {
+
+		var playerHealth = document.getElementById("playerHealth");
+		playerHealth.value += 20;
+		document.getElementById("playerHealthValue").innerHTML = playerHealth.value;
+
+		coins = coins - 5;
+		document.getElementById("coins").innerHTML = coins;
+	}
+}
 
 </script>
 
@@ -464,7 +508,10 @@
 
 	#knightCover {
 		display: none;
-		position: relative;
+	}
+
+	#tradingPost {
+		display: none;
 	}
 
 	body {
@@ -708,6 +755,16 @@
 	pre {
 		text-transform: uppercase;
 	}
+
+	#gems {
+		color: orangered;
+		font-weight: bold;
+	}
+
+	#coins {
+		color: orange;
+		font-weight: bold;
+	}
 </style>
 
 <body onload="load()">
@@ -715,7 +772,6 @@
 
 	<h1>Questers</h1>
 	<div>An incremental... dungeon-crawler?</div>
-	<div class="grey">Note: health is a work in progress. you cant die rn</div>
 	
 <ul id="tabmenu">
 	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
@@ -753,8 +809,14 @@
 
 	<section id="market">
 		<h3>Market</h3>
-			<div>Gems: <span id="gems">0</span></div>
 			<div>Coins: <span id="coins">0</span></div>
+
+			<section>
+			<div class="margin"><span class="button" onclick="healthPotion()">Buy Health Potion</span></div>
+			<div>Power: 20 HP</div>
+			<div>Cost: 5 coins</div>
+			</section>
+
 	</section>
 
 	<section id="barracks">
@@ -764,13 +826,13 @@
 			<div class="triangle"></div>
 			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
 			<div title="acclaim per second">Power: 0.1 aps</div>
-			<div>Rogue Cost: <span id="shopCost">15</span></div>
+			<div>Cost: <span id="shopCost">15</span> acclaim</div>
 		</section>
 		<section id="knightCover">
 			<div class="triangle"></div>
 			<div class="margin"><a class="button" onclick="buyKnight()">Hire Knight (<span id="knights">0</span>)</a></div>
 			<div title="acclaim per second">Power: 0.5 aps</div>
-			<div>Knight Cost: <span id="knightCost">100</span></div>
+			<div>Cost: <span id="knightCost">100</span> acclaim</div>
 		</section>
 	</section>
 </div>
@@ -778,8 +840,14 @@
 <div id="inventory">
 	<section>
 		<h3>Items</h3>
+		<div class="grey">Click on an item to sell it for gems.</div>
 			<ul id="list">
 			</ul>
+	</section>
+
+	<section id="tradingPost">
+		<h3>Trading Post</h3>
+			<div>Gems: <span id="gems">0</span></div>
 	</section>
 
 	<section>
@@ -804,7 +872,7 @@
 	</span>
 
 	<div class="margin">
-		<div class="grey">version 5</div>
+		<div class="grey">version 5.5</div>
 		<div class="grey">Guy Briggs 2018</div>
 	</div>
 </div>
