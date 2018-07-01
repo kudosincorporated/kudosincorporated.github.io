@@ -61,28 +61,33 @@
 	}
 
 	var clicks = 0;
+	var gems = 0;
 	var coins = 0;
 	var shops = 0;
 	var shopCost = 15;
 	var knights = 0;
 	var knightCost = 100;
+	var health = 100;
+	var healthValue = 100;
+	var playerHealth = 100;
+	var playerHealthValue = 100;
 
 	function add() {
 		clicks++;
 		document.getElementById("inc").innerHTML = clicks;
 	}
 
-	function randCoin() {
+	function randGem() {
 		if (Math.random() * 100 <= 10) {
-		var coinArray = [1, 2, 3, 4, 5];
-		var coinCount = coinArray[Math.floor(Math.random() * coinArray.length)];
-			coins = coins + coinCount;
-			document.getElementById("coins").innerHTML = coins;
+		var gemArray = [1, 2, 3, 4, 5];
+		var gemCount = gemArray[Math.floor(Math.random() * gemArray.length)];
+			gems = gems + gemCount;
+			document.getElementById("gems").innerHTML = gems;
 			var ul = document.getElementById("log");
 			var li = document.createElement("li");
-			li.appendChild(document.createTextNode("You gain "));
-			li.appendChild(document.createTextNode(coinCount));
-			li.appendChild(document.createTextNode(" coins."));
+			li.appendChild(document.createTextNode("You find "));
+			li.appendChild(document.createTextNode(gemCount));
+			li.appendChild(document.createTextNode(" gems."));
 			li.style.color = "orangered";
 			ul.appendChild(li);
 		}
@@ -132,19 +137,79 @@
 		knight();
 	}, 2000);
 
+	function newEnemy() {	
+		var descArray = [
+"Crazed",
+"Stupid",
+"Brainless",
+"Deadly",
+"Mischievous"
+		];
+		var desc = descArray[Math.floor(Math.random() * descArray.length)];
+		
+		var nameArray = [
+"goblin",
+"orc",
+"troll",
+"elf",
+"wizard",
+"spectre",
+"ghost",
+"imp",
+"demon",
+"dragon",
+"vampire",
+"serpent"
+		];
+		var name = nameArray[Math.floor(Math.random() * nameArray.length)];
+
+		document.getElementById("newEnemy").innerHTML = (desc + " " + name);
+	}
+
 	function walk() {
-	var rand = Math.floor(Math.random() * 100);
-	if (rand <= 5) {
-		genItem();
-	}
-	else {
-		var ul = document.getElementById("log");
-		var li = document.createElement("li");
-		var myArray = ["You wander a bit further.", "You move to the next room.", "The fight is over.", "Your hands are bloodstained.", "The next door beckons.", "You fight with vigour.", "Your armour is battle-worn.", "You fight endlessly.", "You smell battle.", "You walk down a hallway.", "The door slams behind you.", "You smell treasure.", "All is quiet, finally."];
-		var char1 = myArray[Math.floor(Math.random() * myArray.length)];
-		li.appendChild(document.createTextNode(char1));
-		ul.appendChild(li);
-	}
+		var health = document.getElementById("health");
+		health.value -= 10;
+		document.getElementById("healthValue").innerHTML = health.value;
+
+		if (Math.random() * 100 <= 10) {
+			var damageArray = [1, 2, 3, 4, 5];
+			var damage = damageArray[Math.floor(Math.random() * damageArray.length)];
+
+			var playerHealth = document.getElementById("playerHealth");
+			playerHealth.value -= damage;
+			document.getElementById("playerHealthValue").innerHTML = playerHealth.value;
+		}
+
+		if (health.value <= 0) {
+			health.value = 100;
+
+			newEnemy();
+
+			var coinArray = [1, 2, 3, 4, 5];
+			var coinCount = coinArray[Math.floor(Math.random() * coinArray.length)];
+			coins = coins + coinCount;
+			document.getElementById("coins").innerHTML = coins;
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			li.appendChild(document.createTextNode("You gain "));
+			li.appendChild(document.createTextNode(coinCount));
+			li.appendChild(document.createTextNode(" coins."));
+			li.style.color = "orange";
+			ul.appendChild(li);
+		}
+
+		var rand = Math.floor(Math.random() * 100);
+		if (rand <= 5) {
+			genItem();
+		}
+		else {
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			var myArray = ["You wander a bit further.", "You move to the next room.", "The fight is over.", "Your hands are bloodstained.", "The next door beckons.", "You fight with vigour.", "Your armour is battle-worn.", "You fight endlessly.", "You smell battle.", "You walk down a hallway.", "The door slams behind you.", "You smell treasure.", "All is quiet, finally."];
+			var char1 = myArray[Math.floor(Math.random() * myArray.length)];
+			li.appendChild(document.createTextNode(char1));
+			ul.appendChild(li);
+		}
 	}
 
 	function clearLog() {
@@ -166,7 +231,7 @@
 	}, 10);
 
 	function seeMarket() {
-		if (coins >= 1) {
+		if (coins >= 1 || gems >= 1) {
 			document.getElementById("market").style.display = "block";
 		}
 	}
@@ -204,13 +269,19 @@
 	}, 1000);
 
 	function save() {
+	var playerHealth = document.getElementById("playerHealth").value;
+	var playerHealthValue = document.getElementById("playerHealthValue").innerHTML;
+
 	var save = {
 		clicks: clicks,
+		gems: gems,
 		coins: coins,
 		shops: shops,
 		shopCost: shopCost,
 		knights: knights,
-		knightCost: knightCost
+		knightCost: knightCost,
+		playerHealth: playerHealth,
+		playerHealthValue: playerHealthValue
 		};
 		localStorage.setItem("save",JSON.stringify(save));
 
@@ -227,18 +298,26 @@
 		var savegame = JSON.parse(localStorage.getItem("save"));
 
 		if (typeof savegame.clicks !== "undefined") clicks = savegame.clicks;
+		if (typeof savegame.gems !== "undefined") gems = savegame.gems;
 		if (typeof savegame.coins !== "undefined") coins = savegame.coins;
 		if (typeof savegame.shops !== "undefined") shops = savegame.shops;
 		if (typeof savegame.shopCost !== "undefined") shopCost = savegame.shopCost;
 		if (typeof savegame.knights !== "undefined") knights = savegame.knights;
 		if (typeof savegame.knightCost !== "undefined") knightCost = savegame.knightCost;
 
+		if (typeof savegame.playerHealth !== "undefined") playerHealth = savegame.playerHealth;
+		if (typeof savegame.playerHealthValue !== "undefined") playerHealthValue = savegame.playerHealthValue;
+
 		document.getElementById("inc").innerHTML = clicks;
+		document.getElementById("gems").innerHTML = gems;
 		document.getElementById("coins").innerHTML = coins;
 		document.getElementById("shops").innerHTML = shops;
 		document.getElementById("shopCost").innerHTML = shopCost;
 		document.getElementById("knights").innerHTML = knights;
 		document.getElementById("knightCost").innerHTML = knightCost;
+
+		document.getElementById("playerHealth").value = playerHealth;
+		document.getElementById("playerHealthValue").innerHTML = playerHealthValue;
 
 		//the list
 
@@ -341,7 +420,7 @@
 "Staff",
 "Wand",
 "Scepter",
-"Robes"
+"Robe"
 		];
 		var item = itemArray[Math.floor(Math.random() * itemArray.length)];
 
@@ -360,11 +439,13 @@
 
 			colorise();
 	}
+
 </script>
 
 </head>
 
 <style type="text/css">
+
 	#inventory {
 		display: none;
 	}
@@ -377,8 +458,13 @@
 		display: none;
 	}
 	
+	#rogueCover {
+		position: relative;
+	}
+
 	#knightCover {
 		display: none;
+		position: relative;
 	}
 
 	body {
@@ -386,6 +472,7 @@
 		background-color: #eee;
 		font-family: sans-serif;
 		overflow-y: scroll;
+		cursor: default;
 	}
 
 	#cover {
@@ -410,9 +497,36 @@
 
 	section {
 		margin: 10px;
-		padding: 10px;
+		padding: 15px;
 		background-color: white;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
+	}
+
+	section section {
+		margin: 10px 0;
 		border: 1px solid #ddd;
+		box-shadow: none;
+	}
+
+	.left {
+		float: left;
+		width: 50%;
+	}
+
+	.right {
+		float: right;
+		width: 50%;
+	}
+
+	#clearfix {
+		clear: both;
+	}
+
+	#bottom {
+		clear: both;
+		padding-top: 10px;
 	}
 
 	#tabmenu {
@@ -450,13 +564,21 @@
 	.button, .sb {
 		background-color: white;
 		border: 1px solid #666;
+		border-radius: 4px;
 		color: black;
 		padding: 5px 10px;
 		margin: 10px;
 		font-size: 1em;
+		user-select: none;
+		transition: 300ms;
+	}
+
+	.button:active {
+		padding: 5px 20px;
 	}
 
 	.sb {
+		border-radius: 2px;
 		padding: 2px 5px;
 		font-size: 0.9em;
 		margin: 0;
@@ -510,8 +632,13 @@
 		font-weight: bold;
 		display: inline-block;
 		padding: 5px;
-		border: 1px solid #ddd;
 		margin: 2px;
+		border-radius: 4px;
+		cursor: default;
+	}
+
+	#list li:hover {
+		background-color: rgba(0,0,0,0.05);
 	}
 
 	.broken {
@@ -545,6 +672,42 @@
 		font-style: italic;
 		text-decoration: underline;
 	}
+
+	progress {
+		width: 90%;
+		height: 10px;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+
+	progress::-webkit-progress-value {
+			transition: 100ms;
+	}
+
+	progress::-webkit-progress-bar {
+		background-color: #ddd;
+	}
+
+	#playerHealth::-webkit-progress-value {
+		background-color: #5cd65c;
+	}
+
+	#playerHealth {
+		color: #ff6666;
+	}
+
+	#health::-webkit-progress-value {
+		background-color: cornflowerblue;
+	}
+
+	#health {
+		color: cornflowerblue;
+	}
+
+	pre {
+		text-transform: uppercase;
+	}
 </style>
 
 <body onload="load()">
@@ -552,6 +715,7 @@
 
 	<h1>Questers</h1>
 	<div>An incremental... dungeon-crawler?</div>
+	<div class="grey">Note: health is a work in progress. you cant die rn</div>
 	
 <ul id="tabmenu">
 	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
@@ -562,8 +726,22 @@
 	<section>
 		<div id="inc">0</div>
 		<span>Acclaim</span>
-		<div class="margin"><a class="button" onclick="add(), walk(), randCoin()">Fight</a></div>
+		<div class="margin"><a class="button" onclick="add(), walk(), randGem()">Fight</a></div>
 		<div title="acclaim per second"><span id="total">0.0</span> aps</div>
+
+<section>
+	<div class="left">
+		<pre>PLAYER</pre>
+		<progress id="playerHealth" value="100" max="100"></progress>
+		<pre><span id="playerHealthValue">100</span></pre>
+	</div>
+	<div class="right">
+		<pre><span id="newEnemy">THE DOOR GUARDIAN</span></pre>
+		<progress id="health" value="100" max="100"></progress>
+		<pre><span id="healthValue">100</span></pre>
+	</div>
+	<div id="clearfix"></div>
+</section>
 	</section>
 
 	<section>
@@ -573,23 +751,27 @@
 		</ul>
 	</section>
 
+	<section id="market">
+		<h3>Market</h3>
+			<div>Gems: <span id="gems">0</span></div>
+			<div>Coins: <span id="coins">0</span></div>
+	</section>
+
 	<section id="barracks">
 		<h3>Barracks</h3>
-		<section>
+
+		<section id="rogueCover">
+			<div class="triangle"></div>
 			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
 			<div title="acclaim per second">Power: 0.1 aps</div>
 			<div>Rogue Cost: <span id="shopCost">15</span></div>
 		</section>
 		<section id="knightCover">
+			<div class="triangle"></div>
 			<div class="margin"><a class="button" onclick="buyKnight()">Hire Knight (<span id="knights">0</span>)</a></div>
 			<div title="acclaim per second">Power: 0.5 aps</div>
 			<div>Knight Cost: <span id="knightCost">100</span></div>
 		</section>
-	</section>
-
-	<section id="market">
-		<h3>Market</h3>
-			<div>Coins: <span id="coins">0</span></div>
 	</section>
 </div>
 
@@ -612,6 +794,7 @@
 	</section>
 </div>
 
+<div id="bottom">
 	<span title="These processes are done automatically!">
 		<a class="sb" onclick="save()">Save</a>
 		<a class="sb" onclick="load()">Load</a>
@@ -620,9 +803,10 @@
 		<a class="sb" onclick="del()">Reset</a>
 	</span>
 
-<div class="margin">
-	<div class="grey">version 4.5</div>
-	<div class="grey">Guy Briggs 2018</div>
+	<div class="margin">
+		<div class="grey">version 5</div>
+		<div class="grey">Guy Briggs 2018</div>
+	</div>
 </div>
 
 </div>
