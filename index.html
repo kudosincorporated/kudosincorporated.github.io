@@ -182,6 +182,7 @@
 
 		if (health.value <= 0) {
 			health.value = 100;
+			document.getElementById("healthValue").innerHTML = 100;
 
 			newEnemy();
 
@@ -232,7 +233,7 @@
 	}
 
 	function seeBarracks() {
-		if (clicks >= 10 || shops >= 1) {
+		if (clicks >= 15 || shops >= 1) {
 			document.getElementById("barracks").style.display = "block";
 		}
 	}
@@ -462,15 +463,18 @@
 
 	}
 
-var delItem = function() {
-	$("#list li").click(function() {
-		$(this).closest("li").remove();
-		gems = gems + 1;
-		document.getElementById("gems").innerHTML = gems;
-	});
-}
+var complete = 0;
 
-window.setInterval(delItem, 1000);
+function delItem() {
+$(function() {
+	$("#list li").click(
+		function() {
+			$(this).closest("li").remove();
+			gems = gems + 10;
+			document.getElementById("gems").innerHTML = gems;
+		});
+});
+}
 
 function healthPotion() {
 	if (coins >= 5 && document.getElementById("playerHealth").value < 100) {
@@ -489,6 +493,27 @@ function healthPotion() {
 </head>
 
 <style type="text/css">
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+	body {
+		font-family: "Nunito", sans-serif;
+		margin: 0;
+		background-color: #eee;
+		overflow-y: scroll;
+		cursor: default;
+	}
+
+	h1, h3 {
+		margin: 0;
+		padding: 10px;
+		color: #444;
+		font-size: 3em;
+	}
+
+	h3 {
+		padding: 0;
+		font-size: 2em;
+	}
 
 	#inventory {
 		display: none;
@@ -514,14 +539,6 @@ function healthPotion() {
 		display: none;
 	}
 
-	body {
-		margin: 0;
-		background-color: #eee;
-		font-family: sans-serif;
-		overflow-y: scroll;
-		cursor: default;
-	}
-
 	#cover {
 		background-color: white;
 		width: 350px;
@@ -539,7 +556,7 @@ function healthPotion() {
 	}
 
 	#inc {
-		font-size: 40px;
+		font-size: 50px;
 	}
 
 	section {
@@ -646,17 +663,6 @@ function healthPotion() {
 		pointer-events: none;
 	}
 
-	h1, h3 {
-		margin: 0;
-		padding: 10px;
-		font-family: "Tahoma", sans-serif;
-		color: #444;
-	}
-
-	h3 {
-		padding: 0;
-	}
-
 	#footer {
 		position: absolute;
 		bottom: 10px;
@@ -741,7 +747,7 @@ function healthPotion() {
 	}
 
 	#playerHealth {
-		color: #ff6666;
+		color: #5cd65c;
 	}
 
 	#health::-webkit-progress-value {
@@ -775,7 +781,7 @@ function healthPotion() {
 	
 <ul id="tabmenu">
 	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
-	<li><a id="tabInventory" onclick="dispInventory(), colorise()">Inventory</a></li>
+	<li><a id="tabInventory" onclick="dispInventory(), colorise(), delItem()">Inventory</a></li>
 </ul>
 
 <div id="clicker">
@@ -872,7 +878,7 @@ function healthPotion() {
 	</span>
 
 	<div class="margin">
-		<div class="grey">version 5.5</div>
+		<div class="grey">version 6</div>
 		<div class="grey">Guy Briggs 2018</div>
 	</div>
 </div>
