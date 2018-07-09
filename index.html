@@ -606,13 +606,12 @@ function excalibur() {
 		font-family: "Nunito", sans-serif;
 		margin: 0;
 		background-color: #eee;
-		overflow-y: scroll;
 		cursor: default;
 	}
 
 	h1, h3 {
 		margin: 0;
-		padding: 10px;
+		padding: 10px 0;
 		color: #444;
 		font-size: 3em;
 	}
@@ -633,10 +632,6 @@ function excalibur() {
 	#market {
 		display: none;
 	}
-	
-	#rogueCover {
-		position: relative;
-	}
 
 	#knightCover {
 		display: none;
@@ -652,18 +647,9 @@ function excalibur() {
 
 	#cover {
 		background-color: white;
-		width: 400px;
-		margin: 0 auto;
-		text-align: center;
 		min-height: 100vh;
 		height: 100%;
-		box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-	}
-
-	@media screen and (max-width: 1000px) {
-		#cover {
-			width: 100%;
-		}
+		padding: 0 20px;
 	}
 
 	#inc {
@@ -671,16 +657,17 @@ function excalibur() {
 	}
 
 	section {
-		margin: 10px;
+		max-width: 450px;
+		text-align: center;
+		margin-bottom: 20px;
 		padding: 15px;
 		background-color: white;
 		border: 1px solid #ccc;
-		border-radius: 4px;
-		box-shadow: 0px 2px 5px rgba(0,0,0,0.05);
 	}
 
 	section section {
-		margin: 10px 0;
+		max-width: 450px;
+		margin: 10px auto;
 		border: 1px solid #ddd;
 		box-shadow: none;
 	}
@@ -695,29 +682,63 @@ function excalibur() {
 		width: 50%;
 	}
 
-	#clearfix {
+	.leftcol {
+		float: left;
+		width: 450px;
+	}
+
+	.rightcol {
+		margin-left: 470px;
+	}
+
+	.clearfix {
 		clear: both;
+	}
+
+	@media screen and (max-width: 1000px) {
+		.leftcol {
+			width: 100%;
+		}
+
+		.rightcol {
+			width: 100%;
+			margin-left: 0;
+		}
 	}
 
 	#bottom {
-		clear: both;
-		padding-top: 10px;
+		float: right;
+		text-align: right;
+		margin: 10px -10px;
 	}
 
 	#tabmenu {
-		padding: 0;
+		padding: 0 0 0 10px;
+		margin: 0 -20px;
+		margin-bottom: 0;
+		background-color: cornflowerblue;
 	}
 
 	#tabmenu li {
 		display: inline-block;
 		list-style-type: none;
-		padding: 0 10px 0 5px;
 	}
 
-	#tabmenu li:not(:last-of-type) {
-		border-right: 1px solid #999;
+	#tabmenu li a {
+		display: inline-block;
+		padding: 10px;
+		margin: 0;
+		color: white;
+		font-size: 1.1em;
 	}
-	
+
+	#tabmenu li:nth-last-child(-n+2) a {
+	}
+
+	#tabmenu li:nth-last-child(-n+2) {
+		float: right;
+	}
+
 	a {
 		color: cornflowerblue;
 		cursor: pointer;
@@ -737,12 +758,12 @@ function excalibur() {
 	}
 
 	.button, .sb {
+		display: inline-block;
 		background-color: white;
 		border: 1px solid #666;
 		border-radius: 4px;
 		color: black;
 		padding: 5px 10px;
-		margin: 10px;
 		font-size: 1em;
 		user-select: none;
 		transition: 300ms;
@@ -760,7 +781,7 @@ function excalibur() {
 	}
 
 	.margin {
-		padding: 10px;
+		padding: 10px 0;
 	}
 
 	#logo {
@@ -772,13 +793,6 @@ function excalibur() {
 		opacity: 0.8;
 		padding-top: 10px;
 		pointer-events: none;
-	}
-
-	#footer {
-		position: absolute;
-		bottom: 10px;
-		display: block;
-		width: 100%;
 	}
 
 	.grey {
@@ -799,6 +813,7 @@ function excalibur() {
 		margin: 2px;
 		border-radius: 4px;
 		cursor: default;
+		user-select: none; 
 	}
 
 	#list li:hover {
@@ -846,7 +861,7 @@ function excalibur() {
 	}
 
 	progress::-webkit-progress-value {
-			transition: 300ms;
+			transition: 200ms;
 	}
 
 	progress::-webkit-progress-bar {
@@ -887,15 +902,38 @@ function excalibur() {
 <body onload="load()">
 <div id="cover">
 
-	<h1>Questers</h1>
-	<div>An incremental... dungeon-crawler?</div>
-	
 <ul id="tabmenu">
 	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
 	<li><a id="tabInventory" onclick="dispInventory(), colorise(), delItem()">Inventory</a></li>
+
+	<span title="Reloads the page.">
+	<li>
+		<a onclick="del()">Reset</a>
+	</li>
+	</span>
+
+	<span title="These processes are done automatically!">
+	<li>
+		<a onclick="load()">Load</a>
+	</li>
+	<li>
+		<a onclick="save()">Save</a>
+	</li>
+	</span>
 </ul>
 
+<div id="bottom">
+	<div class="grey">Guy Briggs 2018</div>
+	<div class="grey">version 7</div>
+</div>
+
+	<h1>Questers</h1>
+	<div>An incremental... dungeon-crawler?</div>
+	<div class="margin"></div>
+
 <div id="clicker">
+
+<div class="leftcol">
 	<section>
 		<div id="inc">0</div>
 		<span>Acclaim</span>
@@ -913,7 +951,7 @@ function excalibur() {
 		<progress id="health" value="100" max="100"></progress>
 		<pre><span id="healthValue">100</span></pre>
 	</div>
-	<div id="clearfix"></div>
+	<div class="clearfix"></div>
 </section>
 	</section>
 
@@ -923,7 +961,9 @@ function excalibur() {
 			<li>You enter the dungeon.</li>
 		</ul>
 	</section>
+</div>
 
+<div class="rightcol">
 	<section id="market">
 		<h3>Market</h3>
 			<div>Coins: <span id="coins">0</span></div>
@@ -954,6 +994,7 @@ function excalibur() {
 			<div>Cost: <span id="mageCost">500</span> acclaim</div>
 		</section>
 	</section>
+</div>
 </div>
 
 <div id="inventory">
@@ -987,21 +1028,6 @@ function excalibur() {
 			<div>Legendary <span class="legendary">(R5)</span></div>
 			<div>Godly <span class="godly">(R6)</span></div>
 	</section>
-</div>
-
-<div id="bottom">
-	<span title="These processes are done automatically!">
-		<a class="sb" onclick="save()">Save</a>
-		<a class="sb" onclick="load()">Load</a>
-	</span>
-	<span title="Reloads the page.">
-		<a class="sb" onclick="del()">Reset</a>
-	</span>
-
-	<div class="margin">
-		<div class="grey">version 7</div>
-		<div class="grey">Guy Briggs 2018</div>
-	</div>
 </div>
 
 </div>
