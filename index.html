@@ -80,6 +80,7 @@
 	var healthValue = 100;
 	var playerHealth = 100;
 	var playerHealthValue = 100;
+	var slashBought = 0;
 
 	function add() {
 		clicks++;
@@ -332,7 +333,7 @@
 	}, 10);
 
 	function seeMages() {
-		if (clicks >= 250 || knights >= 1) {
+		if (clicks >= 100 || knights >= 1) {
 			document.getElementById("mageCover").style.display = "block";
 		}
 	}
@@ -374,7 +375,8 @@
 		mages: mages,
 		mageCost: mageCost,
 		playerHealth: playerHealth,
-		playerHealthValue: playerHealthValue
+		playerHealthValue: playerHealthValue,
+		slashBought: slashBought
 		};
 		localStorage.setItem("save",JSON.stringify(save));
 
@@ -402,6 +404,7 @@
 
 		if (typeof savegame.playerHealth !== "undefined") playerHealth = savegame.playerHealth;
 		if (typeof savegame.playerHealthValue !== "undefined") playerHealthValue = savegame.playerHealthValue;
+		if (typeof savegame.slashBought !== "undefined") slashBought = savegame.slashBought;
 
 		document.getElementById("inc").innerHTML = clicks;
 		document.getElementById("gems").innerHTML = gems;
@@ -595,12 +598,63 @@ function excalibur() {
 	}
 }
 
+
+//abilities
+
+function buySlash() {
+	if (coins >= 100) {
+		slashBought = 1;
+		coins = coins - 100;
+		document.getElementById("coins").innerHTML = coins;
+		document.getElementById("slashCover").style.display = "block";
+		document.getElementById("buySlash").style.display = "none";
+	}
+}
+
+function seeSlash() {
+	if (slashBought != 0) {
+		document.getElementById("slashCover").style.display = "block";
+		document.getElementById("buySlash").style.display = "none";
+	}
+}
+
+function slash() {
+	document.getElementById("slash").disabled = true;
+	setTimeout(function(){document.getElementById("slash").disabled = false;}, 5000);
+
+	var health = document.getElementById("health");
+	var slashProgress = document.getElementById("slashProgress");
+
+	health.value -= 50;
+
+	var decrease = setInterval(
+		function() {
+			slashProgress.value -= 1;
+		},
+	50);
+
+	setTimeout(function() {
+		slashProgress.value = 100;
+		clearInterval(decrease);
+	}, 5000);
+
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			li.appendChild(document.createTextNode("You slash at the enemy."));
+			ul.appendChild(li);
+}
+
+
 </script>
 
 </head>
 
 <style type="text/css">
 @import url('https://fonts.googleapis.com/css?family=Nunito');
+
+	#slashCover {
+		display: none;
+	}
 
 	body {
 		font-family: "Nunito", sans-serif;
@@ -780,6 +834,11 @@ function excalibur() {
 		margin: 0;
 	}
 
+	.sb:disabled {
+		color: #999;
+		border: 1px solid #ccc;
+	}
+
 	.margin {
 		padding: 10px 0;
 	}
@@ -884,6 +943,16 @@ function excalibur() {
 		color: cornflowerblue;
 	}
 
+	#slashProgress::-webkit-progress-value {
+		background-color: coral;
+	}
+
+	#slashProgress {
+		color: coral;
+		width: 80px;
+		margin-bottom: 2px;
+	}
+
 	pre {
 		text-transform: uppercase;
 	}
@@ -899,7 +968,7 @@ function excalibur() {
 	}
 </style>
 
-<body onload="load()">
+<body onload="load(), seeSlash()">
 <div id="cover">
 
 <ul id="tabmenu">
@@ -921,7 +990,7 @@ function excalibur() {
 
 <div id="bottom">
 	<div class="grey">Guy Briggs 2018</div>
-	<div class="grey">version 7.5</div>
+	<div class="grey">version 7.7</div>
 </div>
 
 	<h1>Questers</h1>
@@ -948,6 +1017,10 @@ function excalibur() {
 		<progress id="health" value="100" max="100"></progress>
 		<pre><span id="healthValue">100</span></pre>
 	</div>
+	<div id="slashCover" class="left">
+		<div>Abilities</div>
+		<button id="slash" class="sb" onclick="slash()">Slash</button> <progress id="slashProgress" value="100" max="100"></progress>
+	</div>
 	<div class="clearfix"></div>
 </section>
 	</section>
@@ -969,6 +1042,12 @@ function excalibur() {
 			<div class="margin"><span class="button" onclick="healthPotion()">Buy Health Potion</span></div>
 			<div>Power: 20 HP</div>
 			<div>Cost: 5 coins</div>
+			</section>
+
+			<section id="buySlash">
+			<div class="margin"><span class="button" onclick="buySlash()">Buy Ability: Slash</span></div>
+			<div>Power: -50 HP</div>
+			<div>Cost: 100 coins</div>
 			</section>
 	</section>
 
@@ -1008,10 +1087,7 @@ function excalibur() {
 
 			<section>
 			<div class="margin"><span class="button" onclick="excalibur()">Loot Excalibur</span></div>
-			<div>Cost:</div>
-				<div>1000 acclaim</div>
-				<div>300 coins</div>
-				<div>300 gems</div>
+			<div>Cost: 1000 acclaim, 300 coins, 300 gems</div>
 			</section>
 	</section>
 
