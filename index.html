@@ -2,9 +2,26 @@
 <html>
 <head>
 	<title>Questers</title>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
+
+//the true items
+
+function itembar() {
+	$("#list1").on('click', 'li', function () {
+		$(this).remove().appendTo('#list2');
+	});
+
+	$("#list2").on('click', 'li', function () {
+		if (document.getElementById("list1").getElementsByTagName("li").length == 5) {
+			//null
+		}
+		else {
+			$(this).remove().appendTo('#list1');
+		}
+	});
+}
 
 	function colorise() {
 		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
@@ -51,6 +68,39 @@
 			"fontWeight" : "bold",
 			"font-size" : "1.5em"
 		});
+
+		$("li:contains(ATK)")
+		.css({
+			"background-color" : "coral"
+		});
+		$("li:contains(DEF)")
+		.css({
+			"background-color" : "cornflowerblue"
+		});
+		$("li:contains(HLT)")
+		.css({
+			"background-color" : "limegreen"
+		});
+		$("li:contains(LCK)")
+		.css({
+			"background-color" : "gold"
+		});
+
+		if ($("#list1 li:contains(ATK)")) {
+			clickDamage = 10 + (5 * $("#list1 li:contains(ATK)").length);
+		}
+
+		if ($("#list1 li:contains(DEF)")) {
+			defence = 0 + (1 * $("#list1 li:contains(DEF)").length);
+		}
+
+		if ($("#list1 li:contains(HLT)")) {
+			healthregen = 0 + (1 * $("#list1 li:contains(HLT)").length);
+		}
+
+		if ($("#list1 li:contains(LCK)")) {
+			luck = 0 + (1 * $("#list1 li:contains(LCK)").length);
+		}
 	}
 
 	function dispClicker() {
@@ -81,6 +131,11 @@
 	var playerHealth = 100;
 	var playerHealthValue = 100;
 	var slashBought = 0;
+
+	var clickDamage = 10;
+	var defence = 0;
+	var healthregen = 0;
+	var luck = 0;
 
 	function add() {
 		clicks++;
@@ -229,6 +284,7 @@
 
 			var coinArray = [1, 2, 3, 4, 5];
 			var coinCount = coinArray[Math.floor(Math.random() * coinArray.length)];
+			coinCount = coinCount + luck;
 			coins = coins + coinCount;
 			document.getElementById("coins").innerHTML = coins;
 			var ul = document.getElementById("log");
@@ -246,13 +302,32 @@
 	}, 10);
 
 	function walk() {
+
 		var health = document.getElementById("health");
-		health.value -= 10;
+		health.value -= clickDamage;
 		document.getElementById("healthValue").innerHTML = health.value;
+
+		if (Math.random() * 100 <= 5) {
+			var playerHealth = document.getElementById("playerHealth");
+			playerHealth.value += healthregen;
+			document.getElementById("playerHealthValue").innerHTML = playerHealth.value;
+
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			li.appendChild(document.createTextNode("You regenerate "));
+			li.appendChild(document.createTextNode(healthregen));
+			li.appendChild(document.createTextNode(" health."));
+			li.style.color = "limegreen";
+			ul.appendChild(li);
+		}
 
 		if (Math.random() * 100 <= 10) {
 			var damageArray = [1, 2, 3, 4, 5];
 			var damage = damageArray[Math.floor(Math.random() * damageArray.length)];
+
+			if (damage >= defence) {
+				damage -= defence;
+			}
 
 			var playerHealth = document.getElementById("playerHealth");
 			playerHealth.value -= damage;
@@ -387,6 +462,22 @@
 			return item.textContent;
 		});
 		localStorage.setItem("list", JSON.stringify(array));
+
+			//the runes (List1)
+
+		var runes = document.querySelectorAll("#list1 li");
+		var runesarray = Array.prototype.map.call(runes, function(rune) {
+			return rune.textContent;
+		});
+		localStorage.setItem("list1", JSON.stringify(runesarray));
+
+			//the runes (List2)
+
+		var runes2 = document.querySelectorAll("#list2 li");
+		var runesarray2 = Array.prototype.map.call(runes2, function(rune2) {
+			return rune2.textContent;
+		});
+		localStorage.setItem("list2", JSON.stringify(runesarray2));
 	}
 
 	function load() {
@@ -423,6 +514,30 @@
 
 		var saved = JSON.parse(localStorage.getItem("list")) || [];
 		saved.forEach(addLi);
+
+		//the runes (List1)
+
+		var savedrunes = JSON.parse(localStorage.getItem("list1")) || [];
+		savedrunes.forEach(addLi1);
+
+		//the runes (List2)
+
+		var savedrunes2 = JSON.parse(localStorage.getItem("list2")) || [];
+		savedrunes2.forEach(addLi2);
+	}
+
+	function addLi1(text) {
+		var ulList1 = document.getElementById("list1");
+		var li = document.createElement("li");
+		li.appendChild(document.createTextNode(text));
+		ulList1.appendChild(li);
+	}
+
+	function addLi2(text) {
+		var ulList2 = document.getElementById("list2");
+		var li = document.createElement("li");
+		li.appendChild(document.createTextNode(text));
+		ulList2.appendChild(li);
 	}
 
 	function addLi(text) {
@@ -434,6 +549,9 @@
 
 	function del() {
 		localStorage.removeItem("save");
+		localStorage.removeItem("list");
+		localStorage.removeItem("list1");
+		localStorage.removeItem("list2");
 		location.reload();
 	}
 
@@ -602,9 +720,9 @@ function excalibur() {
 //abilities
 
 function buySlash() {
-	if (coins >= 100) {
+	if (coins >= 50) {
 		slashBought = 1;
-		coins = coins - 100;
+		coins = coins - 50;
 		document.getElementById("coins").innerHTML = coins;
 		document.getElementById("slashCover").style.display = "block";
 		document.getElementById("buySlash").style.display = "none";
@@ -626,6 +744,7 @@ function slash() {
 	var slashProgress = document.getElementById("slashProgress");
 
 	health.value -= 50;
+	document.getElementById("healthValue").innerHTML = health.value;
 
 	var decrease = setInterval(
 		function() {
@@ -644,6 +763,41 @@ function slash() {
 			ul.appendChild(li);
 }
 
+	function canBuySlash() {
+		if (coins >= 10) {
+			document.getElementById("buySlash").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		canBuySlash();
+	}, 10);
+
+function seeRunes() {
+	var list1length = document.getElementById("list1").getElementsByTagName("li").length;
+	var list2length = document.getElementById("list2").getElementsByTagName("li").length;
+
+	if (list1length >= 1 || list2length >= 1) {
+		document.getElementById("runepage").style.display = "block";
+	}
+}
+
+function buyRune() {
+	if (gems >= 100) {
+		gems = gems - 100;
+		document.getElementById("gems").innerHTML = gems;
+
+		var ulList2 = document.getElementById("list2");
+		var li = document.createElement("li");
+
+			var runeArray = ["ATK", "DEF", "HLT", "LCK"];
+			var rune = runeArray[Math.floor(Math.random() * runeArray.length)];
+			li.appendChild(document.createTextNode(rune));
+			ulList2.appendChild(li);
+
+		colorise();
+	}
+}
 
 </script>
 
@@ -652,7 +806,11 @@ function slash() {
 <style type="text/css">
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
-	#slashCover {
+	#runepage {
+		display: none;
+	}
+
+	#buySlash {
 		display: none;
 	}
 
@@ -696,6 +854,10 @@ function slash() {
 	}
 
 	#tradingPost {
+		display: none;
+	}
+
+	#slashCover {
 		display: none;
 	}
 
@@ -966,14 +1128,101 @@ function slash() {
 		color: orange;
 		font-weight: bold;
 	}
+
+.list {
+	padding: 0;
+	display: flex;
+	min-height: 62px;
+	margin: 5px 0;
+}
+
+.list li {
+	background-color: white;
+	margin: 0 5px;
+	display: inline-block;
+	list-style-type: none;
+	height: 60px;
+	width: 60px;
+	text-align: center;
+	line-height: 60px;
+	overflow: hidden;
+	border-radius: 50%;
+	transition: 300ms;
+}
+
+.list li:hover {
+	transform: scale(1.1);
+}
+
+#list1 {
+	display: block;
+	text-align: center;
+}
+
+#list2 {
+	display: block;
+	text-align: left;
+	min-height: 70px;
+}
+
+#runestorage {
+	/* not in use */
+}
+
+#runes {
+	position: relative;
+	border: 4px dashed orange;
+	height: 260px;
+	width: 260px;
+	border-radius: 50%;
+	margin: 30px auto;
+}
+
+#list1 li {
+	position: absolute;
+	margin-left: -5px;
+	border-radius: 30px;
+}
+
+#list1 li:nth-of-type(1) {
+	top: -25px;
+	left: calc(50% - 25px);
+}
+
+#list1 li:nth-of-type(2) {
+	top: 65px;
+	left: calc(50% + 100px);
+}
+
+#list1 li:nth-of-type(3) {
+	top: 200px;
+	left: calc(50% + 50px);
+}
+
+#list1 li:nth-of-type(4) {
+	top: 200px;
+	left: calc(50% - 100px);
+}
+
+#list1 li:nth-of-type(5) {
+	top: 65px;
+	left: calc(50% - 150px);
+}
+
+#runekey .godly, #runekey .legendary, #runekey .broken {
+		font-weight: bold;
+		font-style: normal;
+		text-decoration: none;
+}
+
 </style>
 
-<body onload="load(), seeSlash()">
+<body onload="load(), seeSlash(), itembar(), colorise()">
 <div id="cover">
 
 <ul id="tabmenu">
-	<li><b><a id="tabClicker" onclick="dispClicker()">Clicker</a></b></li>
-	<li><a id="tabInventory" onclick="dispInventory(), colorise(), delItem()">Inventory</a></li>
+	<li><b><a id="tabClicker" onclick="dispClicker(), colorise()">Clicker</a></b></li>
+	<li><a id="tabInventory" onclick="dispInventory(), colorise(), delItem(), seeRunes()">Inventory</a></li>
 
 	<span title="Reloads the page.">
 	<li>
@@ -990,7 +1239,7 @@ function slash() {
 
 <div id="bottom">
 	<div class="grey">Guy Briggs 2018</div>
-	<div class="grey">version 7.7</div>
+	<div class="grey">version 8 | Added runes.</div>
 </div>
 
 	<h1>Questers</h1>
@@ -1004,6 +1253,12 @@ function slash() {
 		<div id="inc">0</div>
 		<span>Acclaim</span>
 		<div class="margin"><a class="button" onclick="add(), walk(), randGem()">Fight</a></div>
+
+	<div id="slashCover">
+		<div><button id="slash" class="sb" onclick="slash()">Slash</button></div>
+		<progress id="slashProgress" value="100" max="100"></progress>
+	</div>
+
 		<div title="acclaim/damage per second"><span id="total">0.0</span> aps/dps</div>
 
 <section>
@@ -1016,10 +1271,6 @@ function slash() {
 		<pre><span id="newEnemy">THE DOOR GUARDIAN</span></pre>
 		<progress id="health" value="100" max="100"></progress>
 		<pre><span id="healthValue">100</span></pre>
-	</div>
-	<div id="slashCover" class="left">
-		<div>Abilities</div>
-		<button id="slash" class="sb" onclick="slash()">Slash</button> <progress id="slashProgress" value="100" max="100"></progress>
 	</div>
 	<div class="clearfix"></div>
 </section>
@@ -1046,8 +1297,8 @@ function slash() {
 
 			<section id="buySlash">
 			<div class="margin"><span class="button" onclick="buySlash()">Buy Ability: Slash</span></div>
-			<div>Power: -50 HP</div>
-			<div>Cost: 100 coins</div>
+			<div>Damage: 50 HP</div>
+			<div>Cost: 50 coins</div>
 			</section>
 	</section>
 
@@ -1074,6 +1325,8 @@ function slash() {
 </div>
 
 <div id="inventory">
+
+<div class="leftcol">
 	<section>
 		<h3>Items</h3>
 		<div class="grey">Click on an item to sell it for gems.</div>
@@ -1086,13 +1339,18 @@ function slash() {
 			<div>Gems: <span id="gems">0</span></div>
 
 			<section>
-			<div class="margin"><span class="button" onclick="excalibur()">Loot Excalibur</span></div>
-			<div>Cost: 1000 acclaim, 300 coins, 300 gems</div>
+				<div class="margin"><span class="button" onclick="excalibur()">Loot Excalibur</span></div>
+				<div>Cost: 1000 acclaim, 300 coins, 300 gems</div>
+			</section>
+
+			<section>
+				<div class="margin"><span class="button" onclick="buyRune(), itembar(), seeRunes()">Loot Rune</span></div>
+				<div>Cost: 100 gems</div>
 			</section>
 	</section>
 
 	<section>
-		<h3>Key</h3>
+		<h3>Item Key</h3>
 			<div>Broken <span class="broken">(R0)</span></div>
 			<div>Common <span class="common">(R1)</span></div>
 			<div>Uncommon <span class="uncommon">(R2)</span></div>
@@ -1103,6 +1361,38 @@ function slash() {
 	</section>
 </div>
 
+<div class="rightcol">
+	<div id="runepage">
+	<section>
+		<h3>Runes</h3>
+		<div class="grey">Click a rune to add it to the rune circle.</div>
+	<div id="runes">
+		<ul id="list1" class="list">
+		</ul>
+	</div>
+
+	<div id="runestorage">
+		<ul id="list2" class="list">
+		</ul>
+	</div>
+	</section>
+
+	<section id="runekey">
+		<h3>Rune Key</h3>
+			<div><span class="rare">ATK</span> +5 Click Damage</div>
+			<div><span class="scarce">DEF</span> +1 Defence</div>
+			<div><span class="common">HLT</span> +1 Health Regen</div>
+			<div><span class="godly">LCK</span> Increases Luck</div>
+			
+			<div><span class="legendary"></span></div>
+			<div><span class="uncommon"></span></div>
+			<div><span class="broken"></span></div>
+	</section>
+	</div>
 </div>
+
+</div>
+</div>
+
 </body>
 </html>
