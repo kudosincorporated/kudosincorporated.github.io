@@ -131,6 +131,7 @@ function itembar() {
 	var playerHealth = 100;
 	var playerHealthValue = 100;
 	var slashBought = 0;
+	var slashLevel = 0;
 
 	var clickDamage = 10;
 	var defence = 0;
@@ -307,6 +308,7 @@ function itembar() {
 		health.value -= clickDamage;
 		document.getElementById("healthValue").innerHTML = health.value;
 
+	if (healthregen >= 1) {
 		if (Math.random() * 100 <= 5) {
 			var playerHealth = document.getElementById("playerHealth");
 			playerHealth.value += healthregen;
@@ -320,6 +322,7 @@ function itembar() {
 			li.style.color = "limegreen";
 			ul.appendChild(li);
 		}
+	}
 
 		if (Math.random() * 100 <= 10) {
 			var damageArray = [1, 2, 3, 4, 5];
@@ -451,7 +454,8 @@ function itembar() {
 		mageCost: mageCost,
 		playerHealth: playerHealth,
 		playerHealthValue: playerHealthValue,
-		slashBought: slashBought
+		slashBought: slashBought,
+		slashLevel: slashLevel
 		};
 		localStorage.setItem("save",JSON.stringify(save));
 
@@ -496,6 +500,7 @@ function itembar() {
 		if (typeof savegame.playerHealth !== "undefined") playerHealth = savegame.playerHealth;
 		if (typeof savegame.playerHealthValue !== "undefined") playerHealthValue = savegame.playerHealthValue;
 		if (typeof savegame.slashBought !== "undefined") slashBought = savegame.slashBought;
+		if (typeof savegame.slashLevel !== "undefined") slashLevel = savegame.slashLevel;
 
 		document.getElementById("inc").innerHTML = clicks;
 		document.getElementById("gems").innerHTML = gems;
@@ -509,6 +514,8 @@ function itembar() {
 
 		document.getElementById("playerHealth").value = playerHealth;
 		document.getElementById("playerHealthValue").innerHTML = playerHealthValue;
+
+		document.getElementById("slashLevel").innerHTML = slashLevel;
 
 		//the list
 
@@ -720,9 +727,9 @@ function excalibur() {
 //abilities
 
 function buySlash() {
-	if (coins >= 50) {
+	if (coins >= 100) {
 		slashBought = 1;
-		coins = coins - 50;
+		coins = coins - 100;
 		document.getElementById("coins").innerHTML = coins;
 		document.getElementById("slashCover").style.display = "block";
 		document.getElementById("buySlash").style.display = "none";
@@ -734,6 +741,21 @@ function seeSlash() {
 		document.getElementById("slashCover").style.display = "block";
 		document.getElementById("buySlash").style.display = "none";
 	}
+	if (slashLevel == 8) {
+		document.getElementById("slashLevel").innerHTML = "100 (Max. Level)";
+	}
+}
+
+function levelSlash() {
+	if (coins >= 50 && slashLevel <= 7) {
+		slashLevel++;
+		coins = coins - 50;
+		document.getElementById("coins").innerHTML = coins;
+		document.getElementById("slashLevel").innerHTML = 20 + (slashLevel * 10);
+	}
+	if (slashLevel == 8) {
+		document.getElementById("slashLevel").innerHTML = "100 (Max. Level)";
+	}
 }
 
 function slash() {
@@ -743,7 +765,9 @@ function slash() {
 	var health = document.getElementById("health");
 	var slashProgress = document.getElementById("slashProgress");
 
-	health.value -= 50;
+	var slashDamage = (20 + (slashLevel * 10));
+
+	health.value -= slashDamage;
 	document.getElementById("healthValue").innerHTML = health.value;
 
 	var decrease = setInterval(
@@ -764,8 +788,11 @@ function slash() {
 }
 
 	function canBuySlash() {
-		if (coins >= 10) {
+		if (coins >= 10 && slashBought != 1) {
 			document.getElementById("buySlash").style.display = "block";
+		}
+		if (slashBought != 0) {
+			document.getElementById("canUpgradeSlash").style.display = "block";
 		}
 	}
 
@@ -811,6 +838,10 @@ function buyRune() {
 	}
 
 	#buySlash {
+		display: none;
+	}
+
+	#canUpgradeSlash {
 		display: none;
 	}
 
@@ -882,7 +913,6 @@ function buyRune() {
 	}
 
 	section section {
-		max-width: 450px;
 		margin: 10px auto;
 		border: 1px solid #ddd;
 		box-shadow: none;
@@ -948,9 +978,6 @@ function buyRune() {
 		font-size: 1.1em;
 	}
 
-	#tabmenu li:nth-last-child(-n+2) a {
-	}
-
 	#tabmenu li:nth-last-child(-n+2) {
 		float: right;
 	}
@@ -994,11 +1021,6 @@ function buyRune() {
 		padding: 2px 5px;
 		font-size: 0.9em;
 		margin: 0;
-	}
-
-	.sb:disabled {
-		color: #999;
-		border: 1px solid #ccc;
 	}
 
 	.margin {
@@ -1110,9 +1132,20 @@ function buyRune() {
 	}
 
 	#slashProgress {
+		display: inline-block;
+		margin: 5px 0;
 		color: coral;
 		width: 80px;
-		margin-bottom: 2px;
+		height: 8px;
+	}
+
+	#slash {
+		display: inline-block;
+	}
+
+	.button:disabled {
+		color: #999;
+		border: 1px solid #ccc;
 	}
 
 	pre {
@@ -1239,7 +1272,7 @@ function buyRune() {
 
 <div id="bottom">
 	<div class="grey">Guy Briggs 2018</div>
-	<div class="grey">version 8 | Added runes.</div>
+	<div class="grey">version 9.1</div>
 </div>
 
 	<h1>Questers</h1>
@@ -1252,14 +1285,13 @@ function buyRune() {
 	<section>
 		<div id="inc">0</div>
 		<span>Acclaim</span>
+		<div title="acclaim/damage per second">(<span id="total">0.0</span> aps/dps)</div>
 		<div class="margin"><a class="button" onclick="add(), walk(), randGem()">Fight</a></div>
 
 	<div id="slashCover">
-		<div><button id="slash" class="sb" onclick="slash()">Slash</button></div>
+		<button id="slash" class="button" onclick="slash()">Slash</button>
 		<progress id="slashProgress" value="100" max="100"></progress>
 	</div>
-
-		<div title="acclaim/damage per second"><span id="total">0.0</span> aps/dps</div>
 
 <section>
 	<div class="left">
@@ -1296,9 +1328,15 @@ function buyRune() {
 			</section>
 
 			<section id="buySlash">
-			<div class="margin"><span class="button" onclick="buySlash()">Buy Ability: Slash</span></div>
-			<div>Damage: 50 HP</div>
-			<div>Cost: 50 coins</div>
+				<div class="margin"><span class="button" onclick="buySlash()">Buy Ability: Slash</span></div>
+				<div>Damage: 20 HP</div>
+				<div>Cost: 100 coins</div>
+			</section>
+
+			<section id="canUpgradeSlash">
+				<div class="margin"><a class="button" onclick="levelSlash()">Upgrade Ability: Slash</a></div>
+				<div>Current damage: <span id="slashLevel">20</span>
+				<div>Cost: 50 coins</div>
 			</section>
 	</section>
 
@@ -1334,21 +1372,6 @@ function buyRune() {
 			</ul>
 	</section>
 
-	<section id="tradingPost">
-		<h3>Trading Post</h3>
-			<div>Gems: <span id="gems">0</span></div>
-
-			<section>
-				<div class="margin"><span class="button" onclick="excalibur()">Loot Excalibur</span></div>
-				<div>Cost: 1000 acclaim, 300 coins, 300 gems</div>
-			</section>
-
-			<section>
-				<div class="margin"><span class="button" onclick="buyRune(), itembar(), seeRunes()">Loot Rune</span></div>
-				<div>Cost: 100 gems</div>
-			</section>
-	</section>
-
 	<section>
 		<h3>Item Key</h3>
 			<div>Broken <span class="broken">(R0)</span></div>
@@ -1359,13 +1382,29 @@ function buyRune() {
 			<div>Legendary <span class="legendary">(R5)</span></div>
 			<div>Godly <span class="godly">(R6)</span></div>
 	</section>
+
+	<section id="tradingPost">
+		<h3>Trading Post</h3>
+			<div>Gems: <span id="gems">0</span></div>
+
+			<section>
+				<div class="margin"><span class="button" onclick="excalibur()">Loot Excalibur</span>
+					<div class="grey">Does nothing, buy at own risk. haha.</div></div>
+				<div>Cost: 1000 acclaim, 300 coins, 300 gems</div>
+			</section>
+
+			<section>
+				<div class="margin"><span class="button" onclick="buyRune(), itembar(), seeRunes()">Loot Rune</span></div>
+				<div>Cost: 100 gems</div>
+			</section>
+	</section>
 </div>
 
 <div class="rightcol">
 	<div id="runepage">
 	<section>
 		<h3>Runes</h3>
-		<div class="grey">Click a rune to add it to the rune circle.</div>
+		<div class="grey">Click a rune to equip it to the rune circle.</div>
 	<div id="runes">
 		<ul id="list1" class="list">
 		</ul>
@@ -1390,8 +1429,8 @@ function buyRune() {
 	</section>
 	</div>
 </div>
-
 </div>
+
 </div>
 
 </body>
