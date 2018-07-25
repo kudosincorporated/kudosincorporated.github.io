@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Upstream.</title>
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style type="text/css">
+
+body, button {
+	font-family: serif;
+	font-size: 1em;
+}
+
+#one, #two, #three {
+	display: inline-block;
+	width: 250px;
+	vertical-align: text-top;
+	margin-top: 20px;
+}
+
+#one {
+	text-align: center;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+#team {
+	min-height: 70px;
+}
+
+#dudes {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#team li, #dudes li {
+	background-color: white;
+	display: inline-block;
+	width: 60px;
+	height: 60px;
+	line-height: 60px;
+	border: 1px solid black;
+	text-align: center;
+	overflow: hidden;
+	margin: 0 5px;
+	cursor: pointer;
+}
+
+#team li:hover, #dudes li:hover {
+	background-color: #eee;
+}
+
+#dudes li {
+	margin: 5px;
+}
+
+.center {
+	font-family: monospace;
+	text-align: center;
+}
+
+button {
+	background-color: white;
+	border: 1px solid black;
+	padding: 5px;
+	margin: 5px;
+	min-width: 150px;
+	cursor: pointer;
+}
+
+button:disabled {
+	border: 1px solid #999;
+	background-color: #f4f4f4;
+	cursor: default;
+}
+
+a:visited {
+	color: #0000EE;
+}
+
+.hidden {
+	display: none;
+}
+
+.info {
+	position: absolute;
+	margin-top: -4px;
+	margin-left: 4px;
+	box-shadow: 2px 2px 4px #555;
+	padding: 4px;
+	display: none;
+}
+
+li:hover .info {
+	display: inline-block;
+}
+
+</style>
+
+<script type="text/javascript">
+	
+var clicks = 0;
+var distance = 0;
+var updistance = 0;
+var downdistance = 0;
+
+var wildsfound = false;
+
+var place = "";
+
+function walk() {
+	clicks++;
+	document.getElementById("total").innerHTML = clicks;
+}
+
+function prettify(input){
+	var output = Math.round(input * 1000000)/1000000;
+	return output;
+}
+
+function upstream() {
+	document.getElementById('upstream').disabled = true;
+	document.getElementById('upstream').innerHTML = "Wandering...";
+	setTimeout(function(){
+		document.getElementById('upstream').disabled = false;
+		document.getElementById('upstream').innerHTML = "Wander upstream.";
+		distance += 0.1;
+		updistance += 0.1;
+		document.getElementById('distance').innerHTML = prettify(distance);
+		document.getElementById('updistance').innerHTML = prettify(updistance);
+
+		findLocation();
+	}, 1000);
+}
+
+function downstream() {
+	if (prettify(distance) >= 0.1) {
+		document.getElementById('downstream').disabled = true;
+		document.getElementById('downstream').innerHTML = "Backtracking...";
+		setTimeout(function(){
+			document.getElementById('downstream').disabled = false;
+			document.getElementById('downstream').innerHTML = "Backtrack downstream.";
+			distance -= 0.1;
+			downdistance += 0.1;
+			document.getElementById('distance').innerHTML = prettify(distance);
+			document.getElementById('downdistance').innerHTML = prettify(downdistance);
+
+			findLocation();
+		}, 1000);
+	}
+	else {
+		alert("You cannot backtrack any further.");
+	}
+}
+
+function findLocation() {
+	if (prettify(distance) >= 0 && prettify(distance) < 1) {
+		place = "homesteadtown";
+	}
+	else if (prettify(distance) >= 1 && prettify(distance) <= 2) {
+		place = "the wilds";
+
+		if (wildsfound == false) {
+			$('#thewilds').removeClass('hidden');
+			$('#log').html('You discover the wilds. Looks dangerous.');
+			wildsfound = true;
+		}
+	}
+	document.getElementById('place').innerHTML = place;
+}
+
+function updatePlace() {
+	document.getElementById('distance').innerHTML = prettify(distance);
+	document.getElementById('place').innerHTML = place;
+}
+
+function homesteadtown() {
+	distance = 0;
+	place = "homesteadtown";
+	$('#log').html('You fast travel to ' + place + '.');
+	updatePlace();
+}
+
+function thewilds() {
+	distance = 1;
+	place = "the wilds";
+	$('#log').html('You fast travel to ' + place + '.');
+	updatePlace();
+}
+
+</script>
+</head>
+<body>
+
+<div id="log">A sense of adventure pushes you forward.</div>
+
+<div id="one">
+	<button href="#" onclick="walk()">Walk around</button>
+	<div id="total">0</div>
+	<div>You are in <u><span id="place">homesteadtown</span></u>.</div>
+
+	<br>
+
+	<button id="upstream" onclick="upstream()">Wander upstream.</button>
+	<button id="downstream" onclick="downstream()">Backtrack downstream.</button>
+
+	<br>
+	<br>
+
+	<div><b>Current coordinates:</b></div>
+	<div>You are <span id="distance">0</span>km up the stream.</div>
+	<br>
+	<div>You have walked a total of <span id="updistance">0</span>km upstream, and backtracked a total of <span id="downdistance">0</span>km downstream.</div>
+
+	<ul id="locations">
+		<div><b>Discovered:</b></div>
+		<li id="homesteadtown" class="place">
+			Homesteadtown. (0km) <a href="#" onclick="homesteadtown()">Fast travel</a>
+			<span class="info">Contains: wood, newbies</span>
+		</li>
+		<li id="thewilds" class="place hidden">
+			The wilds. (1km) <a href='#' onclick='thewilds()'>Fast travel</a>
+			<div class="info">Contains: wood, fish, bears</div>
+		</li>
+	</ul>
+</div>
+
+<div id="two">
+	You have no resources.
+</div>
+
+<div id="three">
+	There are no currents quests.
+</div>
+
+</body>
+</html>
