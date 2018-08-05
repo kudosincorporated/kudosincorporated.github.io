@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ultimatum (smile/sneer)</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+var smiles = 0;
+var laughs = 0;
+var laughchance = 0.1;
+var sneers = 0;
+var frowns = 0;
+var frownchance = 0.1;
+var population = 10000;
+var happypeople = 0;
+var sadpeople = 0;
+var autosmile = 1200;
+var autosneer = 1200;
+
+function smile() {
+	smiles++;
+	population--;
+	$('#smiles').html(smiles);
+	$('#population').html(population);
+	if (Math.random() <= laughchance) {
+		laughs++;
+		$('#laughs').html(laughs);
+	}
+}
+
+function sneer() {
+	sneers++;
+	population--;
+	$('#sneers').html(sneers);
+	$('#population').html(population);
+	if (Math.random() <= frownchance) {
+		frowns++;
+		$('#frowns').html(frowns);
+	}
+}
+
+function happy() {
+	if (laughs >= 10 && autosmile >= 300) {
+		laughs -= 10;
+		autosmile -= 100;
+		happypeople++;
+		$('#smiles').html(smiles);
+		$('#laughs').html(laughs);
+		$('#happypeople').html(happypeople);
+		autohappy();
+	}
+	else {
+		$('#log').html("You can't do that. Sorry!");
+	}
+}
+
+function sad() {
+	if (frowns >= 10 && autosneer >= 300) {
+		frowns -= 10;
+		autosneer -= 100;
+		sadpeople++;
+		$('#sneers').html(sneers);
+		$('#frowns').html(frowns);
+		$('#sadpeople').html(sadpeople);
+		autosad();
+	}
+	else {
+		$('#log').html("You can't do that. :(");
+	}
+}
+
+function autohappy() {
+	var smileint = setInterval(function() {
+		smile();
+		if (population <= 0) {
+			clearInterval(smileint);
+		}
+	}, autosmile);
+}
+
+function autosad() {
+	var sneerint = setInterval(function() {
+		sneer();
+		if (population <= 0) {
+			clearInterval(sneerint);
+		}
+	}, autosneer);
+}
+
+var endgame = setInterval(function() {
+	if (population <= 0) {
+		population = 0;
+		$('#population').html(population);
+		$('.action').addClass('disabled');
+
+		if (smiles + laughs >= sneers + frowns) {
+			$('#log').html("Awesome choice! The world is full of smiles. You're a great person. :)<br>Thanks for playing my game.<br>KudosInc (Guy).");
+			$('#log').addClass('yellow');
+		}
+		else if (sneers + frowns >= smiles + laughs) {
+			$('#log').html("Screw the world, I hate people. Nobody should feel happy. You're right.<br>Thanks for playing.<br>KudosInc (Guy).");
+			$('#log').addClass('blue');
+		}
+		else {
+			$('#log').html("Perfectly balanced, as all things should be. Congrats.<br>Thanks for playing.<br>KudosInc (Guy).");
+		}
+	}
+}, 100);
+
+</script>
+</head>
+<body>
+
+<div class="upper">
+	<div class="box">
+		<div>
+			Say hello to someone with a smile. <a class="action" onclick="smile()">[Action]</a>
+		</div>
+		<br>
+		<div>
+			Tell someone to go away with a sneer. <a class="action" onclick="frown()">[Action]</a>
+		</div>
+		<br>
+		<div>
+			People are smiling to eachother now. <a class="action yellow" onclick="happy()">[10 laughs]</a>
+		</div>
+		<br>
+		<div>
+			People are sneering at eachother now. <a class="action blue" onclick="sad()">[10 frowns]</a>
+		</div>
+	</div>
+</div>
+
+<div class="lower">
+	<div class="box">
+		<div>Smiles: <span class="yellow" id="smiles">0</span></div>
+		<div>Laughs: <span class="yellow" id="laughs">0</span></div>
+		<div>Happy people: <span class="yellow" id="happypeople">0</span></div>
+		<div>Sneers: <span class="blue" id="sneers">0</span></div>
+		<div>Frowns: <span class="blue" id="frowns">0</span></div>
+		<div>Sad people: <span class="blue" id="sadpeople">0</span></div>
+		<br>
+		<div>Population: <span id="population">10000</span></div>
+		<br>
+		<div id="log"></div>
+	</div>
+</div>
+
+</body>
+
+<style type="text/css">
+
+body, button {
+	font-family: monospace;
+	font-size: 15px;
+}
+
+body {
+	color: limegreen;
+	background-color: #222;
+	margin: 0;
+	height: 100vh;
+}
+
+.disabled {
+	pointer-events: none;
+}
+
+.action {
+	color: coral;
+	cursor: pointer;
+	user-select: none;
+}
+
+.action:active {
+	color: orange;
+}
+
+.yellow {
+	color: yellow;
+}
+
+.blue {
+	color: dodgerblue;
+}
+
+.box {
+	padding: 20px;
+}
+
+.upper {
+	height: 25%;
+}
+
+.lower {
+	height: 25%;
+}
+
+</style>
+</html>
