@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>ultimatum</title>
+	<title>Ultimatium</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script type="text/javascript">
@@ -13,14 +13,18 @@ var sneers = 0;
 var frowns = 0;
 var frownchance = 0.1;
 var population = 5000;
-var happypeople = 0;
-var sadpeople = 0;
+var happiness  = 0;
+var sadness = 0;
 var autosmile = 1200;
 var autosneer = 1200;
+var happypeople = 0;
+var sadpeople = 0;
+var smileinc = 1;
+var sadinc = 1;
 
 function smile() {
-	smiles++;
-	population--;
+	smiles += smileinc;
+	population -= smileinc;
 	$('#smiles').html(smiles);
 	$('#population').html(population);
 	if (Math.random() <= laughchance) {
@@ -30,8 +34,8 @@ function smile() {
 }
 
 function sneer() {
-	sneers++;
-	population--;
+	sneers += sadinc;
+	population -= sadinc;
 	$('#sneers').html(sneers);
 	$('#population').html(population);
 	if (Math.random() <= frownchance) {
@@ -41,13 +45,13 @@ function sneer() {
 }
 
 function happy() {
-	if (laughs >= 10 && autosmile >= 300) {
-		laughs -= 10;
+	if (laughs >= 5 && autosmile >= 300) {
+		laughs -= 5;
 		autosmile -= 100;
-		happypeople++;
+		happiness++;
 		$('#smiles').html(smiles);
 		$('#laughs').html(laughs);
-		$('#happypeople').html(happypeople);
+		$('#happiness').html(happiness);
 		autohappy();
 	}
 	else {
@@ -56,17 +60,43 @@ function happy() {
 }
 
 function sad() {
-	if (frowns >= 10 && autosneer >= 300) {
-		frowns -= 10;
+	if (frowns >= 5 && autosneer >= 300) {
+		frowns -= 5;
 		autosneer -= 100;
-		sadpeople++;
+		sadness++;
 		$('#sneers').html(sneers);
 		$('#frowns').html(frowns);
-		$('#sadpeople').html(sadpeople);
+		$('#sadness').html(sadness);
 		autosad();
 	}
 	else {
 		$('#log').html("You can't do that. :(");
+	}
+}
+
+function newhappyperson() {
+	if (laughs >= 10) {
+		laughs -= 10;
+		happypeople++;
+		smileinc++;
+		$('#laughs').html(laughs);
+		$('#happypeople').html(happypeople);
+	}
+	else {
+		$('#log').html("You can't do that. More laughs!");
+	}
+}
+
+function newsadperson() {
+	if (frowns >= 10) {
+		frowns -= 10;
+		sadpeople++;
+		sneerinc++;
+		$('#laughs').html(laughs);
+		$('#sadpeople').html(sadpeople);
+	}
+	else {
+		$('#log').html("You can't do that. More frowns.");
 	}
 }
 
@@ -106,50 +136,148 @@ var endgame = setInterval(function() {
 			$('#log').html("Perfectly balanced, as all things should be. Congrats.<br>Thanks for playing.<br>KudosInc (Guy).");
 		}
 	}
+
+	//additional interval functions
+
+	if (laughs >= 3) {
+		$('#overallhappiness').show(300);
+	}
+	if (frowns >= 3) {
+		$('#overallsadness').show(300);
+	}
+	if (laughs >= 6) {
+		$('#smilingpeople').show(300);
+	}
+	if (laughs >= 6) {
+		$('#sneeringpeople').show(300);
+	}
+
+	if (smiles >= 1) {
+		$('#sm').show(300);
+	}
+	if (sneers >= 1) {
+		$('#sn').show(300);
+	}
+	if (laughs >= 1) {
+		$('#l').show(300);
+	}
+	if (frowns >= 1) {
+		$('#f').show(300);
+	}
+	if (happiness >= 1) {
+		$('#h').show(300);
+	}
+	if (sadness >= 1) {
+		$('#s').show(300);
+	}
+	if (happypeople >= 1) {
+		$('#jp').show(300);
+	}
+	if (sadpeople >= 1) {
+		$('#dp').show(300);
+	}
+	if (smiles >= 1 || sneers >= 1) {
+		$('#p').show(300);
+	}
 }, 100);
+
+function help() {
+	$('#helpbox').toggle(300);
+}
 
 </script>
 </head>
 <body>
 
+<div style="float: right; margin: 20px;">
+	<a class="help" onclick="help()">[Help]</a>
+	<div id="helpbox">
+		<ul>
+			<li>Happiness is the speed at which smiles and laughs are generated.</li>
+			<li>Joyous people increase the number of smiles generated.</li>
+			<li>Sadness is the speed at which sneers and frowns are generated.</li>
+			<li>Depressed people increase the number of sneers generated.</li>
+		</ul>
+		<ul>
+			<li>The population is the number of people yet to have an emotion.</li>
+		</ul>
+		<ul>
+			<li>The game can typically be played through in about 5-10 minutes.</li>
+		</ul>
+	</div>
+</div>
+
 <div class="upper">
 	<div class="box">
-		<div>
+		<div id="smileaction">
 			Say hello to someone with a smile. <a class="action" onclick="smile()">[Action]</a>
 		</div>
-		<br>
-		<div>
+		<div id='smileaction'>
 			Tell someone to go away with a sneer. <a class="action" onclick="sneer()">[Action]</a>
 		</div>
-		<br>
-		<div>
-			People are smiling to eachother now. <a class="action yellow" onclick="happy()">[10 laughs]</a>
+		<div id='overallhappiness'>
+			The overall happiness of the world increases. <a class="action yellow" onclick="happy()">[5 laughs]</a>
 		</div>
-		<br>
-		<div>
-			People are sneering at eachother now. <a class="action blue" onclick="sad()">[10 frowns]</a>
+		<div id='smilingpeople'>
+			People are smiling to eachother now. <a class="action yellow" onclick="newhappyperson()">[10 laughs]</a>
+		</div>
+		<div id='overallsadness'>
+			The overall sadness of the world increases. <a class="action blue" onclick="sad()">[5 frowns]</a>
+		</div>
+		<div id='sneeringpeople'>
+			People are sneering at eachother now. <a class="action blue" onclick="newsadperson()">[10 frowns]</a>
 		</div>
 	</div>
 </div>
 
 <div class="lower">
 	<div class="box">
-		<div>Smiles: <span class="yellow" id="smiles">0</span></div>
-		<div>Laughs: <span class="yellow" id="laughs">0</span></div>
-		<div>Happy people: <span class="yellow" id="happypeople">0</span></div>
-		<div>Sneers: <span class="blue" id="sneers">0</span></div>
-		<div>Frowns: <span class="blue" id="frowns">0</span></div>
-		<div>Sad people: <span class="blue" id="sadpeople">0</span></div>
+		<div id="sm">Smiles: <span class="yellow" id="smiles">0</span></div>
+		<div id="l">Laughs: <span class="yellow" id="laughs">0</span></div>
+		<div id="h">Happiness: <span class="yellow" id="happiness">0</span></div>
+		<div id="jp">Joyful people: <span class="yellow" id="happypeople">0</span></div>
+		<div id="sn">Sneers: <span class="blue" id="sneers">0</span></div>
+		<div id="f">Frowns: <span class="blue" id="frowns">0</span></div>
+		<div id="s">Sadness: <span class="blue" id="sadness">0</span></div>
+		<div id="dp">Depressed people: <span class="blue" id="sadpeople">0</span></div>
 		<br>
-		<div>Population: <span id="population">5000</span></div>
+		<div id="p">Population: <span id="population">5000</span></div>
 		<br>
 		<div id="log"></div>
 	</div>
 </div>
-
 </body>
 
 <style type="text/css">
+
+#smileaction,
+#sneeraction,
+#overallhappiness,
+#overallsadness,
+#smilingpeople,
+#sneeringpeople {
+	margin-bottom: 10px;
+}
+
+#helpbox,
+#overallhappiness,
+#overallsadness,
+#smilingpeople,
+#sneeringpeople {
+	display: none;
+}
+
+#sm,
+#l,
+#h,
+#jp,
+#sn,
+#f,
+#s,
+#dp,
+#p {
+	display: none;
+}
 
 body, button {
 	font-family: monospace;
@@ -183,6 +311,11 @@ body {
 
 .blue {
 	color: dodgerblue;
+}
+
+.help {
+	color: yellowgreen;
+	cursor: pointer;
 }
 
 .box {
