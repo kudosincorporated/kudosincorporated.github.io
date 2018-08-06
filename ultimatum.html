@@ -179,10 +179,24 @@ var endgame = setInterval(function() {
 	if (smiles >= 1 || sneers >= 1) {
 		$('#p').show(300);
 	}
+
+	populationbar();
 }, 100);
 
 function help() {
 	$('#helpbox').toggle(300);
+}
+
+function populationbar() {
+	var myBar = document.getElementById("myBar");
+	var happypop = document.getElementById("happypop");
+	var sadpop = document.getElementById("sadpop");
+	var width = population / 100;
+	var happywidth = smiles / 100;
+	var sadwidth = sneers / 100;
+	myBar.style.width = width + '%';
+	happypop.style.width = happywidth + '%';
+	sadpop.style.width = sadwidth + '%';
 }
 
 </script>
@@ -241,7 +255,13 @@ function help() {
 		<div id="s">Sadness: <span class="blue" id="sadness">0</span></div>
 		<div id="dp">Depressed people: <span class="blue" id="sadpeople">0</span></div>
 		<br>
-		<div id="p">Population: <span id="population">10000</span></div>
+		<div id="p">Population: <span id="population">10000</span>
+		<div id="myProgress">
+			<div id="myBar"></div>
+			<div id="happypop"></div>
+			<div id="sadpop"></div>
+		</div>
+		</div>
 		<br>
 		<div id="log"></div>
 	</div>
@@ -249,6 +269,29 @@ function help() {
 </body>
 
 <style type="text/css">
+
+#myProgress {
+	margin: 10px 0;
+	width: 120px;
+}
+
+#myBar,
+#happypop,
+#sadpop {
+	float: right;
+	width: 100%;
+	height: 10px;
+	background-color: #0f3e0f;
+	transition: 100ms;
+}
+
+#happypop {
+	background-color: yellow;
+}
+
+#sadpop {
+	background-color: dodgerblue;
+}
 
 #smileaction,
 #sneeraction,
