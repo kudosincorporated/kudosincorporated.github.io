@@ -190,7 +190,7 @@ function help() {
 <body>
 
 <div style="float: right; margin: 20px;">
-	<a class="help" onclick="help()">[Help]</a>
+	<a id="helpbtn" class="help" onclick="help()">[Help] <span class="info">(spoilers)</span></a>
 	<div id="helpbox">
 		<ul>
 			<li>Happiness is the speed at which smiles and laughs are generated.</li>
@@ -277,6 +277,18 @@ function help() {
 #dp,
 #p {
 	display: none;
+}
+
+.info {
+	color: azure;
+	display: inline-block;
+	width: 0px;
+	overflow: hidden;
+	transition: 300ms;
+}
+
+#helpbtn:hover .info {
+	width: 100px;
 }
 
 body, button {
