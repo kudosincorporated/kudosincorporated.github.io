@@ -20,7 +20,7 @@ var autosneer = 1200;
 var happypeople = 0;
 var sadpeople = 0;
 var smileinc = 1;
-var sadinc = 1;
+var sneerinc = 1;
 
 function smile() {
 	smiles += smileinc;
@@ -34,8 +34,8 @@ function smile() {
 }
 
 function sneer() {
-	sneers += sadinc;
-	population -= sadinc;
+	sneers += sneerinc;
+	population -= sneerinc;
 	$('#sneers').html(sneers);
 	$('#population').html(population);
 	if (Math.random() <= frownchance) {
