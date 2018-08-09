@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>oreminer</title>
+	<meta charset="utf-8">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+var world = ["x","x","_","_","_","_","#","_","_","_","_","/","&#8254;","&#8254;","&#92;","_","0"];
+var newplace = ["1","2","3","_","4","5","6","_"];
+var rightworld = [];
+var leftworld = [];
+
+window.onload = function() {
+	updateworld();
+
+	$(document).keydown(function(e){
+		if (e.keyCode == 37) { 
+			walkleft();
+		}
+		if (e.keyCode == 39) { 
+			walkright();
+		}
+	});
+}
+
+function walkleft() {
+	console.log('walked left.');
+	rightworld.splice(0, 0, world[16]);
+	world.splice(16, 1);
+
+	if (leftworld[0] != undefined) {
+		world.splice(0, 0, leftworld[0]);
+		leftworld.splice(0, 1);
+	}
+	else {
+		world.splice(0, 0, 'x');
+	}
+	updateworld();
+}
+
+function walkright() {
+	console.log('walked right.');
+	leftworld.splice(0, 0, world[0]);
+	world.splice(0, 1);
+
+	if (rightworld[0] != undefined) {
+		world.splice(16, 0, rightworld[0]);
+		rightworld.splice(0, 1);
+	}
+	else {
+
+		if (newplace[0] != undefined) {
+			world.splice(16, 0, newplace[0]);
+			newplace.splice(0, 1);
+		}
+		else {
+			world.splice(16, 0, "u");
+		}
+
+	}
+	updateworld();
+}
+
+function updateworld() {
+	placetest();
+
+	document.getElementById("world").innerHTML = "";
+	for (var i = 0; i < world.length; i++) {
+		worldupdate = "<li>" + world[i] + "</li>";
+		document.getElementById("world").innerHTML += worldupdate;
+	}
+
+	$('#world li:nth-of-type(9)')
+	.css({
+		"opacity" : "0.2",
+	});
+}
+
+function placetest() {
+	if (world[8] == "#") {
+		$('#event').html("The sign reads: This is like, the starting area.");
+	}
+	else {
+		$('#event').html("");
+	}
+}
+
+function debug() {
+	console.log(leftworld);
+	console.log(world);
+	console.log(rightworld);
+}
+
+</script>
+</head>
+<body>
+use the left and right arrows to move.
+
+<div id="container">
+	<ul id="world"></ul>
+	<div id="you">@</div>
+
+	<div id="eventcover">
+		<span id="event"></span>
+	</div>
+</div>
+
+</body>
+
+<style type="text/css">
+
+body {
+	margin: 0;
+	font-family: monospace;
+	font-size: 16px;
+	text-align: center;
+}
+
+#container {
+	position: absolute;
+	width: 100%;
+	top: calc(50% - 50px);
+}
+
+#eventcover {
+	text-align: center;
+}
+
+#world {
+	font-size: 24px;
+	list-style-type: none;
+	padding: 0;
+	display: block;
+	background-color: #eee;
+	overflow: hidden;
+	margin: 0 auto;
+	width: 400px;
+	text-align: center;
+}
+
+#world li {
+	display: inline;
+	margin: 2px;
+}
+
+#you {
+	font-weight: bold;
+	font-size: 24px;
+	color: red;
+	margin: 0 auto;
+	width: 1em;
+	text-align: center;
+	position: absolute;
+	left: 50%;
+	top: 0;
+	margin-left: -0.5em;
+}
+
+</style>
+</html>
