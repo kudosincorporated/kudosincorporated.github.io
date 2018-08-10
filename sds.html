@@ -15,6 +15,172 @@
 </style>
 <script type="text/javascript">
 
+//--------------------------------------------------
+//--------------------------------------------------
+//--------------------- items ----------------------
+//--------------------------------------------------
+//--------------------------------------------------
+
+
+var inventory = [];
+var items = [];
+
+function newitem() {
+	var array = ['dagger', 'stick'];
+	var chosen = array[Math.floor(Math.random() * array.length)];
+
+	if (chosen == "dagger") {
+		items.push({
+			"name": "The Bloody Dagger",
+			"info": "Covered in dripping blood, this dagger's previous owner was perhaps not a novel peace prize winner."
+		});
+	}
+	if (chosen == "stick") {
+		items.push({
+			"name": "A Stick",
+			"info": "A sturdy, brown coloured stick."
+		});
+	}
+	updateitems();
+
+	$('#log').html("You find " + items[0].name + ".");
+	flash();
+}
+
+function updateitems() {
+	document.getElementById("items").innerHTML = "";
+	for (var i = 0; i < items.length; i++) {
+		itemsupdate = "<li>" + items[i].name + " <span class='info'>" + items[i].info + "</span></li>";
+		document.getElementById("items").innerHTML += itemsupdate;
+	}
+}
+
+
+//--------------------------------------------------
+//--------------------------------------------------
+//--------------------- world ----------------------
+//--------------------------------------------------
+//--------------------------------------------------
+
+$(function() {
+	$('.lorepage').on("mouseover", function() {
+		$(this).removeClass('unseen');
+	});
+
+	updateworld();
+	$(document).keydown(function(e){
+		if (e.keyCode == 37) {
+			walkleft();
+		}
+		if (e.keyCode == 39) {
+			walkright();
+		}
+	});
+});
+
+var world = ["$","_","_","_","_","_","#","_","_","_","_","_","_","_","_","_","$"];
+var newplace = ["1","2","3","_","4","5","6","_","g","u","y","_","w","a","s","_","h","e","r","e"];
+var rightworld = [];
+var leftworld = [];
+
+function walkleft() {
+	console.log('walked left.');
+	rightworld.splice(0, 0, world[16]);
+	world.splice(16, 1);
+
+	if (leftworld[0] != undefined) {
+		world.splice(0, 0, leftworld[0]);
+		leftworld.splice(0, 1);
+	}
+	else {
+		var array = ["_","_","_","_","_","_","_","_","$"];
+		var tile = array[Math.floor(Math.random() * array.length)];
+		world.splice(0, 0, tile);
+	}
+	updateworld();
+	slimarray();
+	if (Math.random() * 100 <= 2) {
+		spawnenemy();
+	}
+}
+
+function walkright() {
+	console.log('walked right.');
+	leftworld.splice(0, 0, world[0]);
+	world.splice(0, 1);
+
+	if (rightworld[0] != undefined) {
+		world.splice(16, 0, rightworld[0]);
+		rightworld.splice(0, 1);
+	}
+	else {
+
+		if (newplace[0] != undefined) {
+			world.splice(16, 0, newplace[0]);
+			newplace.splice(0, 1);
+		}
+		else {
+			var array = ["_","_","_","_","_","_","_","_","$"];
+			var tile = array[Math.floor(Math.random() * array.length)];
+			world.splice(16, 0, tile);
+		}
+
+	}
+	updateworld();
+	slimarray();
+	if (Math.random() * 100 <= 2) {
+		spawnenemy();
+	}
+}
+
+function slimarray() {
+	if (leftworld.length >= 300) {
+		leftworld.pop();
+	}
+	if (rightworld.length >= 300) {
+		rightworld.pop();
+	}
+}
+
+function updateworld() {
+	placetest();
+
+	document.getElementById("world").innerHTML = "";
+	for (var i = 0; i < world.length; i++) {
+		worldupdate = "<li>" + world[i] + "</li>";
+		document.getElementById("world").innerHTML += worldupdate;
+	}
+
+	$('#world li:nth-of-type(9)')
+	.css({
+		"opacity" : "0",
+	});
+}
+
+function placetest() {
+	if (world[8] == "#") {
+		$('#event').html("The sign reads: This is like, the starting area.");
+	}
+	else {
+		$('#event').html(". . .");
+	}
+}
+
+function debug() {
+	console.log(leftworld);
+	console.log(world);
+	console.log(rightworld);
+}
+
+
+//--------------------------------------------------
+//--------------------------------------------------
+//------------------- lorebook ---------------------
+//--------------------------------------------------
+//--------------------------------------------------
+
+
+
 function flash() {
 	$('#log').addClass("flash");
 	setTimeout(function(){$('#log').removeClass("flash");},900);
@@ -43,12 +209,6 @@ function newlore() {
 	}
 }
 
-$(function() {
-	$('.lorepage').on("mouseover", function() {
-		$(this).removeClass('unseen');
-	});
-});
-
 //--------------------------------------------------
 //--------------------------------------------------
 //--------------------- mine -----------------------
@@ -60,11 +220,13 @@ var mine = ['','','','','','','','',''];
 window.onload = function() {
 	updatemine();
 
-	var newenemy = setInterval(function() {
+	//autospawn enemies
+
+	/*var newenemy = setInterval(function() {
 		if (Math.random() * 100 <= 5) {
 			spawnenemy();
 		}
-	}, 1000);
+	}, 1000);*/
 
 	$("#mine").on('click', 'li', function () {
 		var index = $("#mine li").index(this);
@@ -160,70 +322,93 @@ var enemies = [];
 var gold = 0;
 
 function spawnenemy() {
-	var array = ['dog', 'hobo', 'oldlady', 'civilian', 'cat'];
-	var chosen = array[Math.floor(Math.random() * array.length)];
+	if (enemies.length <= 8) {
+		var array = ['dog', 'hobo', 'oldlady', 'civilian', 'cat'];
+		var chosen = array[Math.floor(Math.random() * array.length)];
 
-	if (chosen == "dog") {
-		enemies.push({
-			"name": "a rabid dog",
-			"hp": 30
-		});
-	}
-	else if (chosen == "hobo") {
-		enemies.push({
-			"name": "a dagger-weilding hobo",
-			"hp": 40
-		});
-	}
-	else if (chosen == "oldlady") {
-		enemies.push({
-			"name": "a scary old lady",
-			"hp": 20
-		});
-	}
-	else if (chosen == "civilian") {
-		enemies.push({
-			"name": "a suspicious-looking civilian",
-			"hp": 20
-		});
-	}
-	else if (chosen == "cat") {
-		enemies.push({
-			"name": "a hissing cat",
-			"hp": 15
-		});
-	}
-	update();
+		if (chosen == "dog") {
+			enemies.push({
+				"name": "a rabid dog",
+				"hp": 30
+			});
+		}
+		else if (chosen == "hobo") {
+			enemies.push({
+				"name": "a dagger-weilding hobo",
+				"hp": 40
+			});
+		}
+		else if (chosen == "oldlady") {
+			enemies.push({
+				"name": "a scary old lady",
+				"hp": 20
+			});
+		}
+		else if (chosen == "civilian") {
+			enemies.push({
+				"name": "a suspicious-looking civilian",
+				"hp": 20
+			});
+		}
+		else if (chosen == "cat") {
+			enemies.push({
+				"name": "a hissing cat",
+				"hp": 15
+			});
+		}
+		update();
 
-	$('#log').html("Another enemy spawns!");
-	flash();
+		$('#log').html("Another enemy spawns!");
+		flash();
+	}
 }
 
 function update() {
 	$("#battle").html("");
 	for (var i = 0; i < enemies.length; i++) {
-		$("#battle").append("<div class='enemy' onclick='attackenemy(" + i + ")'>" + enemies[i].name + "<br>" + enemies[i].hp + "</div>");
+		$("#battle").append(
+			"<div class='enemy' onclick='attackenemy(" + i + ")'>" + enemies[i].name + "<br>" + enemies[i].hp + "</div>"
+		);
 	}
 }
 
 function attackenemy(i) {
-	enemies[i].hp -= 5;
-	for (var k = 0; k < enemies.length; k++) {
-
-		if (enemies[k].hp <= 0) {
-			var index = enemies.indexOf(enemies[k]);
-			enemies.splice(index, 1);
-
-			var array = [1, 2, 3, 4, 5];
-			var count = array[Math.floor(Math.random() * array.length)];
-			gold += count;
-			$('#gold').html(gold);
-
-			$('#log').html("You loot " + count + " gold from the enemy.");
-			flash();
-		}
-
+	var spot = enemies.indexOf(enemies[i]);
+	if (enemies[i].name == "") {
+		//do nothing
 	}
+	else {
+		enemies[i].hp -= 5;
+		for (var k = 0; k < enemies.length; k++) {
+
+			if (enemies[k].hp <= 0) {
+				var index = enemies.indexOf(enemies[k]);
+					enemies.splice(index, 1, {
+						"name": "",
+						"hp": "<button onclick='loot(" + i + ")'>Loot.</button>"
+					});
+			}
+
+		}
+		update();
+	}
+}
+
+function loot(i) {
+	if (Math.random() * 100 <= 50) {
+		newitem();
+	}
+	else {
+		var array = [1, 2, 3, 4, 5];
+		var count = array[Math.floor(Math.random() * array.length)];
+		gold += count;
+		$('#gold').html(gold);
+
+		$('#log').html("You loot " + count + " gold from the enemy.");
+		flash();
+	}
+	var spot = enemies.indexOf(enemies[i]);
+	enemies.splice(spot, 1);
 	update();
 }
 
@@ -251,6 +436,10 @@ function loretab() {
 	$('#lt').addClass('active');
 }
 
+function togglehelp() {
+	$('#help').toggle(300);
+}
+
 </script>
 </head>
 <body>
@@ -258,39 +447,69 @@ function loretab() {
 <div class="container">
 	<div class="sidecol">
 		<div>Gold: <span id="gold">0</span></div>
+		<hr>
+		<button onclick="togglehelp()">Help/Guide</button>
+		<div id="help">
+			<ol style="padding-left: 0;">
+				<li><b>The cart.</b></li>
+				Press the 'send cart' button to send the cart out to collect resources, possibly gold or a lorepage.
+				<li><b>The world.</b></li>
+				Press the buttons to move left and right and traverse the world. Sometimes, you will meet an enemy who you can confront to gain resources, possibly gold or an item.
+				<li><b>The lore.</b></li>
+				The lorebook is a list of lorepages you collect. Over time, more aspects of your world will be revealed.
+			</ol>
+			<i>The links at the top right of the page are developer tools (use them and you're cheating!).</i>
+		</div>
 	</div>
 	<div class="maincol">
 		<div class="header">
 			<div id="log">Nothing much.</div>
-				<div style="float: right; margin: 0 4px;"><a href="#" onclick="newore()">+i</a></div>
+				<div style="float: right; margin: 0 4px;"><a href="#" onclick="newore()">+o</a></div>
 				<div style="float: right; margin: 0 4px;"><a href="#" onclick="spawnenemy()">+e</a></div>
 				<div style="float: right; margin: 0 4px;"><a href="#" onclick="newlore()">+l</a></div>
+				<div style="float: right; margin: 0 4px;"><a href="#" onclick="newitem()">+i</a></div>
 		</div>
 
 		<ul id="tabmenu">
 			<li><a id="ct" class="active" onclick="carttab()">Cart</a></li>
-			<li><a id="bt" onclick="battletab()">Battle</a></li>
+			<li><a id="bt" onclick="battletab()">World</a></li>
 			<li><a id="lt" onclick="loretab()">Lore</a></li>
 		</ul>
 
 		<div class="tab" id="carttab">
 			<div class="left">
-				<button id="sendcart" onclick="sendcart()">Send cart.</button>
+				<ul id="items">
+				</ul>
 			</div>
 			<div class="right">
-				<ul id="mine"></ul>
-				<div id="myProgress">
-					<div id="myBar"></div>
+				<div class="left">
+					<button id="sendcart" onclick="sendcart()">Send cart.</button>
+				</div>
+				<div class="right">
+					<ul id="mine"></ul>
+					<div id="myProgress">
+						<div id="myBar"></div>
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<div class="tab" id="battletab">
 			<div id="battle"></div>
+
+			<div style="position: relative;">
+				<ul id="world"></ul>
+				<div id="you">@</div>
+				<div style="width: 350px; margin: 0 auto;">
+					<button style="float: left;" id="walkleft" onclick="walkleft()">Walk left.</button>
+					<button style="float: right;" id="walkright" onclick="walkright()">Walk right.</button>
+				</div>
+				<div id="event">. . .</div>
+			</div>
 		</div>
 
 		<div class="tab" id="loretab">
-			<h2 class="title">Lorequest</h2>
+			<h2 class="title">Lorebook</h2>
 			<ul id="lorebook">
 
 <!-- begin logbook -->
@@ -348,7 +567,52 @@ function loretab() {
 </body>
 
 <style type="text/css">
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Inconsolata|Nunito');
+
+#help {
+	display: none;
+}
+
+#items {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+#items li {
+	display: inline-block;
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	background-color: white;
+	margin: 5px;
+	cursor: default;
+}
+
+#items li:hover {
+	background-color: #f8f8f8;
+}
+
+.sidecol {
+	position: relative;
+}
+
+.info {
+	position: absolute;
+	padding: 5px 10px;
+	width: 150px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	box-shadow: 0px 2px 4px #eee;
+	margin-left: -11px;
+	margin-top: 10px;
+	background-color: #fefde7;
+	display: none;
+}
+
+li:hover .info {
+	display: inline-block;
+}
 
 #battletab,
 #loretab {
@@ -469,7 +733,7 @@ button:hover {
 
 button:disabled {
 	cursor: default;
-	background-color: white;
+	background-color: #eee;
 }
 
 .enemy {
@@ -481,16 +745,20 @@ button:disabled {
 	line-height: 25px;
 	text-align: center;
 	border: 1px solid #999;
-	margin: 5px;
+	margin: 0 5px;
 	cursor: pointer;
 	user-select: none;
 	overflow: hidden;
+	display:inline-flex;
+	justify-content:center;
+	align-items:center;
+	vertical-align: top;
 }
 
 #battle {
-	padding: 10px;
-	min-height: 140px;
-	background-color: #eee;
+	padding: 10px 0;
+	min-height: 120px;
+	background-color: #f4f4f4;
 	text-align: center;
 }
 
@@ -606,6 +874,41 @@ button:disabled {
 	0% { background-color: transparent; }
 	50% { background-color: #fbf8b2; }
 	100% { background-color: transparent; }
+}
+
+
+#world {
+	font-family: 'Inconsolata', monospace;
+	font-size: 30px;
+	list-style-type: none;
+	display: block;
+	width: 400px;
+	margin: 10px auto;
+	background-color: #fefde7;
+	overflow: hidden;
+	text-align: center;
+}
+
+#world li {
+	display: inline;
+	margin: 2px;
+}
+
+#you {
+	font-family: 'Inconsolata', monospace;
+	font-size: 30px;
+	color: coral;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	padding-left: 40px;
+	text-align: center;
+}
+
+#event {
+	clear: both;
+	margin-top: 50px;
+	text-align: center;
 }
 </style>
 </html>
