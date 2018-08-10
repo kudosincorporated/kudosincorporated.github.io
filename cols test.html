@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>cols test</title>
+</head>
+<body>
+
+<div class="container">
+	<div class="sidecol">
+	</div>
+	<div class="maincol">
+		<div class="header">
+		</div>
+		<div class="left">
+		</div>
+		<div class="right">
+		</div>
+	</div>
+</div>
+
+</body>
+
+<style type="text/css">
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	height: 100vh;
+}
+
+.container {
+	height: 100%;
+	background-color: red;
+}
+
+.sidecol {
+	height: 100%;
+	width: 20%;
+	float: left;
+	background-color: seagreen;
+}
+
+.maincol {
+	height: 100%;
+	width: 80%;
+	float: right;
+	background-color: orange;
+}
+
+.header {
+	height: 10%;
+	background-color: limegreen;
+}
+
+.left {
+	height: 90%;
+	width: 50%;
+	float: left;
+	background-color: coral;
+}
+
+.right {
+	height: 90%;
+	width: 50%;
+	float: right;
+	background-color: dodgerblue;
+}
+
+@media screen and (max-width: 900px) {
+	.left, .right {
+		width: 100%;
+		height: auto;
+		min-height: 10%;
+	}
+	.maincol, .sidecol {
+		width: 100%;
+	}
+	.sidecol {
+		height: auto;
+		min-height: 10%;
+	}
+}
+
+</style>
+</html>
