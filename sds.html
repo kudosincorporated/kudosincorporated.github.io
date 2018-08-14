@@ -17,6 +17,63 @@
 
 //--------------------------------------------------
 //--------------------------------------------------
+//------------------ people/jobs -------------------
+//--------------------------------------------------
+//--------------------------------------------------
+
+function prettify(input) {
+	var output = Math.round(input * 1000000)/1000000;
+	return output;
+}
+
+var People = {
+	population: 1,
+	gatherers: 0
+}
+
+var Stuff = {
+	leaves: 0
+}
+
+$(document).ready(function() {
+
+	$('#gatherer__cover .upclick').on('click', function() {
+		if (People.population >= 1) {
+			People.gatherers++;
+			People.population--;
+			$('#gatherers').html(People.gatherers);
+			$('#population').html(People.population);
+		}
+	});
+	$('#gatherer__cover .downclick').on('click', function() {
+		if (People.gatherers >= 1) {
+			People.gatherers--;
+			People.population++;
+			$('#gatherers').html(People.gatherers);
+			$('#population').html(People.population);
+		}
+	});
+
+});
+
+var peopledoingjobs = setInterval(function() {
+
+	Stuff.leaves += (People.gatherers * 0.1);
+	$("#leaves").html(prettify(Stuff.leaves));
+
+}, 1000);
+
+function eatleaves() {
+	if (Stuff.leaves >= 1) {
+		Stuff.leaves--;
+		$("#leaves").html(prettify(Stuff.leaves));
+		$('#log').html("You eat some leaves. Mmm, tasty.");
+		flash();
+	}
+}
+
+//--------------------------------------------------
+//--------------------------------------------------
 //--------------------- items ----------------------
 //--------------------------------------------------
 //--------------------------------------------------
@@ -62,6 +119,8 @@ function updateitems() {
 //--------------------------------------------------
 //--------------------------------------------------
 
+var position = 7;
+
 $(function() {
 	$('.lorepage').on("mouseover", function() {
 		$(this).removeClass('unseen');
@@ -78,58 +137,101 @@ $(function() {
 	});
 });
 
-var world = ["$","_","_","_","_","_","#","_","_","_","_","_","_","_","_","_","$"];
-var newplace = ["1","2","3","_","4","5","6","_","g","u","y","_","w","a","s","_","h","e","r","e"];
+var world = [".","_","_","_","_","_","#","_","_","_","_","_","_","_","_","_","_"];
+var newplace = ["g","u","y"];
 var rightworld = [];
 var leftworld = [];
 
 function walkleft() {
-	console.log('walked left.');
-	rightworld.splice(0, 0, world[16]);
-	world.splice(16, 1);
-
-	if (leftworld[0] != undefined) {
-		world.splice(0, 0, leftworld[0]);
-		leftworld.splice(0, 1);
+	if (position == 0) {
+		//do nothing
 	}
 	else {
-		var array = ["_","_","_","_","_","_","_","_","$"];
-		var tile = array[Math.floor(Math.random() * array.length)];
-		world.splice(0, 0, tile);
-	}
-	updateworld();
-	slimarray();
-	if (Math.random() * 100 <= 2) {
-		spawnenemy();
+		position--;
+		$('#position').html(position);
+
+		rightworld.splice(0, 0, world[16]);
+		world.splice(16, 1);
+
+		if (leftworld[0] != undefined) {
+			world.splice(0, 0, leftworld[0]);
+			leftworld.splice(0, 1);
+		}
+		else {
+			if (position >= 8) {
+				var array = ["_",".","$","&"];
+				var tile = array[Math.floor(Math.random() * array.length)];
+				world.splice(0, 0, tile);
+			}
+			else {
+				var array = [",","."];
+				var tile = array[Math.floor(Math.random() * array.length)];
+				world.splice(0, 0, tile);
+			}
+		}
+		updateworld();
+		slimarray();
+		if (Math.random() * 100 <= 2) {
+			spawnenemy();
+		}
 	}
 }
 
 function walkright() {
-	console.log('walked right.');
-	leftworld.splice(0, 0, world[0]);
-	world.splice(0, 1);
-
-	if (rightworld[0] != undefined) {
-		world.splice(16, 0, rightworld[0]);
-		rightworld.splice(0, 1);
+	if (position == 200) {
+		//do nothing
 	}
 	else {
+		position++;
+		$('#position').html(position);
 
-		if (newplace[0] != undefined) {
-			world.splice(16, 0, newplace[0]);
-			newplace.splice(0, 1);
+		leftworld.splice(0, 0, world[0]);
+		world.splice(0, 1);
+
+		if (rightworld[0] != undefined) {
+			world.splice(16, 0, rightworld[0]);
+			rightworld.splice(0, 1);
 		}
 		else {
-			var array = ["_","_","_","_","_","_","_","_","$"];
-			var tile = array[Math.floor(Math.random() * array.length)];
-			world.splice(16, 0, tile);
-		}
 
-	}
-	updateworld();
-	slimarray();
-	if (Math.random() * 100 <= 2) {
-		spawnenemy();
+			if (newplace[0] != undefined) {
+				world.splice(16, 0, newplace[0]);
+				newplace.splice(0, 1);
+			}
+			else {
+				if (position <= 192) {
+					var array = ["_",".","$","&"];
+					var tile = array[Math.floor(Math.random() * array.length)];
+
+					if (world[15] == "_" && Math.random() * 100 <= 40) {
+						world.splice(16, 0, "_");
+					}
+					else if (world[15] == "." && Math.random() * 100 <= 30) {
+						world.splice(16, 0, ".");
+					}
+					else if (world[15] == "$" && Math.random() * 100 <= 20) {
+						world.splice(16, 0, "$");
+					}
+					else if (world[15] == "&" && Math.random() * 100 <= 10) {
+						world.splice(16, 0, "&");
+					}
+					else {
+						world.splice(16, 0, tile);
+					}
+				}
+				else {
+					var array = [",","."];
+					var tile = array[Math.floor(Math.random() * array.length)];
+					world.splice(16, 0, tile);
+				}
+			}
+
+		}
+		updateworld();
+		slimarray();
+		if (Math.random() * 100 <= 2) {
+			spawnenemy();
+		}
 	}
 }
 
@@ -158,11 +260,29 @@ function updateworld() {
 }
 
 function placetest() {
-	if (world[8] == "#") {
-		$('#event').html("The sign reads: This is like, the starting area.");
+	if (world[8] == "#" && position == 5) {
+		$('#event').html('The sign reads: "Welcome to the Island."');
+	}
+	else if (position == 0) {
+		$('#event').html("It's just water over there...");
+	}
+	else if (position == 200) {
+		$('#event').html("Looks like the other side of the island...");
 	}
 	else {
-		$('#event').html(". . .");
+		$('#event').html("...");
+	}
+
+	//position and biomes
+
+	if (position >= 0 && position < 16) {
+		$('#biome').html("Beginners Bay");
+	}
+	else if (position >= 16) {
+		$('#biome').html("The Island");
+	}
+	else {
+		$('#biome').html("?");
 	}
 }
 
@@ -243,9 +363,102 @@ window.onload = function() {
 			if (this.innerHTML == 'new lore') {
 				newlore();
 			}
+			if (this.innerHTML == 'lockbox') {
+				newlockbox();
+			}
 		$(this).remove();
 	});
 }
+
+var actions = [];
+
+function newlockbox() {
+	spawntask();
+}
+
+function spawntask() {
+	if (actions.length <= 9) {
+
+		var array = ['LootBox', 'GoldBox'];
+		var chosen = array[Math.floor(Math.random() * array.length)];
+
+		if (chosen == "LootBox") {
+			actions.push({
+				"name": "LootBox",
+				"hp": 25,
+				"type": "lootbox"
+			});
+		}
+		else if (chosen == "GoldBox") {
+			actions.push({
+				"name": "GoldBox",
+				"hp": 25,
+				"type": "goldbox"
+			});
+		}
+		updatetasks();
+
+	}
+}
+
+function updatetasks() {
+
+	for (var i = 0; i < actions.length; i++) {
+		if (actions[i].hp <= 0 || actions[i].name == "") {
+			actions.splice(i, 1, {
+				"name": "",
+				"hp": "<button onclick='finish(" + i + ")'>Open</button>",
+				"type": actions[i].type
+			});
+		}
+	}
+
+	$("#events").html("");
+	var i;
+	for (var i = 0; i < actions.length; i++) {
+		$("#events").append(
+			"<div onclick='doaction(" + i + ")'><span class='delmark' onclick='delmark(" + i + ")'>&#x00D7;</span>" + actions[i].name + "<br>" + actions[i].hp + "</div>"
+		);
+	}
+}
+
+function delmark(i) {
+	actions.splice(i, 1);
+	updatetasks();
+}
+
+function doaction(i) {
+	if (actions[i] != undefined) {
+		if (actions[i].name != "") {
+			actions[i].hp -= 5;
+			updatetasks();
+		}
+	}
+}
+
+function finish(i) {
+	if (actions[i].type == "lootbox") {
+		if (Math.random() * 100 <= 50) {
+			newitem();
+		}
+		else {
+			newlore();
+		}
+		
+	}
+	else if (actions[i].type == "goldbox") {
+		var array = [1, 2, 3, 4, 5];
+		var count = array[Math.floor(Math.random() * array.length)];
+		gold += count;
+		$('#gold').html(gold);
+
+		$('#log').html("You open the box and find " + count + " gold.");
+		flash();
+	}
+	actions.splice(i, 1);
+	updatetasks();
+}
+
 
 function sendcart() {
 	document.getElementById("sendcart").disabled = true;
@@ -284,7 +497,7 @@ function newore() {
 	var position = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 	var point = position[Math.floor(Math.random() * position.length)];
 
-	var orearray = ['2 gold', '3 gold', 'new lore'];
+	var orearray = ['2 gold', '3 gold', 'new lore', 'lockbox'];
 	var ore = orearray[Math.floor(Math.random() * orearray.length)];
 
 	if (mine[point] == "") {
@@ -306,6 +519,9 @@ function updatemine() {
 			$('#mine li:nth-child(' + (i + 1) + ')').addClass('collect');
 		}
 		$("#mine li:contains('new lore')").css({
+			"background-color" : "#fefde7"
+		});
+		$("#mine li:contains('lockbox')").css({
 			"background-color" : "#fefde7"
 		});
 	}
@@ -364,6 +580,17 @@ function spawnenemy() {
 }
 
 function update() {
+
+	for (var i = 0; i < enemies.length; i++) {
+		if (enemies[i].hp <= 0 || enemies[i].name == "") {
+			enemies.splice(i, 1, {
+				"name": "",
+				"hp": "<button onclick='loot(" + i + ")'>Loot</button>",
+				"type": enemies[i].type
+			});
+		}
+	}
+
 	$("#battle").html("");
 	for (var i = 0; i < enemies.length; i++) {
 		$("#battle").append(
@@ -373,24 +600,11 @@ function update() {
 }
 
 function attackenemy(i) {
-	var spot = enemies.indexOf(enemies[i]);
-	if (enemies[i].name == "") {
-		//do nothing
-	}
-	else {
-		enemies[i].hp -= 5;
-		for (var k = 0; k < enemies.length; k++) {
-
-			if (enemies[k].hp <= 0) {
-				var index = enemies.indexOf(enemies[k]);
-					enemies.splice(index, 1, {
-						"name": "",
-						"hp": "<button onclick='loot(" + i + ")'>Loot.</button>"
-					});
-			}
-
+	if (enemies[i] != undefined) {
+		if (enemies[i].name != "") {
+			enemies[i].hp -= 5;
+			update();
 		}
-		update();
 	}
 }
 
@@ -407,8 +621,8 @@ function loot(i) {
 		$('#log').html("You loot " + count + " gold from the enemy.");
 		flash();
 	}
-	var spot = enemies.indexOf(enemies[i]);
-	enemies.splice(spot, 1);
+
+	enemies.splice(i, 1);
 	update();
 }
 
@@ -446,20 +660,21 @@ function togglehelp() {
 
 <div class="container">
 	<div class="sidecol">
-		<div>Gold: <span id="gold">0</span></div>
-		<hr>
-		<button onclick="togglehelp()">Help/Guide</button>
-		<div id="help">
-			<ol style="padding-left: 0;">
-				<li><b>The cart.</b></li>
-				Press the 'send cart' button to send the cart out to collect resources, possibly gold or a lorepage.
-				<li><b>The world.</b></li>
-				Press the buttons to move left and right and traverse the world. Sometimes, you will meet an enemy who you can confront to gain resources, possibly gold or an item.
-				<li><b>The lore.</b></li>
-				The lorebook is a list of lorepages you collect. Over time, more aspects of your world will be revealed.
-			</ol>
-			<i>The links at the top right of the page are developer tools (use them and you're cheating!).</i>
+		<div class="sidebarbox">
+			<div>Gold: <span id="gold">0</span></div>
+			<div>Leaves: <span id="leaves">0</span></div>
 		</div>
+
+		<div class="sidebarbox" id="people">
+			<i class="fa fa-user-o" aria-hidden="true"></i> <span id="population">1</span>
+			<hr>
+			<div id="gatherer__cover">
+				Gatherers: <span id="gatherers">0</span>
+				<span class="click upclick">⌃</span><span class="click downclick">⌄</span>
+			</div>
+		</div>
+
+		<button onclick="eatleaves()">Eat Leaves</button>
 	</div>
 	<div class="maincol">
 		<div class="header">
@@ -471,21 +686,25 @@ function togglehelp() {
 		</div>
 
 		<ul id="tabmenu">
-			<li><a id="ct" class="active" onclick="carttab()">Cart</a></li>
+			<li><a id="ct" class="active" onclick="carttab()">Look</a></li>
 			<li><a id="bt" onclick="battletab()">World</a></li>
 			<li><a id="lt" onclick="loretab()">Lore</a></li>
 		</ul>
 
-		<div class="tab" id="carttab">
-			<div class="left">
-				<ul id="items">
-				</ul>
+		<div class="tab" id="carttab" style="height: 80%;">
+			<div class="left" style="height: 100%;">
+				<div class="upper">
+					<ul id="items"></ul>
+				</div>
+				<div class="lower">
+					<div id="events"></div>
+				</div>
 			</div>
 			<div class="right">
-				<div class="left">
-					<button id="sendcart" onclick="sendcart()">Send cart.</button>
+				<div class="left cartleft">
+					<button id="sendcart" onclick="sendcart()">Look around.</button>
 				</div>
-				<div class="right">
+				<div class="right cartright">
 					<ul id="mine"></ul>
 					<div id="myProgress">
 						<div id="myBar"></div>
@@ -504,7 +723,8 @@ function togglehelp() {
 					<button style="float: left;" id="walkleft" onclick="walkleft()">Walk left.</button>
 					<button style="float: right;" id="walkright" onclick="walkright()">Walk right.</button>
 				</div>
-				<div id="event">. . .</div>
+				<div id="event">...</div>
+				<div style="text-align: center;"><span id="position">7</span>m (<span id="biome">Starter Plains</span>)</div>
 			</div>
 		</div>
 
@@ -515,9 +735,29 @@ function togglehelp() {
 <!-- begin logbook -->
 
 <li>
-	<h2><i class="fa fa-bookmark" aria-hidden="true"></i> 14th May, 9:32AM, 100000BC</h2>
+	<h2><i class="fa fa-bullhorn" aria-hidden="true"></i> 14th May 100,000BC</h2>
 	<div>
 		The lorebook is created. Dozens rejoice.
+	</div>
+</li>
+<li>
+	<h2><i class="fa fa-bookmark" aria-hidden="true"></i> Sissy Conface: The Story so Far</h2>
+	<div>
+		Dear Diary,
+		<div style="border: 0; margin: 0;"></div>
+		Today was like, totally amazing.
+		<br>
+		I was walking down the hallway past Brent Trentson... and he WAVED AT ME!! It was, like, the most dreamy thing ever. BUT just as I was about to give him one of my flirtiest looks of disdain he walked right by me to his friend who was, like, so inconsiderately standing behind me.
+		<div style="border: 0; margin: 0;"></div>
+		Anyway, after that I was magically transported onto a deserted island with only the bottle of Fiji water in my backpack and a weird desire to eat leaves. Boring.
+		<div style="border: 0; margin: 0;"></div>
+		Whatever, though. It gives me tons of time to work on my diary. I'm thinking of drawing a full page picture of Brent using, like, tree sap. Or maybe dirt! He's soo manly.
+		<div style="border: 0; margin: 0;"></div>
+		Thats it for today, Diary. Thanks for, like, listening.
+		<div style="border: 0; margin: 0;"></div>
+		xoxo,
+		<br>
+		Sissy Conface
 	</div>
 </li>
 <li id="baron" class="lorepage">
@@ -560,6 +800,25 @@ function togglehelp() {
 <!-- end logbook -->
 
 			</ul>
+
+			<div style="margin: 50px;"></div>
+
+			<button onclick="togglehelp()">Help/Guide</button>
+			<div id="help">
+				<ol>
+					<li><b>Look.</b></li>
+					Press the 'look around' button to collect resources.
+					<li><b>World.</b></li>
+					Press the buttons to move left and right and traverse the world. Sometimes, you will meet an enemy who you can confront to gain resources.
+					<li><b>Lore.</b></li>
+					The lorebook is a list of lorepages you collect. Over time, more details about the world will be revealed.
+					<li><b>People.</b></li>
+					The sidebar has a list of the current population. You can assign them to complete certain tasks.
+				</ol>
+				<i>The links at the top right of the page are developer tools (use them and you're cheating!).</i>
+			</div>
+			<br>
+			<br>
 		</div>
 	</div>
 </div>
@@ -568,6 +827,72 @@ function togglehelp() {
 
 <style type="text/css">
 @import url('https://fonts.googleapis.com/css?family=Inconsolata|Nunito');
+
+.click {
+	background-color: #eee;
+	padding: 1px 3px;
+	margin: 0 3px;
+	font-size: 1.2em;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.click:hover {
+	background-color: #ddd;
+}
+
+#people {
+	user-select: none;
+}
+
+.sidebarbox {
+	border: 1px solid #ccc;
+	padding: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.sidebarbox hr {
+	height: 1px;
+	background-color: #ccc;
+	border: 0;
+}
+
+.upper {
+	height: 50%;
+}
+
+.lower {
+	height: 50px;
+}
+
+#events div {
+	position: relative;
+	display: inline-block;
+	height: 100px;
+	width: 100px;
+	line-height: 25px;
+	text-align: center;
+	border: 1px solid #222;
+	margin: 5px;
+	cursor: pointer;
+	user-select: none;
+	overflow: hidden;
+	display:inline-flex;
+	justify-content:center;
+	align-items:center;
+	vertical-align: top;
+}
+
+.delmark {
+	position: absolute;
+	top: -5px;
+	right: 5px;
+}
+
+.delmark:hover {
+	color: red;
+}
 
 #help {
 	display: none;
@@ -594,6 +919,7 @@ function togglehelp() {
 }
 
 .sidecol {
+	text-align: center;
 	position: relative;
 }
 
@@ -687,13 +1013,13 @@ body {
 
 .sidecol {
 	height: 100%;
-	width: 10%;
+	width: 15%;
 	float: left;
 }
 
 .maincol {
 	height: 100%;
-	width: 90%;
+	width: 85%;
 	float: right;
 }
 
@@ -705,19 +1031,6 @@ body {
 #log {
 	height: 100%;
 	padding: 0 10px;
-}
-
-@media screen and (max-width: 1000px) {
-	.maincol, .sidecol {
-		width: 100%;
-	}
-	.sidecol {
-		height: auto;
-		min-height: 10%;
-	}
-	#lorebook {
-		width: 100%;
-	}
 }
 
 button {
@@ -880,9 +1193,11 @@ button:disabled {
 #world {
 	font-family: 'Inconsolata', monospace;
 	font-size: 30px;
+	height: 30px;
+	line-height: 30px;
 	list-style-type: none;
 	display: block;
-	width: 400px;
+	width: 450px;
 	margin: 10px auto;
 	background-color: #fefde7;
 	overflow: hidden;
@@ -909,6 +1224,23 @@ button:disabled {
 	clear: both;
 	margin-top: 50px;
 	text-align: center;
+}
+
+@media screen and (max-width: 1000px) {
+	.maincol, .sidecol {
+		width: 100%;
+	}
+	.sidecol {
+		height: auto;
+		min-height: 10%;
+	}
+	#lorebook {
+		width: 100%;
+	}
+	.cartleft, .cartright {
+		width: 100%;
+		padding-bottom: 20px;
+	}
 }
 </style>
 </html>
