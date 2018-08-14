@@ -357,7 +357,7 @@ function lore() {
 
 </script>
 </head>
-<body>
+<body class="wob">
 
 <div id="header">
 	<ul id="tabmenu">
@@ -475,6 +475,7 @@ function lore() {
 </body>
 
 <style type="text/css">
+@import url('https://fonts.googleapis.com/css?family=Nunito');
 
 .col {
 	display: inline-block;
@@ -686,6 +687,14 @@ body {
 	THE WHITE ON BLACK THEME
 								*/
 
+.wob, .wob button {
+	font-family: 'Nunito', sans-serif;
+}
+
+.wob button {
+	font-size: inherit;
+}
+
 .wob #events div {
 	border: 1px solid #222;
 }
@@ -700,7 +709,7 @@ body {
 }
 
 .wob #events div button:hover {
-	background-color: rgba(46, 139, 87, 0.1);
+	background-color: rgba(0, 0, 0, 0.05);
 }
 
 .wob .tab__link {
@@ -709,17 +718,17 @@ body {
 
 .wob .tab__link:hover,
 .wob .tab__link.selected {
-	background-color: rgba(46, 139, 87, 0.1);
+	background-color: rgba(0, 0, 0, 0.05);
 }
 
 .wob #myBar,
 .wob #happypop,
 .wob #sadpop {
-	background-color: rgba(46, 139, 87, 0.1);
+	background-color: #eee;
 }
 
 .wob #happypop {
-	background-color: orange;
+	background-color: #ffbb00;
 }
 
 .wob #sadpop {
@@ -733,6 +742,7 @@ body {
 
 .wob .action {
 	color: tomato;
+	font-weight: bold;
 }
 
 .wob .action:active {
@@ -740,25 +750,30 @@ body {
 }
 
 .wob .yellow {
-	color: orange;
+	color: #ffbb00;
+	font-weight: bold;
 }
 
 .wob .blue {
 	color: dodgerblue;
+	font-weight: bold;
 }
 
 .wob .yellowborder {
-	color: orange;
-	border: 1px solid orange!important;
+	color: #ffbb00;
+	font-weight: bold;
+	border: 1px solid #ffbb00!important;
 }
 
 .wob .blueborder {
 	color: dodgerblue;
+	font-weight: bold;
 	border: 1px solid dodgerblue!important;
 }
 
 .wob .help {
-	color: lightseagreen;
+	color: #222;
+	text-decoration: underline;
 	cursor: pointer;
 }
 
