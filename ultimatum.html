@@ -3,7 +3,6 @@
 <head>
 	<title>Ultimatium</title>
 	<meta charset="utf-8">
-
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script type="text/javascript">
@@ -26,9 +25,9 @@ var smileinc = 1;
 var sneerinc = 1;
 var happytoken = 0;
 var sadtoken = 0;
-
 var happybar = 0;
 var sadbar = 0;
+var power = 0;
 
 function smile() {
 	smileTwo();
@@ -124,21 +123,19 @@ function newsadperson() {
 	}
 }
 
+var smileint;
 function autohappy() {
-	var smileint = setInterval(function() {
+	clearInterval(smileint);
+	smileint = setInterval(function() {
 		smile();
-		if (population <= 0) {
-			clearInterval(smileint);
-		}
 	}, autosmile);
 }
 
+var sneerint;
 function autosad() {
-	var sneerint = setInterval(function() {
+	clearInterval(sneerint);
+	sneerint = setInterval(function() {
 		sneer();
-		if (population <= 0) {
-			clearInterval(sneerint);
-		}
 	}, autosneer);
 }
 
@@ -215,6 +212,15 @@ var endgame = setInterval(function() {
 		$('#st').show(300);
 	}
 
+	if (happytoken >= 1 || sadtoken >= 1) {
+		$('#SintoH').show(300);
+		$('#HintoS').show(300);
+	}
+
+	if (happytoken >= 3 || sadtoken >= 3) {
+		$('#prestige').show(300);
+	}
+
 	populationbar();
 }, 100);
 
@@ -237,27 +243,28 @@ function populationbar() {
 var actions = [];
 
 function spawntask() {
-	if (actions.length <= 9) {
+	if (smiles >= 30 || sneers >= 30) {
+		if (actions.length <= 9) {
 
-		var array = ['HappyBox!', 'SadBox...'];
-		var chosen = array[Math.floor(Math.random() * array.length)];
+			var array = ['HappyBox!', 'SadBox...'];
+			var chosen = array[Math.floor(Math.random() * array.length)];
 
-		if (chosen == "HappyBox!") {
-			actions.push({
-				"name": "HappyBox!",
-				"hp": 25,
-				"type": "happy"
-			});
+			if (chosen == "HappyBox!") {
+				actions.push({
+					"name": "HappyBox!",
+					"hp": 25,
+					"type": "happy"
+				});
+			}
+			else if (chosen == "SadBox...") {
+				actions.push({
+					"name": "SadBox...",
+					"hp": 25,
+					"type": "sad"
+				});
+			}
+			update();
 		}
-		else if (chosen == "SadBox...") {
-			actions.push({
-				"name": "SadBox...",
-				"hp": 25,
-				"type": "sad"
-			});
-		}
-		update();
-
 	}
 }
 
@@ -320,8 +327,6 @@ function finish(i) {
 
 
 
-
-
 function help() {
 	$('#helpbox').toggle(300);
 }
@@ -348,11 +353,141 @@ function universe() {
 	$('#universe').show();
 }
 
-function lore() {
+function info() {
 	$('.tab .tab__link').removeClass("selected");
-	$('.tab .loretab').addClass("selected");
+	$('.tab .infotab').addClass("selected");
 	$('.page').hide();
-	$('#lore').show();
+	$('#info').show();
+}
+
+function costSgiveS() {
+	if (sadtoken >= 1) {
+		sadtoken--;
+		$("#sadtoken").html(sadtoken);
+		sneers += smiles;
+		smiles -= smiles;
+		frowns += laughs;
+		laughs -= laughs;
+		$("#sneers").html(sneers);
+		$("#smiles").html(smiles);
+		$("#frowns").html(frowns);
+		$("#laughs").html(laughs);
+		$('#log').html("A wave of depression sweeps over the world. All happiness is turned into sadness.");
+
+		sadbar += happybar;
+		happybar -= happybar;
+		populationbar();
+	}
+	else {
+		$('#log').html("You don't have enough Sad Tokens to do this.");
+	}
+}
+
+function costHgiveH() {
+	if (happytoken >= 1) {
+		happytoken--;
+		$("#happytoken").html(happytoken);
+		smiles += sneers;
+		sneers -= sneers;
+		laughs += frowns;
+		frowns -= frowns;
+		$("#smiles").html(smiles);
+		$("#sneers").html(sneers);
+		$("#laughs").html(laughs);
+		$("#frowns").html(frowns);
+		$('#log').html("A wave of joy sweeps over the world. All sadness is transformed into happiness.");
+
+		happybar += sadbar;
+		sadbar -= sadbar;
+		populationbar();
+	}
+	else {
+		$('#log').html("You don't have enough Happy Tokens to do this!");
+	}
+}
+
+function plusitup() {
+	happytoken = 100;
+	sadtoken = 100;
+}
+
+function prestigeHappy() {
+	if (happytoken >= 10) {
+		happytoken -= 10;
+		$("#happytoken").html(happytoken);
+
+		var powerinc = smiles + laughs + sneers + frowns + happiness + sadness + happypeople + sadpeople;
+		power += powerinc;
+		$("#power").html(power);
+
+		smiles = 0;				$("#smiles").html(smiles);
+		laughs = 0;				$("#laughs").html(laughs);
+		laughchance = 0.1;		//non html
+		sneers = 0;				$("#sneers").html(sneers);
+		frowns = 0;				$("#frowns").html(frowns);
+		frownchance = 0.1;		//non html
+		maxpopulation = 1000;	//non html
+		population = 1000;		$('#population').html(population);
+		happiness  = 0;			$("#happiness").html(happiness);
+		sadness = 0;			$("#sadness").html(sadness);
+		autosmile = 1200;		//non html
+		autosneer = 1200;		//non html
+		happypeople = 0;		$("#happypeople").html(happypeople);
+		sadpeople = 0;			$("#sadpeople").html(sadpeople);
+		smileinc = 1;			//non html
+		sneerinc = 1;			//non html
+		happybar = 0;			//non html
+		sadbar = 0;				//non html
+
+		clearInterval(smileint);
+		clearInterval(sneerint);
+
+		actions = [];
+		update();
+		$('#log').html("You move away from this world, leaving it forever. Your power increases.");
+	}
+	else {
+		$('#log').html("Not enough Happy Tokens. Your work is not done!");
+	}
+}
+
+function prestigeSad() {
+	if (sadtoken >= 10) {
+		sadtoken -= 10;
+		$("#sadtoken").html(sadtoken);
+
+		power += (smiles + laughs + sneers + frowns + maxpopulation + happiness + sadness + happypeople + sadpeople);
+		$("#power").html(power);
+
+		smiles = 0;				$("#smiles").html(smiles);
+		laughs = 0;				$("#laughs").html(laughs);
+		laughchance = 0.1;		//non html
+		sneers = 0;				$("#sneers").html(sneers);
+		frowns = 0;				$("#frowns").html(frowns);
+		frownchance = 0.1;		//non html
+		maxpopulation = 1000;	//non html
+		population = 1000;		$('#population').html(population);
+		happiness  = 0;			$("#happiness").html(happiness);
+		sadness = 0;			$("#sadness").html(sadness);
+		autosmile = 1200;		//non html
+		autosneer = 1200;		//non html
+		happypeople = 0;		$("#happypeople").html(happypeople);
+		sadpeople = 0;			$("#sadpeople").html(sadpeople);
+		smileinc = 1;			//non html
+		sneerinc = 1;			//non html
+		happybar = 0;			//non html
+		sadbar = 0;				//non html
+
+		clearInterval(smileint);
+		clearInterval(sneerint);
+
+		actions = [];
+		update();
+		$('#log').html("You move away from this world, leaving it forever. Your power increases.");
+	}
+	else {
+		$('#log').html("Not enough Sad Tokens. Your work is not done.");
+	}
 }
 
 </script>
@@ -372,8 +507,8 @@ function lore() {
 			</a>
 		</li>
 		<li class="tab">
-			<a class="loretab tab__link" onclick="lore()">
-				Lore
+			<a class="infotab tab__link" onclick="info()">
+				Info
 			</a>
 		</li>
 	</ul>
@@ -383,43 +518,41 @@ function lore() {
 	<a class="help" onclick="header()">[Header]</a>
 </div>
 
-<div style="float: right; margin: 20px 0;">
-	<a id="helpbtn" class="help" onclick="help()">[Help]</a>
-	<div id="helpbox">
-		<ul>
-			<li>Happiness is the speed at which smiles and laughs are generated.</li>
-			<li>Joyous people increase the number of smiles generated per click/per tick.</li>
-			<li>The same logic applies to other emotions.</li>
-		</ul>
-		<ul>
-			<li>The population is the number of people yet to have an emotion.</li>
-			<li>When this bar fills, you will be rewarded and it will be reset.</li>
-		</ul>
-		<a class="help" onclick="toggletheme()">Toggle Theme</a>
-	</div>
-</div>
-
 <div class="mainbox">
 	<div class="page" id="world">
 		<div class="row">
 			<div class="box">
-				<div id="smileaction">
-					Say hello to someone with a smile. <a class="action" onclick="smile()">[Action]</a>
+				<div class="col">
+					<div id='smileaction' class='marginb'>
+						Say hello to someone with a smile. <a class="action" onclick="smile()">[Action]</a>
+					</div>
+					<div id='sneeraction' class='marginb'>
+						Tell someone to go away with a sneer. <a class="action" onclick="sneer()">[Action]</a>
+					</div>
+					<div id='overallhappiness' class='marginb'>
+						The overall happiness of the world increases. <a class="action yellow" onclick="happy()">[5 laughs]</a>
+					</div>
+					<div id='smilingpeople' class='marginb'>
+						People are smiling to eachother now. <a class="action yellow" onclick="newhappyperson()">[10 laughs]</a>
+					</div>
+					<div id='overallsadness' class='marginb'>
+						The overall sadness of the world increases. <a class="action blue" onclick="sad()">[5 frowns]</a>
+					</div>
+					<div id='sneeringpeople' class='marginb'>
+						People are sneering at eachother now. <a class="action blue" onclick="newsadperson()">[10 frowns]</a>
+					</div>
 				</div>
-				<div id='smileaction'>
-					Tell someone to go away with a sneer. <a class="action" onclick="sneer()">[Action]</a>
-				</div>
-				<div id='overallhappiness'>
-					The overall happiness of the world increases. <a class="action yellow" onclick="happy()">[5 laughs]</a>
-				</div>
-				<div id='smilingpeople'>
-					People are smiling to eachother now. <a class="action yellow" onclick="newhappyperson()">[10 laughs]</a>
-				</div>
-				<div id='overallsadness'>
-					The overall sadness of the world increases. <a class="action blue" onclick="sad()">[5 frowns]</a>
-				</div>
-				<div id='sneeringpeople'>
-					People are sneering at eachother now. <a class="action blue" onclick="newsadperson()">[10 frowns]</a>
+				<div class="col">
+					<div id="SintoH" class="marginb">
+						Change all sneers and frowns into smiles and laughs. <a class="action yellow" onclick="costHgiveH()">[1 H Token]</a>
+					</div>
+					<div id="HintoS" class="marginb">
+						Convert every smile and laugh into sneers and frowns. <a class="action blue" onclick="costSgiveS()">[1 S Token]</a>
+					</div>
+					<br>
+					<div id="prestige" class="marginb">
+						Move from this planet, and start afresh. <a class="action yellow" onclick="prestigeHappy()">[10 H Tokens]</a> or <a class="action blue" onclick="prestigeSad()">[10 S Tokens]</a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -463,23 +596,49 @@ function lore() {
 	</div>
 	<div class="page" id="universe">
 		<div class="box">
-			Apparently the whole universe goes here? That's going to be interesting.
+			<div>Nothing happens here yet. Power is currently a useless stat.</div>
+			<br>
+			<div>Power: <span id="power">0</span></div>
 		</div>
 	</div>
-	<div class="page" id="lore">
-		<div class="box">
-			...And the lore will be here. Work in Progress!
+	<div class="page" id="info">
+		<div class="info">
+			<div class="box">
+				<div id="helpbox">
+					<h1>Ultimatium, a game by KudosInc (Guy).</h1>
+					<h3>This is the second "real" game I've made using Javascript. It also uses the popular Javascript library jQuery.</h3>
+					<div><b>Help/Guide/Definitions:</b></div>
+					<ul>
+						<li>Happiness is the speed at which smiles and laughs are generated.</li>
+						<li>Joyous people increase the number of smiles generated per click/per tick.</li>
+						<li>The same logic applies to other emotions.</li>
+					</ul>
+					<ul>
+						<li>The population is the number of people yet to have an emotion.</li>
+						<li>When this bar fills, you will be rewarded and it will be reset.</li>
+					</ul>
+					<ul>
+						<li>You can also find HappyBoxes and SadBoxes, which give a little increase in their respective emotions when clicked.</li>
+					</ul>
+					<div class="marginb">Next stop: Adding the ability to save.</div>
+					<div class="marginb">Also... items!</div>
+					<div class="marginb"><a class="action" onclick="toggletheme()">Toggle Theme</a></div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 </body>
 
 <style type="text/css">
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+.page {
+	height: 100%;
+}
 
 .col {
 	display: inline-block;
-	width: 30%;
+	width: 40%;
 	float: left;
 }
 
@@ -576,19 +735,16 @@ button:focus {
 	background-color: dodgerblue;
 }
 
-#smileaction,
-#sneeraction,
-#overallhappiness,
-#overallsadness,
-#smilingpeople,
-#sneeringpeople {
+.marginb {
 	margin-bottom: 10px;
 }
 
+#SintoH,
+#HintoS,
+#prestige,
 #universe,
-#lore,
+#info,
 #header,
-#helpbox,
 #overallhappiness,
 #overallsadness,
 #smilingpeople,
@@ -687,21 +843,13 @@ body {
 	THE WHITE ON BLACK THEME
 								*/
 
-.wob, .wob button {
-	font-family: 'Nunito', sans-serif;
-}
-
-.wob button {
-	font-size: inherit;
-}
-
 .wob #events div {
-	border: 1px solid #222;
+	border: 1px solid #999;
 }
 
 .wob #events div button {
 	background-color: transparent;
-	border: 1px solid #222;
+	border: 1px solid #999;
 }
 
 .wob .delmark:hover {
@@ -772,11 +920,9 @@ body {
 }
 
 .wob .help {
-	color: #222;
-	text-decoration: underline;
-	cursor: pointer;
+	color: teal;
+	font-weight: bold;
 }
-
 
 </style>
 </html>
