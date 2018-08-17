@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>forager</title>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="foragerJS.js"></script>
+	<link rel="stylesheet" href="foragerCSS.css">
+</head>
+<body onload="loadGame()">
+
+<div class="container">
+	<div class="sidecol">
+		<div class="padder">
+			<div id="log__fader"></div>
+			<ul id="log">
+				<li>The forest beckons.</li>
+			</ul>
+			<div style="position: absolute; bottom: 0; left: 0; padding: 5px; z-index: 2;">
+				<button onclick="saveGame()">Save</button> <button onclick="delGame()">Reset</button>
+			</div>
+		</div>
+	</div>
+	<div class="maincol">
+		<ul id="tabmenu">
+			<li><a id="ct" class="active" onclick="carttab()">Look</a></li>
+			<li><a id="bt" onclick="battletab()">World</a></li>
+			<li><a id="lt" onclick="loretab()">Lore</a></li>
+		</ul>
+
+		<div class="tab" id="carttab" style="height: 80%;">
+			<div class="left" style="height: 100%;">
+				<div class="upper">
+					<div id="items">
+					</div>
+				</div>
+				<div class="lower">
+					<button class="actionbtn" id="eatDarkBerries" onclick="eatDarkBerries()">Eat dark berries.</button>
+					<button class="actionbtn" id="eatRedBerries" onclick="eatRedBerries()">Eat red berries.</button>
+					<button class="actionbtn" id="eatBlueBerries" onclick="eatBlueBerries()">Eat blue berries.</button>
+					<button class="actionbtn" id="craftFlask" onclick="craftFlask()">Craft flask.</button>
+					<button id="craftFirepit" onclick="craftFirepit()">Make firepit.</button>
+					<button id="brewcornflower" onclick="brewcornflower()">Brew cornflower.</button>
+					<button id="drinkCoffeeBrew" onclick="drinkCoffeeBrew()">Drink coffee brew.</button>
+				</div>
+			</div>
+			<div class="right" style="height: 100%;">
+				<div class="upper">
+					<div class="left cartleft">
+						<button id="sendcart" onclick="sendcart()">Look around.</button>
+						<br>
+						<button id="collectwater" onclick="collectwater()">Collect water.</button>
+					</div>
+					<div class="right cartright">
+						<ul id="mine"></ul>
+						<div id="myProgress">
+							<div id="myBar"></div>
+						</div>
+						<br>
+						<button id="dropall" onclick="dropall()">Discard all.</button>
+					</div>
+					<div style="clear: both;"></div>
+				</div>
+				<div class="lower">
+					<div class="left cartleft">
+						<div>Health: </div>
+						<div class="bar">
+							<div id="healthBar" class="inner">
+								<span id="playerHealth">0</span>
+							</div>
+						</div>
+						<div>Thirst: </div>
+						<div class="bar">
+							<div id="thirstBar" class="inner">
+								<span id="playerThirst">0</span>
+							</div>
+						</div>
+						<div>Energy: </div>
+						<div class="bar">
+							<div id="energyBar" class="inner">
+								<span id="playerEnergy">0</span>
+							</div>
+						</div>
+						<div>Carry weight: <span id="playerWeight">0</span>/<span id="playerTotalWeight">0</span></div>
+						<div><a href="#" onclick="newore()">+o</a></div>
+					</div>
+					<div class="right cartright">
+						<div id="coreitems"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="tab" id="battletab">
+			<div>content.</div>
+		</div>
+
+		<div class="tab" id="loretab">
+			<div>content.</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
