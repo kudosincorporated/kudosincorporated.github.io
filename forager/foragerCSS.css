@@ -494,6 +494,16 @@ body {
 	display: none;
 }
 
-#e_name {
+#e_name,
+#weapon {
 	text-transform: capitalize;
+}
+
+#hunt:hover {
+	background-color: inherit;
+	border-color: dodgerblue;
+}
+
+#hunt:active {
+	background-color: #e6f3ff;
 }
