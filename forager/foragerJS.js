@@ -462,7 +462,7 @@ function levelCheck() {
 			'tree bark'
 		];
 	}
-	if (Game.player.plantlvl == 2) {
+	if (Game.player.plantlvl >= 2) {
 		orearray = [
 			'dark berries',
 			'red berries',
