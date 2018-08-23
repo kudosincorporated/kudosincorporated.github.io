@@ -1,4 +1,3 @@
-
 var Game = {
 	player: {
 		health: 100,
@@ -214,6 +213,7 @@ function loadGame() {
 }
 
 function delGame() {
+	alert("The forest has proved too strong an opponent.");
 	localStorage.removeItem("save");
 	localStorage.removeItem("mine");
 	localStorage.removeItem("items");
@@ -367,6 +367,9 @@ function updateValues() {
 	if (Game.player.health >= 100) Game.player.health = 100;
 	if (Game.player.thirst >= 100) Game.player.thirst = 100;
 	if (Game.player.energy >= 100) Game.player.energy = 100;
+	if (Game.player.health <= 0) Game.player.health = 0;
+	if (Game.player.thirst <= 0) Game.player.thirst = 0;
+	if (Game.player.energy <= 0) Game.player.energy = 0;
 
 	$('#playerHealth').html(prettify(Game.player.health));
 	$('#playerThirst').html(prettify(Game.player.thirst));
@@ -402,6 +405,17 @@ function updateValues() {
 	$('#fightlvl').html(prettify(Game.player.fightlvl));
 	$('#fightxp').html(prettify(Game.player.fightxp));
 	$('#nextlvlfight').html(prettify(Game.player.nextlvlfight));
+
+
+	//thirst and energy depletion
+
+	if (Game.player.thirst <= 0) {
+		Game.player.health = 10;
+	}
+
+	if (Game.player.energy <= 0) {
+		Game.player.health = 10;
+	}
 }
 
 function levelCheck() {
@@ -419,6 +433,14 @@ function levelCheck() {
 		Game.player.craftlvl++;
 		updateValues();
 		$('#log').prepend("<li class='green'>Your crafting skill increases.</li>");
+	}
+
+	if (Game.player.fightxp >= Game.player.nextlvlfight) {
+		Game.player.fightxp = 0;
+		Game.player.nextlvlfight += 20;
+		Game.player.fightlvl++;
+		updateValues();
+		$('#log').prepend("<li class='green'>Your fighting skill increases.</li>");
 	}
 
 	//fighting xp/levelling not yet implemented
@@ -537,7 +559,7 @@ function buttonChecker() {
 		$('#actions').append('<button id="eatMilkcap" onclick="eatMilkcap()">Eat milkcap.</button>');
 	}
 
-	if (itemCheck.opiumPoppy >= 1 && itemCheck.sharpRock >= 1) {
+	if (itemCheck.opiumPoppy >= 1 && itemCheck.sharpRock >= 1 && Game.player.craftlvl >= 1) { //craft level 2 is required to do this
 		$('#actions').append('<button id="extractOpium" onclick="extractOpium()">Extract opium.</button>');
 	}
 
@@ -592,13 +614,13 @@ function buttonChecker() {
 	if (itemCheck.sharpRock >= 1) {
 		Game.world.weapon = "sharp rock";
 		Game.world.damage = 5;
-		$('#weapon').html(Game.world.weapon + " (" + Game.world.damage + " dmg)");
 	}
 	else {
 		Game.world.weapon = "fists";
 		Game.world.damage = 1;
-		$('#weapon').html(Game.world.weapon + " (" + Game.world.damage + " dmg)");
 	}
+	var totaldamage = Game.world.damage + Game.player.fightlvl;
+	$('#weapon').html(Game.world.weapon + " (" + totaldamage + " dmg)");
 }
 
 function itemInc(item, id, i) {
@@ -690,6 +712,10 @@ function craftFlask() {
 	imageItems();
 
 	$('#log').prepend("<li>You construct a makeshift flask for water carrying.</li>");
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
 }
 
 function craftPouch() {
@@ -707,6 +733,10 @@ function craftPouch() {
 
 	Game.player.totalweight += 10;
 	updateValues();
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
 }
 
 function craftFirepit() {
@@ -721,6 +751,10 @@ function craftFirepit() {
 	imageItems();
 
 	$('#log').prepend("<li>You make a firepit for warmth... and the ability to brew.</li>");
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
 }
 
 function extractOpium() {
@@ -729,6 +763,10 @@ function extractOpium() {
 
 	newitem("opium", "poppy tears to melt your fears.", 1);
 	$('#log').prepend("<li>You cut open the opium poppy, revealing a dried latex.</li>");
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
 }
 
 function makeOintment() {
@@ -737,6 +775,10 @@ function makeOintment() {
 
 	newitem("ointment", "a smooth, oily substance for wounds.", 1);
 	$('#log').prepend("<li>You mix the sap and marigold, making a helpful ointment.</li>");
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
 }
 
 function brewcornflower() {
@@ -745,6 +787,10 @@ function brewcornflower() {
 
 	newitem("coffee brew", "a small decoction for tired eyes.", 1);
 	$('#log').prepend("<li>You brew the cornflower in some water.</li>");
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
 }
 
 function roastMilkcap() {
@@ -752,6 +798,10 @@ function roastMilkcap() {
 
 	newitem("roasted shroom", "much better for you.", 1);
 	$('#log').prepend("<li>You roast the milkcap over the firepit.</li>");
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
 }
 
 function eatRoastMilkcap() {
@@ -976,10 +1026,10 @@ function worldUpdate() {
 	if (Game.world.distance == 10) {
 		$('#theClearing__event').show();
 	}
-	if (Game.world.distance == 25) {
+	if (Game.world.distance == 20) {
 		$('#theWaterhole__event').show();
 	}
-	if (Game.world.distance == 50) {
+	if (Game.world.distance == 30) {
 		$('#theVillage__event').show();
 	}
 
@@ -989,10 +1039,10 @@ function worldUpdate() {
 	if (Game.world.distance >= 10) {
 		Game.places.theClearing = true;
 	}
-	if (Game.world.distance >= 25) {
+	if (Game.world.distance >= 20) {
 		Game.places.theWaterhole = true;
 	}
-	if (Game.world.distance >= 50) {
+	if (Game.world.distance >= 30) {
 		Game.places.theVillage = true;
 	}
 
@@ -1033,12 +1083,16 @@ function placeTest() {
 function forwards() {
 	document.getElementById('forwards').disabled = true;
 	document.getElementById('forwards').innerHTML = "Walking deeper...";
+
 	setTimeout(function() {
 		document.getElementById('forwards').disabled = false;
-		document.getElementById('forwards').innerHTML = "Venture into the forest.";
+		document.getElementById('forwards').innerHTML = 'Venture into the forest. <i class="fa fa-arrow-up" aria-hidden="true"></i>';
 
 		Game.world.distance += 0.5;
 		worldUpdate();
+
+		Game.player.energy -= 0.5;
+		updateValues();
 
 		$('#log').prepend("<li>You move deeper into the forest.</li>");
 	}, 1000);
@@ -1048,12 +1102,16 @@ function backwards() {
 	if (Game.world.distance >= 0.5) {
 		document.getElementById('backwards').disabled = true;
 		document.getElementById('backwards').innerHTML = "Backtracking steps...";
+
 		setTimeout(function() {
 			document.getElementById('backwards').disabled = false;
-			document.getElementById('backwards').innerHTML = "Backtrack your steps.";
+			document.getElementById('backwards').innerHTML = 'Backtrack your steps. <i class="fa fa-arrow-down" aria-hidden="true"></i>';
 
 			Game.world.distance -= 0.5;
 			worldUpdate();
+
+			Game.player.energy -= 0.5;
+			updateValues();
 
 			$('#log').prepend("<li>You walk backwards.</li>");
 		}, 1000);
@@ -1076,22 +1134,33 @@ function hunt() {
 		$('#forwards').addClass("hidden");
 		$('#backwards').addClass("hidden");
 
-		var array = ["rabbit", "bear"];
+		var array = ["rabbit", "bear", "deer", "racoon", "skunk"];
 		var chosen = array[Math.floor(Math.random() * array.length)];
 
 		if (chosen == "rabbit") {
 			Game.enemy.name = "rabbit";
 			Game.enemy.desc = "This rabbit's eyes are bloodred. It looks just about ready to kill.";
-			Game.enemy.response = 0.2;
-			Game.enemy.damage = 0.1;
-			Game.enemy.health = 15;
+			animalStats(0.2, 0.1, 15);
 		}
 		if (chosen == "bear") {
 			Game.enemy.name = "bear";
 			Game.enemy.desc = "A large brown bear appears from out of the shadows. It does not look friendly.";
-			Game.enemy.response = 0.1;
-			Game.enemy.damage = 1;
-			Game.enemy.health = 100;
+			animalStats(0.1, 1, 100);
+		}
+		if (chosen == "deer") {
+			Game.enemy.name = "deer";
+			Game.enemy.desc = "You find a frantically braying deer. Lucky for you, it looks wounded.";
+			animalStats(0.1, 0.1, 50);
+		}
+		if (chosen == "racoon") {
+			Game.enemy.name = "racoon";
+			Game.enemy.desc = "The racoon picks up a small twig to duel you with. It looks fast.";
+			animalStats(0.5, 0.05, 25);
+		}
+		if (chosen == "skunk") {
+			Game.enemy.name = "skunk";
+			Game.enemy.desc = "A skunk runs towards you. The morning light shines off its black claws.";
+			animalStats(0.1, 0.5, 20);
 		}
 
 		$('#log').prepend("<li class='red'>A " + Game.enemy.name + " appears suddenly.</li>");
@@ -1102,6 +1171,12 @@ function hunt() {
 	}
 }
 
+function animalStats(response, damage, health) {
+	Game.enemy.response = response;
+	Game.enemy.damage = damage;
+	Game.enemy.health = health;
+}
+
 
 function attack() {
 	//player attacks
@@ -1109,7 +1184,8 @@ function attack() {
 	document.getElementById('attack').disabled = true;
 
 		var playerAtk = setInterval(function() {
-			Game.enemy.health -= (Game.world.damage * 0.05);
+			var totaldamage = Game.world.damage + Game.player.fightlvl;
+			Game.enemy.health -= (totaldamage * 0.05);
 			worldUpdate();
 		}, 50);
 		setTimeout(function() {
@@ -1117,6 +1193,10 @@ function attack() {
 		}, 1000);
 
 		$('#log').prepend("<li>You attack the " + Game.enemy.name + " with your " + Game.world.weapon + ".</li>");
+
+		Game.player.fightxp += 5;
+		updateValues();
+		levelCheck();
 
 	setTimeout(function() {
 		document.getElementById('attack').disabled = false;
@@ -1149,13 +1229,24 @@ function endFight() {
 
 	$('#log').prepend("<li class='green'>You win the fight.</li>");
 
+	//possible item
+
+	if (Math.random() * 100 <= 50) {
+		newore();
+		$('#log').prepend("<li class='green'>You forage for something near the animal's body.</li>");
+	}
+
 	placeTest();
 }
 
 function leaveForest() {
 	var end = confirm("You have reached the end of the game -- thank you so much for playing it! Leaving the forest will reset the game, with no reward. Are you sure?");
 	if (end == true) {
-		delGame();
+		localStorage.removeItem("save");
+		localStorage.removeItem("mine");
+		localStorage.removeItem("items");
+		localStorage.removeItem("base");
+		location.reload();
 	}
 	else {
 		//keep playing :)
@@ -1165,12 +1256,9 @@ function leaveForest() {
 
 
 
-/*
 
 function plantlevel2() {
 	Game.player.plantlvl = 2;
 	levelCheck();
 	updateValues();
 }
-
-*/
