@@ -4,7 +4,7 @@ This is my repo for games.
 
 Questers is my first, an unfinished dungeon crawler incremental visible at
 
-[https://kudosincorporated.github.io/](https://kudosincorporated.github.io/)
+[https://kudosincorporated.github.io](https://kudosincorporated.github.io)
 
 Ultimatum is my second game, where you play as an emotional person with a big impact
 
