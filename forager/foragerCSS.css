@@ -611,6 +611,13 @@ body {
 	transition: 150ms;
 }
 
+#items .box .no {
+	position: absolute;
+	top: 0;
+	left: 5px;
+	font-size: 0.8em;
+}
+
 .stacked {
 	width: 20px;
 	font-size: 0;
@@ -620,10 +627,12 @@ body {
 	opacity: 0.6;
 	border-color: #aaa;
 	box-shadow: none;
+	box-shadow: inset 0 0 100px rgba(0,0,0,0.05);
 }
 
 .stacked .delmark {
 	font-size: 16px;
+	text-shadow: none;
 }
 
 #hunt:hover, #attack:hover {

@@ -395,7 +395,9 @@ function updateItems() {
 	var i;
 	for (var i = 0; i < items.length; i++) {
 		$("#items").append(
-			  "<div class='box'><span class='delmark' onclick='delmark(" + i + ")'>&#x00D7;</span>"
+			  "<div class='box'>"
+			+ "<span class='no'></span>"
+			+ "<span class='delmark' onclick='delmark(" + i + ")'>&#x00D7;</span>"
 			+ items[i].name
 			+ "</div><div class='info'>"
 			+ "<i>"
@@ -719,6 +721,8 @@ function stacker(item, id) {
 	for (var i = 0; i < itemCheck[id] - 1; i++) {
 		$('#items .box').eq(index + i + 1).addClass("stacked");
 	}
+
+	$('#items .box .no').eq(index).html(itemCheck[id]);
 }
 
 
