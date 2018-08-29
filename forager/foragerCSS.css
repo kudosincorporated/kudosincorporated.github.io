@@ -1,7 +1,8 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Mono');
 
 .rightcol button {
 	margin: 3px;
+	margin-bottom: 6px;
 	display: block;
 	width: 100%;
 }
@@ -13,7 +14,7 @@
 	height: 90px;
 	width: 90px;
 	text-align: center;
-	border: 1px solid #999;
+	border: 1px solid #ccc;
 	margin: 5px;
 	overflow: hidden;
 	display: inline-flex;
@@ -30,6 +31,8 @@
 	1px -1px 0 #fff,
 	-1px 1px 0 #fff,
 	1px 1px 0 #fff;
+
+	box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
 }
 
 .box-sm {
@@ -69,7 +72,8 @@ hr {
 }
 
 #battletab,
-#loretab {
+#loretab,
+.disc_tab {
 	display: none;
 }
 
@@ -89,7 +93,9 @@ body {
 }
 
 button {
-	border: 1px solid #999;
+	border: 1px solid #bbb;
+	border-radius: 2px;
+	border-bottom: 3px solid #bbb;
 	background: white;
 	padding: 5px 10px;
 	cursor: pointer;
@@ -120,7 +126,7 @@ button:disabled {
 
 #mine li {
 	background-color: white;
-	font-size: 16px;
+	font-size: 14px;
 	text-align: center;
 	margin: 3px;
 	padding: 0;
@@ -128,7 +134,7 @@ button:disabled {
 	height: 70px;
 	width: 70px;
 	background-color: white;
-	border: 1px solid #999;
+	border: 1px solid #ccc;
 	overflow: hidden;
 	display: inline-flex;
 	justify-content: center;
@@ -158,7 +164,7 @@ button:disabled {
 .bar {
 	text-align: center;
 	margin: 5px 0;
-	width: 250px;
+	width: 100%;
 }
 
 .inner {
@@ -166,6 +172,7 @@ button:disabled {
 	text-shadow: 0px 2px 2px rgba(0,0,0,0.2);
 	width: 100%;
 	min-height: 8px;
+	white-space: nowrap;
 	overflow: hidden;
 }
 
@@ -212,17 +219,15 @@ button:disabled {
 }
 
 #tabmenu {
-	border-bottom: 1px solid #ccc;
 	cursor: default;
 	text-align: center;
 	display: table;
 	table-layout: fixed;
 	width: 100%;
-	height: 50px;
-	line-height: 50px;
+	height: 45px;
+	line-height: 45px;
 	margin: 0;
 	padding: 0;
-	background-color: #eee;
 }
 
 #tabmenu li {
@@ -231,25 +236,26 @@ button:disabled {
 
 #tabmenu li a {
 	display: block;
-}
-
-#tabmenu li:not(:last-child) a {
-	border-right: 0;
+	background-color: #6bc76b;
+	color: white;
+	text-shadow: 0px 2px 2px rgba(0,0,0,0.1);
+	border-bottom: 5px solid #46b946;
+	cursor: pointer;
 }
 
 #tabmenu li:hover a {
-	background-color: #f4f4f4;
+	background-color: #7ece7e;
 }
 
-.active {
-	background-color: #ddd!important;
+#tabmenu li a.active,
+#tabmenu li a:active {
+	background-color: #59c059;
 }
 
 .topbox {
-	height: 19%;
-	overflow: auto;
-	border-bottom: 1px solid #ccc;
+	height: 20%;
 	padding: 20px;
+	overflow: auto;
 }
 
 .sidecol {
@@ -270,7 +276,7 @@ button:disabled {
 }
 
 #log__cover {
-	height: 81%;
+	height: 80%;
 	width: 100%;
 	position: relative;
 	overflow: hidden;
@@ -283,11 +289,11 @@ button:disabled {
 	height: 100%;
 	width: 100%;
 	z-index: 1;
-	background-image: linear-gradient(top, transparent, white);
-	background-image: -webkit-linear-gradient(top, transparent, white);
-	background-image: -moz-linear-gradient(top, transparent, white);
-	background-image: -ms-linear-gradient(top, transparent, white);
-	background-image: -o-linear-gradient(top, transparent, white);
+	background-image: linear-gradient(top, transparent, #f8f8f8);
+	background-image: -webkit-linear-gradient(top, transparent, #f8f8f8);
+	background-image: -moz-linear-gradient(top, transparent, #f8f8f8);
+	background-image: -ms-linear-gradient(top, transparent, #f8f8f8);
+	background-image: -o-linear-gradient(top, transparent, #f8f8f8);
 }
 
 .maincol {
@@ -381,8 +387,9 @@ body {
 	position: absolute;
 	top: 0;
 	left: 0;
+	background-color: #f8f8f8;
 	border-right: 1px solid #eee;
-	box-shadow: 0 0 16px rgba(0,0,0,0.1);
+	box-shadow: 0 0 16px rgba(0,0,0,0.15);
 	height: 100%;
 }
 
@@ -391,10 +398,10 @@ body {
 	position: absolute;
 	top: 0;
 	right: 0;
+	background-color: #f8f8f8;
 	border-left: 1px solid #eee;
-	box-shadow: 0 0 16px rgba(0,0,0,0.1);
+	box-shadow: 0 0 16px rgba(0,0,0,0.15);
 	height: 100%;
-
 	padding: 10px;
 }
 
@@ -428,11 +435,16 @@ body {
 
 #items {
 	text-align: left;
+	margin-top: 10px;
+}
+
+#skillscover {
+	width: 160px;
 }
 
 #base__cover {
-	background-color: #f8f8f8;
 	border-top: 1px solid #ccc;
+	padding-right: 180px;
 }
 
 .left {
@@ -499,15 +511,6 @@ body {
 	text-transform: capitalize;
 }
 
-#hunt:hover {
-	background-color: inherit;
-	border-color: dodgerblue;
-}
-
-#hunt:active {
-	background-color: #e6f3ff;
-}
-
 .grey {
 	font-size: 0.9em;
 	color: grey;
@@ -516,8 +519,137 @@ body {
 #skillscover {
 	float: left;
 	text-align: left;
+}
+
+.displaybox {
 	padding: 15px;
 	background-color: white;
 	border: 1px solid #ccc;
 	box-shadow: 0px 2px 2px rgba(0,0,0,0.1);
+}
+
+
+.menu {
+	cursor: default;
+	text-align: center;
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	height: 40px;
+	line-height: 40px;
+	margin: 0;
+	padding: 0;
+}
+
+.menu li {
+	display: table-cell;
+}
+
+.menu li a {
+	display: block;
+	background-color: #8cb3d9;
+	color: white;
+	text-shadow: 0px 2px 2px rgba(0,0,0,0.1);
+	border-bottom: 5px solid #709fcf;
+	cursor: pointer;
+}
+
+.menu li:hover a {
+	background-color: #9fbfdf;
+}
+
+.menu li a.menu_active,
+.menu li a:active {
+	background-color: #79a6d2;
+}
+
+.worldpage {
+	padding: 15px;
+}
+
+#map {
+	font-family: monospace;
+	font-size: 0;
+	width: 300px;
+	padding: 10px;
+	overflow: hidden;
+	margin: 0 auto;
+	background-color: #eee;
+}
+
+#map .tile {
+	font-size: 14px;
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	margin: 3px;
+	background-color: white;
+	border: 1px solid #ddd;
+	text-shadow:
+	-1px -1px 0 #fff,
+	 1px -1px 0 #fff,
+	-1px  1px 0 #fff,
+	 1px  1px 0 #fff;
+}
+
+#map .tile .fillbar {
+	background-color: #60d288;
+	margin-top: -50px;
+	display: block;
+	width: 0%;
+	height: 100%;
+	transition: 1000ms linear;
+}
+
+.id {
+	display: none;
+}
+
+#theClearing__event .inner {
+	transition: 150ms;
+}
+
+.stacked {
+	width: 20px;
+	font-size: 0;
+	margin: 10px 5px;
+	height: 80px;
+	margin-left: -6px;
+	opacity: 0.6;
+	border-color: #aaa;
+	box-shadow: none;
+}
+
+.stacked .delmark {
+	font-size: 16px;
+}
+
+#hunt:hover, #attack:hover {
+	background-color: inherit;
+	border-color: dodgerblue;
+}
+
+#hunt:active, #attack:active {
+	background-color: #e6f3ff;
+}
+
+#forwards {
+	width: 200px;
+	border-width: 1px;
+	margin: 5px 0;
+}
+
+#walkProgress {
+	margin: 0 auto;
+	margin-bottom: 15px;
+	width: 200px;
+	background-color: #eee;
+}
+
+#walkBar {
+	width: 100%;
+	height: 8px;
+	background-color: #aaa;
 }

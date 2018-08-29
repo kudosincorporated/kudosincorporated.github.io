@@ -35,8 +35,35 @@ var Game = {
 		theClearing: false,
 		theWaterhole: false,
 		theVillage: false
-	}
+	},
+
+	complete: 1,
+	clickdmg: 25
 }
+
+var used = [];
+var map = [];
+
+//map zones
+
+var Icons = {
+	tree: '<i class="fa fa-tree" aria-hidden="true"></i><span class="id">tree</span>',
+	mine: '<i class="fa fa-diamond" aria-hidden="true"></i><span class="id">mine</span>',
+	house: '<i class="fa fa-home" aria-hidden="true"></i><span class="id">house</span>',
+	water: '<i class="fa fa-tint" aria-hidden="true"></i><span class="id">water</span>',
+	binoculars: '<i class="fa fa-binoculars" aria-hidden="true"></i>',
+	signs: '<i class="fa fa-map-signs" aria-hidden="true"></i>'
+}
+
+var Zones = {
+	zone1: [
+		Icons.signs, Icons.tree, Icons.tree, Icons.tree, Icons.binoculars,
+		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.water,
+		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.house,
+		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.tree,
+		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.tree,
+	]
+};
 
 var orearray = [
 	'dark berries',
@@ -63,6 +90,7 @@ function mineInit() {
 		if (Game.world.distance != 0 && Game.places.theCliff != false) {
 			Game.world.distance = 0;
 			worldUpdate();
+			loadMap();
 			$('#log').prepend("<li>You are back at the Cliff.</li>");
 		}
 	})
@@ -70,6 +98,7 @@ function mineInit() {
 		if (Game.world.distance != 10 && Game.places.theClearing != false) {
 			Game.world.distance = 10;
 			worldUpdate();
+			loadMap();
 			$('#log').prepend("<li>You travel to the Clearing to hunt animals.</li>");
 		}
 	})
@@ -77,6 +106,7 @@ function mineInit() {
 		if (Game.world.distance != 20 && Game.places.theWaterhole != false) {
 			Game.world.distance = 20;
 			worldUpdate();
+			loadMap();
 			$('#log').prepend("<li>You travel to the Waterhole to go fishing.</li>");
 		}
 	})
@@ -84,6 +114,7 @@ function mineInit() {
 		if (Game.world.distance != 30 && Game.places.theVillage != false) {
 			Game.world.distance = 30;
 			worldUpdate();
+			loadMap();
 			$('#log').prepend("<li>You travel to the Village.</li>");
 		}
 	})
@@ -92,44 +123,45 @@ function mineInit() {
 	$("#mine").on('click', 'li', function () {
 		var index = $("#mine li").index(this);
 
-		if (this.innerHTML == 'dark berries') {
-			clickedItem("dark berries", "they look... menacing.", 1, index);
-		}
-		else if (this.innerHTML == 'red berries') {
-			clickedItem("red berries", "they look... tasty.", 1, index);
-		}
-		else if (this.innerHTML == 'blue berries') {
-			clickedItem("blue berries", "they look... bland.", 1, index);
-		}
-		else if (this.innerHTML == 'leaves') {
-			clickedItem("leaves", "thick, green leaves from an unknown tree. used for flask and pouch crafting.", 4, index);
-		}
-		else if (this.innerHTML == 'twigs') {
-			clickedItem("twigs", "a small bundle of sticks. used for firepit and flask making.", 3, index);
-		}
-		else if (this.innerHTML == 'tree sap') {
-			clickedItem("tree sap", "a slightly sweet, sticky substance. used to make ointment.", 2, index);
-		}
-		else if (this.innerHTML == 'marigold') {
-			clickedItem("marigold", "helpful for treating wounds used to make ointment..", 2, index);
-		}
-		else if (this.innerHTML == 'milkcap') {
-			clickedItem("milkcap", "tasty if prepared in a firepit.", 2, index);
-		}
-		else if (this.innerHTML == 'cornflower') {
-			clickedItem("cornflower", "an ancient remedy for tired eyes when mixed with water.", 2, index);
-		}
-		else if (this.innerHTML == 'opium poppy') {
-			clickedItem("opium poppy", "now this looks interesting...", 2, index);
-		}
-		else if (this.innerHTML == 'sharp rock') {
-			clickedItem("sharp rock", "now this could be useful. can be used as a weapon or to craft opium.", 3, index);
-		}
-		else if (this.innerHTML == 'tree bark') {
-			clickedItem("tree bark", "a strong piece of bark. used for pouch and firepit crafting.", 3, index);
-		}
-		else {
-			console.log("clicked an empty square.");
+		switch (this.innerHTML) {
+			case 'dark berries':
+				clickedItem("dark berries", "they look... menacing.", 1, index);
+				break;
+			case 'red berries':
+				clickedItem("red berries", "they look... tasty.", 1, index);
+				break;
+			case 'blue berries':
+				clickedItem("blue berries", "they look... bland.", 1, index);
+				break;
+			case 'leaves':
+				clickedItem("leaves", "thick, green leaves from an unknown tree. used for flask and pouch crafting.", 4, index);
+				break;
+			case 'twigs':
+				clickedItem("twigs", "a small bundle of sticks. used for firepit and flask making.", 3, index);
+				break;
+			case 'tree sap':
+				clickedItem("tree sap", "a slightly sweet, sticky substance. used to make ointment.", 2, index);
+				break;
+			case 'marigold':
+				clickedItem("marigold", "helpful for treating wounds used to make ointment..", 2, index);
+				break;
+			case 'milkcap':
+				clickedItem("milkcap", "tasty if prepared in a firepit.", 2, index);
+				break;
+			case 'cornflower':
+				clickedItem("cornflower", "an ancient remedy for tired eyes when mixed with water.", 2, index);
+				break;
+			case 'opium poppy':
+				clickedItem("opium poppy", "now this looks interesting...", 2, index);
+				break;
+			case 'sharp rock':
+				clickedItem("sharp rock", "now this could be useful. can be used as a weapon or to craft opium.", 3, index);
+				break;
+			case 'tree bark':
+				clickedItem("tree bark", "a strong piece of bark. used for pouch and firepit crafting.", 3, index);
+				break;
+			default:
+				console.log("clicked an empty square.");
 		}
 	});
 }
@@ -178,6 +210,7 @@ function saveGame() {
 function loadGame() {
 	update();
 	mineInit();
+	makeMap();
 
 	if (localStorage.getItem("save") != undefined) {
 		var savegame = JSON.parse(localStorage.getItem("save"));
@@ -216,11 +249,12 @@ function loadGame() {
 
 		update();
 		worldUpdate();
+		loadMap();
 	}
 }
 
 function delGame() {
-	alert("The forest has proved too strong an opponent.");
+	alert("You could not survive the forest!");
 	localStorage.removeItem("save");
 	localStorage.removeItem("mine");
 	localStorage.removeItem("items");
@@ -259,17 +293,18 @@ function spliceitem(index) {
 function sendcart() {
 	document.getElementById("sendcart").disabled = true;
 
-    var elem = document.getElementById("myBar");
-    var width = 100;
-    var id = setInterval(frame, 50);
-    function frame() {
-        if (width <= 0) {
-            clearInterval(id);
-        } else {
-            width--;
-            elem.style.width = width + '%';
-        }
-    }
+	var elem = document.getElementById("myBar");
+	var width = 100;
+	var id = setInterval(frame, 50);
+	function frame() {
+		if (width <= 0) {
+			clearInterval(id);
+		}
+		else {
+			width--;
+			elem.style.width = width + '%';
+		}
+	}
 
 	setTimeout(function() {
 		document.getElementById("sendcart").disabled = false;
@@ -286,7 +321,15 @@ function sendcart() {
 
 		$('#log').prepend("<li>You finish looking, and find some supplies.</li>");
 
-		Game.player.energy--;
+		//lose energy
+		var forageint = setInterval(function() {
+			Game.player.energy -= 0.1;
+			updateValues();
+		}, 50);
+		setTimeout(function() {
+			clearInterval(forageint);
+		}, 500);
+
 		Game.player.plantxp += 10;
 		levelCheck();
 		updateValues();
@@ -304,7 +347,18 @@ function newore() {
 		updateMine();
 	}
 	else {
-		newore();
+		var full = 0;
+		for (var i = 0; i < 9; i++) {	
+			if (mine[i] != "") {
+				full++;
+			}
+		}
+		if (full >= 9) {
+			console.log("The mine is full!");
+		}
+		else {
+			newore();
+		}
 	}
 }
 
@@ -335,6 +389,8 @@ function delmark(i) {
 }
 
 function updateItems() {
+	sort();
+
 	$("#items").html("");
 	var i;
 	for (var i = 0; i < items.length; i++) {
@@ -357,9 +413,14 @@ function updateItems() {
 		Game.player.weight += items[i].weight;
 	}
 
-
 	updateValues();
 	imageItems();
+}
+
+function sort() {
+	items = items.sort(function (a, b) {
+		return a["name"].localeCompare(b["name"]);
+	});
 }
 
 function prettify(input) {
@@ -414,14 +475,19 @@ function updateValues() {
 	$('#nextlvlfight').html(prettify(Game.player.nextlvlfight));
 
 
-	//thirst and energy depletion
+	//thirst and energy levels at zero
 
 	if (Game.player.thirst <= 0) {
-		Game.player.health = 10;
+		//you are a thirsty boi. nothing happens if you get too thirsty yet.
 	}
 
 	if (Game.player.energy <= 0) {
-		Game.player.health = 10;
+		$('.place').addClass("hidden");
+		$('#forwards').addClass("hidden");
+	}
+	else {
+		$('.place').removeClass("hidden");
+		$('#forwards').removeClass("hidden");
 	}
 }
 
@@ -513,6 +579,9 @@ function buttonChecker() {
 			opium: 0
 	}
 
+	//init stacker
+	$('.box').removeClass("stacked");
+
 	for (var i = 0; i < items.length; i++) {
 		//foraged items
 		itemInc("dark berries", "darkBerries", i);
@@ -562,51 +631,51 @@ function buttonChecker() {
 		$('#actions').append('<button id="eatBlueBerries" onclick="eatBlueBerries()">Eat blue berries.</button>');
 	}
 
-	if (itemCheck.milkcap >= 1) {
+	if (itemCheck.milkcap >= 1) { //eat milkcap
 		$('#actions').append('<button id="eatMilkcap" onclick="eatMilkcap()">Eat milkcap.</button>');
 	}
 
-	if (itemCheck.opiumPoppy >= 1 && itemCheck.sharpRock >= 1 && Game.player.craftlvl >= 1) { //craft level 2 is required to do this
+	if (itemCheck.opiumPoppy >= 1 && itemCheck.sharpRock >= 1 && Game.player.craftlvl >= 1) { //(craft level 2 is required to do this)
 		$('#actions').append('<button id="extractOpium" onclick="extractOpium()">Extract opium.</button>');
 	}
 
-	if (itemCheck.roastMilkcap >= 1) {
+	if (itemCheck.roastMilkcap >= 1) { //eat roast shroom
 		$('#actions').append('<button id="eatRoastMilkcap" onclick="eatRoastMilkcap()">Eat roasted shroom.</button>');
 	}
 
-	if (itemCheck.treeSap >= 1 && itemCheck.marigold >= 1) {
+	if (itemCheck.treeSap >= 1 && itemCheck.marigold >= 1) { //make ointment
 		$('#actions').append('<button id="makeOintment" onclick="makeOintment()">Make ointment.</button>');
 	}
 
-	if (itemCheck.ointment >= 1) {
+	if (itemCheck.ointment >= 1) { //use ointment
 		$('#actions').append('<button id="useOintment" onclick="useOintment()">Use ointment.</button>');
 	}
 
 	//other resources
 
-	if (haveFirepit == true && itemCheck.milkcap >= 1) {
+	if (haveFirepit == true && itemCheck.milkcap >= 1) { //roast milkcap
 		$('#actions').append('<button id="roastMilkcap" onclick="roastMilkcap()">Roast milkcap.</button>');
 	}
 
-	if (haveFirepit == true && itemCheck.cornflower >= 1 && itemCheck.water >= 1) {
+	if (haveFirepit == true && itemCheck.cornflower >= 1 && itemCheck.water >= 1) { //make coffee brew
 		$('#actions').append('<button id="brewcornflower" onclick="brewcornflower()">Brew cornflower.</button>');
 	}
 
-	if (itemCheck.coffeeBrew >= 1) {
+	if (itemCheck.coffeeBrew >= 1) { //drink coffee brew
 		$('#actions').append('<button id="drinkCoffeeBrew" onclick="drinkCoffeeBrew()">Drink coffee brew.</button>');
 	}
 
 	//the coreitems crafting
 
-	if (haveFlask == true) {
-		$('#actions').append('<button class="blue" id="collectwater" onclick="collectwater()">Collect water.</button>');
+	if (haveFlask == true) { //collect water
+		$('#actions').append('<button class="green" id="collectwater" onclick="collectwater()">Collect water.</button>');
 	}
 
-	if (itemCheck.leaves >= 1 && itemCheck.twigs >= 1) { //crafing flask
+	if (itemCheck.leaves >= 1 && itemCheck.twigs >= 1 && haveFlask != true) { //crafing flask
 		$('#actions').append('<button class="green" id="craftFlask" onclick="craftFlask()">Craft flask.</button>');
 	}
 
-	if (itemCheck.twigs >= 1 && itemCheck.treeBark >= 1) { //crafing firepit
+	if (itemCheck.twigs >= 1 && itemCheck.treeBark >= 1 && haveFirepit != true) { //crafing firepit
 		$('#actions').append('<button class="green" id="craftFirepit" onclick="craftFirepit()">Make firepit.</button>');
 	}
 
@@ -616,7 +685,6 @@ function buttonChecker() {
 
 
 	//weaponcheck
-
 
 	if (itemCheck.sharpRock >= 1) {
 		Game.world.weapon = "sharp rock";
@@ -634,7 +702,28 @@ function itemInc(item, id, i) {
 	if (items[i].name == item) {
 		itemCheck[id]++;
 	}
+	
+	stacker(item, id);
 }
+
+
+
+function stacker(item, id) {
+	for (var i = 0; i < items.length; i++) {
+		if (items[i].name == item) {
+			var index = i;
+			break;
+		}
+	}
+
+	for (var i = 0; i < itemCheck[id] - 1; i++) {
+		$('#items .box').eq(index + i + 1).addClass("stacked");
+	}
+}
+
+
+
+
 
 ///////////////////////////
 //     button actions    //
@@ -822,7 +911,7 @@ function eatRoastMilkcap() {
 	}, 50);
 	setTimeout(function() {
 		clearInterval(roastInt);
-	}, 1000);
+	}, 1500);
 }
 
 function useOintment() {
@@ -836,7 +925,7 @@ function useOintment() {
 	}, 50);
 	setTimeout(function() {
 		clearInterval(ointInt);
-	}, 1000);
+	}, 1500);
 }
 
 function drinkCoffeeBrew() {
@@ -1091,6 +1180,28 @@ function forwards() {
 	document.getElementById('forwards').disabled = true;
 	document.getElementById('forwards').innerHTML = "Walking deeper...";
 
+		var elem = document.getElementById("walkBar");
+		var width = 100;
+		var id = setInterval(frame, 10);
+		function frame() {
+			if (width <= 0) {
+				clearInterval(id);
+			}
+			else {
+				width--;
+				elem.style.width = width + '%';
+			}
+		}
+
+		setTimeout(function() {
+			clearInterval(id)
+			width = 100;
+			elem.style.width = width + '%';
+		}, 1000);
+
+	//map
+	explore(Game.clickdmg);
+
 	setTimeout(function() {
 		document.getElementById('forwards').disabled = false;
 		document.getElementById('forwards').innerHTML = 'Venture into the forest. <i class="fa fa-arrow-up" aria-hidden="true"></i>';
@@ -1098,14 +1209,19 @@ function forwards() {
 		Game.world.distance += 0.5;
 		worldUpdate();
 
-		Game.player.energy -= 0.5;
-		updateValues();
+		var walkint = setInterval(function() {
+			Game.player.energy -= 0.1;
+			updateValues();
+		}, 50);
+		setTimeout(function() {
+			clearInterval(walkint);
+		}, 500);
 
 		$('#log').prepend("<li>You move deeper into the forest.</li>");
 	}, 1000);
 }
 
-function backwards() {
+/*function backwards() {
 	if (Game.world.distance >= 0.5) {
 		document.getElementById('backwards').disabled = true;
 		document.getElementById('backwards').innerHTML = "Backtracking steps...";
@@ -1126,7 +1242,7 @@ function backwards() {
 	else {
 		alert("There is no way but forwards. Behind you is a sheer cliff.");
 	}
-}
+}*/
 
 
 
@@ -1188,26 +1304,15 @@ function animalStats(response, damage, health) {
 function attack() {
 	//player attacks
 
-	document.getElementById('attack').disabled = true;
-
-		var playerAtk = setInterval(function() {
-			var totaldamage = Game.world.damage + Game.player.fightlvl;
-			Game.enemy.health -= (totaldamage * 0.05);
-			worldUpdate();
-		}, 50);
-		setTimeout(function() {
-			clearInterval(playerAtk);
-		}, 1000);
+		var totaldamage = Game.world.damage + Game.player.fightlvl;
+		Game.enemy.health -= totaldamage;
+		worldUpdate();
 
 		$('#log').prepend("<li>You attack the " + Game.enemy.name + " with your " + Game.world.weapon + ".</li>");
 
 		Game.player.fightxp += 5;
 		updateValues();
 		levelCheck();
-
-	setTimeout(function() {
-		document.getElementById('attack').disabled = false;
-	}, 1000);
 
 	//enemy responds
 
@@ -1268,4 +1373,104 @@ function plantlevel2() {
 	Game.player.plantlvl = 2;
 	levelCheck();
 	updateValues();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////
+/////              the map              /////
+/////////////////////////////////////////////
+
+function switchTab(tab, id) {
+	$('.world .worldpage').hide();
+	$('.world .menu li a').removeClass('menu_active');
+
+	$(tab).show();
+	$(id).addClass('menu_active');
+}
+
+function makeMap() {
+	Game.complete = 1;
+	$('#complete').html(Game.complete - 1);
+
+	//create map
+	$('#map').html("");
+	used = [];
+	map = [];
+
+	for (var i = 0; i < 25; i++) {
+		if (Zones.zone1[i] != undefined) {
+			map.push(Zones.zone1[i]);
+		}
+		else {
+			map.push('_');
+		}
+	}
+	for (var i = 0; i < 25; i++) {
+		if (map[i] != undefined) {
+			$('#map').append('<div class="tile">' + map[i] + '<div class="fillbar"></div></div>');
+		}
+		else {
+			$('#map').append('<div class="tile">' + '0' + '<div class="fillbar"></div></div>');
+		}
+		used.push({
+			width: 0
+		});
+	}
+
+	//coloring
+	for (var i = 0; i < 25; i++) {
+		$('#map .tile:not(:contains("tree"))').css({
+			"color" : "#f7783c"
+		});
+		$('#map .tile:contains("tree")').css({
+			"color" : "rgba(0,0,0,0.6)",
+			"text-shadow" : "none"
+		});
+	}
+}
+
+function loadMap() {
+	makeMap();
+	
+	var clicks = Game.world.distance * 2;
+	for (var i = 0; i < clicks; i++) {
+		explore(Game.clickdmg);
+	}
+}
+
+function explore(value) {
+	for (var i = Game.complete - 1; i < Game.complete; i++) {
+		if (used[i] != undefined) {
+			if (used[i].width <= 99) {
+				used[i].width += value;
+				$("#map .tile:eq(" + i + ") .fillbar").css({
+					"width" : used[i].width + "%"
+				});
+			}
+			else {
+				Game.complete++;
+				$('#complete').html(Game.complete - 1);
+			}
+		}
+	}
 }

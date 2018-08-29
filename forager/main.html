@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!------------------------------------------>
-	<!--                                      -->
-	<!--         Forager, version 1           -->
-	<!--                                      -->
-	<!-- PM /u/KudosInc for any questions. :) -->
-	<!--                                      -->
-	<!------------------------------------------>
+	<!-- Forager, a game by KudosInc -->
+	<!-- version 1.1 -->
 
 	<title>Forager</title>
 	<!-- jQuery -->
@@ -33,22 +28,24 @@
 
 	<div class="sidecol">
 		<div class="topbox">
-			<div>Health:</div>
-			<div class="bar">
-				<div id="healthBar" class="inner">
-					<span id="playerHealth">0</span> <i class="fa fa-heart" aria-hidden="true"></i>
+			<div class="displaybox" style="padding: 10px; margin: 0;">
+				<div>Health:</div>
+				<div class="bar">
+					<div id="healthBar" class="inner">
+						<span id="playerHealth">0</span> <i class="fa fa-heart" aria-hidden="true"></i>
+					</div>
 				</div>
-			</div>
-			<div>Thirst:</div>
-			<div class="bar">
-				<div id="thirstBar" class="inner">
-					<span id="playerThirst">0</span> <i class="fa fa-tint" aria-hidden="true"></i>
+				<div>Thirst:</div>
+				<div class="bar">
+					<div id="thirstBar" class="inner">
+						<span id="playerThirst">0</span> <i class="fa fa-tint" aria-hidden="true"></i>
+					</div>
 				</div>
-			</div>
-			<div>Energy:</div>
-			<div class="bar">
-				<div id="energyBar" class="inner">
-					<span id="playerEnergy">0</span> <i class="fa fa-low-vision" aria-hidden="true"></i>
+				<div>Energy:</div>
+				<div class="bar">
+					<div id="energyBar" class="inner">
+						<span id="playerEnergy">0</span> <i class="fa fa-low-vision" aria-hidden="true"></i>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -93,22 +90,33 @@
 			</div>
 
 				<div class="lower" id="base__cover" style="height: 30%;">
-					<h2 class="title">Homebase</h2>
-
-					<div id="skillscover">
+					<div id="skillscover" class="displaybox">
 						<div class="marginb">
 							<b>Herbology Skill</b>
-							<div>Level: <span id="plantlvl">0</span> (<span id="plantxp">0</span>/<span id="nextlvlplant">100</span>)</div>
+							<div>
+								Level: <span id="plantlvl">0</span>
+								<span class="grey">
+									(<span id="plantxp">0</span>/<span id="nextlvlplant">100</span>)
+								</span>
+							</div>
 						</div>
 
 						<div class="marginb">
 							<b>Crafting Skill</b>
-							<div>Level: <span id="craftlvl">0</span> (<span id="craftxp">0</span>/<span id="nextlvlcraft">100</span>)</div>
+							<div>Level: <span id="craftlvl">0</span>
+								<span class="grey">
+									(<span id="craftxp">0</span>/<span id="nextlvlcraft">100</span>)
+								</span>
+							</div>
 						</div>
 
 						<div class="marginb">
 							<b>Fighting Skill</b>
-							<div>Level: <span id="fightlvl">0</span> (<span id="fightxp">0</span>/<span id="nextlvlfight">100</span>)</div>
+							<div>Level: <span id="fightlvl">0</span>
+								<span class="grey">
+									(<span id="fightxp">0</span>/<span id="nextlvlfight">100</span>)
+							</span>
+							</div>
 						</div>
 					</div>
 
@@ -120,8 +128,11 @@
 			<div class="left">
 				<h2 class="title">Exploration</h2>
 				
-				<div class="marginb">
-				<button id="forwards" onclick="forwards()">Venture into the forest. <i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+				<div>
+					<button id="forwards" onclick="forwards()">Venture into the forest. <i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+				</div>
+				<div id="walkProgress">
+					<div id="walkBar"></div>
 				</div>
 
 				<div class="marginb">
@@ -138,33 +149,51 @@
 
 				<div style="margin: 20px;"><hr></div>
 
-				<div class="marginb">
-					<b>Discoveries:</b>
+				<div class="marginb"></div>
 
-					<div class='grey'>These are the places you have discovered. Click on them to fast travel to their location.</div>
+				<div class="world">
+					<ul class="menu">
+						<li><a id="d_t" class="menu_tab" onclick="switchTab('.disc_tab', '#d_t')">Discoveries</a></li>
+						<li><a id="m_t" class="menu_active menu_tab" onclick="switchTab('.map_tab', '#m_t')">Map</a></li>
+					</ul>
 
-					<div id="theCliff" class="place">
-						<div><b>The Cliff</b></div>
-						<div><i>The forest's beginnings.</i></div>
-						<div>Location: 0km</div>
+					<div class="disc_tab worldpage">
+						<b>Discoveries:</b>
+						<div class='grey'>These are the places you have discovered. Click on them to fast travel to their location.</div>
+
+						<div id="theCliff" class="place">
+							<div><b>The Cliff</b></div>
+							<div><i>The forest's beginnings.</i></div>
+							<div>Location: 0km</div>
+						</div>
+
+						<div id="theClearing" class="place hidden">
+							<div><b>The Clearing</b></div>
+							<div><i>Animals roam free.</i></div>
+							<div>Location: 10km</div>
+						</div>
+
+						<div id="theWaterhole" class="place hidden">
+							<div><b>The Waterhole</b></div>
+							<div><i>A bountiful fishing spot.</i></div>
+							<div>Location: 20km</div>
+						</div>
+
+						<div id="theVillage" class="place hidden">
+							<div><b>The Village</b></div>
+							<div><i>Civilisation: The end of your journey.</i></div>
+							<div>Location: 30km</div>
+						</div>
 					</div>
 
-					<div id="theClearing" class="place hidden">
-						<div><b>The Clearing</b></div>
-						<div><i>Animals roam free.</i></div>
-						<div>Location: 10km</div>
-					</div>
+					<div class="map_tab worldpage">
+						<div id="map"></div>
 
-					<div id="theWaterhole" class="place hidden">
-						<div><b>The Waterhole</b></div>
-						<div><i>A bountiful fishing spot.</i></div>
-						<div>Location: 20km</div>
-					</div>
+						<div class="marginb"></div>
 
-					<div id="theVillage" class="place hidden">
-						<div><b>The Village</b></div>
-						<div><i>Civilisation: The end of your journey.</i></div>
-						<div>Location: 30km</div>
+						complete. <span id="complete">1</span>
+						<br>
+						
 					</div>
 				</div>
 			</div>
@@ -240,7 +269,7 @@
 		</div>
 
 		<div class="tab" id="loretab">
-			<div style="padding: 15px;">
+			<div style="padding: 15px; height: 100%; overflow: auto;">
 				<h2 class="title">Forager</h2>
 				
 				Forager is a project I undertook to try and learn Javascript and make an incremental game. It also uses the popular JS library jQuery.
@@ -253,8 +282,8 @@
 					<li>Use the 'look around' button to forage for some supplies.</li>
 					<li>Click these supplies to add them to your inventory. Once an item is in your inventory, different actions are unlocked in the right-hand panel as you can combine items, use them, or leave them.</li>
 					<li>As you complete tasks, your skill in that respective task increases.</li>
-					<li><b>Keep foraging and you gain the ability to find different types of items. There are currently 21 obtainable items.</b></li>
-					<li>Your inventory stores items which can be manipulated, and your homebase contains static items.</li>
+					<li><b>Keep foraging and you gain the ability to find different types of items.</b> There are currently 20 obtainable items.</li>
+					<li>Your inventory stores items which can be manipulated, and the lower section contains static items.</li>
 					<li>In the 'world' tab you can walk in a linear direction to discover new places with unique mechanics.</li>
 				</ol>
 
@@ -273,10 +302,13 @@
 				<div class="marginb"></div>
 
 				Thanks for playing!
+
+				<div style="margin: 50px;"><hr></div>
+
+				Note: currently this is verison 1.1, which added more colour, a map and item stacking. This release incorporated some of the feedback I got from reddit, thanks!
 			</div>
 		</div>
 	</div>
-
 </div>
 
 <script type="text/javascript" src="foragerJS.js"></script>
