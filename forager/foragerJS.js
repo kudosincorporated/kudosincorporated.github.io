@@ -666,6 +666,10 @@ function buttonChecker() {
 		$('#actions').append('<button id="drinkCoffeeBrew" onclick="drinkCoffeeBrew()">Drink coffee brew.</button>');
 	}
 
+	if (itemCheck.water >= 1) { //drink water
+		$('#actions').append('<button id="drinkWater" onclick="drinkWater()">Drink water.</button>');
+	}
+
 	//the coreitems crafting
 
 	if (haveFlask == true) { //collect water
@@ -796,6 +800,19 @@ function eatMilkcap() {
 	}, 50);
 	setTimeout(function() {
 		clearInterval(eatint);
+	}, 1000);
+}
+
+function drinkWater() {
+	$('#log').prepend("<li>You drink some of your water.</li>");
+	removeItem("water");
+
+	var waterint = setInterval(function() {
+		Game.player.thirst += 0.5;
+		updateValues();
+	}, 50);
+	setTimeout(function() {
+		clearInterval(waterint);
 	}, 1000);
 }
 
