@@ -24,11 +24,12 @@ var Game = {
 		damage: 1
 	},
 	enemy: {
-		name: "skunk",
-		desc: "An animal.",
-		response: 0.2,
-		damage: 0.1,
-		health: 15
+		name: "",
+		desc: "",
+		response: 0,
+		damage: 0,
+		health: 10,
+		totalhealth: 10
 	},
 	places: {
 		theCliff: true,
@@ -486,7 +487,7 @@ function updateValues() {
 	if (Game.player.energy <= 0) {
 		$('#forwards').addClass("hidden");
 	}
-	else {
+	else if (Game.enemy.name == ""){
 		$('#forwards').removeClass("hidden");
 	}
 }
@@ -1147,13 +1148,13 @@ function worldUpdate() {
 	placeTest();
 
 	//enemy
-
 	$('#enemyHealth').html(prettify(Game.enemy.health));
 
 	var enemyHealthBar = document.getElementById("enemyHealthBar");
-	enemyHealthBar.style.width = Game.enemy.health + '%';
+	var hp = (Game.enemy.health / Game.enemy.totalhealth) * 100;
+	enemyHealthBar.style.width = hp + '%';
 
-	if (Game.enemy.health >= 100) Game.enemy.health = 100;
+	if (Game.enemy.health >= Game.enemy.totalhealth) Game.enemy.health = Game.enemy.totalhealth;
 
 	if (Game.enemy.health <= 0) {
 		enemyHealthBar.style.width = '0%';
@@ -1220,6 +1221,9 @@ function forwards() {
 		}, 500);
 
 		$('#log').prepend("<li>You move deeper into the forest.</li>");
+
+		//random enemy
+		hunt();
 	}, 1000);
 }
 
@@ -1251,41 +1255,36 @@ function forwards() {
 
 
 function hunt() {
-	if (Math.random() * 100 <= 10) {
-		$('#hunt').hide();
-		$('#battle').show();
 
-		$('.place').addClass("hidden");
-		$('#forwards').addClass("hidden");
-		$('#backwards').addClass("hidden");
-
+	//newEnemy (spawnEnemy) function
+	if (Math.random() * 100 <= 25) {
 		var array = ["rabbit", "bear", "deer", "racoon", "skunk"];
 		var chosen = array[Math.floor(Math.random() * array.length)];
 
 		if (chosen == "rabbit") {
 			Game.enemy.name = "rabbit";
 			Game.enemy.desc = "This rabbit's eyes are bloodred. It looks just about ready to kill.";
-			animalStats(0.2, 0.1, 15);
+			animalStats(0.2, 0.1, 15, 15);
 		}
 		if (chosen == "bear") {
 			Game.enemy.name = "bear";
 			Game.enemy.desc = "A large brown bear appears from out of the shadows. It does not look friendly.";
-			animalStats(0.1, 1, 100);
+			animalStats(0.1, 1, 100, 100);
 		}
 		if (chosen == "deer") {
 			Game.enemy.name = "deer";
 			Game.enemy.desc = "You find a frantically braying deer. Lucky for you, it looks wounded.";
-			animalStats(0.1, 0.1, 50);
+			animalStats(0.1, 0.1, 50, 50);
 		}
 		if (chosen == "racoon") {
 			Game.enemy.name = "racoon";
 			Game.enemy.desc = "The racoon picks up a small twig to duel you with. It looks fast.";
-			animalStats(0.5, 0.05, 25);
+			animalStats(0.5, 0.05, 25, 25);
 		}
 		if (chosen == "skunk") {
 			Game.enemy.name = "skunk";
 			Game.enemy.desc = "A skunk runs towards you. The morning light shines off its black claws.";
-			animalStats(0.1, 0.5, 20);
+			animalStats(0.1, 0.5, 20, 20);
 		}
 
 		$('#log').prepend("<li class='red'>A " + Game.enemy.name + " appears suddenly.</li>");
@@ -1293,13 +1292,22 @@ function hunt() {
 		$('#e_name').html(Game.enemy.name);
 		$('#e_desc').html(Game.enemy.desc);
 		worldUpdate();
+
+		//show the modal
+		$('#battle').show();
+		$('.modal_bg').fadeIn(300);
+		$('.modal_bg').removeClass("hide");
+		$('.modal_bg').css({
+			"display" : "inline-flex"
+		})
 	}
 }
 
-function animalStats(response, damage, health) {
+function animalStats(response, damage, health, totalhealth) {
 	Game.enemy.response = response;
 	Game.enemy.damage = damage;
 	Game.enemy.health = health;
+	Game.enemy.totalhealth = totalhealth;
 }
 
 
@@ -1332,19 +1340,16 @@ function attack() {
 }
 
 function endFight() {
-	Game.enemy.health = 99;
+	Game.enemy.health = 1;
 
-	$('#hunt').show();
+	//show modal
 	$('#battle').hide();
-
-	$('.place').removeClass("hidden");
-	$('#forwards').removeClass("hidden");
-	$('#backwards').removeClass("hidden");
+	$('.modal_bg').fadeOut(300);
+	$('.modal_bg').addClass("hide");
 
 	$('#log').prepend("<li class='green'>You win the fight.</li>");
 
 	//possible item
-
 	if (Math.random() * 100 <= 50) {
 		newore();
 		$('#log').prepend("<li class='green'>You forage for something near the animal's body.</li>");
@@ -1381,6 +1386,9 @@ function stacktoggle() {
 	$('body').toggleClass("stacktoggle");
 }
 
+function changelog() {
+	$('#changelog').toggle();
+}
 
 
 

@@ -2,7 +2,6 @@
 <html>
 <head>
 	<!-- Forager, a game by KudosInc -->
-	<!-- version 1.1 -->
 
 	<title>Forager</title>
 	<!-- jQuery -->
@@ -14,13 +13,13 @@
 </head>
 <body onload="loadGame()">
 
-	<div class="tabmenu__cover">
-		<ul id="tabmenu">
-			<li><a id="ct" class="active" onclick="carttab()">Look</a></li>
-			<li><a id="bt" onclick="battletab()">World</a></li>
-			<li><a id="lt" onclick="loretab()">Info</a></li>
-		</ul>
-	</div>
+<div class="tabmenu__cover">
+	<ul id="tabmenu">
+		<li><a id="ct" class="active" onclick="carttab()">Look</a></li>
+		<li><a id="bt" onclick="battletab()">World</a></li>
+		<li><a id="lt" onclick="loretab()">Info</a></li>
+	</ul>
+</div>
 
 <div class="rightcol">
 	<span id="actions"></span>
@@ -129,7 +128,8 @@
 
 		<div class="tab" id="battletab">
 			<div class="left">
-				<h2 class="title">Exploration</h2>
+				<h2 class="title" style="margin-bottom: 0;">Exploration</h2>
+				<div class="grey" style="margin-bottom: 10px;">Tip: There are bears in the forest. Stock up on supplies before embarking.</div>
 				
 				<div>
 					<button id="forwards" onclick="forwards()">Venture into the forest. <i class="fa fa-arrow-up" aria-hidden="true"></i></button>
@@ -194,15 +194,13 @@
 
 						<div class="marginb"></div>
 
-						complete. <span id="complete">1</span>
-						<br>
-						
+						<div class="grey">sectors complete: <span id="complete">1</span></div>
 					</div>
 				</div>
 			</div>
 
 			<div class="right">
-				<h2 class="title">Places</h2>
+				<h2 class="title">Events</h2>
 
 <!-- Begin Events -->
 
@@ -211,9 +209,11 @@
 
 	<div class="marginb">The smoldering wreckage of your plane lies to your left, teetering on the edge of the cliff. It would be unwise to try and go back inside the craft.</div>
 
-	<div class="marginb">In front of you lies a dense forest, populated with all sorts of natural resources.</div>
+	<div class="marginb">In front of you lies a dense forest.</div>
 
-	<div class='grey'>Keep walking forward into the forest to discover new places.</div>
+	<div class="grey">Keep walking forward into the forest to discover new places.</div>
+
+	<div class="marginb"></div>
 </div>
 
 <div id="theClearing__event" class="event">
@@ -224,23 +224,6 @@
 	<div class='grey marginb'>Click the button below to try and find animals, when one shows up you have the ability to fight it. Animals can drop foragable materials.</div>
 
 	<button id="hunt" onclick="hunt()">Hunt for animals.</button>
-
-	<div id="battle">
-		<div id="enemy">
-			<b><div id="e_name">Nothing.</div></b>
-			<div id="e_desc">The lack of something.</div>
-
-			<div class="bar">
-				<div id="enemyHealthBar" class="inner">
-					<span id="enemyHealth">100</span>
-				</div>
-			</div>
-
-			<div class="marginb"></div>
-
-			<button class="btn-sm" id="attack" onclick="attack()">Attack.</button>
-		</div>
-	</div>
 </div>
 
 <div id="theWaterhole__event" class="event">
@@ -264,7 +247,6 @@
 
 	<button onclick="leaveForest()">Leave the forest forever.</button>
 </div>
-
 
 <!-- End Events -->
 
@@ -310,27 +292,63 @@
 
 				<h2 class="title">Changelog</h2>
 
-				<ul>
-					<li><b>version 1.1.1</b></li>
+				<button class="btn-sm" onclick="changelog()">View</button>
+
+				<div id="changelog">
 					<ul>
-						<li>
-							Fixed a bug in which place names weren't hidden.
-						</li>
+						<li><b>version 1.2</b></li>
+						<ul>
+							<li>
+								Added random enemy spawns in the forest instead of a specific hunting area. Comes with a cool modal effect.
+							</li>
+							<li>
+								Added a toggle button to choose between stacking item visuals.
+							</li>
+						</ul>
+						<li><b>version 1.1.1</b></li>
+						<ul>
+							<li>
+								Fixed a bug in which place names weren't hidden.
+							</li>
+							<li>
+								Added changelog.
+							</li>
+						</ul>
+						<li><b>version 1.1</b></li>
+						<ul>
+							<li>
+								Added more colour, a map and item stacking. This release incorporated some of the feedback I got from reddit, thanks!
+							</li>
+						</ul>
+						<li><b>version 1</b></li>
+						<ul>
+							<li>
+								First release, as a prototype on /r/incremental_games.
+							</li>
+						</ul>
 					</ul>
-					<li><b>version 1.1</b></li>
-					<ul>
-						<li>
-							Added more colour, a map and item stacking. This release incorporated some of the feedback I got from reddit, thanks!
-						</li>
-					</ul>
-					<li><b>version 1</b></li>
-					<ul>
-						<li>
-							First release, as a prototype on reddit.
-						</li>
-					</ul>
-				</ul>
+				</div>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal_bg hide">
+	<div id="battle" class="event_modal">
+		<h3 class="title battle_header">An Enemy Appears</h3>
+		<div id="enemy">
+			<b><div id="e_name">Nothing.</div></b>
+			<div id="e_desc">The lack of something.</div>
+
+			<div class="bar" style="width: 90%; margin: 10px auto;">
+				<div id="enemyHealthBar" class="inner">
+					<span id="enemyHealth">100</span>
+				</div>
+			</div>
+
+			<div class="marginb"></div>
+
+			<button class="btn-sm" id="attack" onclick="attack()">Attack.</button>
 		</div>
 	</div>
 </div>
