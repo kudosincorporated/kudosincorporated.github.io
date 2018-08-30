@@ -83,10 +83,13 @@
 					<div class='grey marginb'>Click the 'look around' button to forage for materials.<br>Check the info tab for more information.</div>
 			</div>
 
-			<div class="right" style="height: 70%;">
+			<div class="right" style="height: 70%; position: relative;">
 					<h2 class="title" style="margin-bottom: 0;">Inventory</h2>
 					<div class="grey">Carry weight: <span id="playerWeight">0</span>/<span id="playerTotalWeight">0</span></div>
 					<div id="items"></div>
+					<div style="position: absolute; top: 0; left: 0; margin: 5px;">
+						<button id="stacktoggle" onclick="stacktoggle()" style="padding: 2px 6px; border-width: 1px;">Toggle Stacks</button>
+					</div>
 			</div>
 
 				<div class="lower" id="base__cover" style="height: 30%;">
@@ -305,7 +308,28 @@
 
 				<div style="margin: 50px;"><hr></div>
 
-				Note: currently this is verison 1.1, which added more colour, a map and item stacking. This release incorporated some of the feedback I got from reddit, thanks!
+				<h2 class="title">Changelog</h2>
+
+				<ul>
+					<li><b>version 1.1.1</b></li>
+					<ul>
+						<li>
+							Fixed a bug in which place names weren't hidden.
+						</li>
+					</ul>
+					<li><b>version 1.1</b></li>
+					<ul>
+						<li>
+							Added more colour, a map and item stacking. This release incorporated some of the feedback I got from reddit, thanks!
+						</li>
+					</ul>
+					<li><b>version 1</b></li>
+					<ul>
+						<li>
+							First release, as a prototype on reddit.
+						</li>
+					</ul>
+				</ul>
 			</div>
 		</div>
 	</div>

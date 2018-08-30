@@ -618,6 +618,10 @@ body {
 	font-size: 0.8em;
 }
 
+.stacktoggle .stacked {
+	display: none;
+}
+
 .stacked {
 	width: 20px;
 	font-size: 0;

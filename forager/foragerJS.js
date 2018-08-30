@@ -484,11 +484,9 @@ function updateValues() {
 	}
 
 	if (Game.player.energy <= 0) {
-		$('.place').addClass("hidden");
 		$('#forwards').addClass("hidden");
 	}
 	else {
-		$('.place').removeClass("hidden");
 		$('#forwards').removeClass("hidden");
 	}
 }
@@ -1379,7 +1377,9 @@ function plantlevel2() {
 	updateValues();
 }
 
-
+function stacktoggle() {
+	$('body').toggleClass("stacktoggle");
+}
 
 
 
