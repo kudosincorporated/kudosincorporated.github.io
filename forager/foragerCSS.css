@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto+Mono');
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif|Roboto+Slab|Slabo+27px');
+
+body, button {
+	font-family: 'Roboto Slab', sans-serif;
+	font-size: 14px;
+}
 
 .rightcol button {
 	margin: 3px;
@@ -79,11 +84,6 @@ hr {
 
 * {
 	box-sizing: border-box;
-}
-
-body, button {
-	font-family: 'Open Sans', sans-serif;
-	font-size: 14px;
 }
 
 body {
@@ -293,6 +293,7 @@ button:disabled {
 	background-image: -moz-linear-gradient(top, transparent, #f8f8f8);
 	background-image: -ms-linear-gradient(top, transparent, #f8f8f8);
 	background-image: -o-linear-gradient(top, transparent, #f8f8f8);
+	pointer-events: none;
 }
 
 .maincol {
@@ -515,7 +516,7 @@ body {
 }
 
 #e_name,
-#weapon {
+.weapon {
 	text-transform: capitalize;
 }
 
@@ -530,7 +531,7 @@ body {
 }
 
 .displaybox {
-	padding: 15px;
+	padding: 10px;
 	background-color: white;
 	border: 1px solid #ccc;
 	box-shadow: 0px 2px 2px rgba(0,0,0,0.1);
@@ -681,6 +682,7 @@ body {
 	align-items: center;
 	vertical-align: top;
 	padding-bottom: 100px;
+	overflow: auto;
 }
 
 .hide {
@@ -697,4 +699,41 @@ body {
 	border: 1px solid #ccc;
 	margin: 10px 0;
 	padding: 10px;
+}
+
+.topbox .inner {
+	transition: 300ms linear;
+}
+
+.toggle-btn {
+	padding: 2px 6px;
+	border-width: 1px;
+}
+
+#info {
+	display: none;
+	position: relative;
+	text-align: left;
+	width: 80%;
+	margin: 20px auto;
+	padding: 15px;
+}
+
+#bait:hover + .info {
+	display: inline-block;
+}
+
+#bait + .info {
+	width: 200px;
+	margin: 30px 0 0 -100px;
+	text-align: left;
+	font-size: 0.8em;
+}
+
+.edit_icon {
+	cursor: pointer;
+}
+
+.edit_icon:hover {
+	color: dodgerblue;
 }

@@ -17,7 +17,7 @@
 	<ul id="tabmenu">
 		<li><a id="ct" class="active" onclick="carttab()">Look</a></li>
 		<li><a id="bt" onclick="battletab()">World</a></li>
-		<li><a id="lt" onclick="loretab()">Info</a></li>
+		<li><a id="lt" onclick="loretab()">Player</a></li>
 	</ul>
 </div>
 
@@ -27,7 +27,7 @@
 
 	<div class="sidecol">
 		<div class="topbox">
-			<div class="displaybox" style="padding: 10px; margin: 0;">
+			<div class="displaybox">
 				<div>Health:</div>
 				<div class="bar">
 					<div id="healthBar" class="inner">
@@ -55,7 +55,9 @@
 				<li>The forest beckons.</li>
 			</ul>
 			<div style="position: absolute; bottom: 0; left: 3px; padding: 3px; z-index: 2;">
-				<button class="btn-sm" onclick="saveGame()">Save</button> <button class="btn-sm" onclick="delGame()">Reset</button>
+				<button class="toggle-btn" onclick="saveGame()">Save</button>
+				<button class="toggle-btn" onclick="delGame()">Reset</button>
+				<button class="toggle-btn" onclick="info()">Info/FAQ</button>
 			</div>
 		</div>
 	</div>
@@ -79,7 +81,7 @@
 
 					<br>
 					<br>
-					<div class='grey marginb'>Click the 'look around' button to forage for materials.<br>Check the info tab for more information.</div>
+					<div class='grey marginb'>Click the 'look around' button to forage for materials.<br>Check the info button for more information.</div>
 			</div>
 
 			<div class="right" style="height: 70%; position: relative;">
@@ -87,7 +89,7 @@
 					<div class="grey">Carry weight: <span id="playerWeight">0</span>/<span id="playerTotalWeight">0</span></div>
 					<div id="items"></div>
 					<div style="position: absolute; top: 0; left: 0; margin: 5px;">
-						<button id="stacktoggle" onclick="stacktoggle()" style="padding: 2px 6px; border-width: 1px;">Toggle Stacks</button>
+						<button class="toggle-btn" onclick="stacktoggle()">Toggle Stacks</button>
 					</div>
 			</div>
 
@@ -147,7 +149,7 @@
 				<div class="marginb">
 					<b>Weapon:</b>
 					<br>
-					<span id="weapon">none.</span>
+					<span class="weapon">none.</span>
 				</div>
 
 				<div style="margin: 20px;"><hr></div>
@@ -204,6 +206,16 @@
 
 <!-- Begin Events -->
 
+<div id="theForest__event" class="event">
+	<h2 class="title">The Forest</h2>
+
+	<div class="marginb">The smoldering wreckage of your plane lies to your left, teetering on the edge of the cliff. It would be unwise to try and go back inside the craft.</div>
+
+	<div class="marginb">In front of you lies a dense forest.</div>
+
+	<div class="grey marginb">Keep walking forward into the forest to discover new places.</div>
+</div>
+
 <div id="theCliff__event" class="event">
 	<h2 class="title">The Cliff</h2>
 
@@ -211,9 +223,7 @@
 
 	<div class="marginb">In front of you lies a dense forest.</div>
 
-	<div class="grey">Keep walking forward into the forest to discover new places.</div>
-
-	<div class="marginb"></div>
+	<div class="grey marginb">Keep walking forward into the forest to discover new places.</div>
 </div>
 
 <div id="theClearing__event" class="event">
@@ -221,9 +231,11 @@
 
 	<div class="marginb">You come across a patch of the forest which seems more... alive. You can see small animals darting around the treetops, and rustling bushes in your peripheral vision. Perhaps this would be a good spot to hunt.</div>
 
-	<div class='grey marginb'>Click the button below to try and find animals, when one shows up you have the ability to fight it. Animals can drop foragable materials.</div>
+	<div class="grey marginb">Click the button below to hunt for animals, instead of encountering them randomly.</div>
 
-	<button id="hunt" onclick="hunt()">Hunt for animals.</button>
+	<div class="marginb">
+		<button id="hunt" onclick="hunt()">Hunt for animals.</button>
+	</div>
 </div>
 
 <div id="theWaterhole__event" class="event">
@@ -231,7 +243,7 @@
 
 	<div class="marginb">In front of you is a waterhole, brimming with fish that make ripples as they dart around. Standing under a shady tree, you can finally rest... or go fishing!</div>
 
-	<div class="marginb"><i><b>The waterhole is a work in progress!</b> But for getting this far you deserve a reward: The "endgame" is located at 30km into the forest, and because there is no prestige mechanic yet it's completely useless.</i></div>
+	<div class="marginb"><i>The waterhole, and all events after it, are works in progress. There are currently no new mechanics to be discovered further into the forest, sorry. The final 'place' is the village, which is located 30km into the forest.</i></div>
 </div>
 
 <div id="theVillage__event" class="event">
@@ -245,7 +257,9 @@
 
 	<div class="marginb">Could you leave the forest? Can you?</div>
 
-	<button onclick="leaveForest()">Leave the forest forever.</button>
+	<div class="marginb">
+		<button onclick="leaveForest()">Leave the forest forever.</button>
+	</div>
 </div>
 
 <!-- End Events -->
@@ -254,7 +268,55 @@
 		</div>
 
 		<div class="tab" id="loretab">
-			<div style="padding: 15px; height: 100%; overflow: auto;">
+			<div class="left">
+				<div class="marginb">
+					<b><span class="playername">name</span></b>
+					<span class="edit_icon" onclick="changename()" title="Edit name.">
+						<i class="fa fa-pencil" aria-hidden="true"></i>
+					</span>,
+					<span class="playertitle">title</span>.
+				</div>
+				<hr>
+				Runes:
+				<br>
+				WIP
+			</div>
+			<div class="right">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal_bg hide">
+	<div id="battle" class="event_modal">
+		<h3 class="title battle_header">An Enemy Appears</h3>
+		<div id="enemy">
+			<b><div id="e_name">Nothing.</div></b>
+			<div id="e_desc">The lack of something.</div>
+
+			<div class="bar" style="width: 90%; margin: 10px auto;">
+				<div id="enemyHealthBar" class="inner">
+					<span id="enemyHealth">100</span>
+				</div>
+			</div>
+
+			<div style="text-align: center;">
+				<button class="btn-sm marginb" id="attack" onclick="attack()">Attack.</button>
+			</div>
+
+			<button class="toggle-btn marginb" id="bait" onclick="bait()">Bait.</button>
+				<div class="info">
+					Baiting the enemy increases flee chance.
+					<br>
+					Costs 1 blue berries.
+				</div>
+			<button class="toggle-btn marginb" id="flee" onclick="flee()">Flee. (<span id="fleechance">0</span>% chance)</button>
+		</div>
+	</div>
+
+			<div id="info" class="event_modal">
+				<span class="delmark" onclick="closeinfo()" style="font-size: 1.5em; margin: 0 5px;">&#x00D7;</span>
+
 				<h2 class="title">Forager</h2>
 				
 				Forager is a project I undertook to try and learn Javascript and make an incremental game. It also uses the popular JS library jQuery.
@@ -296,6 +358,15 @@
 
 				<div id="changelog">
 					<ul>
+						<li><b>version 1.3</b></li>
+						<ul>
+							<li>
+								Improved/polished mechanics introduced in the last update.
+							</li>
+							<li>
+								Rearraged the info tab, added the player tab.
+							</li>
+						</ul>
 						<li><b>version 1.2</b></li>
 						<ul>
 							<li>
@@ -323,34 +394,12 @@
 						<li><b>version 1</b></li>
 						<ul>
 							<li>
-								First release, as a prototype on /r/incremental_games.
+								First release, as a prototype on /r/incremental_games. (August 2018)
 							</li>
 						</ul>
 					</ul>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal_bg hide">
-	<div id="battle" class="event_modal">
-		<h3 class="title battle_header">An Enemy Appears</h3>
-		<div id="enemy">
-			<b><div id="e_name">Nothing.</div></b>
-			<div id="e_desc">The lack of something.</div>
-
-			<div class="bar" style="width: 90%; margin: 10px auto;">
-				<div id="enemyHealthBar" class="inner">
-					<span id="enemyHealth">100</span>
-				</div>
-			</div>
-
-			<div class="marginb"></div>
-
-			<button class="btn-sm" id="attack" onclick="attack()">Attack.</button>
-		</div>
-	</div>
 </div>
 
 <script type="text/javascript" src="foragerJS.js"></script>

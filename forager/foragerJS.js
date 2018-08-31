@@ -1,5 +1,7 @@
 var Game = {
 	player: {
+		name: "Player",
+		title: "the Simple Nomad",
 		health: 100,
 		thirst: 100,
 		energy: 100,
@@ -29,7 +31,8 @@ var Game = {
 		response: 0,
 		damage: 0,
 		health: 10,
-		totalhealth: 10
+		totalhealth: 10,
+		fleechance: 0
 	},
 	places: {
 		theCliff: true,
@@ -83,6 +86,7 @@ function update() {
 	updateBase();
 	imageItems();
 	buttonChecker();
+	playerUpdate();
 }
 
 function mineInit() {
@@ -177,6 +181,7 @@ setInterval(function() {
 
 function saveGame() {
 	var save = {
+		name: Game.player.name,
 		health: Game.player.health,
 		thirst: Game.player.thirst,
 		energy: Game.player.energy,
@@ -223,6 +228,7 @@ function loadGame() {
 		if (saveitems != "") items = saveitems;
 		if (savebase != "") base = savebase;
 
+		if (typeof savegame.name !== "undefined") Game.player.name = savegame.name;
 		if (typeof savegame.health !== "undefined") Game.player.health = savegame.health;
 		if (typeof savegame.thirst !== "undefined") Game.player.thirst = savegame.thirst;
 		if (typeof savegame.energy !== "undefined") Game.player.energy = savegame.energy;
@@ -323,13 +329,8 @@ function sendcart() {
 		$('#log').prepend("<li>You finish looking, and find some supplies.</li>");
 
 		//lose energy
-		var forageint = setInterval(function() {
-			Game.player.energy -= 0.1;
-			updateValues();
-		}, 50);
-		setTimeout(function() {
-			clearInterval(forageint);
-		}, 500);
+		Game.player.energy -= 1;
+		updateValues();
 
 		Game.player.plantxp += 10;
 		levelCheck();
@@ -487,7 +488,7 @@ function updateValues() {
 	if (Game.player.energy <= 0) {
 		$('#forwards').addClass("hidden");
 	}
-	else if (Game.enemy.name == ""){
+	else if (Game.enemy.name == "") {
 		$('#forwards').removeClass("hidden");
 	}
 }
@@ -700,7 +701,7 @@ function buttonChecker() {
 		Game.world.damage = 1;
 	}
 	var totaldamage = Game.world.damage + Game.player.fightlvl;
-	$('#weapon').html(Game.world.weapon + " (" + totaldamage + " dmg)");
+	$('.weapon').html(Game.world.weapon + " (" + totaldamage + " dmg)");
 }
 
 function itemInc(item, id, i) {
@@ -750,70 +751,45 @@ function eatDarkBerries() {
 	$('#log').prepend("<li class='red'>The dark berries cause you to convulse and hallucinate. Don't eat scary berries!</li>");
 	removeItem("dark berries");
 
-	var berryint = setInterval(function() {
-		Game.player.health -= 1;
-		Game.player.thirst -= 0.1;
-		updateValues();
-	}, 50);
-	setTimeout(function() {
-		clearInterval(berryint);
-	}, 1500);
+	Game.player.health -= 10;
+	Game.player.thirst -= 5;
+	updateValues();
 }
 
 function eatRedBerries() {
 	$('#log').prepend("<li class='red'>The red berries parch your throat and weaken you.</li>");
 	removeItem("red berries");
 
-	var berryint = setInterval(function() {
-		Game.player.thirst -= 1;
-		Game.player.energy -= 0.1;
-		updateValues();
-	}, 50);
-	setTimeout(function() {
-		clearInterval(berryint);
-	}, 1500);
+	Game.player.thirst -= 10;
+	Game.player.energy -= 5;
+	updateValues();
 }
 
 function eatBlueBerries() {
 	$('#log').prepend("<li>The berries are slightly sour, but tasty.</li>");
 	removeItem("blue berries");
 
-	var berryint = setInterval(function() {
-		Game.player.health += 0.3;
-		Game.player.thirst += 0.2;
-		Game.player.energy += 0.1;
-		updateValues();
-	}, 50);
-	setTimeout(function() {
-		clearInterval(berryint);
-	}, 1000);
+	Game.player.health += 5;
+	Game.player.thirst += 3;
+	Game.player.energy += 2;
+	updateValues();
 }
 
 function eatMilkcap() {
 	$('#log').prepend("<li>The milkcap tastes like... nothing.</li>");
 	removeItem("milkcap");
 
-	var eatint = setInterval(function() {
-		Game.player.health += 0.1;
-		Game.player.thirst += 0.1;
-		updateValues();
-	}, 50);
-	setTimeout(function() {
-		clearInterval(eatint);
-	}, 1000);
+	Game.player.health += 5;
+	Game.player.energy += 5;
+	updateValues();
 }
 
 function drinkWater() {
 	$('#log').prepend("<li>You drink some of your water.</li>");
 	removeItem("water");
 
-	var waterint = setInterval(function() {
-		Game.player.thirst += 0.5;
-		updateValues();
-	}, 50);
-	setTimeout(function() {
-		clearInterval(waterint);
-	}, 1000);
+	Game.player.thirst += 20;
+	updateValues();
 }
 
 function craftFlask() {
@@ -848,8 +824,6 @@ function craftPouch() {
 	$('#log').prepend("<li>You craft a pouch to carry more supplies after foraging.</li>");
 
 	Game.player.totalweight += 10;
-	updateValues();
-
 	Game.player.craftxp += 10;
 	updateValues();
 	levelCheck();
@@ -924,42 +898,26 @@ function eatRoastMilkcap() {
 	$('#log').prepend("<li>You eat the roasted shroom, filling you with vitality.</li>");
 	removeItem("roasted shroom");
 
-	var roastInt = setInterval(function() {
-		Game.player.health += 0.5;
-		Game.player.energy += 0.1;
-		updateValues();
-	}, 50);
-	setTimeout(function() {
-		clearInterval(roastInt);
-	}, 1500);
+	Game.player.health += 20;
+	Game.player.energy += 8;
+	updateValues();
 }
 
 function useOintment() {
 	$('#log').prepend("<li>You use the ointment, healing your wounds.</li>");
 	removeItem("ointment");
 
-	var ointInt = setInterval(function() {
-		Game.player.health += 1;
-		Game.player.energy += 0.1;
-		updateValues();
-	}, 50);
-	setTimeout(function() {
-		clearInterval(ointInt);
-	}, 1500);
+	Game.player.health += 45;
+	updateValues();
 }
 
 function drinkCoffeeBrew() {
 	$('#log').prepend("<li>You drink the coffee-like brew, energising you instantly.</li>");
 	removeItem("coffee brew");
 
-	var drinkCoffee = setInterval(function() {
-		Game.player.thirst += 0.2;
-		Game.player.energy += 0.8;
-		updateValues();
-	}, 50);
-	setTimeout(function() {
-		clearInterval(drinkCoffee);
-	}, 1000);
+	Game.player.thirst += 15;
+	Game.player.energy += 30;
+	updateValues();
 }
 
 ///////////////////////////
@@ -1005,9 +963,6 @@ function deathCheck() {
 		delGame();
 	}
 }
-
-
-
 
 
 
@@ -1085,19 +1040,14 @@ function imageItems() {
 
 
 
-
 function carttab() {
-	$('.tab').hide();
-	$('#tabmenu li a').removeClass('active');
-
+	cleartabs();
 	$('#carttab').show();
 	$('#ct').addClass('active');
 }
 
 function battletab() {
-	$('.tab').hide();
-	$('#tabmenu li a').removeClass('active');
-
+	cleartabs();
 	$('#battletab').show();
 	$('#bt').addClass('active');
 
@@ -1105,14 +1055,15 @@ function battletab() {
 }
 
 function loretab() {
-	$('.tab').hide();
-	$('#tabmenu li a').removeClass('active');
-
+	cleartabs();
 	$('#loretab').show();
 	$('#lt').addClass('active');
 }
 
-
+function cleartabs() {
+	$('.tab').hide();
+	$('#tabmenu li a').removeClass('active');
+}
 
 
 
@@ -1229,13 +1180,9 @@ function forwards() {
 		Game.world.distance += 0.5;
 		worldUpdate();
 
-		var walkint = setInterval(function() {
-			Game.player.energy -= 0.1;
-			updateValues();
-		}, 50);
-		setTimeout(function() {
-			clearInterval(walkint);
-		}, 500);
+		Game.player.energy -= 1;
+		Game.player.thirst -= 1;
+		updateValues();
 
 		$('#log').prepend("<li>You move deeper into the forest.</li>");
 
@@ -1273,35 +1220,35 @@ function forwards() {
 
 function hunt() {
 
-	//newEnemy (spawnEnemy) function
-	if (Math.random() * 100 <= 25) {
+	//newEnemy (spawn enemy) function
+	if (Math.random() * 100 <= 50) {
 		var array = ["rabbit", "bear", "deer", "racoon", "skunk"];
 		var chosen = array[Math.floor(Math.random() * array.length)];
 
 		if (chosen == "rabbit") {
 			Game.enemy.name = "rabbit";
 			Game.enemy.desc = "This rabbit's eyes are bloodred. It looks just about ready to kill.";
-			animalStats(0.2, 0.1, 15, 15);
+			animalStats(0.2, 3, 15, 15, 0.5);
 		}
 		if (chosen == "bear") {
 			Game.enemy.name = "bear";
 			Game.enemy.desc = "A large brown bear appears from out of the shadows. It does not look friendly.";
-			animalStats(0.1, 1, 100, 100);
+			animalStats(0.1, 30, 100, 100, 0.1);
 		}
 		if (chosen == "deer") {
 			Game.enemy.name = "deer";
 			Game.enemy.desc = "You find a frantically braying deer. Lucky for you, it looks wounded.";
-			animalStats(0.1, 0.1, 50, 50);
+			animalStats(0.1, 5, 50, 50, 1);
 		}
 		if (chosen == "racoon") {
 			Game.enemy.name = "racoon";
 			Game.enemy.desc = "The racoon picks up a small twig to duel you with. It looks fast.";
-			animalStats(0.5, 0.05, 25, 25);
+			animalStats(0.5, 3, 25, 25, 0.2);
 		}
 		if (chosen == "skunk") {
 			Game.enemy.name = "skunk";
 			Game.enemy.desc = "A skunk runs towards you. The morning light shines off its black claws.";
-			animalStats(0.1, 0.5, 20, 20);
+			animalStats(0.1, 15, 20, 20, 0.3);
 		}
 
 		$('#log').prepend("<li class='red'>A " + Game.enemy.name + " appears suddenly.</li>");
@@ -1316,15 +1263,17 @@ function hunt() {
 		$('.modal_bg').removeClass("hide");
 		$('.modal_bg').css({
 			"display" : "inline-flex"
-		})
+		});
 	}
 }
 
-function animalStats(response, damage, health, totalhealth) {
+function animalStats(response, damage, health, totalhealth, fleechance) {
 	Game.enemy.response = response;
 	Game.enemy.damage = damage;
 	Game.enemy.health = health;
 	Game.enemy.totalhealth = totalhealth;
+	Game.enemy.fleechance = fleechance;
+	$('#fleechance').html(Math.round(Game.enemy.fleechance * 100));
 }
 
 
@@ -1337,32 +1286,46 @@ function attack() {
 
 		$('#log').prepend("<li>You attack the " + Game.enemy.name + " with your " + Game.world.weapon + ".</li>");
 
-		Game.player.fightxp += 5;
+		Game.player.fightxp += 1;
 		updateValues();
 		levelCheck();
 
 	//enemy responds
 
 	if (Math.random() <= Game.enemy.response) {
-		$('#log').prepend("<li class='red'>The " + Game.enemy.name + " attacks back.</li>");
+		enemyAttack();
+	}
+}
 
-		var enemyAtk = setInterval(function() {
-			Game.player.health -= Game.enemy.damage;
-			updateValues();
-		}, 50);
-		setTimeout(function() {
-			clearInterval(enemyAtk);
-		}, 1500);
+function enemyAttack() {
+	$('#log').prepend("<li class='red'>The " + Game.enemy.name + " attacks you.</li>");
+
+	Game.player.health -= Game.enemy.damage;
+	updateValues();
+}
+
+function bait() {
+	if (itemCheck.blueBerries >= 1) {
+		Game.enemy.fleechance = Game.enemy.fleechance * 1.5;
+		$('#fleechance').html(Math.round(Game.enemy.fleechance * 100));
+		removeItem("blue berries");
+		$('#log').prepend("<li>You throw some berries towards the " + Game.enemy.name + " as a distaction.</li>");
+	}
+}
+
+function flee() {
+	if (Math.random() <= Game.enemy.fleechance) {
+		$('#log').prepend("<li class='green'>You flee from the fight.</li>");
+		removeFight();
+	}
+	else {
+		$('#log').prepend("<li>Your escape attempt fails.</li>");
+		enemyAttack();
 	}
 }
 
 function endFight() {
-	Game.enemy.health = 1;
-
-	//show modal
-	$('#battle').hide();
-	$('.modal_bg').fadeOut(300);
-	$('.modal_bg').addClass("hide");
+	removeFight();
 
 	$('#log').prepend("<li class='green'>You win the fight.</li>");
 
@@ -1371,6 +1334,16 @@ function endFight() {
 		newore();
 		$('#log').prepend("<li class='green'>You forage for something near the animal's body.</li>");
 	}
+}
+
+function removeFight() {
+	Game.enemy.health = 1;
+	Game.enemy.name = "";
+
+	//show modal
+	$('#battle').hide();
+	$('.modal_bg').fadeOut(300);
+	$('.modal_bg').addClass("hide");
 
 	placeTest();
 }
@@ -1400,17 +1373,26 @@ function plantlevel2() {
 }
 
 function stacktoggle() {
-	$('body').toggleClass("stacktoggle");
+	$('#items').toggleClass("stacktoggle");
 }
 
 function changelog() {
 	$('#changelog').toggle();
 }
 
+function info() {
+	if (Game.enemy.name == "") {
+		$('.modal_bg').fadeIn(300);
+		$('.modal_bg').removeClass("hide");
+		$('#info').show();
+	}
+}
 
-
-
-
+function closeinfo() {
+	$('.modal_bg').fadeOut(300);
+	$('.modal_bg').addClass("hide");
+	$('#info').hide();
+}
 
 
 
@@ -1502,4 +1484,24 @@ function explore(value) {
 			}
 		}
 	}
+}
+
+
+
+
+
+
+//player tab
+
+function playerUpdate() {
+	$('.playername').html(Game.player.name);
+	$('.playertitle').html(Game.player.title);
+}
+
+function changename() {
+	var person = prompt("What's your name?");
+	if (person != null && person != "") {
+		Game.player.name = person;
+	}
+	playerUpdate();
 }
