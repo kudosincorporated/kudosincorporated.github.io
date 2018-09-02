@@ -619,74 +619,76 @@ function buttonChecker() {
 		}
 	}
 
-	$('#actions').html("");
+	$('#use').html("");
+	$('#craft').html("");
+	$('#misc').html("");
 
 	if (itemCheck.darkBerries >= 1) { //dark berries
-		$('#actions').append('<button id="eatDarkBerries" onclick="eatDarkBerries()">Eat dark berries.</button>');
+		$('#use').append('<button id="eatDarkBerries" onclick="eatDarkBerries()">Eat dark berries.</button>');
 	}
 
 	if (itemCheck.redBerries >= 1) { //red berries
-		$('#actions').append('<button id="eatRedBerries" onclick="eatRedBerries()">Eat red berries.</button>');
+		$('#use').append('<button id="eatRedBerries" onclick="eatRedBerries()">Eat red berries.</button>');
 	}
 
 	if (itemCheck.blueBerries >= 1) { //blue berries
-		$('#actions').append('<button id="eatBlueBerries" onclick="eatBlueBerries()">Eat blue berries.</button>');
+		$('#use').append('<button id="eatBlueBerries" onclick="eatBlueBerries()">Eat blue berries.</button>');
 	}
 
 	if (itemCheck.milkcap >= 1) { //eat milkcap
-		$('#actions').append('<button id="eatMilkcap" onclick="eatMilkcap()">Eat milkcap.</button>');
+		$('#use').append('<button id="eatMilkcap" onclick="eatMilkcap()">Eat milkcap.</button>');
 	}
 
 	if (itemCheck.opiumPoppy >= 1 && itemCheck.sharpRock >= 1 && Game.player.craftlvl >= 1) { //(craft level 2 is required to do this)
-		$('#actions').append('<button id="extractOpium" onclick="extractOpium()">Extract opium.</button>');
+		$('#craft').append('<button id="extractOpium" onclick="extractOpium()">Extract opium.</button>');
 	}
 
 	if (itemCheck.roastMilkcap >= 1) { //eat roast shroom
-		$('#actions').append('<button id="eatRoastMilkcap" onclick="eatRoastMilkcap()">Eat roasted shroom.</button>');
+		$('#use').append('<button id="eatRoastMilkcap" onclick="eatRoastMilkcap()">Eat roasted shroom.</button>');
 	}
 
 	if (itemCheck.treeSap >= 1 && itemCheck.marigold >= 1) { //make ointment
-		$('#actions').append('<button id="makeOintment" onclick="makeOintment()">Make ointment.</button>');
+		$('#craft').append('<button id="makeOintment" onclick="makeOintment()">Make ointment.</button>');
 	}
 
 	if (itemCheck.ointment >= 1) { //use ointment
-		$('#actions').append('<button id="useOintment" onclick="useOintment()">Use ointment.</button>');
+		$('#use').append('<button id="useOintment" onclick="useOintment()">Use ointment.</button>');
 	}
 
 	//other resources
 
 	if (haveFirepit == true && itemCheck.milkcap >= 1) { //roast milkcap
-		$('#actions').append('<button id="roastMilkcap" onclick="roastMilkcap()">Roast milkcap.</button>');
+		$('#craft').append('<button id="roastMilkcap" onclick="roastMilkcap()">Roast milkcap.</button>');
 	}
 
 	if (haveFirepit == true && itemCheck.cornflower >= 1 && itemCheck.water >= 1) { //make coffee brew
-		$('#actions').append('<button id="brewcornflower" onclick="brewcornflower()">Brew cornflower.</button>');
+		$('#craft').append('<button id="brewcornflower" onclick="brewcornflower()">Brew cornflower.</button>');
 	}
 
 	if (itemCheck.coffeeBrew >= 1) { //drink coffee brew
-		$('#actions').append('<button id="drinkCoffeeBrew" onclick="drinkCoffeeBrew()">Drink coffee brew.</button>');
+		$('#use').append('<button id="drinkCoffeeBrew" onclick="drinkCoffeeBrew()">Drink coffee brew.</button>');
 	}
 
 	if (itemCheck.water >= 1) { //drink water
-		$('#actions').append('<button id="drinkWater" onclick="drinkWater()">Drink water.</button>');
+		$('#use').append('<button id="drinkWater" onclick="drinkWater()">Drink water.</button>');
 	}
 
 	//the coreitems crafting
 
 	if (haveFlask == true) { //collect water
-		$('#actions').append('<button class="green" id="collectwater" onclick="collectwater()">Collect water.</button>');
+		$('#misc').append('<button id="collectwater" onclick="collectwater()">Collect water.</button>');
 	}
 
 	if (itemCheck.leaves >= 1 && itemCheck.twigs >= 1 && haveFlask != true) { //crafing flask
-		$('#actions').append('<button class="green" id="craftFlask" onclick="craftFlask()">Craft flask.</button>');
+		$('#craft').append('<button id="craftFlask" onclick="craftFlask()">Craft flask.</button>');
 	}
 
 	if (itemCheck.twigs >= 1 && itemCheck.treeBark >= 1 && haveFirepit != true) { //crafing firepit
-		$('#actions').append('<button class="green" id="craftFirepit" onclick="craftFirepit()">Make firepit.</button>');
+		$('#craft').append('<button id="craftFirepit" onclick="craftFirepit()">Make firepit.</button>');
 	}
 
 	if (itemCheck.leaves >= 1 && itemCheck.treeBark >= 1) { //crafing pouch
-		$('#actions').append('<button class="green" id="craftPouch" onclick="craftPouch()">Craft pouch.</button>');
+		$('#craft').append('<button id="craftPouch" onclick="craftPouch()">Craft pouch.</button>');
 	}
 
 
@@ -1504,4 +1506,34 @@ function changename() {
 		Game.player.name = person;
 	}
 	playerUpdate();
+}
+
+
+
+
+
+
+
+
+
+//collapsible
+
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+	acc[i].addEventListener("click", function() {
+		/* Toggle between adding and removing the "active" class,
+		to highlight the button that controls the panel */
+		this.classList.toggle("active");
+
+		/* Toggle between hiding and showing the active panel */
+		var panel = this.nextElementSibling;
+		if (panel.style.display === "none") {
+			panel.style.display = "block";
+		}
+		else {
+			panel.style.display = "none";
+		}
+	});
 }

@@ -440,6 +440,8 @@ body {
 
 #skillscover {
 	width: 160px;
+	float: left;
+	text-align: left;
 }
 
 #base__cover {
@@ -523,11 +525,6 @@ body {
 .grey {
 	font-size: 0.9em;
 	color: grey;
-}
-
-#skillscover {
-	float: left;
-	text-align: left;
 }
 
 .displaybox {
@@ -736,4 +733,49 @@ body {
 
 .edit_icon:hover {
 	color: dodgerblue;
+}
+
+#reset:hover {
+	background-color: #ff5050;
+	border: 1px solid #ff3333;
+	color: white;
+}
+
+
+.accordion {
+	padding: 5px;
+	background-color: #47d1d1;
+	color: white;
+	text-shadow: 0px 2px 2px rgba(0,0,0,0.1);
+	border: 0;
+	border-bottom: 5px solid #2eb8b8;
+	font-size: 1em;
+	outline: none;
+}
+
+.rightcol .accordion {
+	margin: 0;
+}
+
+.rightcol .accordion:not(:first-of-type) {
+	margin: 10px 0 0 0;
+}
+
+.accordion:hover {
+	background-color: #70dbdb;
+}
+
+.accordion.active {
+	background-color: #31c4c4;
+}
+
+.panel {
+	padding: 10px;
+	background-color: #eaeaea;
+	min-height: 50px;
+}
+
+.panel button {
+	border-width: 1px;
+	margin: 3px 0;
 }

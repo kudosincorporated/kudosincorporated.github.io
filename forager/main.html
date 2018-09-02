@@ -22,7 +22,20 @@
 </div>
 
 <div class="rightcol">
-	<span id="actions"></span>
+	<button class="accordion">Use</button>
+	<div class="panel">
+		<span id="use"></span>
+	</div>
+
+	<button class="accordion">Craft</button>
+	<div class="panel">
+		<span id="craft"></span>
+	</div>
+
+	<button class="accordion">Misc</button>
+	<div class="panel">
+		<span id="misc"></span>
+	</div>
 </div>
 
 	<div class="sidecol">
@@ -55,8 +68,8 @@
 				<li>The forest beckons.</li>
 			</ul>
 			<div style="position: absolute; bottom: 0; left: 3px; padding: 3px; z-index: 2;">
-				<button class="toggle-btn" onclick="saveGame()">Save</button>
-				<button class="toggle-btn" onclick="delGame()">Reset</button>
+				<button class="toggle-btn" onclick="saveGame()" id="save">Save</button>
+				<button class="toggle-btn" onclick="delGame()" id="reset">Reset</button>
 				<button class="toggle-btn" onclick="info()">Info/FAQ</button>
 			</div>
 		</div>
@@ -81,7 +94,7 @@
 
 					<br>
 					<br>
-					<div class='grey marginb'>Click the 'look around' button to forage for materials.<br>Check the info button for more information.</div>
+					<div class="grey marginb">Click the 'look around' button to forage for materials.<br>Check the info button for more information.</div>
 			</div>
 
 			<div class="right" style="height: 70%; position: relative;">
@@ -358,6 +371,12 @@
 
 				<div id="changelog">
 					<ul>
+						<li><b>version 1.4</b></li>
+						<ul>
+							<li>
+								Separated the actions into sections according to their use.
+							</li>
+						</ul>
 						<li><b>version 1.3</b></li>
 						<ul>
 							<li>
