@@ -1,7 +1,7 @@
 var Game = {
 	player: {
-		name: "Player",
-		title: "the Simple Nomad",
+		name: "Wanderer",
+		title: "the Nobody",
 		health: 100,
 		thirst: 100,
 		energy: 100,
@@ -21,9 +21,12 @@ var Game = {
 			nextlvlfight: 100
 	},
 	world: {
+		encounter: 25,
 		distance: 0,
 		weapon: "fists",
-		damage: 1
+		damage: 1,
+		armour: "plain clothes",
+		defence: 0
 	},
 	enemy: {
 		name: "",
@@ -33,12 +36,6 @@ var Game = {
 		health: 10,
 		totalhealth: 10,
 		fleechance: 0
-	},
-	places: {
-		theCliff: true,
-		theClearing: false,
-		theWaterhole: false,
-		theVillage: false
 	},
 
 	complete: 1,
@@ -51,22 +48,24 @@ var map = [];
 //map zones
 
 var Icons = {
-	tree: '<i class="fa fa-tree" aria-hidden="true"></i><span class="id">tree</span>',
-	mine: '<i class="fa fa-diamond" aria-hidden="true"></i><span class="id">mine</span>',
-	house: '<i class="fa fa-home" aria-hidden="true"></i><span class="id">house</span>',
-	water: '<i class="fa fa-tint" aria-hidden="true"></i><span class="id">water</span>',
-	binoculars: '<i class="fa fa-binoculars" aria-hidden="true"></i>',
-	signs: '<i class="fa fa-map-signs" aria-hidden="true"></i>'
+	tree: 				'<span class="id">tree</span><i class="fa fa-tree" aria-hidden="true"></i>',
+	house: 				'<span class="id">house</span><i class="fa fa-home" aria-hidden="true"></i>',
+	mine: 				'<span class="id">mine</span><i class="fa fa-diamond" aria-hidden="true"></i>',
+	water: 				'<span class="id">water</span><i class="fa fa-tint" aria-hidden="true"></i>',
+	binoculars: 		'<span class="id">binoculars</span><i class="fa fa-binoculars" aria-hidden="true"></i>',
+	signs: 				'<span class="id">signs</span><i class="fa fa-map-signs" aria-hidden="true"></i>',
+	cubes: 				'<span class="id">cubes</span><i class="fa fa-cubes" aria-hidden="true"></i>',
+	gift: 				'<span class="id">gift</span><i class="fa fa-gift" aria-hidden="true"></i>',
+	flag: 				'<span class="id">flag</span><i class="fa fa-flag" aria-hidden="true"></i>',
+	mark: 				'<span class="id">mark</span><i class="fa fa-exclamation" aria-hidden="true"></i>',
+	person: 			'<span class="id">person</span><i class="fa fa-user" aria-hidden="true"></i>'
 }
 
 var Zones = {
-	zone1: [
-		Icons.signs, Icons.tree, Icons.tree, Icons.tree, Icons.binoculars,
-		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.water,
-		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.house,
-		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.tree,
-		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.tree,
-	]
+	first: [
+		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.tree
+	],
+	current: []
 };
 
 var orearray = [
@@ -90,41 +89,6 @@ function update() {
 }
 
 function mineInit() {
-	//fast travel init
-	$("#theCliff").on('click', function() {
-		if (Game.world.distance != 0 && Game.places.theCliff != false) {
-			Game.world.distance = 0;
-			worldUpdate();
-			loadMap();
-			$('#log').prepend("<li>You are back at the Cliff.</li>");
-		}
-	})
-	$("#theClearing").on('click', function() {
-		if (Game.world.distance != 10 && Game.places.theClearing != false) {
-			Game.world.distance = 10;
-			worldUpdate();
-			loadMap();
-			$('#log').prepend("<li>You travel to the Clearing to hunt animals.</li>");
-		}
-	})
-	$("#theWaterhole").on('click', function() {
-		if (Game.world.distance != 20 && Game.places.theWaterhole != false) {
-			Game.world.distance = 20;
-			worldUpdate();
-			loadMap();
-			$('#log').prepend("<li>You travel to the Waterhole to go fishing.</li>");
-		}
-	})
-	$("#theVillage").on('click', function() {
-		if (Game.world.distance != 30 && Game.places.theVillage != false) {
-			Game.world.distance = 30;
-			worldUpdate();
-			loadMap();
-			$('#log').prepend("<li>You travel to the Village.</li>");
-		}
-	})
-
-
 	$("#mine").on('click', 'li', function () {
 		var index = $("#mine li").index(this);
 
@@ -200,33 +164,33 @@ function saveGame() {
 			fightxp: Game.player.fightxp,
 			nextlvlfight: Game.player.nextlvlfight,
 
-		distance: Game.world.distance,
-
-		theCliff: Game.places.theCliff,
-		theClearing: Game.places.theClearing,
-		theWaterhole: Game.places.theWaterhole,
-		theVillage: Game.places.theVillage
+		distance: Game.world.distance
 	};
 	localStorage.setItem("save", JSON.stringify(save));
 	localStorage.setItem("mine", JSON.stringify(mine));
 	localStorage.setItem("items", JSON.stringify(items));
 	localStorage.setItem("base", JSON.stringify(base));
+
+	localStorage.setItem("map", JSON.stringify(map));
 }
 
 function loadGame() {
 	update();
 	mineInit();
-	makeMap();
 
 	if (localStorage.getItem("save") != undefined) {
 		var savegame = JSON.parse(localStorage.getItem("save"));
 		var savemine = JSON.parse(localStorage.getItem("mine"));
 		var saveitems = JSON.parse(localStorage.getItem("items"));
 		var savebase = JSON.parse(localStorage.getItem("base"));
+		var savemap = JSON.parse(localStorage.getItem("map"));
 
 		if (savemine != "") mine = savemine;
 		if (saveitems != "") items = saveitems;
 		if (savebase != "") base = savebase;
+
+		if (savemap != "") map = savemap;
+		constructMap();
 
 		if (typeof savegame.name !== "undefined") Game.player.name = savegame.name;
 		if (typeof savegame.health !== "undefined") Game.player.health = savegame.health;
@@ -249,14 +213,14 @@ function loadGame() {
 
 		if (typeof savegame.distance !== "undefined") Game.world.distance = savegame.distance;
 
-		if (typeof savegame.theCliff !== "undefined") Game.places.theCliff = savegame.theCliff;
-		if (typeof savegame.theClearing !== "undefined") Game.places.theClearing = savegame.theClearing;
-		if (typeof savegame.theWaterhole !== "undefined") Game.places.theWaterhole = savegame.theWaterhole;
-		if (typeof savegame.theVillage !== "undefined") Game.places.theVillage = savegame.theVillage;
-
 		update();
 		worldUpdate();
 		loadMap();
+	}
+	else {
+		//makes a new map for first time users!
+		genNewMap();
+		constructMap();
 	}
 }
 
@@ -266,6 +230,7 @@ function delGame() {
 	localStorage.removeItem("mine");
 	localStorage.removeItem("items");
 	localStorage.removeItem("base");
+	localStorage.removeItem("map");
 	location.reload();
 }
 
@@ -703,7 +668,11 @@ function buttonChecker() {
 		Game.world.damage = 1;
 	}
 	var totaldamage = Game.world.damage + Game.player.fightlvl;
-	$('.weapon').html(Game.world.weapon + " (" + totaldamage + " dmg)");
+	$('.weapon').html(Game.world.weapon + " (" + totaldamage + " damage)");
+
+	//armourcheck (placement temporaray)
+	var totaldefence = Game.world.defence;
+	$('.armour').html(Game.world.armour + " (" + totaldefence + " defence)");
 }
 
 function itemInc(item, id, i) {
@@ -1087,36 +1056,6 @@ function cleartabs() {
 function worldUpdate() {
 	$('#distance').html(prettify(Game.world.distance));
 
-	$('.event').hide();
-
-	if (Game.world.distance == 0) {
-		$('#theCliff__event').show();
-	}
-	if (Game.world.distance == 10) {
-		$('#theClearing__event').show();
-	}
-	if (Game.world.distance == 20) {
-		$('#theWaterhole__event').show();
-	}
-	if (Game.world.distance == 30) {
-		$('#theVillage__event').show();
-	}
-
-	if (Game.world.distance >= 0) {
-		Game.places.theCliff = true;
-	}
-	if (Game.world.distance >= 10) {
-		Game.places.theClearing = true;
-	}
-	if (Game.world.distance >= 20) {
-		Game.places.theWaterhole = true;
-	}
-	if (Game.world.distance >= 30) {
-		Game.places.theVillage = true;
-	}
-
-	placeTest();
-
 	//enemy
 	$('#enemyHealth').html(prettify(Game.enemy.health));
 
@@ -1129,23 +1068,6 @@ function worldUpdate() {
 	if (Game.enemy.health <= 0) {
 		enemyHealthBar.style.width = '0%';
 		endFight();
-	}
-}
-
-function placeTest() {
-	$('.place').addClass("hidden");
-
-	if (Game.places.theCliff == true) {
-		$("#theCliff").removeClass("hidden");
-	}
-	if (Game.places.theClearing == true) {
-		$("#theClearing").removeClass("hidden");
-	}
-	if (Game.places.theWaterhole == true) {
-		$("#theWaterhole").removeClass("hidden");
-	}
-	if (Game.places.theVillage == true) {
-		$("#theVillage").removeClass("hidden");
 	}
 }
 
@@ -1188,8 +1110,13 @@ function forwards() {
 
 		$('#log').prepend("<li>You move deeper into the forest.</li>");
 
-		//random enemy
-		hunt();
+		if (placechecker() == true) {
+			eventChecker();
+		}
+		else {
+			hunt();
+		}
+		
 	}, 1000);
 }
 
@@ -1223,7 +1150,7 @@ function forwards() {
 function hunt() {
 
 	//newEnemy (spawn enemy) function
-	if (Math.random() * 100 <= 50) {
+	if (Math.random() * 100 <= Game.world.encounter) {
 		var array = ["rabbit", "bear", "deer", "racoon", "skunk"];
 		var chosen = array[Math.floor(Math.random() * array.length)];
 
@@ -1235,7 +1162,7 @@ function hunt() {
 		if (chosen == "bear") {
 			Game.enemy.name = "bear";
 			Game.enemy.desc = "A large brown bear appears from out of the shadows. It does not look friendly.";
-			animalStats(0.1, 30, 100, 100, 0.1);
+			animalStats(0.1, 30, 100, 100, 0.2);
 		}
 		if (chosen == "deer") {
 			Game.enemy.name = "deer";
@@ -1286,7 +1213,7 @@ function attack() {
 		Game.enemy.health -= totaldamage;
 		worldUpdate();
 
-		$('#log').prepend("<li>You attack the " + Game.enemy.name + " with your " + Game.world.weapon + ".</li>");
+		$('#log').prepend("<li>You attack the " + Game.enemy.name + " with your " + Game.world.weapon + ", dealing " + totaldamage + " damage.</li>");
 
 		Game.player.fightxp += 1;
 		updateValues();
@@ -1300,17 +1227,17 @@ function attack() {
 }
 
 function enemyAttack() {
-	$('#log').prepend("<li class='red'>The " + Game.enemy.name + " attacks you.</li>");
+	$('#log').prepend("<li class='red'>The " + Game.enemy.name + " attacks you for " + Game.enemy.damage + " damage.</li>");
 
 	Game.player.health -= Game.enemy.damage;
 	updateValues();
 }
 
 function bait() {
-	if (itemCheck.blueBerries >= 1) {
+	if (itemCheck.redBerries >= 1) {
 		Game.enemy.fleechance = Game.enemy.fleechance * 1.5;
 		$('#fleechance').html(Math.round(Game.enemy.fleechance * 100));
-		removeItem("blue berries");
+		removeItem("red berries");
 		$('#log').prepend("<li>You throw some berries towards the " + Game.enemy.name + " as a distaction.</li>");
 	}
 }
@@ -1346,8 +1273,6 @@ function removeFight() {
 	$('#battle').hide();
 	$('.modal_bg').fadeOut(300);
 	$('.modal_bg').addClass("hide");
-
-	placeTest();
 }
 
 function leaveForest() {
@@ -1384,16 +1309,9 @@ function changelog() {
 
 function info() {
 	if (Game.enemy.name == "") {
-		$('.modal_bg').fadeIn(300);
-		$('.modal_bg').removeClass("hide");
+		showModal();
 		$('#info').show();
 	}
-}
-
-function closeinfo() {
-	$('.modal_bg').fadeOut(300);
-	$('.modal_bg').addClass("hide");
-	$('#info').hide();
 }
 
 
@@ -1414,30 +1332,57 @@ function closeinfo() {
 /////////////////////////////////////////////
 
 function switchTab(tab, id) {
-	$('.world .worldpage').hide();
-	$('.world .menu li a').removeClass('menu_active');
+	$('.worldpage').hide();
+	$('.menu li a').removeClass('menu_active');
 
 	$(tab).show();
 	$(id).addClass('menu_active');
 }
 
 function makeMap() {
+	if (map == "") {
+		genNewMap();
+	}
+
+	constructMap();
+}
+
+function genNewMap() {
+	//random generation
+	var tilearray = ["mine", "signs", "cubes"];
+	var done = 0;
+
+	for (var i = 0; i < 25; i++) {
+		if (Zones.first[i] != undefined) {
+			map.push(Zones.first[i]);
+		}
+		else {
+			if (Math.random() * 100 <= 50) {
+				map.push(Icons["tree"]);
+			}
+			else {
+				if (done <= 2) {
+					var chosentile = tilearray[Math.floor(Math.random() * tilearray.length)];
+					map.push(Icons[tilearray[done]]);
+					done++;
+				}
+				else {
+					var chosentile = tilearray[Math.floor(Math.random() * tilearray.length)];
+					map.push(Icons[chosentile]);
+				}
+			}
+		}
+	}
+}
+
+function constructMap() {
 	Game.complete = 1;
 	$('#complete').html(Game.complete - 1);
 
 	//create map
 	$('#map').html("");
 	used = [];
-	map = [];
 
-	for (var i = 0; i < 25; i++) {
-		if (Zones.zone1[i] != undefined) {
-			map.push(Zones.zone1[i]);
-		}
-		else {
-			map.push('_');
-		}
-	}
 	for (var i = 0; i < 25; i++) {
 		if (map[i] != undefined) {
 			$('#map').append('<div class="tile">' + map[i] + '<div class="fillbar"></div></div>');
@@ -1463,8 +1408,6 @@ function makeMap() {
 }
 
 function loadMap() {
-	makeMap();
-	
 	var clicks = Game.world.distance * 2;
 	for (var i = 0; i < clicks; i++) {
 		explore(Game.clickdmg);
@@ -1493,6 +1436,7 @@ function explore(value) {
 
 
 
+
 //player tab
 
 function playerUpdate() {
@@ -1501,7 +1445,7 @@ function playerUpdate() {
 }
 
 function changename() {
-	var person = prompt("What's your name?");
+	var person = prompt("What's your name?", Game.player.name);
 	if (person != null && person != "") {
 		Game.player.name = person;
 	}
@@ -1535,5 +1479,82 @@ for (i = 0; i < acc.length; i++) {
 		else {
 			panel.style.display = "none";
 		}
+
+	$(".accordion").html('<i class="fa fa-chevron-up" aria-hidden="true"></i>');
+	$(".accordion.active").html('<i class="fa fa-chevron-down" aria-hidden="true"></i>');
 	});
+}
+
+
+
+
+
+
+
+
+
+
+
+function eventChecker() {
+	var dist = (Game.world.distance / 2) - 1;
+
+	switch ($('#map .tile').eq(dist).text()) {
+		case 'signs':
+			questEvent();
+			break;
+		case 'mine':
+			mineEvent();
+			break;
+		case 'cubes':
+			cubesEvent();
+			break;
+		default:
+			//none
+	}
+}
+
+function placechecker() {
+	var dist = (Game.world.distance / 2) - 1;
+
+	switch ($('#map .tile').eq(dist).text()) {
+		case "":
+			return false; //checks if not on edge of square
+			break;
+		case "tree":
+			return false; //checks if on edge of tree square
+			break;
+		default:
+			return true; //otherwise, you got urself an event!
+	}
+}
+
+
+function showModal() {
+	$('.event_modal').hide();
+	$('.modal_bg').fadeIn(300);
+	$('.modal_bg').removeClass("hide");
+	$('.modal_bg').css({
+		"display" : "inline-flex"
+	});
+}
+
+function hideModal() {
+	$('.modal_bg').fadeOut(300);
+	$('.modal_bg').addClass("hide");
+	$('.event_modal').hide();
+}
+
+function questEvent() {
+	showModal();
+	$('#questEvent').show();
+}
+
+function mineEvent() {
+	showModal();
+	$('#mineEvent').show();
+}
+
+function cubesEvent() {
+	showModal();
+	$('#cubesEvent').show();
 }

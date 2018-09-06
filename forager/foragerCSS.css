@@ -161,6 +161,11 @@ button:disabled {
 	color: red;
 }
 
+.exit {
+	font-size: 1.5em;
+	margin: 0 5px;
+}
+
 .bar {
 	text-align: center;
 	margin: 5px 0;
@@ -438,15 +443,8 @@ body {
 	margin-top: 10px;
 }
 
-#skillscover {
-	width: 160px;
-	float: left;
-	text-align: left;
-}
-
 #base__cover {
 	border-top: 1px solid #ccc;
-	padding-right: 180px;
 }
 
 .left {
@@ -504,10 +502,13 @@ body {
 	width: 50%;
 	border: 1px solid #ccc;
 	padding: 10px;
-	margin: 10px auto;
+	margin: 0 auto;
 	text-align: center;
 	background-color: white;
 	box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+	display: none;
+	max-height: 95%;
+	position: relative;
 }
 
 .battle_header {
@@ -517,8 +518,7 @@ body {
 	border-bottom: 1px solid #ddd;
 }
 
-#e_name,
-.weapon {
+#e_name {
 	text-transform: capitalize;
 }
 
@@ -678,15 +678,9 @@ body {
 	justify-content: center;
 	align-items: center;
 	vertical-align: top;
-	padding-bottom: 100px;
-	overflow: auto;
 }
 
 .hide {
-	display: none;
-}
-
-#battle {
 	display: none;
 }
 
@@ -708,12 +702,10 @@ body {
 }
 
 #info {
-	display: none;
-	position: relative;
 	text-align: left;
 	width: 80%;
-	margin: 20px auto;
 	padding: 15px;
+	overflow: auto;
 }
 
 #bait:hover + .info {
@@ -742,40 +734,99 @@ body {
 }
 
 
-.accordion {
-	padding: 5px;
-	background-color: #47d1d1;
-	color: white;
-	text-shadow: 0px 2px 2px rgba(0,0,0,0.1);
-	border: 0;
-	border-bottom: 5px solid #2eb8b8;
-	font-size: 1em;
-	outline: none;
-}
-
-.rightcol .accordion {
+.title-sm {
+	font-weight: normal;
 	margin: 0;
+	float: left;
+	width: 80%;
+	text-align: left;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 2px solid #ccc;
+	color: #444;
+	font-size: 1.3em;
 }
 
-.rightcol .accordion:not(:first-of-type) {
-	margin: 10px 0 0 0;
+.accordion {
+	float: right;
+	width: 20%;
+	height: 40px;
+	line-height: 40px;
+	border-bottom: 2px solid #ccc;
+	text-align: right;
+	cursor: pointer;
+	color: grey;
+	transition: 300ms;
 }
 
-.accordion:hover {
-	background-color: #70dbdb;
-}
-
+.accordion:hover,
 .accordion.active {
-	background-color: #31c4c4;
+	color: dodgerblue;
+	border-color: dodgerblue;
 }
 
 .panel {
+	clear: both;
 	padding: 10px;
-	background-color: #eaeaea;
+	background-color: #f0f0f0;
 	min-height: 50px;
 }
 
 .panel button {
 	border-width: 1px;
 	margin: 3px 0;
+}
+
+
+
+
+.statstable {
+	width: 80%;
+	margin: 0 auto;
+	border: 1px solid #ddd;
+	margin-bottom: 20px;
+}
+
+table, th, td {
+	border-collapse: collapse;
+}
+
+.statstable td {
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+	white-space: nowrap;
+}
+
+.statstable tr:hover {
+	background-color: #f9f9f9;
+}
+
+.table_title {
+	text-align: left;
+}
+
+.table_desc {
+	text-align: right;
+}
+
+.statstable th {
+	background-color: #eee;
+	padding: 10px;
+	border-bottom: 1px solid #ddd;
+}
+
+
+
+
+
+
+#tabmenu li a.locked {
+	border-color: #666;
+	background-color: #888;
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+#tabmenu li a.locked:after {
+	content: " (WIP)";
 }

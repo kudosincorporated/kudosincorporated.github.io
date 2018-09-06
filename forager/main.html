@@ -2,6 +2,7 @@
 <html>
 <head>
 	<!-- Forager, a game by KudosInc -->
+	<meta charset="UTF-8">
 
 	<title>Forager</title>
 	<!-- jQuery -->
@@ -17,22 +18,22 @@
 	<ul id="tabmenu">
 		<li><a id="ct" class="active" onclick="carttab()">Look</a></li>
 		<li><a id="bt" onclick="battletab()">World</a></li>
-		<li><a id="lt" onclick="loretab()">Player</a></li>
+		<li><a id="lt" class="locked" onclick="loretab()">Village</a></li>
 	</ul>
 </div>
 
 <div class="rightcol">
-	<button class="accordion">Use</button>
+	<h2 class="title-sm">Use</h2><span class="accordion"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 	<div class="panel">
 		<span id="use"></span>
 	</div>
 
-	<button class="accordion">Craft</button>
+	<h2 class="title-sm">Craft</h2><span class="accordion"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 	<div class="panel">
 		<span id="craft"></span>
 	</div>
 
-	<button class="accordion">Misc</button>
+	<h2 class="title-sm">Misc</h2><span class="accordion"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>
 	<div class="panel">
 		<span id="misc"></span>
 	</div>
@@ -94,7 +95,9 @@
 
 					<br>
 					<br>
-					<div class="grey marginb">Click the 'look around' button to forage for materials.<br>Check the info button for more information.</div>
+					<div class="grey marginb">
+						Click the 'look around' button to forage for materials.<br>Check the info button for more information.
+					</div>
 			</div>
 
 			<div class="right" style="height: 70%; position: relative;">
@@ -107,36 +110,7 @@
 			</div>
 
 				<div class="lower" id="base__cover" style="height: 30%;">
-					<div id="skillscover" class="displaybox">
-						<div class="marginb">
-							<b>Herbology Skill</b>
-							<div>
-								Level: <span id="plantlvl">0</span>
-								<span class="grey">
-									(<span id="plantxp">0</span>/<span id="nextlvlplant">100</span>)
-								</span>
-							</div>
-						</div>
-
-						<div class="marginb">
-							<b>Crafting Skill</b>
-							<div>Level: <span id="craftlvl">0</span>
-								<span class="grey">
-									(<span id="craftxp">0</span>/<span id="nextlvlcraft">100</span>)
-								</span>
-							</div>
-						</div>
-
-						<div class="marginb">
-							<b>Fighting Skill</b>
-							<div>Level: <span id="fightlvl">0</span>
-								<span class="grey">
-									(<span id="fightxp">0</span>/<span id="nextlvlfight">100</span>)
-							</span>
-							</div>
-						</div>
-					</div>
-
+					<h2 class="title" style="font-size: 1.3em;">Core Items</h2>
 					<div id="base"></div>
 				</div>
 		</div>
@@ -144,7 +118,7 @@
 		<div class="tab" id="battletab">
 			<div class="left">
 				<h2 class="title" style="margin-bottom: 0;">Exploration</h2>
-				<div class="grey" style="margin-bottom: 10px;">Tip: There are bears in the forest. Stock up on supplies before embarking.</div>
+				<div class="grey" style="margin-bottom: 10px;">Tip: There are bears in the forest.<br>It's not recommended to embark without stocking up on supplies first.</div>
 				
 				<div>
 					<button id="forwards" onclick="forwards()">Venture into the forest. <i class="fa fa-arrow-up" aria-hidden="true"></i></button>
@@ -153,154 +127,111 @@
 					<div id="walkBar"></div>
 				</div>
 
-				<div class="marginb">
-					<b>Current position:</b>
-					<br>
-					You are <span id="distance">0</span>km into the forest.
-				</div>
-
-				<div class="marginb">
-					<b>Weapon:</b>
-					<br>
-					<span class="weapon">none.</span>
-				</div>
+					<div class="marginb">
+						<b>Current position:</b>
+						<br>
+						You are <span id="distance">0</span>km into the forest.
+					</div>
 
 				<div style="margin: 20px;"><hr></div>
 
-				<div class="marginb"></div>
+				<div class="map_tab worldpage">
+					<div id="map"></div>
 
-				<div class="world">
-					<ul class="menu">
-						<li><a id="d_t" class="menu_tab" onclick="switchTab('.disc_tab', '#d_t')">Discoveries</a></li>
-						<li><a id="m_t" class="menu_active menu_tab" onclick="switchTab('.map_tab', '#m_t')">Map</a></li>
-					</ul>
+					<div class="marginb"></div>
 
-					<div class="disc_tab worldpage">
-						<b>Discoveries:</b>
-						<div class='grey'>These are the places you have discovered. Click on them to fast travel to their location.</div>
-
-						<div id="theCliff" class="place">
-							<div><b>The Cliff</b></div>
-							<div><i>The forest's beginnings.</i></div>
-							<div>Location: 0km</div>
-						</div>
-
-						<div id="theClearing" class="place hidden">
-							<div><b>The Clearing</b></div>
-							<div><i>Animals roam free.</i></div>
-							<div>Location: 10km</div>
-						</div>
-
-						<div id="theWaterhole" class="place hidden">
-							<div><b>The Waterhole</b></div>
-							<div><i>A bountiful fishing spot.</i></div>
-							<div>Location: 20km</div>
-						</div>
-
-						<div id="theVillage" class="place hidden">
-							<div><b>The Village</b></div>
-							<div><i>Civilisation: The end of your journey.</i></div>
-							<div>Location: 30km</div>
-						</div>
-					</div>
-
-					<div class="map_tab worldpage">
-						<div id="map"></div>
-
-						<div class="marginb"></div>
-
-						<div class="grey">sectors complete: <span id="complete">1</span></div>
-					</div>
+					<div class="grey">You have explored <span id="complete">1</span> sectors.</div>
 				</div>
 			</div>
 
 			<div class="right">
-				<h2 class="title">Events</h2>
+				<h2 class="title"><span class="playername">Hero</span>'s Stats</h2>
 
-<!-- Begin Events -->
+				<table class="statstable">
+					<tr>
+						<th colspan="2">Stats</th>
+					</tr>
+					<tr>
+						<td class="table_title">
+							Name
+						</td>
+						<td class="table_desc">
+							<span class="playername">Hero</span>
+							<span class="edit_icon" onclick="changename()" title="Edit name.">
+								<i class="fa fa-pencil" aria-hidden="true"></i>
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_title">Weapon</td>
+						<td class="table_desc"><span class="weapon">none.</span></td>
+					</tr>
+					<tr>
+						<td class="table_title">Armour</td>
+						<td class="table_desc"><span class="armour">none.</span></td>
+					</tr>
+				</table>
 
-<div id="theForest__event" class="event">
-	<h2 class="title">The Forest</h2>
-
-	<div class="marginb">The smoldering wreckage of your plane lies to your left, teetering on the edge of the cliff. It would be unwise to try and go back inside the craft.</div>
-
-	<div class="marginb">In front of you lies a dense forest.</div>
-
-	<div class="grey marginb">Keep walking forward into the forest to discover new places.</div>
-</div>
-
-<div id="theCliff__event" class="event">
-	<h2 class="title">The Cliff</h2>
-
-	<div class="marginb">The smoldering wreckage of your plane lies to your left, teetering on the edge of the cliff. It would be unwise to try and go back inside the craft.</div>
-
-	<div class="marginb">In front of you lies a dense forest.</div>
-
-	<div class="grey marginb">Keep walking forward into the forest to discover new places.</div>
-</div>
-
-<div id="theClearing__event" class="event">
-	<h2 class="title">The Clearing</h2>
-
-	<div class="marginb">You come across a patch of the forest which seems more... alive. You can see small animals darting around the treetops, and rustling bushes in your peripheral vision. Perhaps this would be a good spot to hunt.</div>
-
-	<div class="grey marginb">Click the button below to hunt for animals, instead of encountering them randomly.</div>
-
-	<div class="marginb">
-		<button id="hunt" onclick="hunt()">Hunt for animals.</button>
-	</div>
-</div>
-
-<div id="theWaterhole__event" class="event">
-	<h2 class="title">The Waterhole</h2>
-
-	<div class="marginb">In front of you is a waterhole, brimming with fish that make ripples as they dart around. Standing under a shady tree, you can finally rest... or go fishing!</div>
-
-	<div class="marginb"><i>The waterhole, and all events after it, are works in progress. There are currently no new mechanics to be discovered further into the forest, sorry. The final 'place' is the village, which is located 30km into the forest.</i></div>
-</div>
-
-<div id="theVillage__event" class="event">
-	<h2 class="title">The Village</h2>
-
-	<div class="marginb">You can hardly belive your eyes as you enter the small village. After all this time, the luxury of society is once again graced upon you. But something's not right.</div>
-
-	<div class="marginb">All the foraging... the animals... the warm mornings spent fishing by a vivid lake.</div>
-
-	<div class="marginb">The forest's siren song calls you, louder with each passing step.</div>
-
-	<div class="marginb">Could you leave the forest? Can you?</div>
-
-	<div class="marginb">
-		<button onclick="leaveForest()">Leave the forest forever.</button>
-	</div>
-</div>
-
-<!-- End Events -->
-
+				<table class="statstable">
+					<tr>
+						<th colspan="2">Skills</th>
+					</tr>
+					<tr>
+						<td class="table_title">Herbology</td>
+						<td class="table_desc">
+							Level: <span id="plantlvl">0</span>
+							<span class="grey">(<span id="plantxp">0</span>/<span id="nextlvlplant">100</span>)</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_title">Crafting</td>
+						<td class="table_desc">
+							Level: <span id="craftlvl">0</span>
+							<span class="grey">(<span id="craftxp">0</span>/<span id="nextlvlcraft">100</span>)</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_title">Fighting</td>
+						<td class="table_desc">
+							Level: <span id="fightlvl">0</span>
+							<span class="grey">(<span id="fightxp">0</span>/<span id="nextlvlfight">100</span>)</span>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 
 		<div class="tab" id="loretab">
 			<div class="left">
-				<div class="marginb">
-					<b><span class="playername">name</span></b>
-					<span class="edit_icon" onclick="changename()" title="Edit name.">
-						<i class="fa fa-pencil" aria-hidden="true"></i>
-					</span>,
-					<span class="playertitle">title</span>.
-				</div>
-				<hr>
-				Runes:
-				<br>
 				WIP
 			</div>
 			<div class="right">
+				WIP
 			</div>
 		</div>
 	</div>
 </div>
 
 <div class="modal_bg hide">
+
+	<div id="questEvent" class="event_modal">
+		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
+		<h3 class="title battle_header">Quest</h3>
+		WIP
+	</div>
+
+	<div id="mineEvent" class="event_modal">
+		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
+		<h3 class="title battle_header">Treasure</h3>
+		WIP
+	</div>
+
+	<div id="cubesEvent" class="event_modal">
+		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
+		<h3 class="title battle_header">Resource</h3>
+		WIP
+	</div>
+
 	<div id="battle" class="event_modal">
 		<h3 class="title battle_header">An Enemy Appears</h3>
 		<div id="enemy">
@@ -321,104 +252,128 @@
 				<div class="info">
 					Baiting the enemy increases flee chance.
 					<br>
-					Costs 1 blue berries.
+					Costs 1 red berries.
 				</div>
 			<button class="toggle-btn marginb" id="flee" onclick="flee()">Flee. (<span id="fleechance">0</span>% chance)</button>
 		</div>
 	</div>
 
-			<div id="info" class="event_modal">
-				<span class="delmark" onclick="closeinfo()" style="font-size: 1.5em; margin: 0 5px;">&#x00D7;</span>
+	<div id="info" class="event_modal">
+		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
 
-				<h2 class="title">Forager</h2>
-				
-				Forager is a project I undertook to try and learn Javascript and make an incremental game. It also uses the popular JS library jQuery.
+		<h2 class="title">Forager</h2>
+		
+		Forager is a project I undertook to try and learn Javascript and make an incremental game. It also uses the popular JS library jQuery.
 
-				<div style="margin: 50px;"><hr></div>
+		<div style="margin: 50px;"><hr></div>
 
-				<b>Some simple tips/a guide:</b>
+		<b>Some simple tips/a guide:</b>
 
-				<ol>
-					<li>Use the 'look around' button to forage for some supplies.</li>
-					<li>Click these supplies to add them to your inventory. Once an item is in your inventory, different actions are unlocked in the right-hand panel as you can combine items, use them, or leave them.</li>
-					<li>As you complete tasks, your skill in that respective task increases.</li>
-					<li><b>Keep foraging and you gain the ability to find different types of items.</b> There are currently 20 obtainable items.</li>
-					<li>Your inventory stores items which can be manipulated, and the lower section contains static items.</li>
-					<li>In the 'world' tab you can walk in a linear direction to discover new places with unique mechanics.</li>
-				</ol>
+		<ol>
+			<li>Use the 'look around' button to forage for some supplies.</li>
+			<li>Click these supplies to add them to your inventory. Once an item is in your inventory, different actions are unlocked in the right-hand panel as you can combine items, use them, or leave them.</li>
+			<li>As you complete tasks, your skill in that respective task increases.</li>
+			<li><b>Keep foraging and you gain the ability to find different types of items.</b> There are currently 20 obtainable items.</li>
+			<li>Your inventory stores items which can be manipulated, and the lower section contains static items.</li>
+			<li>In the 'world' tab you can walk in a linear direction to discover new places with unique mechanics.</li>
+		</ol>
 
-				<div style="margin: 50px;"><hr></div>
+		<div style="margin: 50px;"><hr></div>
 
-				<b>Important thing to note:</b>
+		<b>Important thing to note:</b>
 
-				<div class="marginb"></div>
+		<div class="marginb"></div>
 
-				This is an unfinished game. Currently there is no prestige mechanic, althought it possible to "beat" the game. I've tried to engineer the code in such a way that it would be faily easy to add new content -- but the game as it stands is just a slightly elevated proof of concept of the mechanics involved.
+		This is an unfinished game. Currently there is no prestige mechanic, althought it possible to "beat" the game. I've tried to engineer the code in such a way that it would be faily easy to add new content -- but the game as it stands is just a slightly elevated proof of concept of the mechanics involved.
 
-				<div class="marginb"></div>
+		<div class="marginb"></div>
 
-				Feel free to message me on reddit, my username is /u/KudosInc.
+		Feel free to message me on reddit, my username is /u/KudosInc.
 
-				<div class="marginb"></div>
+		<div class="marginb"></div>
 
-				Thanks for playing!
+		Thanks for playing!
 
-				<div style="margin: 50px;"><hr></div>
+		<div style="margin: 50px;"><hr></div>
 
-				<h2 class="title">Changelog</h2>
+		<h2 class="title">Changelog</h2>
 
-				<button class="btn-sm" onclick="changelog()">View</button>
+		<button class="btn-sm" onclick="changelog()">View</button>
 
-				<div id="changelog">
-					<ul>
-						<li><b>version 1.4</b></li>
-						<ul>
-							<li>
-								Separated the actions into sections according to their use.
-							</li>
-						</ul>
-						<li><b>version 1.3</b></li>
-						<ul>
-							<li>
-								Improved/polished mechanics introduced in the last update.
-							</li>
-							<li>
-								Rearraged the info tab, added the player tab.
-							</li>
-						</ul>
-						<li><b>version 1.2</b></li>
-						<ul>
-							<li>
-								Added random enemy spawns in the forest instead of a specific hunting area. Comes with a cool modal effect.
-							</li>
-							<li>
-								Added a toggle button to choose between stacking item visuals.
-							</li>
-						</ul>
-						<li><b>version 1.1.1</b></li>
-						<ul>
-							<li>
-								Fixed a bug in which place names weren't hidden.
-							</li>
-							<li>
-								Added changelog.
-							</li>
-						</ul>
-						<li><b>version 1.1</b></li>
-						<ul>
-							<li>
-								Added more colour, a map and item stacking. This release incorporated some of the feedback I got from reddit, thanks!
-							</li>
-						</ul>
-						<li><b>version 1</b></li>
-						<ul>
-							<li>
-								First release, as a prototype on /r/incremental_games. (August 2018)
-							</li>
-						</ul>
-					</ul>
-				</div>
-			</div>
+		<div id="changelog">
+			<ul>
+				<li><b>version 1.6</b></li>
+				<ul>
+					<li>
+						Removed places mechanic, which included unique places you could discover on the map.
+					</li>
+					<li>
+						Added icons onto the map which will function as random events as a replacement.
+					</li>
+					<li>
+						Moved player tab to the world page, so all information is easily accessible.
+					</li>
+					<li>
+						Added village tab, which is a WIP.
+					</li>
+				</ul>
+				<li><b>version 1.5</b></li>
+				<ul>
+					<li>
+						Made baiting animals use red berries instead of blue berries.
+					</li>
+					<li>
+						Redesigned the action separators introduced in the last update.
+					</li>
+				</ul>
+				<li><b>version 1.4</b></li>
+				<ul>
+					<li>
+						Separated the actions into sections according to their use.
+					</li>
+				</ul>
+				<li><b>version 1.3</b></li>
+				<ul>
+					<li>
+						Improved/polished mechanics introduced in the last update.
+					</li>
+					<li>
+						Rearraged the info tab, added the player tab.
+					</li>
+				</ul>
+				<li><b>version 1.2</b></li>
+				<ul>
+					<li>
+						Added random enemy spawns in the forest instead of a specific hunting area. Comes with a cool modal effect.
+					</li>
+					<li>
+						Added a toggle button to choose between stacking item visuals.
+					</li>
+				</ul>
+				<li><b>version 1.1.1</b></li>
+				<ul>
+					<li>
+						Fixed a bug in which place names weren't hidden.
+					</li>
+					<li>
+						Added changelog.
+					</li>
+				</ul>
+				<li><b>version 1.1</b></li>
+				<ul>
+					<li>
+						Added more colour, a map and item stacking. This release incorporated some of the feedback I got from reddit, thanks!
+					</li>
+				</ul>
+				<li><b>version 1</b></li>
+				<ul>
+					<li>
+						First release, as a prototype on /r/incremental_games. (August 2018)
+					</li>
+				</ul>
+			</ul>
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript" src="foragerJS.js"></script>
