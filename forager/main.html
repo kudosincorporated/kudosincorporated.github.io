@@ -109,10 +109,10 @@
 					</div>
 			</div>
 
-				<div class="lower" id="base__cover" style="height: 30%;">
-					<h2 class="title" style="font-size: 1.3em;">Core Items</h2>
-					<div id="base"></div>
-				</div>
+			<div class="lower low_cover" id="base__cover" style="height: 30%;">
+				<h2 class="title" style="font-size: 1.3em;">Core Items</h2>
+				<div id="base"></div>
+			</div>
 		</div>
 
 		<div class="tab" id="battletab">
@@ -140,7 +140,7 @@
 
 					<div class="marginb"></div>
 
-					<div class="grey">You have explored <span id="complete">1</span> sectors.</div>
+					<div class="grey">You have explored <span id="complete">1</span> sectors (zone <span id="zone">1</span>).</div>
 				</div>
 			</div>
 
@@ -169,6 +169,10 @@
 					<tr>
 						<td class="table_title">Armour</td>
 						<td class="table_desc"><span class="armour">none.</span></td>
+					</tr>
+					<tr>
+						<td class="table_title">Money</td>
+						<td class="table_desc"><span class="money">0</span> gold pieces</td>
 					</tr>
 				</table>
 
@@ -203,33 +207,144 @@
 
 		<div class="tab" id="loretab">
 			<div class="left">
-				WIP
+				<h2 class="title">Equipped</h2>
+				<div id="equipped" class="accBar"></div>
+
+				<h2 class="title">Accessories</h2>
+				<div id="accessories" class="accBar"></div>
 			</div>
+
 			<div class="right">
-				WIP
+				<div class="marginb">You have <span class="money">0</span> gold pieces.</div>
+
+				<table class="shoptable">
+					<tr>
+						<th colspan="3"><h3 class="shoptitle">Ye Old Rune Shoppe</h3></th>
+					</tr>
+					<tr>
+						<td><img src="images/sharp_rock.png" class="shopimg"></td>
+						<td>
+							<h3 class="shoptitle">Bone Necklace</h3>
+							A handcrafted necklace that wards off attackers. You will encounter less animals with this equipped.
+						</td>
+						<td>
+							<button id="s_bn" class="btn-sm" onclick="buyAccessory('bone necklace', 'You will encounter less animals with this equipped.', 15, '#s_bn')">
+								Buy
+							</button>
+							Cost: 15g
+						</td>
+					</tr>
+					<tr>
+						<td><img src="images/cornflower.png" class="shopimg"></td>
+						<td>
+							<h3 class="shoptitle">Saphire Amulet</h3>
+							This amulet is said to fill the user with immense strength, increasing their damage output when worn.
+						</td>
+						<td>
+							<button id="s_sa" class="btn-sm" onclick="buyAccessory('saphire amulet', 'Increases your damage output when worn.', 25, '#s_sa')">
+								Buy
+							</button>
+							Cost: 25g
+						</td>
+					</tr>
+					<tr>
+						<td><img src="images/water.png" class="shopimg"></td>
+						<td>
+							<h3 class="shoptitle">Wanderer's Shoes</h3>
+							Wearing these magical boots allows you to walk without losing energy or becoming thirsty.
+						</td>
+						<td>
+							<button id="s_ws" class="btn-sm" onclick="buyAccessory(`wanderer's shoes`, 'Wearing them allows you to walk without losing energy.', 35, '#s_ws')">
+								Buy
+							</button>
+							Cost: 35g
+						</td>
+					</tr>
+					<tr>
+						<td><img src="images/red_berries.png" class="shopimg"></td>
+						<td>
+							<h3 class="shoptitle">Ruby Ring</h3>
+							This ring fills you with an inextricable speed. You travel in the forest much faster when wearing it.
+						</td>
+						<td>
+							<button id="s_rr" class="btn-sm" onclick="buyAccessory('ruby ring', 'You travel in the forest much faster when wearing it.', 50, '#s_rr')">
+								Buy
+							</button>
+							Cost: 50g
+						</td>
+					</tr>
+				</table>
+
+				<div class="marginb"></div>
+
+				<table class="shoptable">
+					<tr>
+						<th colspan="3"><h3 class="shoptitle">The Unkempt Kennel</h3></th>
+					</tr>
+					<tr>
+						<td><img src="images/dog_german.png" class="shopimg"></td>
+						<td>
+							<h3 class="shoptitle">German Shepherd</h3>
+							The German Shepherd will help you forage, lowering the time it takes to forage for resources.
+						</td>
+						<td>
+							<button id="s_gs" class="btn-sm" onclick="buyAccessory('german shepherd', 'Lowers the time it takes to forage for resources.', 15, '#s_gs')">
+								Buy
+							</button>
+							Cost: 15g
+						</td>
+					</tr>
+					<tr>
+						<td><img src="images/dog_fox.png" class="shopimg"></td>
+						<td>
+							<h3 class="shoptitle">Foxhound</h3>
+							The foxhoud is an independant aide, periodically finding foragable supplies for you. 
+						</td>
+						<td>
+							<button id="s_fh" class="btn-sm" onclick="buyAccessory('foxhound', 'Periodically finds foragable supplies for you. ', 30, '#s_fh')">
+								Buy
+							</button>
+							Cost: 30g
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</div>
 </div>
 
 <div class="modal_bg hide">
+	<div id="villageEvent" class="event_modal">
+		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
+		<h3 class="title battle_header">The Village</h3>
+		<div class="marginb">
+			You enter the village, which is bustling with street vendors and overflowing market stands.
+			In one of the stands, a wizened old man sleeps behind a counter covered in intricate objects.
+			In another, an enthusiastic young boy stands next to kennels filled with various dogs.
+		</div>
+
+		<div class="grey marginb">You have unlocked the village marketplace, and the ability to use accessories.</div>
+	</div>
 
 	<div id="questEvent" class="event_modal">
 		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
 		<h3 class="title battle_header">Quest</h3>
-		WIP
+		<div class="marginb questInfo"></div>
+		<div class="questButton"></div>
 	</div>
 
 	<div id="mineEvent" class="event_modal">
 		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
 		<h3 class="title battle_header">Treasure</h3>
-		WIP
+		<div class="marginb mineInfo"></div>
+		<div class="mineButton"></div>
 	</div>
 
 	<div id="cubesEvent" class="event_modal">
 		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
 		<h3 class="title battle_header">Resource</h3>
-		WIP
+		<div class="marginb cubesInfo"></div>
+		<div class="marginb grey">The forage box has been filled.</div>
 	</div>
 
 	<div id="battle" class="event_modal">
@@ -263,7 +378,11 @@
 
 		<h2 class="title">Forager</h2>
 		
-		Forager is a project I undertook to try and learn Javascript and make an incremental game. It also uses the popular JS library jQuery.
+		Forager is a project I undertook to try and learn Javascript by making a serious incremental game, after making a few basic ones.
+
+		<div class="marginb"></div>
+
+		Feel free to message me on reddit, my username is /u/KudosInc.
 
 		<div style="margin: 50px;"><hr></div>
 
@@ -280,28 +399,20 @@
 
 		<div style="margin: 50px;"><hr></div>
 
-		<b>Important thing to note:</b>
-
-		<div class="marginb"></div>
-
-		This is an unfinished game. Currently there is no prestige mechanic, althought it possible to "beat" the game. I've tried to engineer the code in such a way that it would be faily easy to add new content -- but the game as it stands is just a slightly elevated proof of concept of the mechanics involved.
-
-		<div class="marginb"></div>
-
-		Feel free to message me on reddit, my username is /u/KudosInc.
-
-		<div class="marginb"></div>
-
-		Thanks for playing!
-
-		<div style="margin: 50px;"><hr></div>
-
 		<h2 class="title">Changelog</h2>
 
-		<button class="btn-sm" onclick="changelog()">View</button>
+		<button class="btn-sm" onclick="changelog()">View</button> <span class="grey">(Spoilers)</span>
 
 		<div id="changelog">
 			<ul>
+				<li><b>version 2.0</b></li>
+				<ul>
+					<li>Added the village/marketplace, where you can equip and purchase accessories.</li>
+					<li>Added accessories, which are equippable items that grant the player passive effects.</li>
+					<li>Added world events which occur when the player is at an orange icon tile.</li>
+					<li>Added infinite exploration of the forest.</li>
+					<li>Redesigned the background, which included adding an image.</li>
+				</ul>
 				<li><b>version 1.6</b></li>
 				<ul>
 					<li>
@@ -365,7 +476,7 @@
 						Added more colour, a map and item stacking. This release incorporated some of the feedback I got from reddit, thanks!
 					</li>
 				</ul>
-				<li><b>version 1</b></li>
+				<li><b>version 1.0</b></li>
 				<ul>
 					<li>
 						First release, as a prototype on /r/incremental_games. (August 2018)

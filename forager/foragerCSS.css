@@ -70,6 +70,7 @@ hr {
 	background-color: #fefde7;
 	display: none;
 	z-index: 2;
+	text-align: left;
 }
 
 .box:hover + .info {
@@ -443,8 +444,12 @@ body {
 	margin-top: 10px;
 }
 
-#base__cover {
+.low_cover {
 	border-top: 1px solid #ccc;
+}
+
+.high_cover {
+	border-bottom: 1px solid #ccc;
 }
 
 .left {
@@ -787,6 +792,10 @@ body {
 	margin-bottom: 20px;
 }
 
+.statstable tr, .shoptable tr {
+	background-color: white;
+}
+
 table, th, td {
 	border-collapse: collapse;
 }
@@ -809,7 +818,7 @@ table, th, td {
 	text-align: right;
 }
 
-.statstable th {
+table th {
 	background-color: #eee;
 	padding: 10px;
 	border-bottom: 1px solid #ddd;
@@ -817,16 +826,105 @@ table, th, td {
 
 
 
+.shoptable {
+	border: 1px solid #ddd;
+}
+
+.shoptable td {
+	padding: 5px;
+	border: 1px solid #ddd;
+	text-align: left;
+}
+
+.shoptable button {
+	margin: 0;
+	border-width: 1px;
+}
+
+.shopimg {
+	height: 80px;
+	width: 80px;
+	border-radius: 50%;
+	background-size: cover;
+	border: 1px solid #ccc;
+	box-shadow: 0px 1px 4px rgba(0,0,0,0.1);
+}
+
+.shoptitle {
+	font-weight: normal;
+	margin: 0;
+}
+
+.shoptable td:nth-child(odd) {
+	background-color: #f8f8f8;
+}
+
+.shoptable td:nth-child(even) {
+	padding: 5px 10px;
+}
+
+
+.accBar {
+	background-color: #f4f4f4;
+	border: 1px solid #ddd;
+	min-height: 95px;
+	width: 100%;
+	margin: 0 auto;
+	margin-bottom: 10px;
+}
+
+.accBar .box-sm {
+	cursor: pointer;
+	box-shadow: none;
+	border-radius: 50%;
+	font-size: 0.8em;
+}
+
+#equipped {
+	max-width: 350px;
+	box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+	border-color: #ccc;
+	border-radius: 5px;
+}
+
+#accessories {
+	background-color: white;
+}
+
+
 
 
 
 #tabmenu li a.locked {
-	border-color: #666;
 	background-color: #888;
-	opacity: 0.5;
+	border-color: #666;
+	color: #eee;
+	opacity: 0.6;
 	pointer-events: none;
 }
 
-#tabmenu li a.locked:after {
-	content: " (WIP)";
+.locked:after {
+	content: " (undiscovered)";
+}
+
+
+
+.bought {
+	background-color: #eee;
+	pointer-events: none;
+	font-size: 0;
+	padding: 2px 10px;
+}
+
+.bought:after {
+	font-size: 14px;
+	content: "Bought";
+}
+
+
+
+
+body {
+	background-image: url(bg5.jpg);
+	background-size: cover;
 }

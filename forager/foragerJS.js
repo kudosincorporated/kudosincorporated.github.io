@@ -26,7 +26,12 @@ var Game = {
 		weapon: "fists",
 		damage: 1,
 		armour: "plain clothes",
-		defence: 0
+		defence: 0,
+		money: 0,
+		walkcost: {
+			energy: 2,
+			water: 1
+		}
 	},
 	enemy: {
 		name: "",
@@ -35,10 +40,22 @@ var Game = {
 		damage: 0,
 		health: 10,
 		totalhealth: 10,
-		fleechance: 0
+		fleechance: 0,
+		type: 'beast',
+		reward: ""
+	},
+	unlocked: {
+		village: false
+	},
+	core: {
+		cart: 5000,
+		walk: 1000,
+		foxTick: 20000,
+		x_damage: 0
 	},
 
 	complete: 1,
+	zone: 1,
 	clickdmg: 25
 }
 
@@ -48,22 +65,22 @@ var map = [];
 //map zones
 
 var Icons = {
-	tree: 				'<span class="id">tree</span><i class="fa fa-tree" aria-hidden="true"></i>',
-	house: 				'<span class="id">house</span><i class="fa fa-home" aria-hidden="true"></i>',
-	mine: 				'<span class="id">mine</span><i class="fa fa-diamond" aria-hidden="true"></i>',
-	water: 				'<span class="id">water</span><i class="fa fa-tint" aria-hidden="true"></i>',
-	binoculars: 		'<span class="id">binoculars</span><i class="fa fa-binoculars" aria-hidden="true"></i>',
-	signs: 				'<span class="id">signs</span><i class="fa fa-map-signs" aria-hidden="true"></i>',
-	cubes: 				'<span class="id">cubes</span><i class="fa fa-cubes" aria-hidden="true"></i>',
-	gift: 				'<span class="id">gift</span><i class="fa fa-gift" aria-hidden="true"></i>',
-	flag: 				'<span class="id">flag</span><i class="fa fa-flag" aria-hidden="true"></i>',
-	mark: 				'<span class="id">mark</span><i class="fa fa-exclamation" aria-hidden="true"></i>',
-	person: 			'<span class="id">person</span><i class="fa fa-user" aria-hidden="true"></i>'
+	tree:		'<span class="id">tree</span><i class="fa fa-tree" aria-hidden="true"></i>',
+	house:		'<span class="id">house</span><i class="fa fa-home" aria-hidden="true"></i>',
+	mine:		'<span class="id">mine</span><i class="fa fa-diamond" aria-hidden="true"></i>',
+	water:		'<span class="id">water</span><i class="fa fa-tint" aria-hidden="true"></i>',
+	binoculars:	'<span class="id">binoculars</span><i class="fa fa-binoculars" aria-hidden="true"></i>',
+	signs:		'<span class="id">signs</span><i class="fa fa-map-signs" aria-hidden="true"></i>',
+	cubes:		'<span class="id">cubes</span><i class="fa fa-cubes" aria-hidden="true"></i>',
+	gift:		'<span class="id">gift</span><i class="fa fa-gift" aria-hidden="true"></i>',
+	flag:		'<span class="id">flag</span><i class="fa fa-flag" aria-hidden="true"></i>',
+	mark:		'<span class="id">mark</span><i class="fa fa-exclamation" aria-hidden="true"></i>',
+	person:		'<span class="id">person</span><i class="fa fa-user" aria-hidden="true"></i>'
 }
 
 var Zones = {
-	first: [
-		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.tree
+	zone1: [
+		Icons.tree, Icons.tree, Icons.tree, Icons.tree, Icons.house
 	],
 	current: []
 };
@@ -78,6 +95,12 @@ var mine = ['','','','','','','','',''];
 var items = [];
 var base = [];
 
+//the RUNE UPDATE
+
+var equipped = [];
+var accessories = [];
+
+
 function update() {
 	updateValues();
 	updateMine();
@@ -86,6 +109,7 @@ function update() {
 	imageItems();
 	buttonChecker();
 	playerUpdate();
+	updateVillage();
 }
 
 function mineInit() {
@@ -135,6 +159,35 @@ function mineInit() {
 	});
 }
 
+function accInit() {
+	buffCheck();
+
+	//initialise accessories
+	$("#equipped").on('click', 'div', function () {
+		var index = $("#equipped div").index(this);
+		accessories.splice(0, 0, {
+			name: equipped[index].name,
+			info: equipped[index].info
+		});
+		equipped.splice(index, 1);
+		makeArrays();
+		buffCheck();
+	});
+
+	$("#accessories").on('click', 'div', function () {
+		if (equipped.length < 3) {
+			var index = $("#accessories div").index(this);
+			equipped.splice(equipped.length, 0, {
+				name: accessories[index].name,
+				info: accessories[index].info
+			});
+			accessories.splice(index, 1);
+			makeArrays();
+			buffCheck();
+		}
+	});
+}
+
 ///////////////////////////
 //        saving         //
 ///////////////////////////
@@ -155,28 +208,34 @@ function saveGame() {
 			plantlvl: Game.player.plantlvl,
 			plantxp: Game.player.plantxp,
 			nextlvlplant: Game.player.nextlvlplant,
-
 			craftlvl: Game.player.craftlvl,
 			craftxp: Game.player.craftxp,
 			nextlvlcraft: Game.player.nextlvlcraft,
-
 			fightlvl: Game.player.fightlvl,
 			fightxp: Game.player.fightxp,
 			nextlvlfight: Game.player.nextlvlfight,
 
-		distance: Game.world.distance
+		distance: Game.world.distance,
+		money: Game.world.money,
+
+		//storyline
+		village: Game.unlocked.village
 	};
 	localStorage.setItem("save", JSON.stringify(save));
 	localStorage.setItem("mine", JSON.stringify(mine));
 	localStorage.setItem("items", JSON.stringify(items));
 	localStorage.setItem("base", JSON.stringify(base));
+	localStorage.setItem("equipped", JSON.stringify(equipped));
+	localStorage.setItem("accessories", JSON.stringify(accessories));
 
+	//the map
 	localStorage.setItem("map", JSON.stringify(map));
 }
 
 function loadGame() {
 	update();
 	mineInit();
+	accInit();
 
 	if (localStorage.getItem("save") != undefined) {
 		var savegame = JSON.parse(localStorage.getItem("save"));
@@ -184,11 +243,16 @@ function loadGame() {
 		var saveitems = JSON.parse(localStorage.getItem("items"));
 		var savebase = JSON.parse(localStorage.getItem("base"));
 		var savemap = JSON.parse(localStorage.getItem("map"));
+		var saveequipped = JSON.parse(localStorage.getItem("equipped"));
+		var saveaccessories = JSON.parse(localStorage.getItem("accessories"));
 
 		if (savemine != "") mine = savemine;
 		if (saveitems != "") items = saveitems;
 		if (savebase != "") base = savebase;
+		if (saveequipped != "") equipped = saveequipped;
+		if (saveaccessories != "") accessories = saveaccessories;
 
+		//the map
 		if (savemap != "") map = savemap;
 		constructMap();
 
@@ -202,16 +266,20 @@ function loadGame() {
 			if (typeof savegame.plantlvl !== "undefined") Game.player.plantlvl = savegame.plantlvl;
 			if (typeof savegame.plantxp !== "undefined") Game.player.plantxp = savegame.plantxp;
 			if (typeof savegame.nextlvlplant !== "undefined") Game.player.nextlvlplant = savegame.nextlvlplant;
-
 			if (typeof savegame.craftlvl !== "undefined") Game.player.craftlvl = savegame.craftlvl;
 			if (typeof savegame.craftxp !== "undefined") Game.player.craftxp = savegame.craftxp;
 			if (typeof savegame.nextlvlcraft !== "undefined") Game.player.nextlvlcraft = savegame.nextlvlcraft;
-
 			if (typeof savegame.fightlvl !== "undefined") Game.player.fightlvl = savegame.fightlvl;
 			if (typeof savegame.fightxp !== "undefined") Game.player.fightxp = savegame.fightxp;
 			if (typeof savegame.nextlvlfight !== "undefined") Game.player.nextlvlfight = savegame.nextlvlfight;
 
 		if (typeof savegame.distance !== "undefined") Game.world.distance = savegame.distance;
+		if (typeof savegame.money !== "undefined") Game.world.money = savegame.money;
+
+		//storyline
+		if (typeof savegame.village !== "undefined") Game.unlocked.village = savegame.village;
+		unlockTest();
+		buffCheck();
 
 		update();
 		worldUpdate();
@@ -230,6 +298,8 @@ function delGame() {
 	localStorage.removeItem("mine");
 	localStorage.removeItem("items");
 	localStorage.removeItem("base");
+	localStorage.removeItem("equipped");
+	localStorage.removeItem("accessories");
 	localStorage.removeItem("map");
 	location.reload();
 }
@@ -267,7 +337,8 @@ function sendcart() {
 
 	var elem = document.getElementById("myBar");
 	var width = 100;
-	var id = setInterval(frame, 50);
+	var carttime = Game.core.cart / 100;
+	var id = setInterval(frame, carttime);
 	function frame() {
 		if (width <= 0) {
 			clearInterval(id);
@@ -300,7 +371,7 @@ function sendcart() {
 		Game.player.plantxp += 10;
 		levelCheck();
 		updateValues();
-	}, 5000);
+	}, Game.core.cart);
 }
 
 function newore() {
@@ -388,6 +459,12 @@ function updateItems() {
 
 function sort() {
 	items = items.sort(function (a, b) {
+		return a["name"].localeCompare(b["name"]);
+	});
+}
+
+function sortBase() {
+	base = base.sort(function (a, b) {
 		return a["name"].localeCompare(b["name"]);
 	});
 }
@@ -574,6 +651,7 @@ function buttonChecker() {
 
 	var haveFlask = false;
 	var haveFirepit = false;
+	var havePouch = false;
 
 	for (var i = 0; i < base.length; i++) {
 		if (base[i].name == "flask") {
@@ -581,6 +659,9 @@ function buttonChecker() {
 		}
 		if (base[i].name == "firepit") {
 			haveFirepit = true;
+		}
+		if (base[i].name == "pouch") {
+			havePouch = true;
 		}
 	}
 
@@ -652,7 +733,7 @@ function buttonChecker() {
 		$('#craft').append('<button id="craftFirepit" onclick="craftFirepit()">Make firepit.</button>');
 	}
 
-	if (itemCheck.leaves >= 1 && itemCheck.treeBark >= 1) { //crafing pouch
+	if (itemCheck.leaves >= 1 && itemCheck.treeBark >= 1 && havePouch != true) { //crafing pouch
 		$('#craft').append('<button id="craftPouch" onclick="craftPouch()">Craft pouch.</button>');
 	}
 
@@ -667,7 +748,8 @@ function buttonChecker() {
 		Game.world.weapon = "fists";
 		Game.world.damage = 1;
 	}
-	var totaldamage = Game.world.damage + Game.player.fightlvl;
+
+	var totaldamage = Game.world.damage + Game.player.fightlvl + Game.core.x_damage;
 	$('.weapon').html(Game.world.weapon + " (" + totaldamage + " damage)");
 
 	//armourcheck (placement temporaray)
@@ -898,6 +980,8 @@ function drinkCoffeeBrew() {
 function updateBase() {
 	buttonChecker();
 
+	sortBase();
+
 	if (base.length > 0) {
 		$("#base").html("");
 		var i;
@@ -1003,7 +1087,32 @@ function imageItems() {
 	$("#items div:contains('ointment'), #mine li:contains('ointment')").css({
 		"background-image" : "url(images/ointment.png)"
 	});
+
+
+
+
+
+
+	$(".acc:contains('bone necklace')").css({
+		"background-image" : "url(images/sharp_rock.png)"
+	});
+	$(".acc:contains('saphire amulet')").css({
+		"background-image" : "url(images/cornflower.png)"
+	});
+	$(`.acc:contains("wanderer's shoes")`).css({
+		"background-image" : "url(images/water.png)"
+	});
+	$(".acc:contains('ruby ring')").css({
+		"background-image" : "url(images/red_berries.png)"
+	});
+	$(".acc:contains('german shepherd')").css({
+		"background-image" : "url(images/dog_german.png)"
+	});
+	$(".acc:contains('foxhound')").css({
+		"background-image" : "url(images/dog_fox.png)"
+	});
 }
+
 
 
 
@@ -1055,6 +1164,7 @@ function cleartabs() {
 
 function worldUpdate() {
 	$('#distance').html(prettify(Game.world.distance));
+	$('#zone').html(Game.zone);
 
 	//enemy
 	$('#enemyHealth').html(prettify(Game.enemy.health));
@@ -1075,9 +1185,14 @@ function forwards() {
 	document.getElementById('forwards').disabled = true;
 	document.getElementById('forwards').innerHTML = "Walking deeper...";
 
+		$('.fillbar').css({
+			"transition" : Game.core.walk + "ms linear"
+		})
+
 		var elem = document.getElementById("walkBar");
 		var width = 100;
-		var id = setInterval(frame, 10);
+		var walktime = Game.core.walk / 100;
+		var id = setInterval(frame, walktime);
 		function frame() {
 			if (width <= 0) {
 				clearInterval(id);
@@ -1092,7 +1207,7 @@ function forwards() {
 			clearInterval(id)
 			width = 100;
 			elem.style.width = width + '%';
-		}, 1000);
+		}, Game.core.walk);
 
 	//map
 	explore(Game.clickdmg);
@@ -1104,8 +1219,8 @@ function forwards() {
 		Game.world.distance += 0.5;
 		worldUpdate();
 
-		Game.player.energy -= 1;
-		Game.player.thirst -= 1;
+		Game.player.energy -= Game.world.walkcost.energy;
+		Game.player.thirst -= Game.world.walkcost.water;
 		updateValues();
 
 		$('#log').prepend("<li>You move deeper into the forest.</li>");
@@ -1117,7 +1232,7 @@ function forwards() {
 			hunt();
 		}
 		
-	}, 1000);
+	}, Game.core.walk);
 }
 
 /*function backwards() {
@@ -1182,17 +1297,16 @@ function hunt() {
 
 		$('#log').prepend("<li class='red'>A " + Game.enemy.name + " appears suddenly.</li>");
 
+		//change enemy type
+		Game.enemy.type = 'beast';
+
 		$('#e_name').html(Game.enemy.name);
 		$('#e_desc').html(Game.enemy.desc);
 		worldUpdate();
 
 		//show the modal
+		showModal();
 		$('#battle').show();
-		$('.modal_bg').fadeIn(300);
-		$('.modal_bg').removeClass("hide");
-		$('.modal_bg').css({
-			"display" : "inline-flex"
-		});
 	}
 }
 
@@ -1209,11 +1323,13 @@ function animalStats(response, damage, health, totalhealth, fleechance) {
 function attack() {
 	//player attacks
 
-		var totaldamage = Game.world.damage + Game.player.fightlvl;
+		var totaldamage = Game.world.damage + Game.player.fightlvl + Game.core.x_damage;
 		Game.enemy.health -= totaldamage;
 		worldUpdate();
 
-		$('#log').prepend("<li>You attack the " + Game.enemy.name + " with your " + Game.world.weapon + ", dealing " + totaldamage + " damage.</li>");
+		if (Game.enemy.name != "") {
+			$('#log').prepend("<li>You attack the " + Game.enemy.name + " with your " + Game.world.weapon + ", dealing " + totaldamage + " damage.</li>");
+		}
 
 		Game.player.fightxp += 1;
 		updateValues();
@@ -1227,7 +1343,9 @@ function attack() {
 }
 
 function enemyAttack() {
-	$('#log').prepend("<li class='red'>The " + Game.enemy.name + " attacks you for " + Game.enemy.damage + " damage.</li>");
+		if (Game.enemy.name != "") {
+			$('#log').prepend("<li class='red'>The " + Game.enemy.name + " attacks you for " + Game.enemy.damage + " damage.</li>");
+		}
 
 	Game.player.health -= Game.enemy.damage;
 	updateValues();
@@ -1254,25 +1372,65 @@ function flee() {
 }
 
 function endFight() {
-	removeFight();
-
 	$('#log').prepend("<li class='green'>You win the fight.</li>");
 
 	//possible item
-	if (Math.random() * 100 <= 50) {
-		newore();
-		$('#log').prepend("<li class='green'>You forage for something near the animal's body.</li>");
+	if (Game.enemy.type == 'beast') {
+		if (Math.random() * 100 <= 50) {
+			newore();
+			$('#log').prepend("<li class='green'>You forage for something near the animal's body.</li>");
+			hideModal();
+		}
 	}
+	else if (Game.enemy.type == 'quest') {
+		if (Game.enemy.reward == 'brute') {
+			$('.questInfo').html(
+				"Finally, the brute is vanquished. As a reward, the village gives you 10 gold pieces."
+			);
+
+			$('.questButton').html(
+				"<button onclick='collect(10)'>Collect reward.</button>"
+			);
+
+			showModal();
+			$('#questEvent').show();
+		}
+		else if (Game.enemy.reward == 'theif') {
+			$('.questInfo').html(
+				"Defeated, the theif surrenders her own wealth. You gain 2 gold pieces."
+			);
+
+			$('.questButton').html(
+				"<button onclick='collect(2)'>Collect reward.</button>"
+			);
+
+			showModal();
+			$('#questEvent').show();
+		}
+		else if (Game.enemy.reward == 'wizard') {
+			$('.questInfo').html(
+				"The wizard laughs maniacally and vanishes in a puff of smoke. He leaves behind 3 gold pieces."
+			);
+
+			$('.questButton').html(
+				"<button onclick='collect(3)'>Collect reward.</button>"
+			);
+
+			showModal();
+			$('#questEvent').show();
+		}
+	}
+
+	removeFight();
+}
+
+function getMoney() {
+
 }
 
 function removeFight() {
 	Game.enemy.health = 1;
 	Game.enemy.name = "";
-
-	//show modal
-	$('#battle').hide();
-	$('.modal_bg').fadeOut(300);
-	$('.modal_bg').addClass("hide");
 }
 
 function leaveForest() {
@@ -1331,14 +1489,6 @@ function info() {
 /////              the map              /////
 /////////////////////////////////////////////
 
-function switchTab(tab, id) {
-	$('.worldpage').hide();
-	$('.menu li a').removeClass('menu_active');
-
-	$(tab).show();
-	$(id).addClass('menu_active');
-}
-
 function makeMap() {
 	if (map == "") {
 		genNewMap();
@@ -1353,8 +1503,8 @@ function genNewMap() {
 	var done = 0;
 
 	for (var i = 0; i < 25; i++) {
-		if (Zones.first[i] != undefined) {
-			map.push(Zones.first[i]);
+		if (Zones.zone1[i] != undefined && Game.zone == 1) {
+			map.push(Zones.zone1[i]);
 		}
 		else {
 			if (Math.random() * 100 <= 50) {
@@ -1408,7 +1558,7 @@ function constructMap() {
 }
 
 function loadMap() {
-	var clicks = Game.world.distance * 2;
+	var clicks = Game.world.distance * 2 + ((Game.zone - 1) * 0.5);
 	for (var i = 0; i < clicks; i++) {
 		explore(Game.clickdmg);
 	}
@@ -1429,8 +1579,26 @@ function explore(value) {
 			}
 		}
 	}
+
+	nextZone();
 }
 
+
+function nextZone() {
+	if (Game.complete == 26) {
+		Game.complete = 1;
+		Game.world.distance -= 0.5;
+
+		Game.zone += 1;
+		$('#zone').html(Game.zone);
+
+		map = [];
+		genNewMap();
+		constructMap();
+
+		$('#log').prepend("<li class='green'>You advance to the next zone of the forest.</li>");
+	}
+}
 
 
 
@@ -1496,9 +1664,10 @@ for (i = 0; i < acc.length; i++) {
 
 
 function eventChecker() {
-	var dist = (Game.world.distance / 2) - 1;
-
-	switch ($('#map .tile').eq(dist).text()) {
+	switch ($('#map .tile').eq(Game.complete - 1).text()) {
+		case 'house':
+			villageEvent();
+			break;
 		case 'signs':
 			questEvent();
 			break;
@@ -1514,9 +1683,9 @@ function eventChecker() {
 }
 
 function placechecker() {
-	var dist = (Game.world.distance / 2) - 1;
+	var position = (Game.world.distance - ((Game.zone - 1) * 50)) / 2;
 
-	switch ($('#map .tile').eq(dist).text()) {
+	switch ($('#map .tile').eq(position - 1).text()) {
 		case "":
 			return false; //checks if not on edge of square
 			break;
@@ -1545,16 +1714,269 @@ function hideModal() {
 }
 
 function questEvent() {
+	var array = [
+		"A timid man approaches you, wringing his hands. He tells you that his village is being terrorised by a masked brute, and offers you gold in exchange for your help in ridding the village of his evil shadow.",
+		"A cloaked figure appears from behind a tree, demanding money. She holds a handmade dagger, but looks injured. You could probably outrun her.",
+		"A crazed wizard blocks your path. He demands you fight him to prove your worth."
+	];
+
+	var enemyArray = [
+		"brute",
+		"theif",
+		"wizard"
+	];
+
+	var number = Math.floor(Math.random() * array.length);
+	$('.questInfo').html(array[number]);
+
+	$('.questButton').html(
+		"<button onclick='beginQuest(`" + enemyArray[number] + "`, `" + array[number] + "`)'>Begin quest.</button>"
+	);
+
 	showModal();
 	$('#questEvent').show();
 }
 
+function beginQuest(enemy, desc) {
+		if (enemy == "brute") {
+			Game.enemy.name = "burly brute";
+			Game.enemy.desc = "<div class='grey marginb'>" + desc + "</div><div>The masked villan stands before you, holding a bag of stolen goods. The village watches with bated breath.";
+			animalStats(0.1, 20, 80, 80, 0);
+		}
+		if (enemy == "theif") {
+			Game.enemy.name = "spindly theif";
+			Game.enemy.desc = "<div class='grey marginb'>" + desc + "</div><div>The theif makes a jab with her dagger, and you are forced to respond.</div>";
+			animalStats(0.3, 3, 30, 30, 0);
+		}
+		if (enemy == "wizard") {
+			Game.enemy.name = "wicked wizard";
+			Game.enemy.desc = "<div class='grey marginb'>" + desc + "</div><div>The wizard waves his staff at you, spitting in your direction. His long beard waves in the morning wind.</div>";
+			animalStats(0.2, 5, 50, 50, 0);
+		}
+
+		$('#log').prepend("<li class='red'>A " + Game.enemy.name + " appears.</li>");
+
+		//change enemy type
+		Game.enemy.type = 'quest';
+		Game.enemy.reward = enemy;
+
+		$('#e_name').html(Game.enemy.name);
+		$('#e_desc').html(Game.enemy.desc);
+		worldUpdate();
+
+		//show the modal
+		showModal();
+		$('#battle').show();
+}
+
 function mineEvent() {
+	var array = [
+		"A gold piece sticks out of the grass. Someone must have dropped it.",
+		"You find a small bag of money, hidden under a rock. Inside is a few dirty gold pieces.",
+		"Buried in the dirt is a small ruby. Probably worth a bit of money.",
+		"You spot a rare kind of flower poking out from a tree stump. It's worth a nice amount of gold."
+	];
+
+	var moneyArray = [
+		1,
+		3,
+		6,
+		10
+	];
+
+	var number = Math.floor(Math.random() * array.length);
+	$('.mineInfo').html(array[number]);
+
+	$('.mineButton').html(
+		"<button onclick='collect(" + moneyArray[number] + ")'>Collect " + moneyArray[number] + " gold pieces.</button>"
+	);
+
 	showModal();
 	$('#mineEvent').show();
 }
 
+function collect(number) {
+	Game.world.money += number;
+	$('.money').html(Game.world.money);
+
+	hideModal();
+}
+
 function cubesEvent() {
+	for (var i = 0; i < 9; i++) {
+		newore();
+	}
+
+	var array = [
+		"You look up and find yourself in a small clearing. It's covered in flora, and you fill your pockets with supplies.",
+		"Next to an abandoned camp you find a small satchel filled with various forest supplies.",
+		"You pass a wizened wanderer, who gives you a small bag filled with flora picked from the forest. He leaves before you can thank him."
+	];
+
+	var number = Math.floor(Math.random() * array.length);
+	$('.cubesInfo').html(array[number]);
+
 	showModal();
 	$('#cubesEvent').show();
+}
+
+function villageEvent() {
+	showModal();
+	$('#villageEvent').show();
+
+	//admin
+	Game.unlocked.village = true;
+	$('#lt').removeClass('locked');
+}
+
+
+
+function unlockTest() {
+	if (Game.unlocked.village == true) {
+		$('#lt').removeClass('locked');
+	}
+}
+
+
+
+
+
+//THE RUNE UPDATE
+
+function updateVillage() {
+	makeArrays();
+
+	$('.money').html(Game.world.money);
+}
+
+function makeArrays() {
+	if (accessories.length > 0) {
+		$("#accessories").html("");
+
+		for (var i = 0; i < accessories.length; i++) {
+			$("#accessories").append(
+				  "<div class='box box-sm acc'>"
+				+ accessories[i].name
+				+ "</div><span class='info'>"
+				+ accessories[i].info
+				+ "</span>"
+			);
+		}
+	}
+	else {
+		$('#accessories').html("");
+	}
+
+	if (equipped.length > 0) {
+		$("#equipped").html("");
+
+		for (var i = 0; i < equipped.length; i++) {
+			$("#equipped").append(
+				  "<div class='box box-sm acc'>"
+				+ equipped[i].name
+				+ "</div><span class='info'>"
+				+ equipped[i].info
+				+ "</span>"
+			);
+		}
+	}
+	else {
+		$('#equipped').html("");
+	}
+
+	imageItems();
+}
+
+function buyAccessory(name, info, price, id) {
+	if (Game.world.money >= price) {
+		Game.world.money -= price;
+		accessories.push({
+			name: name,
+			info: info
+		});
+		$(id).addClass('bought');
+	}
+	else {
+		alert("You don't have enough money to buy the " + name + ". It costs " + price + " gold and you have " + Game.world.money + " gold.");
+	}
+
+	updateVillage();
+}
+
+
+var auto;
+
+function autofox() {
+	var int = 0;
+	var final = Game.core.foxTick / 1000;
+
+	auto = setInterval(function() {
+		int++;
+		if (int >= final) {
+			newore();
+			$('#log').prepend("<li class='green'>Your foxhound forages and finds something.</li>");
+			int = 0;
+		}
+	}, 1000);
+}
+
+function buffCheck() {
+	for (var i = 0; i < equipped.length; i++) {
+		if (equipped[i].name == "bone necklace") {
+			Game.world.encounter = 10;
+			$('#s_bn').addClass('bought');
+		}
+		if (equipped[i].name == "wanderer's shoes") {
+			Game.world.walkcost.energy = 0;
+			Game.world.walkcost.water = 0;
+			$('#s_ws').addClass('bought');
+		}
+		if (equipped[i].name == "ruby ring") {
+			Game.core.walk = 600;
+			$('#s_rr').addClass('bought');
+		}
+		if (equipped[i].name == "foxhound") {
+			autofox();
+			$('#s_fh').addClass('bought');
+		}
+		if (equipped[i].name == "saphire amulet") {
+			Game.core.x_damage = 2;
+			$('#s_sa').addClass('bought');
+		}
+		if (equipped[i].name == "german shepherd") {
+			Game.core.cart = 2000;
+			$('#s_gs').addClass('bought');
+		}
+	}
+
+	for (var i = 0; i < accessories.length; i++) {
+		if (accessories[i].name == "bone necklace") {
+			Game.world.encounter = 25;
+			$('#s_bn').addClass('bought');
+		}
+		if (accessories[i].name == "wanderer's shoes") {
+			Game.world.walkcost.energy = 2;
+			Game.world.walkcost.water = 1;
+			$('#s_ws').addClass('bought');
+		}
+		if (accessories[i].name == "ruby ring") {
+			Game.core.walk = 1000;
+			$('#s_rr').addClass('bought');
+		}
+		if (accessories[i].name == "saphire amulet") {
+			Game.core.x_damage = 0;
+			$('#s_sa').addClass('bought');
+		}
+		if (accessories[i].name == "german shepherd") {
+			Game.core.cart = 5000;
+			$('#s_gs').addClass('bought');
+		}
+		if (accessories[i].name == "foxhound") {
+			clearInterval(auto);
+			$('#s_fh').addClass('bought');
+		}
+	}
+
+	var totaldamage = Game.world.damage + Game.player.fightlvl + Game.core.x_damage;
+	$('.weapon').html(Game.world.weapon + " (" + totaldamage + " damage)");
 }
