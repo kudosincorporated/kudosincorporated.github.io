@@ -53,6 +53,11 @@ var Game = {
 		foxTick: 20000,
 		x_damage: 0
 	},
+	recipie: {
+		bought: 0,
+		cost: 1,
+		total: 6
+	},
 
 	complete: 1,
 	zone: 1,
@@ -91,7 +96,30 @@ var orearray = [
 	'blue berries'
 ];
 
-var mine = ['','','','','','','','',''];
+var weights = [
+	1,		//dark berries
+	1,		//red berries
+	1,		//blue berries
+	4,		//leaves
+	3,		//twigs
+	3,		//tree bark
+	2,		//tree sap
+	2,		//marigold
+	2,		//milkcap
+	2,		//cornflower
+	2,		//opium poppy
+	3		//sharp rock
+];
+
+
+var mine = [];
+for (var i = 0; i < 9; i++) {
+	mine[i] = {
+		ore: "",
+		weight: ""
+	}
+}
+
 var items = [];
 var base = [];
 
@@ -217,6 +245,7 @@ function saveGame() {
 
 		distance: Game.world.distance,
 		money: Game.world.money,
+		bought: Game.recipie.bought,
 
 		//storyline
 		village: Game.unlocked.village
@@ -236,6 +265,9 @@ function loadGame() {
 	update();
 	mineInit();
 	accInit();
+
+	$('.recipieTable tr').hide();
+	$('.shoptab').hide();
 
 	if (localStorage.getItem("save") != undefined) {
 		var savegame = JSON.parse(localStorage.getItem("save"));
@@ -275,11 +307,13 @@ function loadGame() {
 
 		if (typeof savegame.distance !== "undefined") Game.world.distance = savegame.distance;
 		if (typeof savegame.money !== "undefined") Game.world.money = savegame.money;
+		if (typeof savegame.bought !== "undefined") Game.recipie.bought = savegame.bought;
 
 		//storyline
 		if (typeof savegame.village !== "undefined") Game.unlocked.village = savegame.village;
 		unlockTest();
 		buffCheck();
+		initBook();
 
 		update();
 		worldUpdate();
@@ -327,7 +361,10 @@ function newitem(name, info, weight) {
 }
 
 function spliceitem(index) {
-	mine.splice(index, 1, '');
+	mine.splice(index, 1, {
+		ore: "",
+		weight: ""
+	});
 	updateMine();
 	$(this).remove();
 }
@@ -378,16 +415,22 @@ function newore() {
 	var position = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 	var point = position[Math.floor(Math.random() * position.length)];
 
-	var ore = orearray[Math.floor(Math.random() * orearray.length)];
+	var number = Math.floor(Math.random() * orearray.length);
 
-	if (mine[point] == "") {
-		mine.splice(point, 1, ore);
+	var ore = orearray[number];
+	var weight = weights[number];
+
+	if (mine[point].ore == "") {
+		mine.splice(point, 1, {
+			ore: ore,
+			weight, weight
+		});
 		updateMine();
 	}
 	else {
 		var full = 0;
-		for (var i = 0; i < 9; i++) {	
-			if (mine[i] != "") {
+		for (var i = 0; i < 9; i++) {
+			if (mine[i].ore != "") {
 				full++;
 			}
 		}
@@ -401,22 +444,25 @@ function newore() {
 }
 
 function dropall() {
-	mine = ['','','','','','','','',''];
+	for (var i = 0; i < 9; i++) {
+		mine[i] = {
+			ore: "",
+			weight: ""
+		}
+	}
+
 	updateMine();
 }
 
 function updateMine() {
 	document.getElementById("mine").innerHTML = "";
 	for (var i = 0; i < mine.length; i++) {
-		mineupdate = "<li>" + mine[i] + "</li>";
+		mineupdate = "<li>" + mine[i].ore + "</li><span class='info'>weight: " + mine[i].weight + "</span>";
 		document.getElementById("mine").innerHTML += mineupdate;
 
-		if (mine[i].length != 0) {
-			$('#mine li:nth-child(' + (i + 1) + ')').addClass('collect');
+		if (mine[i].ore != "") {
+			$('#mine li:nth-of-type(' + (i + 1) + ')').addClass('collect');
 		}
-		$("#mine li:contains('new lore')").css({
-			"background-color" : "#fefde7"
-		});
 	}
 	imageItems();
 }
@@ -1159,7 +1205,6 @@ function cleartabs() {
 
 
 
-
 //THE WORLD TAB --->> HERE BE A NEW MECHANIC
 
 function worldUpdate() {
@@ -1431,6 +1476,10 @@ function getMoney() {
 function removeFight() {
 	Game.enemy.health = 1;
 	Game.enemy.name = "";
+
+	if (Game.enemy.type == 'beast') {
+		hideModal();
+	}
 }
 
 function leaveForest() {
@@ -1746,12 +1795,12 @@ function beginQuest(enemy, desc) {
 		if (enemy == "theif") {
 			Game.enemy.name = "spindly theif";
 			Game.enemy.desc = "<div class='grey marginb'>" + desc + "</div><div>The theif makes a jab with her dagger, and you are forced to respond.</div>";
-			animalStats(0.3, 3, 30, 30, 0);
+			animalStats(0.4, 6, 30, 30, 0);
 		}
 		if (enemy == "wizard") {
 			Game.enemy.name = "wicked wizard";
 			Game.enemy.desc = "<div class='grey marginb'>" + desc + "</div><div>The wizard waves his staff at you, spitting in your direction. His long beard waves in the morning wind.</div>";
-			animalStats(0.2, 5, 50, 50, 0);
+			animalStats(0.3, 15, 50, 50, 0);
 		}
 
 		$('#log').prepend("<li class='red'>A " + Game.enemy.name + " appears.</li>");
@@ -1936,6 +1985,7 @@ function buffCheck() {
 			$('#s_rr').addClass('bought');
 		}
 		if (equipped[i].name == "foxhound") {
+			clearInterval(auto);
 			autofox();
 			$('#s_fh').addClass('bought');
 		}
@@ -1979,4 +2029,53 @@ function buffCheck() {
 
 	var totaldamage = Game.world.damage + Game.player.fightlvl + Game.core.x_damage;
 	$('.weapon').html(Game.world.weapon + " (" + totaldamage + " damage)");
+}
+
+
+
+function showBook() {
+	showModal();
+	$('#book').show();
+}
+
+function buyRecipie() {
+	if (Game.recipie.bought <= Game.recipie.total) {
+		if (Game.world.money >= Game.recipie.cost) {
+			Game.world.money -= Game.recipie.cost;
+			$('.money').html(Game.world.money);
+
+			$('.recipieTable tr').eq(Game.recipie.bought).show();
+			Game.recipie.bought++;
+		}
+		else {
+			alert("You cannot buy this. It costs " + Game.recipie.cost + " gold and you have " + Game.world.money + " gold.");
+		}
+	}
+	else {
+		alert("You have bought all the recipies!");
+	}
+
+	updateBought();
+}
+
+function initBook() {
+	for (var i = 0; i < Game.recipie.bought; i++) {
+		$('.recipieTable tr').eq(i).show();
+	}
+
+	updateBought();
+}
+
+function updateBought() {
+	$('.r_bought').html(Game.recipie.bought);
+	$('.r_total').html(Game.recipie.total + 1);
+}
+
+
+
+
+
+function newTab(id) {
+	$('.shoptab').hide();
+	$(id).show();
 }

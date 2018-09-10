@@ -93,17 +93,18 @@
 						<a href="#" onclick="plantlevel2()">herbologyLvl2</a>
 					</div> -->
 
-					<br>
+					<!-- <br>
 					<br>
 					<div class="grey marginb">
 						Click the 'look around' button to forage for materials.<br>Check the info button for more information.
-					</div>
+					</div> -->
 			</div>
 
-			<div class="right" style="height: 70%; position: relative;">
+			<div id="right_items" class="right" style="height: 70%; position: relative;">
 					<h2 class="title" style="margin-bottom: 0;">Inventory</h2>
 					<div class="grey">Carry weight: <span id="playerWeight">0</span>/<span id="playerTotalWeight">0</span></div>
 					<div id="items"></div>
+
 					<div style="position: absolute; top: 0; left: 0; margin: 5px;">
 						<button class="toggle-btn" onclick="stacktoggle()">Toggle Stacks</button>
 					</div>
@@ -215,99 +216,178 @@
 			</div>
 
 			<div class="right">
-				<div class="marginb">You have <span class="money">0</span> gold pieces.</div>
+				<h2 class="title" style="margin: 0;">The Marketplace</h2>
+				<div>You have <span class="money">0</span> gold pieces.</div>
 
-				<table class="shoptable">
-					<tr>
-						<th colspan="3"><h3 class="shoptitle">Ye Old Rune Shoppe</h3></th>
-					</tr>
-					<tr>
-						<td><img src="images/sharp_rock.png" class="shopimg"></td>
-						<td>
-							<h3 class="shoptitle">Bone Necklace</h3>
-							A handcrafted necklace that wards off attackers. You will encounter less animals with this equipped.
-						</td>
-						<td>
-							<button id="s_bn" class="btn-sm" onclick="buyAccessory('bone necklace', 'You will encounter less animals with this equipped.', 15, '#s_bn')">
-								Buy
-							</button>
-							Cost: 15g
-						</td>
-					</tr>
-					<tr>
-						<td><img src="images/cornflower.png" class="shopimg"></td>
-						<td>
-							<h3 class="shoptitle">Saphire Amulet</h3>
-							This amulet is said to fill the user with immense strength, increasing their damage output when worn.
-						</td>
-						<td>
-							<button id="s_sa" class="btn-sm" onclick="buyAccessory('saphire amulet', 'Increases your damage output when worn.', 25, '#s_sa')">
-								Buy
-							</button>
-							Cost: 25g
-						</td>
-					</tr>
-					<tr>
-						<td><img src="images/water.png" class="shopimg"></td>
-						<td>
-							<h3 class="shoptitle">Wanderer's Shoes</h3>
-							Wearing these magical boots allows you to walk without losing energy or becoming thirsty.
-						</td>
-						<td>
-							<button id="s_ws" class="btn-sm" onclick="buyAccessory(`wanderer's shoes`, 'Wearing them allows you to walk without losing energy.', 35, '#s_ws')">
-								Buy
-							</button>
-							Cost: 35g
-						</td>
-					</tr>
-					<tr>
-						<td><img src="images/red_berries.png" class="shopimg"></td>
-						<td>
-							<h3 class="shoptitle">Ruby Ring</h3>
-							This ring fills you with an inextricable speed. You travel in the forest much faster when wearing it.
-						</td>
-						<td>
-							<button id="s_rr" class="btn-sm" onclick="buyAccessory('ruby ring', 'You travel in the forest much faster when wearing it.', 50, '#s_rr')">
-								Buy
-							</button>
-							Cost: 50g
-						</td>
-					</tr>
-				</table>
+				<div style="margin: 20px;"></div>
 
-				<div class="marginb"></div>
+				<ul class="shopmenu">
+					<li><button onclick="newTab('#runeshop')">Ye Olde Trinket Shoppe</button></li>
+					<li><button onclick="newTab('#dogshop')">The Unkempt Kennel</button></li>
+					<li><button onclick="newTab('#recipieshop')">Crafter's Outpost</button></li>
+				</ul>
 
-				<table class="shoptable">
-					<tr>
-						<th colspan="3"><h3 class="shoptitle">The Unkempt Kennel</h3></th>
-					</tr>
-					<tr>
-						<td><img src="images/dog_german.png" class="shopimg"></td>
-						<td>
-							<h3 class="shoptitle">German Shepherd</h3>
-							The German Shepherd will help you forage, lowering the time it takes to forage for resources.
-						</td>
-						<td>
-							<button id="s_gs" class="btn-sm" onclick="buyAccessory('german shepherd', 'Lowers the time it takes to forage for resources.', 15, '#s_gs')">
-								Buy
-							</button>
-							Cost: 15g
-						</td>
-					</tr>
-					<tr>
-						<td><img src="images/dog_fox.png" class="shopimg"></td>
-						<td>
-							<h3 class="shoptitle">Foxhound</h3>
-							The foxhoud is an independant aide, periodically finding foragable supplies for you. 
-						</td>
-						<td>
-							<button id="s_fh" class="btn-sm" onclick="buyAccessory('foxhound', 'Periodically finds foragable supplies for you. ', 30, '#s_fh')">
-								Buy
-							</button>
-							Cost: 30g
-						</td>
-					</tr>
-				</table>
+				<hr>
+
+				<div id="recipieshop" class="shoptab" style="text-align: left;">
+
+					<h3 class="title" style="text-align: center;">Crafter's Outpost</h3>
+
+					<div style="float: right; text-align: right;">
+						<button onclick="buyRecipie()" style="border-width: 1px;">Buy New Recipie</button>
+						<div>Cost: 1 gold piece.</div>
+						<hr style="margin: 10px 0;">
+						<div>Bought: <span class="r_bought">0</span>/<span class="r_total">0</span></div>
+					</div>
+
+					<h3 class="title green">Core Items (3)</h3>
+					<table class="recipieTable">
+						<tr>
+							<td><img src="images/flask.png" class="shopimg"></td>
+							<td>
+								<img src="images/leaves.png" class="shopimg">
+								<img src="images/twigs.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/firepit.png" class="shopimg"></td>
+							<td>
+								<img src="images/twigs.png" class="shopimg">
+								<img src="images/tree_bark.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/pouch.png" class="shopimg"></td>
+							<td>
+								<img src="images/tree_bark.png" class="shopimg">
+								<img src="images/leaves.png" class="shopimg">
+							</td>
+						</tr>
+					</table>
+
+					<h3 class="title red">Craftable Items</h3>
+					<table class="recipieTable">
+						<tr>
+							<td><img src="images/coffee_brew.png" class="shopimg"></td>
+							<td>
+								<img src="images/firepit.png" class="shopimg">
+								<img src="images/water.png" class="shopimg">
+								<img src="images/cornflower.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/ointment.png" class="shopimg"></td>
+							<td>
+								<img src="images/tree_sap.png" class="shopimg">
+								<img src="images/marigold.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/opium.png" class="shopimg"></td>
+							<td>
+								<img src="images/opium_poppy.png" class="shopimg">
+								<img src="images/sharp_rock.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/roasted_shroom.png" class="shopimg"></td>
+							<td>
+								<img src="images/firepit.png" class="shopimg">
+								<img src="images/milkcap.png" class="shopimg">
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="runeshop" class="shoptab">
+					<h3 class="title">Ye Olde Trinket Shoppe</h3>
+					<table class="shoptable">
+						<tr>
+							<td><img src="images/sharp_rock.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Bone Necklace</h3>
+								A handcrafted necklace that wards off attackers. You will encounter less animals with this equipped.
+							</td>
+							<td>
+								<button id="s_bn" class="btn-sm" onclick="buyAccessory('bone necklace', 'You will encounter less animals with this equipped.', 15, '#s_bn')">
+									Buy
+								</button>
+								Cost: 15g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/cornflower.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Saphire Amulet</h3>
+								This amulet is said to fill the user with immense strength, increasing their damage output when worn.
+							</td>
+							<td>
+								<button id="s_sa" class="btn-sm" onclick="buyAccessory('saphire amulet', 'Increases your damage output when worn.', 25, '#s_sa')">
+									Buy
+								</button>
+								Cost: 25g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/water.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Wanderer's Shoes</h3>
+								Wearing these magical boots allows you to walk without losing energy or becoming thirsty.
+							</td>
+							<td>
+								<button id="s_ws" class="btn-sm" onclick="buyAccessory(`wanderer's shoes`, 'Wearing them allows you to walk without losing energy.', 35, '#s_ws')">
+									Buy
+								</button>
+								Cost: 35g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/red_berries.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Ruby Ring</h3>
+								This ring fills you with an inextricable speed. You travel in the forest much faster when wearing it.
+							</td>
+							<td>
+								<button id="s_rr" class="btn-sm" onclick="buyAccessory('ruby ring', 'You travel in the forest much faster when wearing it.', 50, '#s_rr')">
+									Buy
+								</button>
+								Cost: 50g
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="dogshop" class="shoptab">
+					<h3 class="title">The Unkempt Kennel</h3>
+					<table class="shoptable">
+						<tr>
+							<td><img src="images/dog_german.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">German Shepherd</h3>
+								The German Shepherd will help you forage, lowering the time it takes to forage for resources.
+							</td>
+							<td>
+								<button id="s_gs" class="btn-sm" onclick="buyAccessory('german shepherd', 'Lowers the time it takes to forage for resources.', 15, '#s_gs')">
+									Buy
+								</button>
+								Cost: 15g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/dog_fox.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Foxhound</h3>
+								The foxhoud is an independant aide, periodically finding foragable supplies for you. 
+							</td>
+							<td>
+								<button id="s_fh" class="btn-sm" onclick="buyAccessory('foxhound', 'Periodically finds foragable supplies for you. ', 30, '#s_fh')">
+									Buy
+								</button>
+								Cost: 30g
+							</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -334,7 +414,6 @@
 	</div>
 
 	<div id="mineEvent" class="event_modal">
-		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
 		<h3 class="title battle_header">Treasure</h3>
 		<div class="marginb mineInfo"></div>
 		<div class="mineButton"></div>
@@ -373,10 +452,10 @@
 		</div>
 	</div>
 
-	<div id="info" class="event_modal">
+	<div id="info" class="event_modal large-modal">
 		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
 
-		<h2 class="title">Forager</h2>
+		<h3 class="title battle_header bh_large">Forager</h3>
 		
 		Forager is a project I undertook to try and learn Javascript by making a serious incremental game, after making a few basic ones.
 
@@ -401,7 +480,7 @@
 
 		<h2 class="title">Changelog</h2>
 
-		<button class="btn-sm" onclick="changelog()">View</button> <span class="grey">(Spoilers)</span>
+		<button class="btn-sm" onclick="changelog()">View</button>
 
 		<div id="changelog">
 			<ul>
