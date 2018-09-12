@@ -63,8 +63,7 @@ hr {
 	padding: 5px 10px;
 	width: 150px;
 	border-radius: 5px;
-	border: 1px solid #ccc;
-	box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+	box-shadow: 0px 2px 4px rgba(0,0,0,0.3);
 	margin-left: -95px;
 	margin-top: 100px;
 	background-color: #fefde7;
@@ -73,23 +72,11 @@ hr {
 	text-align: left;
 }
 
-.box:hover + .info {
+.info:hover {
 	display: inline-block;
 }
 
-.collect + .info {
-	margin: 0;
-	margin-top: 72px;
-	margin-left: -73px;
-	width: 70px;
-	text-align: center;
-	font-size: 12px;
-	white-space: nowrap;
-	overflow: hidden;
-	border-radius: 0;
-}
-
-.collect:hover + .info {
+.box:hover + .info {
 	display: inline-block;
 }
 
@@ -1002,4 +989,32 @@ body {
 
 .shopmenu li:not(:last-of-type) button {
 	border-right: none;
+}
+
+
+.collect + .info {
+	display: inline-block;
+	opacity: 0;
+}
+
+.collect + .info {
+	font-size: 12px;
+	padding: 0;
+	margin: 0;
+	margin-left: -80px;
+	margin-top: -2px;
+	width: 25px;
+	height: 25px;
+	line-height: 25px;
+	border-radius: 50%;
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	transition: 250ms;
+}
+
+.collect:hover + .info,
+.collect + .info:hover {
+	display: inline-block;
+	opacity: 1;
 }

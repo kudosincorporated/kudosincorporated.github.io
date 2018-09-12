@@ -457,7 +457,7 @@ function dropall() {
 function updateMine() {
 	document.getElementById("mine").innerHTML = "";
 	for (var i = 0; i < mine.length; i++) {
-		mineupdate = "<li>" + mine[i].ore + "</li><span class='info'>weight: " + mine[i].weight + "</span>";
+		mineupdate = "<li>" + mine[i].ore + "</li><span class='info'>" + mine[i].weight + "</span>";
 		document.getElementById("mine").innerHTML += mineupdate;
 
 		if (mine[i].ore != "") {
