@@ -42,24 +42,54 @@
 	<div class="sidecol">
 		<div class="topbox">
 			<div class="displaybox">
-				<div>Health:</div>
 				<div class="bar">
 					<div id="healthBar" class="inner">
 						<span id="playerHealth">0</span> <i class="fa fa-heart" aria-hidden="true"></i>
 					</div>
 				</div>
-				<div>Thirst:</div>
 				<div class="bar">
 					<div id="thirstBar" class="inner">
 						<span id="playerThirst">0</span> <i class="fa fa-tint" aria-hidden="true"></i>
 					</div>
 				</div>
-				<div>Energy:</div>
 				<div class="bar">
 					<div id="energyBar" class="inner">
 						<span id="playerEnergy">0</span> <i class="fa fa-low-vision" aria-hidden="true"></i>
 					</div>
 				</div>
+
+				<table class="coretable">
+					<tr>
+						<td class="table_title">Herbology</td>
+						<td class="table_desc">
+							Level: <span id="plantlvl">0</span> <span class="grey">(<span id="planttxt">0</span>)</span>
+							<div class="bar">
+								<div id="plantbar" class="inner">
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_title">Crafting</td>
+						<td class="table_desc">
+							Level: <span id="craftlvl">0</span> <span class="grey">(<span id="crafttxt">0</span>)</span>
+							<div class="bar">
+								<div id="craftbar" class="inner">
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_title">Fighting</td>
+						<td class="table_desc">
+							Level: <span id="fightlvl">0</span> <span class="grey">(<span id="fighttxt">0</span>)</span>
+							<div class="bar">
+								<div id="fightbar" class="inner">
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 
@@ -83,8 +113,8 @@
 					<h2 class="title">Forage</h2>
 					<button id="sendcart" onclick="sendcart()">Look around. <i class="fa fa-tree" aria-hidden="true"></i></button>
 					<ul id="mine"></ul>
-					<div id="myProgress">
-						<div id="myBar"></div>
+					<div id="myProgress" class="bar">
+						<div id="myBar" class="inner"></div>
 					</div>
 					<button id="dropall" onclick="dropall()">Discard all. <i class="fa fa-ban" aria-hidden="true"></i></button>
 					<!-- <div>
@@ -124,8 +154,8 @@
 				<div>
 					<button id="forwards" onclick="forwards()">Venture into the forest. <i class="fa fa-arrow-up" aria-hidden="true"></i></button>
 				</div>
-				<div id="walkProgress">
-					<div id="walkBar"></div>
+				<div id="walkProgress" class="bar">
+					<div id="walkBar" class="inner"></div>
 				</div>
 
 					<div class="marginb">
@@ -177,32 +207,7 @@
 					</tr>
 				</table>
 
-				<table class="statstable">
-					<tr>
-						<th colspan="2">Skills</th>
-					</tr>
-					<tr>
-						<td class="table_title">Herbology</td>
-						<td class="table_desc">
-							Level: <span id="plantlvl">0</span>
-							<span class="grey">(<span id="plantxp">0</span>/<span id="nextlvlplant">100</span>)</span>
-						</td>
-					</tr>
-					<tr>
-						<td class="table_title">Crafting</td>
-						<td class="table_desc">
-							Level: <span id="craftlvl">0</span>
-							<span class="grey">(<span id="craftxp">0</span>/<span id="nextlvlcraft">100</span>)</span>
-						</td>
-					</tr>
-					<tr>
-						<td class="table_title">Fighting</td>
-						<td class="table_desc">
-							Level: <span id="fightlvl">0</span>
-							<span class="grey">(<span id="fightxp">0</span>/<span id="nextlvlfight">100</span>)</span>
-						</td>
-					</tr>
-				</table>
+
 			</div>
 		</div>
 

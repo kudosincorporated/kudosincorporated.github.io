@@ -579,6 +579,11 @@ function updateValues() {
 	else if (Game.enemy.name == "") {
 		$('#forwards').removeClass("hidden");
 	}
+
+	//xp bar fills
+	barfill("plantxp", "nextlvlplant", "#plantbar", "#planttxt");
+	barfill("craftxp", "nextlvlcraft", "#craftbar", "#crafttxt");
+	barfill("fightxp", "nextlvlfight", "#fightbar", "#fighttxt");
 }
 
 function levelCheck() {
@@ -1576,7 +1581,7 @@ function genNewMap() {
 
 function constructMap() {
 	Game.complete = 1;
-	$('#complete').html(Game.complete - 1);
+	$('#complete').html(Game.complete);
 
 	//create map
 	$('#map').html("");
@@ -1607,7 +1612,7 @@ function constructMap() {
 }
 
 function loadMap() {
-	var clicks = Game.world.distance * 2 + ((Game.zone - 1) * 0.5);
+	var clicks = Game.world.distance * 2;
 	for (var i = 0; i < clicks; i++) {
 		explore(Game.clickdmg);
 	}
@@ -1621,28 +1626,25 @@ function explore(value) {
 				$("#map .tile:eq(" + i + ") .fillbar").css({
 					"width" : used[i].width + "%"
 				});
+
+				if (used[i].width >= 100) {
+					nextZone();
+				}
 			}
 			else {
 				Game.complete++;
-				$('#complete').html(Game.complete - 1);
+				$('#complete').html(Game.complete);
 			}
 		}
 	}
-
-	nextZone();
 }
 
 
 function nextZone() {
-	if (Game.complete == 26) {
-		Game.complete = 1;
-		Game.world.distance -= 0.5;
-
+	if (Game.complete == 25) {
 		Game.zone += 1;
 		$('#zone').html(Game.zone);
 
-		map = [];
-		genNewMap();
 		constructMap();
 
 		$('#log').prepend("<li class='green'>You advance to the next zone of the forest.</li>");
@@ -2078,4 +2080,25 @@ function updateBought() {
 function newTab(id) {
 	$('.shoptab').hide();
 	$(id).show();
+}
+
+function freewalk() {
+	Game.world.encounter = 0;
+	Game.core.walk = 10;
+	Game.world.walkcost.energy = 0;
+	Game.world.walkcost.water = 0;
+}
+
+function barfill(_xp, nextlvl_, id, txt) {
+	if (Game.player[_xp] >= Game.player[nextlvl_]) {
+		Game.player[_xp] = Game.player[nextlvl_];
+	}
+
+	var percentage = (Game.player[_xp] / Game.player[nextlvl_]) * 100;
+	$(txt).html(percentage.toFixed(0) + "%")
+
+	var fill = (Game.player[_xp] / Game.player[nextlvl_]) * 100;
+	$(id).css({
+		"width" : fill + "%"
+	});
 }

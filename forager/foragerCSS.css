@@ -138,7 +138,8 @@ button:disabled {
 	height: 70px;
 	width: 70px;
 	background-color: white;
-	border: 1px solid #ccc;
+	border: 1px solid #ddd;
+	box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
 	overflow: hidden;
 	display: inline-flex;
 	justify-content: center;
@@ -262,7 +263,7 @@ button:disabled {
 }
 
 .topbox {
-	height: 210px;
+	height: 310px;
 	overflow: auto;
 }
 
@@ -284,7 +285,7 @@ button:disabled {
 }
 
 #log__cover {
-	height: calc(100% - 210px);
+	height: calc(100% - 310px);
 	width: 100%;
 	position: relative;
 	overflow: hidden;
@@ -582,7 +583,6 @@ body {
 }
 
 #map {
-	font-family: monospace;
 	font-size: 0;
 	width: 300px;
 	padding: 10px;
@@ -601,6 +601,7 @@ body {
 	margin: 3px;
 	background-color: white;
 	border: 1px solid #ddd;
+	box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
 	text-shadow:
 	-1px -1px 0 #fff,
 	 1px -1px 0 #fff,
@@ -615,10 +616,6 @@ body {
 	width: 0%;
 	height: 100%;
 	transition: 1000ms linear;
-}
-
-.id {
-	display: none;
 }
 
 #theClearing__event .inner {
@@ -806,7 +803,6 @@ table, th, td {
 .statstable td {
 	padding: 10px;
 	border-bottom: 1px solid #ddd;
-	white-space: nowrap;
 }
 
 .statstable tr:hover {
@@ -991,13 +987,10 @@ body {
 	border-right: none;
 }
 
-
 .collect + .info {
 	display: inline-block;
 	opacity: 0;
-}
 
-.collect + .info {
 	font-size: 12px;
 	padding: 0;
 	margin: 0;
@@ -1010,11 +1003,113 @@ body {
 	text-align: center;
 	white-space: nowrap;
 	overflow: hidden;
-	transition: 250ms;
+	transition: 150ms;
 }
 
 .collect:hover + .info,
 .collect + .info:hover {
 	display: inline-block;
 	opacity: 1;
+}
+
+
+.tile {
+	position: relative;
+}
+
+
+.id {
+	display: none;
+}
+
+/* currently not used */
+.tile .info {
+	display: block;
+	opacity: 0;
+	transition: 150ms;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	box-shadow: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	line-height: 50px;
+	text-align: center;
+	cursor: default;
+	background-color: white;
+}
+
+.tile:hover .info {
+	display: block;
+	opacity: 1;
+}
+
+.bar {
+	background-color: #f4f4f4;
+	box-shadow: inset 0px 2px 4px rgba(0,0,0,0.1);
+}
+
+#plantbar {
+	background-color: #33cc33;
+}
+
+#craftbar {
+	background-color: #fba651;
+}
+
+#fightbar {
+	background-color: #ff8080;
+}
+
+/*.coretable {
+	width: 100%;
+}
+
+.coretable td {
+	padding: 10px;
+	overflow: hidden;
+}
+
+.coretable .bar {
+	width: 100%;
+}
+
+.coretable tr:not(:last-of-type) {
+	border-bottom: 1px solid #ddd;
+}*/
+
+table {
+	table-layout: fixed;
+}
+
+.coretable {
+	width: 100%;
+}
+
+.coretable tr {
+	background-color: white;
+}
+
+.coretable td {
+	padding: 10px;
+}
+
+.coretable tr:not(:last-of-type) {
+	border-bottom: 1px solid #ddd;
+}
+
+.coretable tr td {
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.coretable .table_title {
+	width: 40%;
+}
+
+.coretable .table_desc {
+	width: 60%;
 }
