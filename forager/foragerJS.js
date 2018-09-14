@@ -56,7 +56,7 @@ var Game = {
 	recipie: {
 		bought: 0,
 		cost: 1,
-		total: 6
+		total: $('.recipieTable tr').length - 1
 	},
 
 	complete: 1,
@@ -180,6 +180,18 @@ function mineInit() {
 				break;
 			case 'tree bark':
 				clickedItem("tree bark", "a strong piece of bark. used for pouch and firepit crafting.", 3, index);
+				break;
+			case 'deerskin':
+				clickedItem("deerskin", "the raw hide of a deer.", 3, index);
+				break;
+			case 'green berries':
+				clickedItem("green berries", "A racoon's favorite treat.", 1, index);
+				break;
+			case 'rabbit meat':
+				clickedItem("rabbit meat", "The raw meat of a fallen rabbit.", 2, index);
+				break;
+			case 'bear tooth':
+				clickedItem("bear tooth", "A large fang ripped from the mouth of a bear.", 1, index);
 				break;
 			default:
 				console.log("clicked an empty square.");
@@ -439,6 +451,19 @@ function newore() {
 		}
 		else {
 			newore();
+		}
+	}
+}
+
+function newDrop(ore, weight) {
+	for (var i = 0; i < 9; i++) {
+		if (mine[i].ore == "") {
+			mine.splice(i, 1, {
+				ore: ore,
+				weight, weight
+			});
+			updateMine();
+			break;
 		}
 	}
 }
@@ -721,6 +746,7 @@ function buttonChecker() {
 	var haveFlask = false;
 	var haveFirepit = false;
 	var havePouch = false;
+	var haveSmallBag = false;
 
 	for (var i = 0; i < base.length; i++) {
 		if (base[i].name == "flask") {
@@ -731,6 +757,9 @@ function buttonChecker() {
 		}
 		if (base[i].name == "pouch") {
 			havePouch = true;
+		}
+		if (base[i].name == "small bag") {
+			haveSmallBag = true;
 		}
 	}
 
@@ -802,6 +831,10 @@ function buttonChecker() {
 		$('#craft').append('<button id="craftPouch" onclick="craftPouch()">Craft pouch.</button>');
 	}
 
+	if (itemCheck.leather >= 1 && itemCheck.treeSap >= 1 && haveSmallBag != true && Game.player.craftlvl >= 1) { //crafting small bag (craft lvl 2)
+		$('#craft').append('<button id="craftSmallBag" onclick="craftSmallBag()">Craft small bag.</button>');
+	}
+
 	if (haveFirepit == true && itemCheck.milkcap >= 1) { //roast milkcap
 		$('#craft').append('<button id="roastMilkcap" onclick="roastMilkcap()">Roast milkcap.</button>');
 	}
@@ -814,11 +847,11 @@ function buttonChecker() {
 		$('#craft').append('<button id="makeLeather" onclick="makeLeather()">Make leather.</button>');
 	}
 
-	if (itemCheck.bearTooth >= 1 && itemCheck.twigs >= 1) { //craft spear
+	if (itemCheck.bearTooth >= 1 && itemCheck.twigs >= 1 && Game.player.craftlvl >= 1) { //craft spear (craft lvl 2)
 		$('#craft').append('<button id="craftSpear" onclick="craftSpear()">Craft spear.</button>');
 	}
 
-	if (haveFirepit == true && itemCheck.rabbitMeat >= 1) { //make leather
+	if (haveFirepit == true && itemCheck.rabbitMeat >= 1 && Game.player.craftlvl >= 1) { //make leather (craft lvl 2)
 		$('#craft').append('<button id="cookRabbit" onclick="cookRabbit()">Cook rabbit meat.</button>');
 	}
 
@@ -976,6 +1009,25 @@ function craftPouch() {
 	levelCheck();
 }
 
+function craftSmallBag() {
+	removeItem("leather");
+	removeItem("tree sap");
+
+	base.push({
+		name: "small bag",
+		info: "a leather bag to carry more items."
+	});
+	updateBase();
+	imageItems();
+
+	$('#log').prepend("<li>You craft a small bag from leather to carry more supplies.</li>");
+
+	Game.player.totalweight += 20;
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
+}
+
 function craftFirepit() {
 	removeItem("twigs");
 	removeItem("tree bark");
@@ -1046,7 +1098,7 @@ function eatRoastMilkcap() {
 	removeItem("roasted shroom");
 
 	Game.player.health += 20;
-	Game.player.energy += 8;
+	Game.player.energy += 30;
 	updateValues();
 }
 
@@ -1241,13 +1293,13 @@ function imageItems() {
 
 
 	$(".acc:contains('bone necklace')").css({
-		"background-image" : "url(images/sharp_rock.png)"
+		"background-image" : "url(images/bone_necklace.png)"
 	});
 	$(".acc:contains('saphire amulet')").css({
-		"background-image" : "url(images/cornflower.png)"
+		"background-image" : "url(images/saphire_amulet.png)"
 	});
 	$(`.acc:contains("wanderer's shoes")`).css({
-		"background-image" : "url(images/water.png)"
+		"background-image" : "url(images/wanderer's_shoes.png)"
 	});
 	$(".acc:contains('ruby ring')").css({
 		"background-image" : "url(images/ruby_ring.png)"
@@ -1524,19 +1576,19 @@ function endFight() {
 	if (Game.enemy.type == 'beast') {
 		if (Math.random() * 100 <= 80) {
 			if (Game.enemy.name == 'deer') {
-				newitem("deerskin", "The raw hide of a deer.", 3);
+				newDrop("deerskin", 3);
 				$('#log').prepend("<li class='green'>You strip the deer of its hide.</li>");
 			}
 			if (Game.enemy.name == 'bear') {
-				newitem("bear tooth", "A large fang ripped from the mouth of a bear.", 1);
+				newDrop("bear tooth", 1);
 				$('#log').prepend("<li class='green'>You take a tooth from the mighty bear as a prize.</li>");
 			}
 			if (Game.enemy.name == 'racoon') {
-				newitem("green berries", "A racoon's favorite treat.", 1);
+				newDrop("green berries", 1);
 				$('#log').prepend("<li class='green'>The racoon holds some green berries in its tiny paws.</li>");
 			}
 			if (Game.enemy.name == 'rabbit') {
-				newitem("rabbit meat", "The raw meat of a fallen rabbit.", 2);
+				newDrop("rabbit meat", 2);
 				$('#log').prepend("<li class='green'>You skin the rabbit and take it's meat.</li>");
 			}
 		}
