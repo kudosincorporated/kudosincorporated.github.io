@@ -671,7 +671,16 @@ function buttonChecker() {
 			coffeeBrew: 0,
 			roastMilkcap: 0,
 			ointment: 0,
-			opium: 0
+			opium: 0,
+
+		//crafted
+			deerskin: 0,
+			bearTooth: 0,
+			greenBerries: 0,
+			rabbitMeat: 0,
+			leather: 0,
+			spear: 0,
+			cookedRabbit: 0
 	}
 
 	//init stacker
@@ -698,6 +707,15 @@ function buttonChecker() {
 		itemInc("roasted shroom", "roastMilkcap", i);
 		itemInc("ointment", "ointment", i);
 		itemInc("opium", "opium", i);
+
+		//battle rewards
+		itemInc("deerskin", "deerskin", i);
+		itemInc("bear tooth", "bearTooth", i);
+		itemInc("green berries", "greenBerries", i);
+		itemInc("rabbit meat", "rabbitMeat", i);
+		itemInc("leather", "leather", i);
+		itemInc("spear", "spear", i);
+		itemInc("cooked rabbit", "cookedRabbit", i);
 	}
 
 	var haveFlask = false;
@@ -720,6 +738,8 @@ function buttonChecker() {
 	$('#craft').html("");
 	$('#misc').html("");
 
+	//use resources
+
 	if (itemCheck.darkBerries >= 1) { //dark berries
 		$('#use').append('<button id="eatDarkBerries" onclick="eatDarkBerries()">Eat dark berries.</button>');
 	}
@@ -730,6 +750,10 @@ function buttonChecker() {
 
 	if (itemCheck.blueBerries >= 1) { //blue berries
 		$('#use').append('<button id="eatBlueBerries" onclick="eatBlueBerries()">Eat blue berries.</button>');
+	}
+
+	if (itemCheck.greenBerries >= 1) { //green berries
+		$('#use').append('<button id="eatGreenBerries" onclick="eatGreenBerries()">Eat green berries.</button>');
 	}
 
 	if (itemCheck.milkcap >= 1) { //eat milkcap
@@ -752,16 +776,6 @@ function buttonChecker() {
 		$('#use').append('<button id="useOintment" onclick="useOintment()">Use ointment.</button>');
 	}
 
-	//other resources
-
-	if (haveFirepit == true && itemCheck.milkcap >= 1) { //roast milkcap
-		$('#craft').append('<button id="roastMilkcap" onclick="roastMilkcap()">Roast milkcap.</button>');
-	}
-
-	if (haveFirepit == true && itemCheck.cornflower >= 1 && itemCheck.water >= 1) { //make coffee brew
-		$('#craft').append('<button id="brewcornflower" onclick="brewcornflower()">Brew cornflower.</button>');
-	}
-
 	if (itemCheck.coffeeBrew >= 1) { //drink coffee brew
 		$('#use').append('<button id="drinkCoffeeBrew" onclick="drinkCoffeeBrew()">Drink coffee brew.</button>');
 	}
@@ -770,11 +784,11 @@ function buttonChecker() {
 		$('#use').append('<button id="drinkWater" onclick="drinkWater()">Drink water.</button>');
 	}
 
-	//the coreitems crafting
-
-	if (haveFlask == true) { //collect water
-		$('#misc').append('<button id="collectwater" onclick="collectwater()">Collect water.</button>');
+	if (itemCheck.cookedRabbit >= 1) { //eat rabbit
+		$('#use').append('<button id="eatCookedRabbit" onclick="eatCookedRabbit()">Eat cooked rabbit.</button>');
 	}
+
+	//craft resources
 
 	if (itemCheck.leaves >= 1 && itemCheck.twigs >= 1 && haveFlask != true) { //crafing flask
 		$('#craft').append('<button id="craftFlask" onclick="craftFlask()">Craft flask.</button>');
@@ -788,12 +802,41 @@ function buttonChecker() {
 		$('#craft').append('<button id="craftPouch" onclick="craftPouch()">Craft pouch.</button>');
 	}
 
+	if (haveFirepit == true && itemCheck.milkcap >= 1) { //roast milkcap
+		$('#craft').append('<button id="roastMilkcap" onclick="roastMilkcap()">Roast milkcap.</button>');
+	}
+
+	if (haveFirepit == true && itemCheck.cornflower >= 1 && itemCheck.water >= 1) { //make coffee brew
+		$('#craft').append('<button id="brewcornflower" onclick="brewcornflower()">Brew cornflower.</button>');
+	}
+
+	if (haveFirepit == true && itemCheck.deerskin >= 1) { //make leather
+		$('#craft').append('<button id="makeLeather" onclick="makeLeather()">Make leather.</button>');
+	}
+
+	if (itemCheck.bearTooth >= 1 && itemCheck.twigs >= 1) { //craft spear
+		$('#craft').append('<button id="craftSpear" onclick="craftSpear()">Craft spear.</button>');
+	}
+
+	if (haveFirepit == true && itemCheck.rabbitMeat >= 1) { //make leather
+		$('#craft').append('<button id="cookRabbit" onclick="cookRabbit()">Cook rabbit meat.</button>');
+	}
+
+	//misc resources
+
+	if (haveFlask == true) { //collect water
+		$('#misc').append('<button id="collectwater" onclick="collectwater()">Collect water.</button>');
+	}
 
 	//weaponcheck
 
-	if (itemCheck.sharpRock >= 1) {
+	if (itemCheck.spear >= 1) {
+		Game.world.weapon = "spear";
+		Game.world.damage = 6;
+	}
+	else if (itemCheck.sharpRock >= 1) {
 		Game.world.weapon = "sharp rock";
-		Game.world.damage = 5;
+		Game.world.damage = 3;
 	}
 	else {
 		Game.world.weapon = "fists";
@@ -1024,6 +1067,59 @@ function drinkCoffeeBrew() {
 	updateValues();
 }
 
+function eatGreenBerries() {
+	$('#log').prepend("<li>The green berries are sweet and juicy.</li>");
+	removeItem("green berries");
+
+	Game.player.health += 15;
+	Game.player.thirst += 15;
+	updateValues();
+}
+
+function makeLeather() {
+	removeItem("deerskin");
+
+	newitem("leather", "a strong, versatile material.", 1);
+	$('#log').prepend("<li>You tan the deer hide into leather.</li>");
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
+}
+
+function craftSpear() {
+	removeItem("bear tooth");
+	removeItem("twigs");
+
+	newitem("spear", "finally, you can poke something from a distance.", 1);
+	$('#log').prepend("<li>You craft a rudimentary spear.</li>");
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
+}
+
+function cookRabbit() {
+	removeItem("rabbitMeat");
+
+	newitem("cooked rabbit", "the cooked rabbit smells much better.", 1);
+	$('#log').prepend("<li>You cook the rabbit meat over an open flame.</li>");
+
+	Game.player.craftxp += 10;
+	updateValues();
+	levelCheck();
+}
+
+function eatCookedRabbit() {
+	$('#log').prepend("<li>You eat the cooked rabbit meat.</li>");
+	removeItem("cooked rabbit");
+
+	Game.player.health += 50;
+	Game.player.energy += 30;
+	updateValues();
+}
+
+
 ///////////////////////////
 //      end buttons      //
 ///////////////////////////
@@ -1154,7 +1250,7 @@ function imageItems() {
 		"background-image" : "url(images/water.png)"
 	});
 	$(".acc:contains('ruby ring')").css({
-		"background-image" : "url(images/red_berries.png)"
+		"background-image" : "url(images/ruby_ring.png)"
 	});
 	$(".acc:contains('german shepherd')").css({
 		"background-image" : "url(images/dog_german.png)"
@@ -1426,11 +1522,25 @@ function endFight() {
 
 	//possible item
 	if (Game.enemy.type == 'beast') {
-		if (Math.random() * 100 <= 50) {
-			newore();
-			$('#log').prepend("<li class='green'>You forage for something near the animal's body.</li>");
-			hideModal();
+		if (Math.random() * 100 <= 80) {
+			if (Game.enemy.name == 'deer') {
+				newitem("deerskin", "The raw hide of a deer.", 3);
+				$('#log').prepend("<li class='green'>You strip the deer of its hide.</li>");
+			}
+			if (Game.enemy.name == 'bear') {
+				newitem("bear tooth", "A large fang ripped from the mouth of a bear.", 1);
+				$('#log').prepend("<li class='green'>You take a tooth from the mighty bear as a prize.</li>");
+			}
+			if (Game.enemy.name == 'racoon') {
+				newitem("green berries", "A racoon's favorite treat.", 1);
+				$('#log').prepend("<li class='green'>The racoon holds some green berries in its tiny paws.</li>");
+			}
+			if (Game.enemy.name == 'rabbit') {
+				newitem("rabbit meat", "The raw meat of a fallen rabbit.", 2);
+				$('#log').prepend("<li class='green'>You skin the rabbit and take it's meat.</li>");
+			}
 		}
+		hideModal();
 	}
 	else if (Game.enemy.type == 'quest') {
 		if (Game.enemy.reward == 'brute') {

@@ -831,7 +831,6 @@ table th {
 
 .shoptable td {
 	padding: 5px;
-	border: 1px solid #ddd;
 	text-align: left;
 }
 
@@ -845,17 +844,12 @@ table th {
 	width: 80px;
 	border-radius: 50%;
 	background-size: cover;
-	border: 1px solid #ccc;
-	box-shadow: 0px 1px 4px rgba(0,0,0,0.1);
+	border: 1px solid #ddd;
 }
 
 .shoptitle {
 	font-weight: normal;
 	margin: 0;
-}
-
-.shoptable td:nth-child(odd) {
-	background-color: #f8f8f8;
 }
 
 .shoptable td:nth-child(even) {
@@ -864,12 +858,11 @@ table th {
 
 
 .accBar {
-	background-color: #f4f4f4;
+	background-color: white;
 	border: 1px solid #ddd;
 	min-height: 95px;
 	width: 100%;
 	margin: 0 auto;
-	margin-bottom: 10px;
 }
 
 .accBar .box-sm {
@@ -880,16 +873,22 @@ table th {
 }
 
 #equipped {
-	max-width: 350px;
-	box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
-	border-color: #ccc;
-	border-radius: 5px;
+	max-width: 300px;
+	background-color: #f4f4f4;
 }
 
 #accessories {
 	background-color: white;
 }
 
+
+.worldbox {
+	width: 90%;
+	margin: 0 auto;
+	border: 1px solid #ddd;
+	box-shadow: none;
+	margin-bottom: 10px;
+}
 
 
 
@@ -940,8 +939,8 @@ body {
 }
 
 .recipieTable {
-	margin: 10px 0;
-	border-top: 1px solid #ccc;
+	margin: 0 auto;
+	border-top: 1px solid #ddd;
 }
 
 .recipieTable td {
@@ -1112,4 +1111,16 @@ table {
 
 .coretable .table_desc {
 	width: 60%;
+}
+
+.mainVillage {
+	white-space: nowrap;
+}
+
+.mainVillage pre {
+	text-align: left;
+	display: inline-block;
+	cursor: pointer;
+	margin: 10px;
+	padding: 10px;
 }

@@ -178,74 +178,102 @@
 			<div class="right">
 				<h2 class="title"><span class="playername">Hero</span>'s Stats</h2>
 
-				<table class="statstable">
-					<tr>
-						<th colspan="2">Stats</th>
-					</tr>
-					<tr>
-						<td class="table_title">
-							Name
-						</td>
-						<td class="table_desc">
-							<span class="playername">Hero</span>
-							<span class="edit_icon" onclick="changename()" title="Edit name.">
-								<i class="fa fa-pencil" aria-hidden="true"></i>
-							</span>
-						</td>
-					</tr>
-					<tr>
-						<td class="table_title">Weapon</td>
-						<td class="table_desc"><span class="weapon">none.</span></td>
-					</tr>
-					<tr>
-						<td class="table_title">Armour</td>
-						<td class="table_desc"><span class="armour">none.</span></td>
-					</tr>
-					<tr>
-						<td class="table_title">Money</td>
-						<td class="table_desc"><span class="money">0</span> gold pieces</td>
-					</tr>
-				</table>
+				<div class="displaybox worldbox">
+					<table class="coretable">
+						<tr>
+							<td class="table_title">
+								Name
+							</td>
+							<td class="table_desc">
+								<span class="playername">Hero</span>
+								<span class="edit_icon" onclick="changename()" title="Edit name.">
+									<i class="fa fa-pencil" aria-hidden="true"></i>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="table_title">Weapon</td>
+							<td class="table_desc"><span class="weapon">none.</span></td>
+						</tr>
+						<!-- <tr>
+							<td class="table_title">Armour</td>
+							<td class="table_desc"><span class="armour">none.</span></td>
+						</tr> -->
+						<tr>
+							<td class="table_title">Money</td>
+							<td class="table_desc"><span class="money">0</span> gold pieces</td>
+						</tr>
+					</table>
+				</div>
 
+				<h2 class="title">Accessories</h2>
 
+				<div style="width: 90%; margin: 0 auto;">
+					<h2 class="title" style="font-size: 1.2em; color: #444; margin-bottom: 5px;">Equipped</h2>
+					<div id="equipped" class="accBar"></div>
+
+					<div class="marginb"></div>
+
+					<h2 class="title" style="font-size: 1.2em; color: #444; margin-bottom: 5px;">Collection</h2>
+					<div id="accessories" class="accBar"></div>
+				</div>
 			</div>
 		</div>
 
 		<div class="tab" id="loretab">
-			<div class="left">
-				<h2 class="title">Equipped</h2>
-				<div id="equipped" class="accBar"></div>
-
-				<h2 class="title">Accessories</h2>
-				<div id="accessories" class="accBar"></div>
+			<div class="left mainVillage">
+				<div class="grey">Welcome to the village market! Click on a shop to visit it.</div>
+<pre onclick="newTab('#runeshop')">
+                  o.*
+                 .*
+                 *o
+                 /\
+     _/\/\_______||_
+    /___|pot shop|__\
+   /_________________\
+    ||     __/\_   ||
+    ||      o.O)   ||
+    ||_xoOv_/__.\o_||
+    ||_____________||
+    ||_____________||
+</pre>
+<pre onclick="newTab('#dogshop')">
+                      //\\///\/\
+                    //\\/\//\\\/\\
+                     ||   ,,.  ||
+   ____   ____       ||   ^c^) ||
+  /____\ /____\      ||___/_.|_||
+  | /\ | ||  ||  <.\ ||_kennel_||
+  ||  || ||  || / |  ||________||
+</pre>
+<div></div>
+<pre onclick="newTab('#recipieshop')">
+    _______________________
+   /                       \
+  /vvvvvvvvvvvvvvvvvvvvvvvvv\
+   ||            /\   | pr |
+   ||    ___    *o*)  | ic |
+   ||_oO__X__  _|_| \ | es |
+   ||________|  |__|* | $1 |
+   ||________|  || |  |____|
+</pre>
 			</div>
-
 			<div class="right">
 				<h2 class="title" style="margin: 0;">The Marketplace</h2>
 				<div>You have <span class="money">0</span> gold pieces.</div>
 
-				<div style="margin: 20px;"></div>
+				<div style="margin: 20px;"><hr></div>
 
-				<ul class="shopmenu">
-					<li><button onclick="newTab('#runeshop')">Ye Olde Trinket Shoppe</button></li>
-					<li><button onclick="newTab('#dogshop')">The Unkempt Kennel</button></li>
-					<li><button onclick="newTab('#recipieshop')">Crafter's Outpost</button></li>
-				</ul>
+				<div id="recipieshop" class="shoptab">
 
-				<hr>
+					<h3 class="title">Crafter's Outpost</h3>
 
-				<div id="recipieshop" class="shoptab" style="text-align: left;">
-
-					<h3 class="title" style="text-align: center;">Crafter's Outpost</h3>
-
-					<div style="float: right; text-align: right;">
-						<button onclick="buyRecipie()" style="border-width: 1px;">Buy New Recipie</button>
+					<div class="displaybox worldbox" style="width: 100%;">
+						<div><button onclick="buyRecipie()" style="border-width: 1px;">Buy New Recipie</button></div>
 						<div>Cost: 1 gold piece.</div>
-						<hr style="margin: 10px 0;">
 						<div>Bought: <span class="r_bought">0</span>/<span class="r_total">0</span></div>
-					</div>
 
-					<h3 class="title green">Core Items (3)</h3>
+
 					<table class="recipieTable">
 						<tr>
 							<td><img src="images/flask.png" class="shopimg"></td>
@@ -268,10 +296,6 @@
 								<img src="images/leaves.png" class="shopimg">
 							</td>
 						</tr>
-					</table>
-
-					<h3 class="title red">Craftable Items</h3>
-					<table class="recipieTable">
 						<tr>
 							<td><img src="images/coffee_brew.png" class="shopimg"></td>
 							<td>
@@ -302,6 +326,7 @@
 							</td>
 						</tr>
 					</table>
+					</div>
 				</div>
 
 				<div id="runeshop" class="shoptab">
@@ -347,7 +372,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td><img src="images/red_berries.png" class="shopimg"></td>
+							<td><img src="images/ruby_ring.png" class="shopimg"></td>
 							<td>
 								<h3 class="shoptitle">Ruby Ring</h3>
 								This ring fills you with an inextricable speed. You travel in the forest much faster when wearing it.
