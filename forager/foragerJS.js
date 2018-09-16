@@ -1290,25 +1290,25 @@ function imageItems() {
 		"background-image" : "url(images/ointment.png)"
 	});
 
-	$("#items div:contains('deerskin'), #mine li:contains('roasted shroom')").css({
+	$("#items div:contains('deerskin'), #mine li:contains('deerskin')").css({
 		"background-image" : "url(images/deerskin.png)"
 	});
-	$("#items div:contains('rabbit meat'), #mine li:contains('coffee brew')").css({
+	$("#items div:contains('rabbit meat'), #mine li:contains('rabbit meat')").css({
 		"background-image" : "url(images/rabbit_meat.png)"
 	});
-	$("#items div:contains('leather'), #mine li:contains('ointment')").css({
+	$("#items div:contains('leather'), #mine li:contains('leather')").css({
 		"background-image" : "url(images/leather.png)"
 	});
-	$("#items div:contains('spear'), #mine li:contains('ointment')").css({
+	$("#items div:contains('spear'), #mine li:contains('spear')").css({
 		"background-image" : "url(images/spear.png)"
 	});
-	$("#items div:contains('bear tooth'), #mine li:contains('ointment')").css({
+	$("#items div:contains('bear tooth'), #mine li:contains('bear tooth')").css({
 		"background-image" : "url(images/bear_tooth.png)"
 	});
-	$("#items div:contains('cooked rabbit'), #mine li:contains('ointment')").css({
+	$("#items div:contains('cooked rabbit'), #mine li:contains('cooked rabbit')").css({
 		"background-image" : "url(images/cooked_rabbit.png)"
 	});
-	$("#items div:contains('green berries'), #mine li:contains('ointment')").css({
+	$("#items div:contains('green berries'), #mine li:contains('green berries')").css({
 		"background-image" : "url(images/green_berries.png)"
 	});
 
