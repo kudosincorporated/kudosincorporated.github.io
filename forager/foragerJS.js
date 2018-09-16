@@ -339,7 +339,7 @@ function loadGame() {
 }
 
 function delGame() {
-	alert("You could not survive the forest!");
+	alert("You have died! The forest proved too strong.");
 	localStorage.removeItem("save");
 	localStorage.removeItem("mine");
 	localStorage.removeItem("items");
@@ -1152,7 +1152,7 @@ function craftSpear() {
 }
 
 function cookRabbit() {
-	removeItem("rabbitMeat");
+	removeItem("rabbit meat");
 
 	newitem("cooked rabbit", "the cooked rabbit smells much better.", 1);
 	$('#log').prepend("<li>You cook the rabbit meat over an open flame.</li>");
@@ -1232,6 +1232,9 @@ function imageItems() {
 	$("#base div:contains('pouch')").css({
 		"background-image" : "url(images/pouch.png)"
 	});
+	$("#base div:contains('small bag')").css({
+		"background-image" : "url(images/small_bag.png)"
+	});
 
 	$("#items div:contains('opium'), #mine li:contains('opium')").css({
 		"background-image" : "url(images/opium.png)"
@@ -1286,6 +1289,29 @@ function imageItems() {
 	$("#items div:contains('ointment'), #mine li:contains('ointment')").css({
 		"background-image" : "url(images/ointment.png)"
 	});
+
+	$("#items div:contains('deerskin'), #mine li:contains('roasted shroom')").css({
+		"background-image" : "url(images/deerskin.png)"
+	});
+	$("#items div:contains('rabbit meat'), #mine li:contains('coffee brew')").css({
+		"background-image" : "url(images/rabbit_meat.png)"
+	});
+	$("#items div:contains('leather'), #mine li:contains('ointment')").css({
+		"background-image" : "url(images/leather.png)"
+	});
+	$("#items div:contains('spear'), #mine li:contains('ointment')").css({
+		"background-image" : "url(images/spear.png)"
+	});
+	$("#items div:contains('bear tooth'), #mine li:contains('ointment')").css({
+		"background-image" : "url(images/bear_tooth.png)"
+	});
+	$("#items div:contains('cooked rabbit'), #mine li:contains('ointment')").css({
+		"background-image" : "url(images/cooked_rabbit.png)"
+	});
+	$("#items div:contains('green berries'), #mine li:contains('ointment')").css({
+		"background-image" : "url(images/green_berries.png)"
+	});
+
 
 
 
@@ -1860,9 +1886,6 @@ for (i = 0; i < acc.length; i++) {
 		else {
 			panel.style.display = "none";
 		}
-
-	$(".accordion").html('<i class="fa fa-chevron-up" aria-hidden="true"></i>');
-	$(".accordion.active").html('<i class="fa fa-chevron-down" aria-hidden="true"></i>');
 	});
 }
 

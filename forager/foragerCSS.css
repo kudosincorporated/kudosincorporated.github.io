@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Noto+Serif|Roboto+Slab|Slabo+27px');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
 
 body, button {
 	font-family: 'Roboto Slab', sans-serif;
@@ -99,7 +99,6 @@ body {
 button {
 	border: 1px solid #bbb;
 	border-radius: 2px;
-	border-bottom: 3px solid #bbb;
 	background: white;
 	padding: 5px 10px;
 	cursor: pointer;
@@ -246,20 +245,20 @@ button:disabled {
 
 #tabmenu li a {
 	display: block;
-	background-color: #6bc76b;
+	background-color: #53c653;
 	color: white;
-	text-shadow: 0px 2px 2px rgba(0,0,0,0.1);
-	border-bottom: 5px solid #46b946;
+	font-size: 1em;
 	cursor: pointer;
+	border-bottom: 5px solid #41be41;
 }
 
 #tabmenu li:hover a {
-	background-color: #7ece7e;
+	background-color: #66cc66;
 }
 
 #tabmenu li a.active,
 #tabmenu li a:active {
-	background-color: #59c059;
+	background-color: #41be41;
 }
 
 .topbox {
@@ -742,38 +741,28 @@ body {
 .title-sm {
 	font-weight: normal;
 	margin: 0;
-	float: left;
-	width: 80%;
-	text-align: left;
-	height: 40px;
-	line-height: 40px;
-	border-bottom: 2px solid #ccc;
-	color: #444;
-	font-size: 1.3em;
+	padding: 5px;
+	font-size: 1.2em;
+	border-bottom: 2px solid #e0e0e0;
 }
 
 .accordion {
-	float: right;
-	width: 20%;
-	height: 40px;
-	line-height: 40px;
-	border-bottom: 2px solid #ccc;
-	text-align: right;
 	cursor: pointer;
-	color: grey;
-	transition: 300ms;
 }
 
-.accordion:hover,
+.accordion:hover {
+	color: #40bf40;
+}
+
 .accordion.active {
-	color: dodgerblue;
-	border-color: dodgerblue;
+	color: #40bf40;
+	border-color: #79d279;
 }
 
 .panel {
+	background-color: #f0f0f0;
 	clear: both;
 	padding: 10px;
-	background-color: #f0f0f0;
 	min-height: 50px;
 }
 
@@ -1123,4 +1112,10 @@ table {
 	cursor: pointer;
 	margin: 10px;
 	padding: 10px;
+}
+
+.button-main {
+	font-size: 1em;
+	padding: 6px 12px;
+	border-bottom: 3px solid #ccc;
 }
