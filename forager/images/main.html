@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Forager, a game by KudosInc -->
+	<meta charset="UTF-8">
+
+	<title>Forager</title>
+	<!-- jQuery -->
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+
+	<!-- fontawesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body onload="loadGame()">
+
+<div class="tabmenu__cover">
+	<ul id="tabmenu">
+		<li><a id="ct" class="active" onclick="carttab()">Look</a></li>
+		<li><a id="bt" onclick="battletab()">World</a></li>
+		<li><a id="lt" class="locked" onclick="loretab()">Village</a></li>
+	</ul>
+</div>
+
+<div class="rightcol">
+	<h2 class="title-sm accordion">Use</h2>
+	<div class="panel">
+		<span id="use"></span>
+	</div>
+
+	<h2 class="title-sm accordion">Craft</h2>
+	<div class="panel">
+		<span id="craft"></span>
+	</div>
+
+	<h2 class="title-sm accordion">Misc</h2>
+	<div class="panel">
+		<span id="misc"></span>
+	</div>
+
+	<!-- the chatbox, from chatango -->
+	<div class="chat-cover">
+		<button class="toggle-btn" id="chat-btn" onclick="showchat()"><span id="chat-id">Show</span> Chat <i class="fa fa-comments" aria-hidden="true"></i></button>
+		<div class="show-chat">
+<script id="cid0020000198260421739" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 100%;height: 100%;">{"handle":"kudosincorporated","arch":"js","styles":{"a":"f8f8f8","b":100,"c":"000000","d":"000000","l":"dddddd","m":"f8f8f8","q":"f8f8f8","r":100,"t":0,"usricon":0,"surl":0,"allowpm":0}}</script>
+		</div>
+	</div>
+</div>
+
+	<div class="sidecol">
+		<div class="topbox">
+			<div class="displaybox">
+				<div class="bar">
+					<div id="healthBar" class="inner">
+						<span id="playerHealth">0</span> <i class="fa fa-heart" aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="bar">
+					<div id="thirstBar" class="inner">
+						<span id="playerThirst">0</span> <i class="fa fa-tint" aria-hidden="true"></i>
+					</div>
+				</div>
+				<div class="bar">
+					<div id="energyBar" class="inner">
+						<span id="playerEnergy">0</span> <i class="fa fa-low-vision" aria-hidden="true"></i>
+					</div>
+				</div>
+
+				<table class="coretable">
+					<tr>
+						<td class="table_title">Herbology</td>
+						<td class="table_desc">
+							Level: <span id="plantlvl">0</span> <span class="grey">(<span id="planttxt">0</span>)</span>
+							<div class="bar">
+								<div id="plantbar" class="inner">
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_title">Crafting</td>
+						<td class="table_desc">
+							Level: <span id="craftlvl">0</span> <span class="grey">(<span id="crafttxt">0</span>)</span>
+							<div class="bar">
+								<div id="craftbar" class="inner">
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td class="table_title">Fighting</td>
+						<td class="table_desc">
+							Level: <span id="fightlvl">0</span> <span class="grey">(<span id="fighttxt">0</span>)</span>
+							<div class="bar">
+								<div id="fightbar" class="inner">
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div id="log__cover">
+			<div id="log__fader"></div>
+			<ul id="log">
+				<li>The forest beckons.</li>
+			</ul>
+			<div style="position: absolute; bottom: 0; left: 3px; padding: 3px; z-index: 2;">
+				<button class="toggle-btn" onclick="saveGame()" id="save">Save</button>
+				<button class="toggle-btn" onclick="delGame()" id="reset">Reset</button>
+				<button class="toggle-btn" onclick="info()">Info/FAQ</button>
+			</div>
+		</div>
+	</div>
+
+<div class="container">
+	<div class="maincol">
+		<div class="tab" id="carttab">
+			<div class="left" style="height: 70%;">
+					<h2 class="title">Forage</h2>
+					<button id="sendcart" class="button-main" onclick="sendcart()">Look around. <i class="fa fa-tree" aria-hidden="true"></i></button>
+					<ul id="mine"></ul>
+					<div id="myProgress" class="bar">
+						<div id="myBar" class="inner"></div>
+					</div>
+					<button id="dropall" onclick="dropall()">Discard all. <i class="fa fa-ban" aria-hidden="true"></i></button>
+					<!-- <div>
+						<a href="#" onclick="newore()">addItem</a>
+						<br>
+						<a href="#" onclick="plantlevel2()">herbologyLvl2</a>
+					</div> -->
+
+					<!-- <br>
+					<br>
+					<div class="grey marginb">
+						Click the 'look around' button to forage for materials.<br>Check the info button for more information.
+					</div> -->
+			</div>
+
+			<div id="right_items" class="right" style="height: 70%; position: relative;">
+					<h2 class="title" style="margin-bottom: 0;">Inventory</h2>
+					<div class="grey">Carry weight: <span id="playerWeight">0</span>/<span id="playerTotalWeight">0</span></div>
+					<div id="items"></div>
+
+					<div style="position: absolute; top: 0; left: 0; margin: 5px;">
+						<button class="toggle-btn" onclick="stacktoggle()">Toggle Stacks</button>
+					</div>
+			</div>
+
+			<div class="lower low_cover" id="base__cover" style="height: 30%;">
+				<h2 class="title" style="font-size: 1.3em;">Core Items</h2>
+				<div id="base"></div>
+			</div>
+		</div>
+
+		<div class="tab" id="battletab">
+			<div class="left">
+				<h2 class="title" style="margin-bottom: 0;">Exploration</h2>
+				<div class="grey" style="margin-bottom: 10px;">Tip: There are bears in the forest.<br>It's not recommended to embark without stocking up on supplies first.</div>
+				
+				<div>
+					<button id="forwards" onclick="forwards()">Venture into the forest. <i class="fa fa-arrow-up" aria-hidden="true"></i></button>
+				</div>
+				<div id="walkProgress" class="bar">
+					<div id="walkBar" class="inner"></div>
+				</div>
+
+					<div class="marginb">
+						<b>Current position:</b>
+						<br>
+						You are <span id="distance">0</span>km into the forest.
+					</div>
+
+				<div style="margin: 20px;"><hr></div>
+
+				<div class="map_tab worldpage">
+					<div id="map"></div>
+
+					<div class="marginb"></div>
+
+					<div class="grey">You have explored <span id="complete">1</span> sectors (zone <span id="zone">1</span>).</div>
+				</div>
+			</div>
+
+			<div class="right">
+				<h2 class="title"><span class="playername">Hero</span>'s Stats</h2>
+
+				<div class="displaybox worldbox">
+					<table class="coretable">
+						<tr>
+							<td class="table_title">
+								Name
+							</td>
+							<td class="table_desc">
+								<span class="playername">Hero</span>
+								<span class="edit_icon" onclick="changename()" title="Edit name.">
+									<i class="fa fa-pencil" aria-hidden="true"></i>
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td class="table_title">Weapon</td>
+							<td class="table_desc"><span class="weapon">none.</span></td>
+						</tr>
+						<!-- <tr>
+							<td class="table_title">Armour</td>
+							<td class="table_desc"><span class="armour">none.</span></td>
+						</tr> -->
+						<tr>
+							<td class="table_title">Money</td>
+							<td class="table_desc"><span class="money">0</span> gold pieces</td>
+						</tr>
+					</table>
+				</div>
+
+				<h2 class="title">Accessories</h2>
+
+				<div style="width: 90%; margin: 0 auto;">
+					<h2 class="title" style="font-size: 1.2em; color: #444; margin-bottom: 5px;">Equipped</h2>
+					<div id="equipped" class="accBar"></div>
+
+					<div class="marginb"></div>
+
+					<h2 class="title" style="font-size: 1.2em; color: #444; margin-bottom: 5px;">Collection</h2>
+					<div id="accessories" class="accBar"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="tab" id="loretab">
+			<div class="left mainVillage">
+				<div class="grey">Welcome to the village market! Click on a shop to visit it.</div>
+<pre onclick="newTab('#runeshop')">
+                  o.*
+                 .*
+                 *o
+                 /\
+     _/\/\_______||_
+    /___|pot shop|__\
+   /_________________\
+    ||     __/\_   ||
+    ||      o.O)   ||
+    ||_xoOv_/__.\o_||
+    ||_____________||
+    ||_____________||
+</pre>
+<pre onclick="newTab('#dogshop')">
+                      //\\///\/\
+                    //\\/\//\\\/\\
+                     ||   ,,.  ||
+   ____   ____       ||   ^c^) ||
+  /____\ /____\      ||___/_.|_||
+  | /\ | ||  ||  <.\ ||_kennel_||
+  ||  || ||  || / |  ||________||
+</pre>
+<div></div>
+<pre onclick="newTab('#recipieshop')">
+    _______________________
+   /                       \
+  /vvvvvvvvvvvvvvvvvvvvvvvvv\
+   ||            /\   | pr |
+   ||    ___    *o*)  | ic |
+   ||_oO__X__  _|_| \ | es |
+   ||________|  |__|* | $1 |
+   ||________|  || |  |____|
+</pre>
+			</div>
+			<div class="right">
+				<h2 class="title" style="margin: 0;">The Marketplace</h2>
+				<div>You have <span class="money">0</span> gold pieces.</div>
+
+				<div style="margin: 20px;"><hr></div>
+
+				<div id="recipieshop" class="shoptab">
+
+					<h3 class="title">Crafter's Outpost</h3>
+
+					<div class="displaybox worldbox" style="width: 100%;">
+						<div><button onclick="buyRecipie()" style="border-width: 1px;">Buy New Recipie</button></div>
+						<div>Cost: 1 gold piece.</div>
+						<div>Bought: <span class="r_bought">0</span>/<span class="r_total">0</span></div>
+
+
+					<table class="recipieTable">
+						<tr>
+							<td><img src="images/flask.png" class="shopimg"></td>
+							<td>
+								<img src="images/leaves.png" class="shopimg">
+								<img src="images/twigs.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/firepit.png" class="shopimg"></td>
+							<td>
+								<img src="images/twigs.png" class="shopimg">
+								<img src="images/tree_bark.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/pouch.png" class="shopimg"></td>
+							<td>
+								<img src="images/tree_bark.png" class="shopimg">
+								<img src="images/leaves.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/coffee_brew.png" class="shopimg"></td>
+							<td>
+								<img src="images/firepit.png" class="shopimg">
+								<img src="images/water.png" class="shopimg">
+								<img src="images/cornflower.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/ointment.png" class="shopimg"></td>
+							<td>
+								<img src="images/tree_sap.png" class="shopimg">
+								<img src="images/marigold.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/opium.png" class="shopimg"></td>
+							<td>
+								<img src="images/opium_poppy.png" class="shopimg">
+								<img src="images/sharp_rock.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/roasted_shroom.png" class="shopimg"></td>
+							<td>
+								<img src="images/firepit.png" class="shopimg">
+								<img src="images/milkcap.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/cooked_rabbit.png" class="shopimg"></td>
+							<td>
+								<img src="images/firepit.png" class="shopimg">
+								<img src="images/rabbit_meat.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/leather.png" class="shopimg"></td>
+							<td>
+								<img src="images/firepit.png" class="shopimg">
+								<img src="images/deerskin.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/spear.png" class="shopimg"></td>
+							<td>
+								<img src="images/bear_tooth.png" class="shopimg">
+								<img src="images/twigs.png" class="shopimg">
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/small_bag.png" class="shopimg"></td>
+							<td>
+								<img src="images/leather.png" class="shopimg">
+								<img src="images/tree_sap.png" class="shopimg">
+							</td>
+						</tr>
+					</table>
+					</div>
+				</div>
+
+				<div id="runeshop" class="shoptab">
+					<h3 class="title">Ye Olde Trinket Shoppe</h3>
+					<table class="shoptable">
+						<tr>
+							<td><img src="images/bone_necklace.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Bone Necklace</h3>
+								A handcrafted necklace that wards off attackers. You will encounter less animals with this equipped.
+							</td>
+							<td>
+								<button id="s_bn" class="btn-sm" onclick="buyAccessory('bone necklace', 'You will encounter less animals with this equipped.', 15, '#s_bn')">
+									Buy
+								</button>
+								Cost: 15g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/saphire_amulet.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Saphire Amulet</h3>
+								This amulet is said to fill the user with immense strength, increasing their damage output when worn.
+							</td>
+							<td>
+								<button id="s_sa" class="btn-sm" onclick="buyAccessory('saphire amulet', 'Increases your damage output when worn.', 25, '#s_sa')">
+									Buy
+								</button>
+								Cost: 25g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/wanderer's_shoes.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Wanderer's Shoes</h3>
+								Wearing these magical boots allows you to walk without losing energy or becoming thirsty.
+							</td>
+							<td>
+								<button id="s_ws" class="btn-sm" onclick="buyAccessory(`wanderer's shoes`, 'Wearing them allows you to walk without losing energy.', 35, '#s_ws')">
+									Buy
+								</button>
+								Cost: 35g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/ruby_ring.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Ruby Ring</h3>
+								This ring fills you with an inextricable speed. You travel in the forest much faster when wearing it.
+							</td>
+							<td>
+								<button id="s_rr" class="btn-sm" onclick="buyAccessory('ruby ring', 'You travel in the forest much faster when wearing it.', 50, '#s_rr')">
+									Buy
+								</button>
+								Cost: 50g
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="dogshop" class="shoptab">
+					<h3 class="title">The Unkempt Kennel</h3>
+					<table class="shoptable">
+						<tr>
+							<td><img src="images/dog_german.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">German Shepherd</h3>
+								The German Shepherd will help you forage, lowering the time it takes to forage for resources.
+							</td>
+							<td>
+								<button id="s_gs" class="btn-sm" onclick="buyAccessory('german shepherd', 'Lowers the time it takes to forage for resources.', 15, '#s_gs')">
+									Buy
+								</button>
+								Cost: 15g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/dog_fox.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Foxhound</h3>
+								The foxhoud is an independant aide, periodically finding foragable supplies for you. 
+							</td>
+							<td>
+								<button id="s_fh" class="btn-sm" onclick="buyAccessory('foxhound', 'Periodically finds foragable supplies for you. ', 30, '#s_fh')">
+									Buy
+								</button>
+								Cost: 30g
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal_bg hide">
+	<div id="villageEvent" class="event_modal">
+		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
+		<h3 class="title battle_header">The Village</h3>
+		<div class="marginb">
+			You enter the village, which is bustling with street vendors and overflowing market stands.
+			In one of the stands, a wizened old man sleeps behind a counter covered in intricate objects.
+			In another, an enthusiastic young boy stands next to kennels filled with various dogs.
+		</div>
+
+		<div class="grey marginb">You have unlocked the village marketplace, and the ability to use accessories.</div>
+	</div>
+
+	<div id="questEvent" class="event_modal">
+		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
+		<h3 class="title battle_header">Quest</h3>
+		<div class="marginb questInfo"></div>
+		<div class="questButton"></div>
+	</div>
+
+	<div id="mineEvent" class="event_modal">
+		<h3 class="title battle_header">Treasure</h3>
+		<div class="marginb mineInfo"></div>
+		<div class="mineButton"></div>
+	</div>
+
+	<div id="cubesEvent" class="event_modal">
+		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
+		<h3 class="title battle_header">Resource</h3>
+		<div class="marginb cubesInfo"></div>
+		<div class="marginb grey">The forage box has been filled.</div>
+	</div>
+
+	<div id="battle" class="event_modal">
+		<h3 class="title battle_header">An Enemy Appears</h3>
+		<div id="enemy">
+			<b><div id="e_name">Nothing.</div></b>
+			<div id="e_desc">The lack of something.</div>
+
+			<div class="bar" style="width: 90%; margin: 10px auto;">
+				<div id="enemyHealthBar" class="inner">
+					<span id="enemyHealth">100</span>
+				</div>
+			</div>
+
+			<div style="text-align: center;">
+				<button class="btn-sm marginb" id="attack" onclick="attack()">Attack.</button>
+			</div>
+
+			<button class="toggle-btn marginb" id="bait" onclick="bait()">Bait.</button>
+				<div class="info">
+					Baiting the enemy increases flee chance.
+					<br>
+					Costs 1 red berries.
+				</div>
+			<button class="toggle-btn marginb" id="flee" onclick="flee()">Flee. (<span id="fleechance">0</span>% chance)</button>
+		</div>
+	</div>
+
+	<div id="info" class="event_modal large-modal">
+		<span class="delmark exit" onclick="hideModal()">&#x00D7;</span>
+
+		<h3 class="title battle_header bh_large">Forager</h3>
+		
+		Forager is a project I undertook to try and learn Javascript by making a serious incremental game, after making a few basic ones.
+
+		<div class="marginb"></div>
+
+		Feel free to message me on reddit, my username is /u/KudosInc.
+
+		<div style="margin: 50px;"><hr></div>
+
+		<b>Some simple tips/a guide:</b>
+
+		<ol>
+			<li>Use the 'look around' button to forage for some supplies.</li>
+			<li>Click these supplies to add them to your inventory. Once an item is in your inventory, different actions are unlocked in the right-hand panel as you can combine items, use them, or leave them.</li>
+			<li>As you complete tasks, your skill in that respective task increases.</li>
+			<li><b>Keep foraging and you gain the ability to find different types of items.</b> There are currently 20 obtainable items.</li>
+			<li>Your inventory stores items which can be manipulated, and the lower section contains static items.</li>
+			<li>In the 'world' tab you can walk in a linear direction to discover new places with unique mechanics.</li>
+		</ol>
+
+		<div style="margin: 50px;"><hr></div>
+
+		<h2 class="title">Changelog</h2>
+
+		<button class="btn-sm" onclick="changelog()">View</button>
+
+		<div id="changelog">
+			<ul>
+				<li><b>version 1.8</b></li>
+				<ul>
+					<li>Made enemies in the forest now drop unique items.</li>
+					<li>Added new craftable items from these drops.</li>
+					<li>The Village redesign, including ASCII art.</li>
+				</ul>
+				<li><b>version 1.7</b></li>
+				<ul>
+					<li>Added the village/marketplace, where you can equip and purchase accessories.</li>
+					<li>Added accessories, which are equippable items that grant the player passive effects.</li>
+					<li>Added world events which occur when the player is at an orange icon tile.</li>
+					<li>Added infinite exploration of the forest.</li>
+					<li>Redesigned the background, which included adding an image.</li>
+				</ul>
+				<li><b>version 1.6</b></li>
+				<ul>
+					<li>
+						Removed places mechanic, which included unique places you could discover on the map.
+					</li>
+					<li>
+						Added icons onto the map which will function as random events as a replacement.
+					</li>
+					<li>
+						Moved player tab to the world page, so all information is easily accessible.
+					</li>
+					<li>
+						Added village tab, which is a WIP.
+					</li>
+				</ul>
+				<li><b>version 1.5</b></li>
+				<ul>
+					<li>
+						Made baiting animals use red berries instead of blue berries.
+					</li>
+					<li>
+						Redesigned the action separators introduced in the last update.
+					</li>
+				</ul>
+				<li><b>version 1.4</b></li>
+				<ul>
+					<li>
+						Separated the actions into sections according to their use.
+					</li>
+				</ul>
+				<li><b>version 1.3</b></li>
+				<ul>
+					<li>
+						Improved/polished mechanics introduced in the last update.
+					</li>
+					<li>
+						Rearraged the info tab, added the player tab.
+					</li>
+				</ul>
+				<li><b>version 1.2</b></li>
+				<ul>
+					<li>
+						Added random enemy spawns in the forest instead of a specific hunting area. Comes with a cool modal effect.
+					</li>
+					<li>
+						Added a toggle button to choose between stacking item visuals.
+					</li>
+				</ul>
+				<li><b>version 1.1.1</b></li>
+				<ul>
+					<li>
+						Fixed a bug in which place names weren't hidden.
+					</li>
+					<li>
+						Added changelog.
+					</li>
+				</ul>
+				<li><b>version 1.1</b></li>
+				<ul>
+					<li>
+						Added more colour, a map and item stacking. This release incorporated some of the feedback I got from reddit, thanks!
+					</li>
+				</ul>
+				<li><b>version 1.0</b></li>
+				<ul>
+					<li>
+						First release, as a prototype on /r/incremental_games. (August 2018)
+					</li>
+				</ul>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="foragerJS.js"></script>
+<link type="text/css" rel="stylesheet" href="foragerCSS.css">
+</body>
+</html>
