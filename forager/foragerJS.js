@@ -1707,6 +1707,16 @@ function changelog() {
 	$('#changelog').toggle();
 }
 
+function showchat() {
+	$('.show-chat').toggle();
+	if ( $('#chat-id').html() == "Show") {
+		$('#chat-id').html("Hide");
+	}
+	else {
+		$('#chat-id').html("Show");
+	}
+}
+
 function info() {
 	if (Game.enemy.name == "") {
 		showModal();

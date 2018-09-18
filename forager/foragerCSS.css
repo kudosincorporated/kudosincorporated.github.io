@@ -1125,6 +1125,20 @@ table {
 }
 
 .chat-cover {
+	margin: 0 -10px;
+	padding: 10px;
+	width: 100%;
 	position: absolute;
 	bottom: 0;
+	text-align: right;
+}
+
+.chat-cover button {
+	margin: 0;
+}
+
+.show-chat {
+	display: none;
+	width: 100%;
+	height: 350px;
 }
