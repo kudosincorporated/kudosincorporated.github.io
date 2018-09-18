@@ -1125,5 +1125,6 @@ table {
 }
 
 .chat-cover {
-	margin-top: 30px;
+	position: absolute;
+	bottom: 0;
 }
