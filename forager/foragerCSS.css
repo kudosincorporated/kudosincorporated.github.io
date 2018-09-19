@@ -1119,12 +1119,3 @@ table {
 	padding: 6px 12px;
 	border-bottom: 3px solid #ccc;
 }
-
-.rightcol {
-	overflow: auto;
-}
-
-.chat-cover {
-	position: absolute;
-	bottom: 0;
-}
