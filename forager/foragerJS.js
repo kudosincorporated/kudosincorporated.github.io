@@ -7,18 +7,15 @@ var Game = {
 		energy: 100,
 		weight: 0,
 		totalweight: 20,
-
-			plantlvl: 0,
-			plantxp: 0,
-			nextlvlplant: 100,
-
-			craftlvl: 0,
-			craftxp: 0,
-			nextlvlcraft: 100,
-
-			fightlvl: 0,
-			fightxp: 0,
-			nextlvlfight: 100
+		plantlvl: 0,
+		plantxp: 0,
+		nextlvlplant: 100,
+		craftlvl: 0,
+		craftxp: 0,
+		nextlvlcraft: 100,
+		fightlvl: 0,
+		fightxp: 0,
+		nextlvlfight: 100
 	},
 	world: {
 		encounter: 25,
@@ -31,7 +28,10 @@ var Game = {
 		walkcost: {
 			energy: 2,
 			water: 1
-		}
+		},
+		complete: 1,
+		zone: 1,
+		clickdmg: 25
 	},
 	enemy: {
 		name: "",
@@ -54,20 +54,14 @@ var Game = {
 		x_damage: 0
 	},
 	recipie: {
-		bought: 0,
-		cost: 1,
-		total: $('.recipieTable tr').length - 1
+		total: $('.recipieTable tr').length - 1,
+		bought: [],
+		cost: 1
 	},
-
-	complete: 1,
-	zone: 1,
-	clickdmg: 25
 }
 
 var used = [];
 var map = [];
-
-//map zones
 
 var Icons = {
 	tree:		'<span class="id">tree</span><i class="fa fa-tree" aria-hidden="true"></i>',
@@ -138,6 +132,7 @@ function update() {
 	buttonChecker();
 	playerUpdate();
 	updateVillage();
+	worldUpdate();
 }
 
 function mineInit() {
@@ -260,46 +255,39 @@ function saveGame() {
 		bought: Game.recipie.bought,
 
 		//storyline
-		village: Game.unlocked.village
+		village: Game.unlocked.village,
+
+		//arrays
+		mine: mine,
+		items: items,
+		base: base,
+		equipped: equipped,
+		accessories: accessories,
+		map: map
 	};
 	localStorage.setItem("save", JSON.stringify(save));
-	localStorage.setItem("mine", JSON.stringify(mine));
-	localStorage.setItem("items", JSON.stringify(items));
-	localStorage.setItem("base", JSON.stringify(base));
-	localStorage.setItem("equipped", JSON.stringify(equipped));
-	localStorage.setItem("accessories", JSON.stringify(accessories));
-
-	//the map
-	localStorage.setItem("map", JSON.stringify(map));
 }
 
 function loadGame() {
-	update();
-	mineInit();
-	accInit();
+	update(); //general update of values
+	mineInit(); //allows clicking of foraged items
+	accInit(); //allows clicking of accessories
 
 	$('.recipieTable tr').hide();
 	$('.shoptab').hide();
 
 	if (localStorage.getItem("save") != undefined) {
 		var savegame = JSON.parse(localStorage.getItem("save"));
-		var savemine = JSON.parse(localStorage.getItem("mine"));
-		var saveitems = JSON.parse(localStorage.getItem("items"));
-		var savebase = JSON.parse(localStorage.getItem("base"));
-		var savemap = JSON.parse(localStorage.getItem("map"));
-		var saveequipped = JSON.parse(localStorage.getItem("equipped"));
-		var saveaccessories = JSON.parse(localStorage.getItem("accessories"));
 
-		if (savemine != "") mine = savemine;
-		if (saveitems != "") items = saveitems;
-		if (savebase != "") base = savebase;
-		if (saveequipped != "") equipped = saveequipped;
-		if (saveaccessories != "") accessories = saveaccessories;
+	//arrays --------------------------------------------------------------
+		if (typeof savegame.mine !== "undefined") mine = savegame.mine;
+		if (typeof savegame.items !== "undefined") items = savegame.items;
+		if (typeof savegame.base !== "undefined") base = savegame.base;
+		if (typeof savegame.equipped !== "undefined") equipped = savegame.equipped;
+		if (typeof savegame.accessories !== "undefined") accessories = savegame.accessories;
+		if (typeof savegame.map !== "undefined") map = savegame.map;
 
-		//the map
-		if (savemap != "") map = savemap;
-		constructMap();
-
+	//values --------------------------------------------------------------
 		if (typeof savegame.name !== "undefined") Game.player.name = savegame.name;
 		if (typeof savegame.health !== "undefined") Game.player.health = savegame.health;
 		if (typeof savegame.thirst !== "undefined") Game.player.thirst = savegame.thirst;
@@ -307,32 +295,38 @@ function loadGame() {
 		if (typeof savegame.weight !== "undefined") Game.player.weight = savegame.weight;
 		if (typeof savegame.totalweight !== "undefined") Game.player.totalweight = savegame.totalweight;
 
-			if (typeof savegame.plantlvl !== "undefined") Game.player.plantlvl = savegame.plantlvl;
-			if (typeof savegame.plantxp !== "undefined") Game.player.plantxp = savegame.plantxp;
-			if (typeof savegame.nextlvlplant !== "undefined") Game.player.nextlvlplant = savegame.nextlvlplant;
-			if (typeof savegame.craftlvl !== "undefined") Game.player.craftlvl = savegame.craftlvl;
-			if (typeof savegame.craftxp !== "undefined") Game.player.craftxp = savegame.craftxp;
-			if (typeof savegame.nextlvlcraft !== "undefined") Game.player.nextlvlcraft = savegame.nextlvlcraft;
-			if (typeof savegame.fightlvl !== "undefined") Game.player.fightlvl = savegame.fightlvl;
-			if (typeof savegame.fightxp !== "undefined") Game.player.fightxp = savegame.fightxp;
-			if (typeof savegame.nextlvlfight !== "undefined") Game.player.nextlvlfight = savegame.nextlvlfight;
+			//experience
+				if (typeof savegame.plantlvl !== "undefined") Game.player.plantlvl = savegame.plantlvl;
+				if (typeof savegame.plantxp !== "undefined") Game.player.plantxp = savegame.plantxp;
+				if (typeof savegame.nextlvlplant !== "undefined") Game.player.nextlvlplant = savegame.nextlvlplant;
+				if (typeof savegame.craftlvl !== "undefined") Game.player.craftlvl = savegame.craftlvl;
+				if (typeof savegame.craftxp !== "undefined") Game.player.craftxp = savegame.craftxp;
+				if (typeof savegame.nextlvlcraft !== "undefined") Game.player.nextlvlcraft = savegame.nextlvlcraft;
+				if (typeof savegame.fightlvl !== "undefined") Game.player.fightlvl = savegame.fightlvl;
+				if (typeof savegame.fightxp !== "undefined") Game.player.fightxp = savegame.fightxp;
+				if (typeof savegame.nextlvlfight !== "undefined") Game.player.nextlvlfight = savegame.nextlvlfight;
 
+	//world values --------------------------------------------------------------
 		if (typeof savegame.distance !== "undefined") Game.world.distance = savegame.distance;
 		if (typeof savegame.money !== "undefined") Game.world.money = savegame.money;
 		if (typeof savegame.bought !== "undefined") Game.recipie.bought = savegame.bought;
 
-		//storyline
-		if (typeof savegame.village !== "undefined") Game.unlocked.village = savegame.village;
-		unlockTest();
-		buffCheck();
-		initBook();
+			//storyline
+				if (typeof savegame.village !== "undefined") Game.unlocked.village = savegame.village;
 
-		update();
-		worldUpdate();
-		loadMap();
+
+
+
+		constructMap(); //create map from save
+		unlockTest(); //unlocks storyline components
+		buffCheck(); //checks for accessory buffs
+		updateBought(); //loads your saved recipies
+		loadMap(); //fill map with green
+
+
+		update(); //final update of new values
 	}
-	else {
-		//makes a new map for first time users!
+	else { //makes a new map for first time users!
 		genNewMap();
 		constructMap();
 	}
@@ -341,12 +335,6 @@ function loadGame() {
 function delGame() {
 	alert("You have died! The forest proved too strong.");
 	localStorage.removeItem("save");
-	localStorage.removeItem("mine");
-	localStorage.removeItem("items");
-	localStorage.removeItem("base");
-	localStorage.removeItem("equipped");
-	localStorage.removeItem("accessories");
-	localStorage.removeItem("map");
 	location.reload();
 }
 
@@ -1388,7 +1376,7 @@ function cleartabs() {
 
 function worldUpdate() {
 	$('#distance').html(prettify(Game.world.distance));
-	$('#zone').html(Game.zone);
+	$('#zone').html(Game.world.zone);
 
 	//enemy
 	$('#enemyHealth').html(prettify(Game.enemy.health));
@@ -1434,7 +1422,7 @@ function forwards() {
 		}, Game.core.walk);
 
 	//map
-	explore(Game.clickdmg);
+	explore(Game.world.clickdmg);
 
 	setTimeout(function() {
 		document.getElementById('forwards').disabled = false;
@@ -1745,7 +1733,7 @@ function genNewMap() {
 	var done = 0;
 
 	for (var i = 0; i < 25; i++) {
-		if (Zones.zone1[i] != undefined && Game.zone == 1) {
+		if (Zones.zone1[i] != undefined && Game.world.zone == 1) {
 			map.push(Zones.zone1[i]);
 		}
 		else {
@@ -1768,8 +1756,8 @@ function genNewMap() {
 }
 
 function constructMap() {
-	Game.complete = 1;
-	$('#complete').html(Game.complete);
+	Game.world.complete = 1;
+	$('#complete').html(Game.world.complete);
 
 	//create map
 	$('#map').html("");
@@ -1802,12 +1790,12 @@ function constructMap() {
 function loadMap() {
 	var clicks = Game.world.distance * 2;
 	for (var i = 0; i < clicks; i++) {
-		explore(Game.clickdmg);
+		explore(Game.world.clickdmg);
 	}
 }
 
 function explore(value) {
-	for (var i = Game.complete - 1; i < Game.complete; i++) {
+	for (var i = Game.world.complete - 1; i < Game.world.complete; i++) {
 		if (used[i] != undefined) {
 			if (used[i].width <= 99) {
 				used[i].width += value;
@@ -1820,8 +1808,8 @@ function explore(value) {
 				}
 			}
 			else {
-				Game.complete++;
-				$('#complete').html(Game.complete);
+				Game.world.complete++;
+				$('#complete').html(Game.world.complete);
 			}
 		}
 	}
@@ -1829,9 +1817,9 @@ function explore(value) {
 
 
 function nextZone() {
-	if (Game.complete == 25) {
-		Game.zone += 1;
-		$('#zone').html(Game.zone);
+	if (Game.world.complete == 25) {
+		Game.world.zone += 1;
+		$('#zone').html(Game.world.zone);
 
 		constructMap();
 
@@ -1900,7 +1888,7 @@ for (i = 0; i < acc.length; i++) {
 
 
 function eventChecker() {
-	switch ($('#map .tile').eq(Game.complete - 1).text()) {
+	switch ($('#map .tile').eq(Game.world.complete - 1).text()) {
 		case 'house':
 			villageEvent();
 			break;
@@ -1919,7 +1907,7 @@ function eventChecker() {
 }
 
 function placechecker() {
-	var position = (Game.world.distance - ((Game.zone - 1) * 50)) / 2;
+	var position = (Game.world.distance - ((Game.world.zone - 1) * 50)) / 2;
 
 	switch ($('#map .tile').eq(position - 1).text()) {
 		case "":
@@ -2226,16 +2214,24 @@ function showBook() {
 }
 
 function buyRecipie() {
-	if (Game.recipie.bought <= Game.recipie.total) {
+	if (Game.recipie.bought.length <= Game.recipie.total) {
 		if (Game.world.money >= Game.recipie.cost) {
 			Game.world.money -= Game.recipie.cost;
 			$('.money').html(Game.world.money);
 
-			$('.recipieTable tr').eq(Game.recipie.bought).show();
-			Game.recipie.bought++;
+			var chosen = getRandom(1, Game.recipie.total + 1);
+			var index = Game.recipie.bought.indexOf(chosen);
+
+			if (index == -1) {
+				$('.recipieTable tr').eq(chosen).show();
+				Game.recipie.bought.push(chosen);
+			}
+			else {
+				buyRecipie(); //try again
+			}
 		}
 		else {
-			alert("You cannot buy this. It costs " + Game.recipie.cost + " gold and you have " + Game.world.money + " gold.");
+			alert("You cannot buy this recipie. It costs " + Game.recipie.cost + " gold and you have " + Game.world.money + " gold.");
 		}
 	}
 	else {
@@ -2245,16 +2241,15 @@ function buyRecipie() {
 	updateBought();
 }
 
-function initBook() {
-	for (var i = 0; i < Game.recipie.bought; i++) {
-		$('.recipieTable tr').eq(i).show();
-	}
-
-	updateBought();
+function getRandom(bottom, top) {
+	return Math.floor(Math.random() * (1 + top - bottom)) + bottom;
 }
 
 function updateBought() {
-	$('.r_bought').html(Game.recipie.bought);
+	for (var i = 0; i < Game.recipie.bought.length; i++) {
+		$('.recipieTable tr').eq(Game.recipie.bought[i]).show();
+	}
+	$('.r_bought').html(Game.recipie.bought.length);
 	$('.r_total').html(Game.recipie.total + 1);
 }
 
