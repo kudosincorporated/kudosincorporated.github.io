@@ -1118,10 +1118,3 @@ table {
 	padding: 6px 12px;
 	border-bottom: 3px solid #ccc;
 }
-
-.chatbox-cover {
-	overflow: hidden;
-	height: 35%;
-	width: 100%;
-	border-top: 1px solid #ddd;
-}
