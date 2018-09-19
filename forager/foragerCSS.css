@@ -411,7 +411,6 @@ body {
 	border-left: 1px solid #eee;
 	box-shadow: 0 0 16px rgba(0,0,0,0.15);
 	height: 100%;
-	padding: 10px;
 }
 
 .maincol {
@@ -1118,4 +1117,11 @@ table {
 	font-size: 1em;
 	padding: 6px 12px;
 	border-bottom: 3px solid #ccc;
+}
+
+.chatbox-cover {
+	overflow: hidden;
+	height: 35%;
+	width: 100%;
+	border-top: 1px solid #ddd;
 }
