@@ -25,13 +25,13 @@ var Game = {
 		armour: "plain clothes",
 		defence: 0,
 		money: 0,
+		complete: 1,
+		zone: 1,
+		clickdmg: 25,
 		walkcost: {
 			energy: 2,
 			water: 1
 		},
-		complete: 1,
-		zone: 1,
-		clickdmg: 25
 	},
 	enemy: {
 		name: "",
@@ -48,6 +48,7 @@ var Game = {
 		village: false
 	},
 	core: {
+		unlocked: 2,
 		cart: 5000,
 		walk: 1000,
 		foxTick: 20000,
@@ -57,7 +58,7 @@ var Game = {
 		total: $('.recipieTable tr').length - 1,
 		bought: [],
 		cost: 1
-	},
+	}
 }
 
 var used = [];
@@ -84,27 +85,118 @@ var Zones = {
 	current: []
 };
 
-var orearray = [
-	'dark berries',
-	'red berries',
-	'blue berries'
-];
-
-var weights = [
-	1,		//dark berries
-	1,		//red berries
-	1,		//blue berries
-	4,		//leaves
-	3,		//twigs
-	3,		//tree bark
-	2,		//tree sap
-	2,		//marigold
-	2,		//milkcap
-	2,		//cornflower
-	2,		//opium poppy
-	3		//sharp rock
-];
-
+var drops = {
+	main: [
+		{
+			name: 'dark berries',
+			info: 'they look... menacing.',
+			weight: 1
+		},{
+			name: 'red berries',
+			info: 'they look... tasty.',
+			weight: 1
+		},{
+			name: 'blue berries',
+			info: 'they look... bland.',
+			weight: 1
+		},{
+			name: 'leaves',
+			info: 'thick, green leaves from an unknown tree.',
+			weight: 4
+		},{
+			name: 'twigs',
+			info: 'a small bundle of sticks.',
+			weight: 3
+		},{
+			name: 'tree sap',
+			info: 'a slightly sweet, sticky substance. used to make ointment.',
+			weight: 2
+		},{
+			name: 'marigold',
+			info: 'helpful for treating wounds used to make ointment.',
+			weight: 2
+		},{
+			name: 'milkcap',
+			info: 'tasty if prepared in a firepit.',
+			weight: 2
+		},{
+			name: 'cornflower',
+			info: 'an ancient remedy for tired eyes when mixed with water.',
+			weight: 2
+		},{
+			name: 'opium poppy',
+			info: 'now this looks interesting...',
+			weight: 2
+		},{
+			name: 'sharp rock',
+			info: "it's sharp enough to be used as a weapon.",
+			weight: 1
+		},{
+			name: 'tree bark',
+			info: 'a strong piece of bark.',
+			weight: 3
+		},{
+			name: 'deerskin',
+			info: 'the raw hide of a deer.',
+			weight: 3
+		},{
+			name: 'green berries',
+			info: "a racoon's favorite treat.",
+			weight: 1
+		},{
+			name: 'rabbit meat',
+			info: "the raw meat of a fallen rabbit.",
+			weight: 2
+		},{
+			name: 'bear tooth',
+			info: 'a large fang ripped from the mouth of a bear.',
+			weight: 3
+		},{
+			name: 'vitality potion',
+			info: "heals you up.",
+			weight: 1
+		},{
+			name: 'quench potion',
+			info: "sates your thirst.",
+			weight: 1
+		},{
+			name: 'zeal potion',
+			info: "gives you energy.",
+			weight: 1
+		}
+	],
+	world: [
+		{
+			name: 'deerskin',//0
+			info: 'the raw hide of a deer.',
+			weight: 3
+		},{
+			name: 'green berries',//1
+			info: "a racoon's favorite treat.",
+			weight: 1
+		},{
+			name: 'rabbit meat',//2
+			info: "the raw meat of a fallen rabbit.",
+			weight: 2
+		},{
+			name: 'bear tooth',//3
+			info: 'a large fang ripped from the mouth of a bear.',
+			weight: 3
+		},{
+			name: 'vitality potion',//4
+			info: "heals your up.",
+			weight: 1
+		},{
+			name: 'quench potion',//5
+			info: "sates your thirst.",
+			weight: 1
+		},{
+			name: 'zeal potion',//6
+			info: "gives you energy.",
+			weight: 1
+		}
+	]
+}
 
 var mine = [];
 for (var i = 0; i < 9; i++) {
@@ -138,58 +230,16 @@ function update() {
 function mineInit() {
 	$("#mine").on('click', 'li', function () {
 		var index = $("#mine li").index(this);
+		
+		var name = mine[index].ore;
+		var info = mine[index].info;
+		var weight = mine[index].weight;
 
-		switch (this.innerHTML) {
-			case 'dark berries':
-				clickedItem("dark berries", "they look... menacing.", 1, index);
-				break;
-			case 'red berries':
-				clickedItem("red berries", "they look... tasty.", 1, index);
-				break;
-			case 'blue berries':
-				clickedItem("blue berries", "they look... bland.", 1, index);
-				break;
-			case 'leaves':
-				clickedItem("leaves", "thick, green leaves from an unknown tree. used for flask and pouch crafting.", 4, index);
-				break;
-			case 'twigs':
-				clickedItem("twigs", "a small bundle of sticks. used for firepit and flask making.", 3, index);
-				break;
-			case 'tree sap':
-				clickedItem("tree sap", "a slightly sweet, sticky substance. used to make ointment.", 2, index);
-				break;
-			case 'marigold':
-				clickedItem("marigold", "helpful for treating wounds used to make ointment..", 2, index);
-				break;
-			case 'milkcap':
-				clickedItem("milkcap", "tasty if prepared in a firepit.", 2, index);
-				break;
-			case 'cornflower':
-				clickedItem("cornflower", "an ancient remedy for tired eyes when mixed with water.", 2, index);
-				break;
-			case 'opium poppy':
-				clickedItem("opium poppy", "now this looks interesting...", 2, index);
-				break;
-			case 'sharp rock':
-				clickedItem("sharp rock", "now this could be useful. can be used as a weapon or to craft opium.", 3, index);
-				break;
-			case 'tree bark':
-				clickedItem("tree bark", "a strong piece of bark. used for pouch and firepit crafting.", 3, index);
-				break;
-			case 'deerskin':
-				clickedItem("deerskin", "the raw hide of a deer.", 3, index);
-				break;
-			case 'green berries':
-				clickedItem("green berries", "A racoon's favorite treat.", 1, index);
-				break;
-			case 'rabbit meat':
-				clickedItem("rabbit meat", "The raw meat of a fallen rabbit.", 2, index);
-				break;
-			case 'bear tooth':
-				clickedItem("bear tooth", "A large fang ripped from the mouth of a bear.", 1, index);
-				break;
-			default:
-				console.log("clicked an empty square.");
+		if (name != "") {
+			clickedItem(name, info, weight, index);
+		}
+		else {
+			console.log("clicked an empty square.");
 		}
 	});
 }
@@ -253,6 +303,7 @@ function saveGame() {
 		distance: Game.world.distance,
 		money: Game.world.money,
 		bought: Game.recipie.bought,
+		zone: Game.world.zone,
 
 		//storyline
 		village: Game.unlocked.village,
@@ -310,18 +361,18 @@ function loadGame() {
 		if (typeof savegame.distance !== "undefined") Game.world.distance = savegame.distance;
 		if (typeof savegame.money !== "undefined") Game.world.money = savegame.money;
 		if (typeof savegame.bought !== "undefined") Game.recipie.bought = savegame.bought;
+		if (typeof savegame.zone !== "undefined") Game.world.zone = savegame.zone;
+		
 
 			//storyline
 				if (typeof savegame.village !== "undefined") Game.unlocked.village = savegame.village;
 
 
-
-
 		constructMap(); //create map from save
+		loadMap(); //fill map with green
 		unlockTest(); //unlocks storyline components
 		buffCheck(); //checks for accessory buffs
 		updateBought(); //loads your saved recipies
-		loadMap(); //fill map with green
 
 
 		update(); //final update of new values
@@ -415,14 +466,15 @@ function newore() {
 	var position = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 	var point = position[Math.floor(Math.random() * position.length)];
 
-	var number = Math.floor(Math.random() * orearray.length);
-
-	var ore = orearray[number];
-	var weight = weights[number];
+	var number = getRandom(0, Game.core.unlocked);
+	var ore = drops.main[number].name;
+	var info = drops.main[number].info;
+	var weight = drops.main[number].weight;
 
 	if (mine[point].ore == "") {
 		mine.splice(point, 1, {
 			ore: ore,
+			info: info,
 			weight, weight
 		});
 		updateMine();
@@ -443,11 +495,16 @@ function newore() {
 	}
 }
 
-function newDrop(ore, weight) {
+function newDrop(index) {
 	for (var i = 0; i < 9; i++) {
 		if (mine[i].ore == "") {
+			var ore = drops.world[index].name;
+			var info = drops.world[index].info;
+			var weight = drops.world[index].weight;
+
 			mine.splice(i, 1, {
 				ore: ore,
+				info: info,
 				weight, weight
 			});
 			updateMine();
@@ -627,37 +684,14 @@ function levelCheck() {
 	//fighting xp/levelling not yet implemented
 
 	if (Game.player.plantlvl == 0) {
-		orearray = [
-			'dark berries',
-			'red berries',
-			'blue berries'
-		];
+		Game.core.unlocked = 2;
 	}
 	if (Game.player.plantlvl == 1) {
-		orearray = [
-			'dark berries',
-			'red berries',
-			'blue berries',
-			'leaves',
-			'twigs',
-			'tree bark'
-		];
+		Game.core.unlocked = 5;
+
 	}
 	if (Game.player.plantlvl >= 2) {
-		orearray = [
-			'dark berries',
-			'red berries',
-			'blue berries',
-			'leaves',
-			'twigs',
-			'tree bark',
-			'tree sap',
-			'marigold',
-			'milkcap',
-			'cornflower',
-			'opium poppy',
-			'sharp rock'
-		];
+		Game.core.unlocked = 11;
 	}
 }
 
@@ -666,34 +700,39 @@ function buttonChecker() {
 
 	itemCheck = {
 		//forage items
-			darkBerries: 0,
-			redBerries: 0,
-			blueBerries: 0,
+			darkberries: 0,
+			redberries: 0,
+			blueberries: 0,
 			twigs: 0,
 			leaves: 0,
-			treeSap: 0,
+			treesap: 0,
 			marigold: 0,
 			milkcap: 0,
 			cornflower: 0,
-			opiumPoppy: 0,
-			sharpRock: 0,
-			treeBark: 0,
+			opiumpoppy: 0,
+			sharprock: 0,
+			treebark: 0,
 			water: 0,
 
 		//crafted
-			coffeeBrew: 0,
-			roastMilkcap: 0,
+			coffeebrew: 0,
+			roastmilkcap: 0,
 			ointment: 0,
 			opium: 0,
 
 		//crafted
 			deerskin: 0,
-			bearTooth: 0,
-			greenBerries: 0,
-			rabbitMeat: 0,
+			beartooth: 0,
+			greenberries: 0,
+			rabbitmeat: 0,
 			leather: 0,
 			spear: 0,
-			cookedRabbit: 0
+			cookedrabbit: 0,
+
+		//potions
+			vitalitypotion: 0,
+			quenchpotion: 0,
+			zealpotion: 0,
 	}
 
 	//init stacker
@@ -701,34 +740,9 @@ function buttonChecker() {
 
 	for (var i = 0; i < items.length; i++) {
 		//foraged items
-		itemInc("dark berries", "darkBerries", i);
-		itemInc("red berries", "redBerries", i);
-		itemInc("blue berries", "blueBerries", i);
-		itemInc("twigs", "twigs", i);
-		itemInc("leaves", "leaves", i);
-		itemInc("tree sap", "treeSap", i);
-		itemInc("marigold", "marigold", i);
-		itemInc("milkcap", "milkcap", i);
-		itemInc("cornflower", "cornflower", i);
-		itemInc("opium poppy", "opiumPoppy", i);
-		itemInc("sharp rock", "sharpRock", i);
-		itemInc("tree bark", "treeBark", i);
-		itemInc("water", "water", i);
-
-		//crafted
-		itemInc("coffee brew", "coffeeBrew", i);
-		itemInc("roasted shroom", "roastMilkcap", i);
-		itemInc("ointment", "ointment", i);
-		itemInc("opium", "opium", i);
-
-		//battle rewards
-		itemInc("deerskin", "deerskin", i);
-		itemInc("bear tooth", "bearTooth", i);
-		itemInc("green berries", "greenBerries", i);
-		itemInc("rabbit meat", "rabbitMeat", i);
-		itemInc("leather", "leather", i);
-		itemInc("spear", "spear", i);
-		itemInc("cooked rabbit", "cookedRabbit", i);
+		var name = items[i].name;
+		var id = name.split(' ').join('');
+		itemInc(name, id, i);
 	}
 
 	var haveFlask = false;
@@ -757,19 +771,19 @@ function buttonChecker() {
 
 	//use resources
 
-	if (itemCheck.darkBerries >= 1) { //dark berries
+	if (itemCheck.darkberries >= 1) { //dark berries
 		$('#use').append('<button id="eatDarkBerries" onclick="eatDarkBerries()">Eat dark berries.</button>');
 	}
 
-	if (itemCheck.redBerries >= 1) { //red berries
+	if (itemCheck.redberries >= 1) { //red berries
 		$('#use').append('<button id="eatRedBerries" onclick="eatRedBerries()">Eat red berries.</button>');
 	}
 
-	if (itemCheck.blueBerries >= 1) { //blue berries
+	if (itemCheck.blueberries >= 1) { //blue berries
 		$('#use').append('<button id="eatBlueBerries" onclick="eatBlueBerries()">Eat blue berries.</button>');
 	}
 
-	if (itemCheck.greenBerries >= 1) { //green berries
+	if (itemCheck.greenberries >= 1) { //green berries
 		$('#use').append('<button id="eatGreenBerries" onclick="eatGreenBerries()">Eat green berries.</button>');
 	}
 
@@ -777,15 +791,15 @@ function buttonChecker() {
 		$('#use').append('<button id="eatMilkcap" onclick="eatMilkcap()">Eat milkcap.</button>');
 	}
 
-	if (itemCheck.opiumPoppy >= 1 && itemCheck.sharpRock >= 1 && Game.player.craftlvl >= 1) { //(craft level 2 is required to do this)
+	if (itemCheck.opiumpoppy >= 1 && itemCheck.sharprock >= 1 && Game.player.craftlvl >= 1) { //(craft level 2 is required to do this)
 		$('#craft').append('<button id="extractOpium" onclick="extractOpium()">Extract opium.</button>');
 	}
 
-	if (itemCheck.roastMilkcap >= 1) { //eat roast shroom
+	if (itemCheck.roastmilkcap >= 1) { //eat roast shroom
 		$('#use').append('<button id="eatRoastMilkcap" onclick="eatRoastMilkcap()">Eat roasted shroom.</button>');
 	}
 
-	if (itemCheck.treeSap >= 1 && itemCheck.marigold >= 1) { //make ointment
+	if (itemCheck.treesap >= 1 && itemCheck.marigold >= 1) { //make ointment
 		$('#craft').append('<button id="makeOintment" onclick="makeOintment()">Make ointment.</button>');
 	}
 
@@ -793,7 +807,7 @@ function buttonChecker() {
 		$('#use').append('<button id="useOintment" onclick="useOintment()">Use ointment.</button>');
 	}
 
-	if (itemCheck.coffeeBrew >= 1) { //drink coffee brew
+	if (itemCheck.coffeebrew >= 1) { //drink coffee brew
 		$('#use').append('<button id="drinkCoffeeBrew" onclick="drinkCoffeeBrew()">Drink coffee brew.</button>');
 	}
 
@@ -801,8 +815,24 @@ function buttonChecker() {
 		$('#use').append('<button id="drinkWater" onclick="drinkWater()">Drink water.</button>');
 	}
 
-	if (itemCheck.cookedRabbit >= 1) { //eat rabbit
+	if (itemCheck.cookedrabbit >= 1) { //eat cooked rabbit
 		$('#use').append('<button id="eatCookedRabbit" onclick="eatCookedRabbit()">Eat cooked rabbit.</button>');
+	}
+
+	if (itemCheck.rabbitmeat >= 1) { //eat RAW rabbit
+		$('#use').append('<button id="eatRawRabbit" onclick="eatRawRabbit()">Eat raw rabbit meat.</button>');
+	}
+
+	if (itemCheck.vitalitypotion >= 1) {
+		$('#use').append('<button id="vitalityPotion" onclick="vitalityPotion()">Drink vitality potion.</button>');
+	}
+
+	if (itemCheck.quenchpotion >= 1) {
+		$('#use').append('<button id="quenchPotion" onclick="quenchPotion()">Drink quench potion.</button>');
+	}
+
+	if (itemCheck.zealpotion >= 1) {
+		$('#use').append('<button id="zealPotion" onclick="zealPotion()">Drink zeal potion.</button>');
 	}
 
 	//craft resources
@@ -811,15 +841,15 @@ function buttonChecker() {
 		$('#craft').append('<button id="craftFlask" onclick="craftFlask()">Craft flask.</button>');
 	}
 
-	if (itemCheck.twigs >= 1 && itemCheck.treeBark >= 1 && haveFirepit != true) { //crafing firepit
+	if (itemCheck.twigs >= 1 && itemCheck.treebark >= 1 && haveFirepit != true) { //crafing firepit
 		$('#craft').append('<button id="craftFirepit" onclick="craftFirepit()">Make firepit.</button>');
 	}
 
-	if (itemCheck.leaves >= 1 && itemCheck.treeBark >= 1 && havePouch != true) { //crafing pouch
+	if (itemCheck.leaves >= 1 && itemCheck.treebark >= 1 && havePouch != true) { //crafing pouch
 		$('#craft').append('<button id="craftPouch" onclick="craftPouch()">Craft pouch.</button>');
 	}
 
-	if (itemCheck.leather >= 1 && itemCheck.treeSap >= 1 && haveSmallBag != true && Game.player.craftlvl >= 1) { //crafting small bag (craft lvl 2)
+	if (itemCheck.leather >= 1 && itemCheck.treesap >= 1 && haveSmallBag != true && Game.player.craftlvl >= 1) { //crafting small bag (craft lvl 2)
 		$('#craft').append('<button id="craftSmallBag" onclick="craftSmallBag()">Craft small bag.</button>');
 	}
 
@@ -835,11 +865,11 @@ function buttonChecker() {
 		$('#craft').append('<button id="makeLeather" onclick="makeLeather()">Make leather.</button>');
 	}
 
-	if (itemCheck.bearTooth >= 1 && itemCheck.twigs >= 1 && Game.player.craftlvl >= 1) { //craft spear (craft lvl 2)
+	if (itemCheck.beartooth >= 1 && itemCheck.twigs >= 1 && Game.player.craftlvl >= 1) { //craft spear (craft lvl 2)
 		$('#craft').append('<button id="craftSpear" onclick="craftSpear()">Craft spear.</button>');
 	}
 
-	if (haveFirepit == true && itemCheck.rabbitMeat >= 1 && Game.player.craftlvl >= 1) { //make leather (craft lvl 2)
+	if (haveFirepit == true && itemCheck.rabbitmeat >= 1) { //cook rabbit
 		$('#craft').append('<button id="cookRabbit" onclick="cookRabbit()">Cook rabbit meat.</button>');
 	}
 
@@ -855,7 +885,7 @@ function buttonChecker() {
 		Game.world.weapon = "spear";
 		Game.world.damage = 6;
 	}
-	else if (itemCheck.sharpRock >= 1) {
+	else if (itemCheck.sharprock >= 1) {
 		Game.world.weapon = "sharp rock";
 		Game.world.damage = 3;
 	}
@@ -957,6 +987,39 @@ function drinkWater() {
 	removeItem("water");
 
 	Game.player.thirst += 20;
+	updateValues();
+}
+
+function eatRawRabbit() {
+	$('#log').prepend("<li class='red'>You bite into the raw meat. It does not taste good.</li>");
+	removeItem("rabbit meat");
+
+	Game.player.health += 5;
+	Game.player.energy -= 20;
+	updateValues();
+}
+
+function vitalityPotion() {
+	$('#log').prepend("<li>You drink the vitality potion, feeling stronger with each glug.</li>");
+	removeItem("vitality potion");
+
+	Game.player.health += 50;
+	updateValues();
+}
+
+function quenchPotion() {
+	$('#log').prepend("<li>You drink the quench potion, feeling fuller with each glug;.</li>");
+	removeItem("quench potion");
+
+	Game.player.thirst += 50;
+	updateValues();
+}
+
+function zealPotion() {
+	$('#log').prepend("<li>You drink the zeal potion, feeling fitter with each glug.</li>");
+	removeItem("zeal potion");
+
+	Game.player.energy += 50;
 	updateValues();
 }
 
@@ -1300,6 +1363,16 @@ function imageItems() {
 		"background-image" : "url(images/green_berries.png)"
 	});
 
+	$("#items div:contains('vitality potion'), #mine li:contains('vitality potion')").css({
+		"background-image" : "url(images/potion_red.png)"
+	});
+	$("#items div:contains('quench potion'), #mine li:contains('quench potion')").css({
+		"background-image" : "url(images/potion_blue.png)"
+	});
+	$("#items div:contains('zeal potion'), #mine li:contains('zeal potion')").css({
+		"background-image" : "url(images/potion_yellow.png)"
+	});
+
 
 
 
@@ -1590,20 +1663,20 @@ function endFight() {
 	if (Game.enemy.type == 'beast') {
 		if (Math.random() * 100 <= 80) {
 			if (Game.enemy.name == 'deer') {
-				newDrop("deerskin", 3);
+				newDrop(0);
 				$('#log').prepend("<li class='green'>You strip the deer of its hide.</li>");
 			}
-			if (Game.enemy.name == 'bear') {
-				newDrop("bear tooth", 1);
-				$('#log').prepend("<li class='green'>You take a tooth from the mighty bear as a prize.</li>");
-			}
 			if (Game.enemy.name == 'racoon') {
-				newDrop("green berries", 1);
+				newDrop(1);
 				$('#log').prepend("<li class='green'>The racoon holds some green berries in its tiny paws.</li>");
 			}
 			if (Game.enemy.name == 'rabbit') {
-				newDrop("rabbit meat", 2);
+				newDrop(2);
 				$('#log').prepend("<li class='green'>You skin the rabbit and take it's meat.</li>");
+			}
+			if (Game.enemy.name == 'bear') {
+				newDrop(3);
+				$('#log').prepend("<li class='green'>You take a tooth from the mighty bear as a prize.</li>");
 			}
 		}
 		hideModal();
@@ -1615,7 +1688,7 @@ function endFight() {
 			);
 
 			$('.questButton').html(
-				"<button onclick='collect(10)'>Collect reward.</button>"
+				"<button onclick='collect(10)'>Collect 10 gold.</button>"
 			);
 
 			showModal();
@@ -1627,7 +1700,7 @@ function endFight() {
 			);
 
 			$('.questButton').html(
-				"<button onclick='collect(2)'>Collect reward.</button>"
+				"<button onclick='collect(2)'>Collect 2 gold.</button>"
 			);
 
 			showModal();
@@ -1639,7 +1712,7 @@ function endFight() {
 			);
 
 			$('.questButton').html(
-				"<button onclick='collect(3)'>Collect reward.</button>"
+				"<button onclick='collect(3)'>Collect 3 gold.</button>"
 			);
 
 			showModal();
@@ -1733,23 +1806,28 @@ function genNewMap() {
 	var done = 0;
 
 	for (var i = 0; i < 25; i++) {
-		if (Zones.zone1[i] != undefined && Game.world.zone == 1) {
-			map.push(Zones.zone1[i]);
+		if (Math.random() * 100 <= 50) {
+			map.push(Icons["tree"]);
+			console.log("tree");
 		}
 		else {
-			if (Math.random() * 100 <= 50) {
-				map.push(Icons["tree"]);
+			if (done <= 2) {
+				var chosentile = tilearray[Math.floor(Math.random() * tilearray.length)];
+				map.push(Icons[tilearray[done]]);
+				done++;
 			}
 			else {
-				if (done <= 2) {
-					var chosentile = tilearray[Math.floor(Math.random() * tilearray.length)];
-					map.push(Icons[tilearray[done]]);
-					done++;
-				}
-				else {
-					var chosentile = tilearray[Math.floor(Math.random() * tilearray.length)];
-					map.push(Icons[chosentile]);
-				}
+				var chosentile = tilearray[Math.floor(Math.random() * tilearray.length)];
+				map.push(Icons[chosentile]);
+			}
+		}
+	}
+
+	for (var i = 0; i < Zones.zone1.length; i++) {
+		if (Game.world.zone == 1) {
+			if (Zones.zone1[i] != undefined) {
+				map.splice(i, 1, Zones.zone1[i]);
+				console.log("zone1");
 			}
 		}
 	}
@@ -1788,9 +1866,34 @@ function constructMap() {
 }
 
 function loadMap() {
-	var clicks = Game.world.distance * 2;
-	for (var i = 0; i < clicks; i++) {
-		explore(Game.world.clickdmg);
+	var clicks = Game.world.distance - (Game.world.zone - 1) * 50;
+	var updated = clicks * 2;
+
+	for (var i = 0; i < updated; i++) {
+		fill(Game.world.clickdmg);
+	}
+}
+
+function fill(value) {
+	for (var i = Game.world.complete - 1; i < Game.world.complete; i++) {
+		if (used[i] != undefined) {
+			if (used[i].width <= 99) {
+				used[i].width += value;
+				$("#map .tile:eq(" + i + ") .fillbar").css({
+					"width" : used[i].width + "%"
+				});
+
+				if (used[i].width >= 100) {
+					//do NOT go to the next zone, Lol
+					//BTW:
+					//fill() is exactly the same as explore(), except it doesn't proc nextZone()
+				}
+			}
+			else {
+				Game.world.complete++;
+				$('#complete').html(Game.world.complete);
+			}
+		}
 	}
 }
 
@@ -1821,6 +1924,8 @@ function nextZone() {
 		Game.world.zone += 1;
 		$('#zone').html(Game.world.zone);
 
+		map = [];
+		genNewMap();
 		constructMap();
 
 		$('#log').prepend("<li class='green'>You advance to the next zone of the forest.</li>");
@@ -1842,7 +1947,12 @@ function playerUpdate() {
 function changename() {
 	var person = prompt("What's your name?", Game.player.name);
 	if (person != null && person != "") {
-		Game.player.name = person;
+		if (person.length <= 20) {
+			Game.player.name = person;
+		}
+		else {
+			alert("That name is too long.");
+		}
 	}
 	playerUpdate();
 }
@@ -2051,6 +2161,8 @@ function villageEvent() {
 	//admin
 	Game.unlocked.village = true;
 	$('#lt').removeClass('locked');
+
+	updateBought(); //added this because bought items weren't updating
 }
 
 
@@ -2219,7 +2331,7 @@ function buyRecipie() {
 			Game.world.money -= Game.recipie.cost;
 			$('.money').html(Game.world.money);
 
-			var chosen = getRandom(1, Game.recipie.total + 1);
+			var chosen = getRandom(0, Game.recipie.total);
 			var index = Game.recipie.bought.indexOf(chosen);
 
 			if (index == -1) {
@@ -2281,4 +2393,25 @@ function barfill(_xp, nextlvl_, id, txt) {
 	$(id).css({
 		"width" : fill + "%"
 	});
+}
+
+
+function buyPotion(type, cost) {
+	if (cost <= Game.world.money) {
+		Game.world.money -= cost;
+		switch (type) {
+			case 'health':
+				newDrop(4);
+				break;
+			case 'thirst':
+				newDrop(5);
+				break;
+			case 'energy':
+				newDrop(6);
+				break;
+		}
+	}
+	else {
+		alert("You cannot buy this. It costs " + cost + " gold and you have " + Game.world.money + " gold.");
+	}
 }

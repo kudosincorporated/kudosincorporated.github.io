@@ -411,6 +411,7 @@ body {
 	border-left: 1px solid #eee;
 	box-shadow: 0 0 16px rgba(0,0,0,0.15);
 	height: 100%;
+	padding: 10px;
 }
 
 .maincol {
@@ -815,15 +816,25 @@ table th {
 
 .shoptable {
 	border: 1px solid #ddd;
+	width: 100%;
+}
+
+.shoptable td:nth-of-type(odd) {
+	text-align: center;
+}
+
+.shoptable td:nth-of-type(even) {
+	width: 60%;
+	border: 1px solid #ddd;
 }
 
 .shoptable td {
-	padding: 5px;
 	text-align: left;
 }
 
 .shoptable button {
-	margin: 0;
+	display: block;
+	margin: 0 auto;
 	border-width: 1px;
 }
 

@@ -23,27 +23,20 @@
 </div>
 
 <div class="rightcol">
-	<div style="height: 65%; padding: 10px; overflow: auto;">
-		<h2 class="title-sm accordion">Use</h2>
-		<div class="panel">
-			<span id="use"></span>
-		</div>
-
-		<h2 class="title-sm accordion">Craft</h2>
-		<div class="panel">
-			<span id="craft"></span>
-		</div>
-
-		<h2 class="title-sm accordion">Misc</h2>
-		<div class="panel">
-			<span id="misc"></span>
-		</div>
+	<h2 class="title-sm accordion">Use</h2>
+	<div class="panel">
+		<span id="use"></span>
 	</div>
 
-	<div style="height: 35%; width: 100%; border-top: 1px solid #ddd;">
-		<script id="cid0020000198341312466" data-cfasync="false" async src="//st.chatango.com/js/gz/emb.js" style="width: 100%;height: 99%;">{"handle":"kudosincorporated","arch":"js","styles":{"a":"f8f8f8","b":100,"c":"000000","d":"000000","l":"dddddd","m":"f8f8f8","p":"10","q":"f8f8f8","r":100,"t":0,"usricon":0,"surl":0,"allowpm":0}}</script>
+	<h2 class="title-sm accordion">Craft</h2>
+	<div class="panel">
+		<span id="craft"></span>
 	</div>
-	
+
+	<h2 class="title-sm accordion">Misc</h2>
+	<div class="panel">
+		<span id="misc"></span>
+	</div>
 </div>
 
 	<div class="sidecol">
@@ -231,18 +224,18 @@
 			<div class="left mainVillage">
 				<div class="grey">Welcome to the village market! Click on a shop to visit it.</div>
 <pre onclick="newTab('#runeshop')">
-                  o.*
-                 .*
-                 *o
-                 /\
-     _/\/\_______||_
-    /___|pot shop|__\
-   /_________________\
-    ||     __/\_   ||
-    ||      o.O)   ||
-    ||_xoOv_/__.\o_||
-    ||_____________||
-    ||_____________||
+                 o.*
+                .*
+                *o
+                /\
+    _/\/\_______||_
+   /___|pot shop|__\
+  /_________________\
+   ||     __/\_   ||
+   ||      o.O)   ||
+   ||_xoOv_/__.\o_||
+   ||_____________||
+   ||_____________||
 </pre>
 <pre onclick="newTab('#dogshop')">
                       //\\///\/\
@@ -263,6 +256,29 @@
    ||_oO__X__  _|_| \ | es |
    ||________|  |__|* | $1 |
    ||________|  || |  |____|
+</pre>
+<pre onclick="newTab('#smeltshop')">
+                           ))(
+                           ^((
+             _____________ (^
+            /  |smelter|  \||
+           /_______________\|
+            ||     _[]   ||__\
+         I  ||     *.*)  || _ |
+         |  ||_())/__.\__||__ |
+ \___]  |_| ||___________|| __|
+  _/\_  |_| ||___________||___|
+</pre>
+<div></div>
+<pre onclick="newTab('#barshop')">
+    ,..,,.,..,,..,,..,,,.,
+   /.,..,,,,.,.,..,.,,,.,.\
+  /,,.,....,..,,.,..,,..,.,\
+   ||       .==          ||
+   ||       +.+)     ___ ||
+   || _c[]__/__.|_  / o \||
+   ||/____xoe's___\ |-=-|||
+   ||/____________\ \___/||
 </pre>
 			</div>
 			<div class="right">
@@ -442,7 +458,7 @@
 							<td><img src="images/dog_fox.png" class="shopimg"></td>
 							<td>
 								<h3 class="shoptitle">Foxhound</h3>
-								The foxhoud is an independant aide, periodically finding foragable supplies for you. 
+								The foxhoud is an independant aide, periodically finding foragable supplies for you.
 							</td>
 							<td>
 								<button id="s_fh" class="btn-sm" onclick="buyAccessory('foxhound', 'Periodically finds foragable supplies for you. ', 30, '#s_fh')">
@@ -452,6 +468,56 @@
 							</td>
 						</tr>
 					</table>
+				</div>
+
+				<div id="barshop" class="shoptab">
+					<h3 class="title">Xoe's Apothecarium</h3>
+					<table class="shoptable">
+						<tr>
+							<td><img src="images/potion_red.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Vitality Potion</h3>
+								The vitality potion will heal you significantly.
+							</td>
+							<td>
+								<button id="s_gs" class="btn-sm" onclick="buyPotion('health', 3)">
+									Buy
+								</button>
+								Cost: 3g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/potion_blue.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Quench Potion</h3>
+								The quench potion sates your thirst.
+							</td>
+							<td>
+								<button id="s_fh" class="btn-sm" onclick="buyPotion('thirst', 3)">
+									Buy
+								</button>
+								Cost: 3g
+							</td>
+						</tr>
+						<tr>
+							<td><img src="images/potion_yellow.png" class="shopimg"></td>
+							<td>
+								<h3 class="shoptitle">Zeal Potion</h3>
+								The zeal potion fills you with an incredible energy.
+							</td>
+							<td>
+								<button id="s_fh" class="btn-sm" onclick="buyPotion('energy', 3)">
+									Buy
+								</button>
+								Cost: 3g
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="smeltshop" class="shoptab">
+					<h3 class="title">Smelters' Shack</h3>
+					The blacksmith doesn't seem to be in right now.
 				</div>
 			</div>
 		</div>
@@ -549,6 +615,12 @@
 
 		<div id="changelog">
 			<ul>
+				<li><b>version 1.8.2</b></li>
+				<ul>
+					<li>Added two new ASCII shops.</li>
+					<li>Added potions, which provide another method of filling your stat bars without needless crafting.</li>
+					<li>Redid the method of finding/adding items to the inventory to be more streamlined. No affect on gameplay.</li>
+				</ul>
 				<li><b>version 1.8.1</b></li>
 				<ul>
 					<li>Made bought recipies randomised instead of linear.</li>
