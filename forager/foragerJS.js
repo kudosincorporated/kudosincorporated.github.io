@@ -1786,13 +1786,13 @@ function getMoney() {
 }
 
 function removeFight() {
-	Game.enemy.health = 1;
-	Game.journey.health = 1;
-	Game.enemy.type = "";
-
 	if (Game.enemy.type == 'beast') {
 		hideModal();
 	}
+
+	Game.enemy.health = 1;
+	Game.journey.health = 1;
+	Game.enemy.type = "";
 }
 
 function leaveForest() {
