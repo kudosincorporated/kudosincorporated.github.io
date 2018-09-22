@@ -651,7 +651,7 @@ function updateValues() {
 	if (Game.player.energy <= 0) {
 		$('#forwards').addClass("hidden");
 	}
-	else if (Game.enemy.name == "") {
+	else {
 		$('#forwards').removeClass("hidden");
 	}
 
@@ -721,7 +721,7 @@ function buttonChecker() {
 
 		//crafted
 			coffeebrew: 0,
-			roastmilkcap: 0,
+			roastedshroom: 0,
 			ointment: 0,
 			opium: 0,
 
@@ -800,7 +800,7 @@ function buttonChecker() {
 		$('#craft').append('<button id="extractOpium" onclick="extractOpium()">Extract opium.</button>');
 	}
 
-	if (itemCheck.roastmilkcap >= 1) { //eat roast shroom
+	if (itemCheck.roastedshroom >= 1) { //eat roast shroom
 		$('#use').append('<button id="eatRoastMilkcap" onclick="eatRoastMilkcap()">Eat roasted shroom.</button>');
 	}
 
