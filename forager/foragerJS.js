@@ -41,8 +41,13 @@ var Game = {
 		health: 10,
 		totalhealth: 10,
 		fleechance: 0,
-		type: 'beast',
+		type: "",
 		reward: ""
+	},
+	journey: {
+		health: 10,
+		totalhealth: 10,
+		damage: 2
 	},
 	unlocked: {
 		village: false
@@ -1458,10 +1463,28 @@ function worldUpdate() {
 	var hp = (Game.enemy.health / Game.enemy.totalhealth) * 100;
 	enemyHealthBar.style.width = hp + '%';
 
-	if (Game.enemy.health >= Game.enemy.totalhealth) Game.enemy.health = Game.enemy.totalhealth;
+	if (Game.enemy.health >= Game.enemy.totalhealth) {
+		Game.enemy.health = Game.enemy.totalhealth;
+	}
 
 	if (Game.enemy.health <= 0) {
 		enemyHealthBar.style.width = '0%';
+		endFight();
+	}
+
+	//journey (walkquest)
+	$('#journeyHealth').html(prettify(Game.journey.health));
+
+	var journeyBar = document.getElementById("journeyBar");
+	var hp = (Game.journey.health / Game.journey.totalhealth) * 100;
+	journeyBar.style.width = hp + '%';
+
+	if (Game.journey.health >= Game.journey.totalhealth) {
+		Game.journey.health = Game.journey.totalhealth;
+	}
+
+	if (Game.journey.health <= 0) {
+		journeyBar.style.width = '0%';
 		endFight();
 	}
 }
@@ -1548,7 +1571,6 @@ function forwards() {
 
 
 function hunt() {
-
 	//newEnemy (spawn enemy) function
 	if (Math.random() * 100 <= Game.world.encounter) {
 		var array = ["rabbit", "bear", "deer", "racoon", "skunk"];
@@ -1637,7 +1659,7 @@ function enemyAttack() {
 }
 
 function bait() {
-	if (itemCheck.redBerries >= 1) {
+	if (itemCheck.redberries >= 1) {
 		Game.enemy.fleechance = Game.enemy.fleechance * 1.5;
 		$('#fleechance').html(Math.round(Game.enemy.fleechance * 100));
 		removeItem("red berries");
@@ -1718,6 +1740,42 @@ function endFight() {
 			showModal();
 			$('#questEvent').show();
 		}
+		else if (Game.enemy.reward == 'house') {
+			$('.questInfo').html(
+				"The house is delapidated, but you find a small bag of gold coins hidden away in a cupboard."
+			);
+
+			$('.questButton').html(
+				"<button onclick='collect(10)'>Collect 10 gold.</button>"
+			);
+
+			showModal();
+			$('#questEvent').show();
+		}
+		else if (Game.enemy.reward == 'boy') {
+			$('.questInfo').html(
+				"An old man greets you, hastily taking the package from your arms. He rummages around his cloak and brings out 6 gold pieces for you."
+			);
+
+			$('.questButton').html(
+				"<button onclick='collect(6)'>Collect 6 gold.</button>"
+			);
+
+			showModal();
+			$('#questEvent').show();
+		}
+		else if (Game.enemy.reward == 'camp') {
+			$('.questInfo').html(
+				"The camp is abandoned, the previous owners leaving only a tiny silver locket half-buried in the ground. It'd be worth a bit of money."
+			);
+
+			$('.questButton').html(
+				"<button onclick='collect(3)'>Collect 3 gold.</button>"
+			);
+
+			showModal();
+			$('#questEvent').show();
+		}
 	}
 
 	removeFight();
@@ -1729,7 +1787,8 @@ function getMoney() {
 
 function removeFight() {
 	Game.enemy.health = 1;
-	Game.enemy.name = "";
+	Game.journey.health = 1;
+	Game.enemy.type = "";
 
 	if (Game.enemy.type == 'beast') {
 		hideModal();
@@ -2048,27 +2107,95 @@ function hideModal() {
 }
 
 function questEvent() {
-	var array = [
-		"A timid man approaches you, wringing his hands. He tells you that his village is being terrorised by a masked brute, and offers you gold in exchange for your help in ridding the village of his evil shadow.",
-		"A cloaked figure appears from behind a tree, demanding money. She holds a handmade dagger, but looks injured. You could probably outrun her.",
-		"A crazed wizard blocks your path. He demands you fight him to prove your worth."
-	];
+	var whichQuest = getRandom(1, 2);
+	if (whichQuest == 1) {
+		var array = [
+			"A timid man approaches you, wringing his hands. He tells you that his village is being terrorised by a masked brute, and offers you gold in exchange for your help in ridding the village of his evil shadow.",
+			"A cloaked figure appears from behind a tree, demanding money. She holds a handmade dagger, but looks injured. You could probably outrun her.",
+			"A crazed wizard blocks your path. He demands you fight him to prove your worth."
+		];
 
-	var enemyArray = [
-		"brute",
-		"theif",
-		"wizard"
-	];
+		var enemyArray = [
+			"brute",
+			"theif",
+			"wizard"
+		];
+		var number = Math.floor(Math.random() * array.length);
 
-	var number = Math.floor(Math.random() * array.length);
-	$('.questInfo').html(array[number]);
+		$('.questInfo').html(array[number]);
+		$('.questButton').html(
+			"<button onclick='beginQuest(`" + enemyArray[number] + "`, `" + array[number] + "`)'>Begin quest.</button>"
+		);
 
-	$('.questButton').html(
-		"<button onclick='beginQuest(`" + enemyArray[number] + "`, `" + array[number] + "`)'>Begin quest.</button>"
-	);
+		showModal();
+		$('#questEvent').show();
+	}
+	else if (whichQuest == 2) {
+		var array = [
+			"In the distance is a small house. It looks abandoned.",
+			"A young boy approaches you, asking if you could deliver a small package for him. He says there will be a reward.",
+			"Smoke billows out from behind a hillock a short distance away. Could be some sort of camp."
+		];
 
-	showModal();
-	$('#questEvent').show();
+		var walkArray = [
+			"house",
+			"boy",
+			"camp"
+		];
+		var number = Math.floor(Math.random() * array.length);
+
+		$('.questInfo').html(array[number]);
+		$('.questButton').html(
+			"<button onclick='walkQuest(`" + walkArray[number] + "`, `" + array[number] + "`)'>Begin quest.</button>"
+		);
+
+		showModal();
+		$('#questEvent').show();
+	}
+	/*else if (whichQuest == 3) {
+		//there are only two types of quests rn
+	}*/
+}
+
+function walkQuest(type, desc) {
+		switch (type) {
+			case 'house':
+				Game.journey.totalhealth = 100;
+				break;
+			case 'boy':
+				Game.journey.totalhealth = 60;
+				break;
+			case 'camp':
+				Game.journey.totalhealth = 30;
+				break;
+		}
+		Game.journey.health = Game.journey.totalhealth;
+
+		$('#log').prepend("<li>You begin a journey quest.</li>");
+		$('#j_desc').html(desc);
+
+		//change enemy type
+		Game.enemy.type = 'quest';
+		Game.enemy.reward = type;
+
+		worldUpdate();
+
+		//show the modal
+		showModal();
+		$('#walk').show();
+}
+
+function walkAction() {
+		Game.journey.health -= Game.journey.damage;
+		worldUpdate();
+
+		Game.player.thirst -= Game.world.walkcost.water;
+		Game.player.energy -= Game.world.walkcost.energy;
+		updateValues();
+
+		if (Math.random() * 100 <= 50) {
+			$('#log').prepend("<li>You keep walking towards your destination.</li>");
+		}
 }
 
 function beginQuest(enemy, desc) {

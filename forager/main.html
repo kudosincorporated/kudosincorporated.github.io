@@ -557,6 +557,19 @@
 		<div class="marginb grey">The forage box has been filled.</div>
 	</div>
 
+	<div id="walk" class="event_modal">
+		<h3 class="title battle_header">Your Journey Begins</h3>
+		<div id="j_desc" class="grey marginb"></div>
+
+		<div class="bar" style="width: 90%; margin: 10px auto;">
+			<div id="journeyBar" class="inner">
+				<span id="journeyHealth">100</span>
+			</div>
+		</div>
+
+		<button class="btn-sm marginb" id="walkAction" onclick="walkAction()">Keep walking.</button>
+	</div>
+
 	<div id="battle" class="event_modal">
 		<h3 class="title battle_header">An Enemy Appears</h3>
 		<div id="enemy">
@@ -615,6 +628,10 @@
 
 		<div id="changelog">
 			<ul>
+				<li><b>version 1.8.3</b></li>
+				<ul>
+					<li>Added another quest type besides assassination: journey quests which operate similarly but instead of costing health they cost thirst and energy.</li>
+				</ul>
 				<li><b>version 1.8.2</b></li>
 				<ul>
 					<li>Added two new ASCII shops.</li>

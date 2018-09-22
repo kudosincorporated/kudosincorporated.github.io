@@ -213,6 +213,14 @@ button:disabled {
 	cursor: pointer;
 }
 
+#enemy .inner,
+#walk .inner {
+	transition: 300ms linear;
+}
+
+#enemy .inner {
+	margin: 0 auto;
+}
 
 
 
@@ -497,13 +505,12 @@ body {
 	margin: 10px;
 }
 
-#enemy .inner {
-	margin: 0 auto;
-	transition: 300ms;
-}
-
 #enemyHealthBar {
 	background-color: #e25050;
+}
+
+#journeyBar {
+	background-color: #60d288;
 }
 
 .event_modal {
