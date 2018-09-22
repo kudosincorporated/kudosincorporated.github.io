@@ -850,11 +850,11 @@ function buttonChecker() {
 		$('#craft').append('<button id="craftFirepit" onclick="craftFirepit()">Make firepit.</button>');
 	}
 
-	if (itemCheck.leaves >= 1 && itemCheck.treebark >= 1 && havePouch != true) { //crafing pouch
+	if (itemCheck.leaves >= 1 && itemCheck.treebark >= 1) { //crafing pouch
 		$('#craft').append('<button id="craftPouch" onclick="craftPouch()">Craft pouch.</button>');
 	}
 
-	if (itemCheck.leather >= 1 && itemCheck.treesap >= 1 && haveSmallBag != true && Game.player.craftlvl >= 1) { //crafting small bag (craft lvl 2)
+	if (itemCheck.leather >= 1 && itemCheck.treesap >= 1 && Game.player.craftlvl >= 1) { //crafting small bag (craft lvl 2)
 		$('#craft').append('<button id="craftSmallBag" onclick="craftSmallBag()">Craft small bag.</button>');
 	}
 
