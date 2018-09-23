@@ -146,34 +146,6 @@ var drops = {
 			name: 'tree bark',
 			info: 'a strong piece of bark.',
 			weight: 3
-		},{
-			name: 'deerskin',
-			info: 'the raw hide of a deer.',
-			weight: 3
-		},{
-			name: 'green berries',
-			info: "a racoon's favorite treat.",
-			weight: 1
-		},{
-			name: 'rabbit meat',
-			info: "the raw meat of a fallen rabbit.",
-			weight: 2
-		},{
-			name: 'bear tooth',
-			info: 'a large fang ripped from the mouth of a bear.',
-			weight: 3
-		},{
-			name: 'vitality potion',
-			info: "heals you up.",
-			weight: 1
-		},{
-			name: 'quench potion',
-			info: "sates your thirst.",
-			weight: 1
-		},{
-			name: 'zeal potion',
-			info: "gives you energy.",
-			weight: 1
 		}
 	],
 	world: [
@@ -700,7 +672,7 @@ function levelCheck() {
 		Game.core.unlocked = 2;
 	}
 	if (Game.player.plantlvl == 1) {
-		Game.core.unlocked = 5;
+		Game.core.unlocked = 4;
 
 	}
 	if (Game.player.plantlvl >= 2) {
