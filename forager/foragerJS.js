@@ -114,7 +114,7 @@ var drops = {
 			weight: 3
 		},{
 			name: 'tree sap',
-			info: 'a slightly sweet, sticky substance. used to make ointment.',
+			info: 'a slightly sweet, sticky substance.',
 			weight: 2
 		},{
 			name: 'marigold',

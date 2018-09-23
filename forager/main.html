@@ -257,7 +257,7 @@
    ||________|  |__|* | $1 |
    ||________|  || |  |____|
 </pre>
-<pre onclick="newTab('#smeltshop')">
+<!-- <pre onclick="newTab('#smeltshop')">
                            ))(
                            ^((
              _____________ (^
@@ -269,7 +269,7 @@
  \___]  |_| ||___________|| __|
   _/\_  |_| ||___________||___|
 </pre>
-<div></div>
+<div></div> -->
 <pre onclick="newTab('#barshop')">
     ,..,,.,..,,..,,..,,,.,
    /.,..,,,,.,.,..,.,,,.,.\
@@ -289,7 +289,8 @@
 
 				<div id="recipieshop" class="shoptab">
 
-					<h3 class="title">Crafter's Outpost</h3>
+					<h3 class="title" style="margin: 0;">Crafter's Outpost</h3>
+					<div class="grey marginb">Utilites</div>
 
 					<div class="displaybox worldbox" style="width: 100%;">
 						<div><button onclick="buyRecipie()" style="border-width: 1px;">Buy New Recipie</button></div>
@@ -381,7 +382,8 @@
 				</div>
 
 				<div id="runeshop" class="shoptab">
-					<h3 class="title">Ye Olde Trinket Shoppe</h3>
+					<h3 class="title" style="margin: 0;">Ye Olde Trinket Shoppe</h3>
+					<div class="grey marginb">Accessories</div>
 					<table class="shoptable">
 						<tr>
 							<td><img src="images/bone_necklace.png" class="shopimg"></td>
@@ -439,7 +441,8 @@
 				</div>
 
 				<div id="dogshop" class="shoptab">
-					<h3 class="title">The Unkempt Kennel</h3>
+					<h3 class="title" style="margin: 0;">The Unkempt Kennel</h3>
+					<div class="grey marginb">Accessories</div>
 					<table class="shoptable">
 						<tr>
 							<td><img src="images/dog_german.png" class="shopimg"></td>
@@ -471,7 +474,8 @@
 				</div>
 
 				<div id="barshop" class="shoptab">
-					<h3 class="title">Xoe's Apothecarium</h3>
+					<h3 class="title" style="margin: 0;">Xoe's Apothecarium</h3>
+					<div class="grey marginb">Consumables</div>
 					<table class="shoptable">
 						<tr>
 							<td><img src="images/potion_red.png" class="shopimg"></td>
@@ -516,7 +520,8 @@
 				</div>
 
 				<div id="smeltshop" class="shoptab">
-					<h3 class="title">Smelters' Shack</h3>
+					<h3 class="title" style="margin: 0;">Smelters' Shack</h3>
+					<div class="grey marginb">WIP</div>
 					The blacksmith doesn't seem to be in right now.
 				</div>
 			</div>
@@ -615,9 +620,9 @@
 			<li>Use the 'look around' button to forage for some supplies.</li>
 			<li>Click these supplies to add them to your inventory. Once an item is in your inventory, different actions are unlocked in the right-hand panel as you can combine items, use them, or leave them.</li>
 			<li>As you complete tasks, your skill in that respective task increases.</li>
-			<li><b>Keep foraging and you gain the ability to find different types of items.</b> There are currently 20 obtainable items.</li>
+			<li><b>Keep foraging and you gain the ability to find different types of items.</b> There are currently 30+ obtainable items.</li>
 			<li>Your inventory stores items which can be manipulated, and the lower section contains static items.</li>
-			<li>In the 'world' tab you can walk in a linear direction to discover new places with unique mechanics.</li>
+			<li>In the 'world' tab you can walk in a linear direction to encounter events and discover unique places.</li>
 		</ol>
 
 		<div style="margin: 50px;"><hr></div>
@@ -628,9 +633,13 @@
 
 		<div id="changelog">
 			<ul>
+				<li><b>version 1.8.4</b></li>
+				<ul>
+					<li>Updated some item images.</li>
+				</ul>
 				<li><b>version 1.8.3</b></li>
 				<ul>
-					<li>Added another quest type besides assassination: journey quests which operate similarly but instead of costing health they cost thirst and energy.</li>
+					<li>Added another quest type besides assassination: journey quests which operate similarly but instead of risking health the player loses thirst and energy.</li>
 				</ul>
 				<li><b>version 1.8.2</b></li>
 				<ul>
