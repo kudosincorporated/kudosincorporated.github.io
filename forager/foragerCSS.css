@@ -656,6 +656,10 @@ body {
 	text-shadow: none;
 }
 
+.stacked-sm {
+	height: 70px;
+}
+
 #forwards {
 	width: 200px;
 	border-width: 1px;

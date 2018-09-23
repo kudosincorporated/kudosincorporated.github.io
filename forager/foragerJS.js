@@ -67,7 +67,6 @@ var Game = {
 	}
 }
 
-Game.recipie.notbought = [];
 for (var i = 0; i < Game.recipie.total; i++) {
 	Game.recipie.notbought.push(i);
 }
@@ -273,16 +272,6 @@ function saveGame() {
 		weight: Game.player.weight,
 		totalweight: Game.player.totalweight,
 
-			plantlvl: Game.player.plantlvl,
-			plantxp: Game.player.plantxp,
-			nextlvlplant: Game.player.nextlvlplant,
-			craftlvl: Game.player.craftlvl,
-			craftxp: Game.player.craftxp,
-			nextlvlcraft: Game.player.nextlvlcraft,
-			fightlvl: Game.player.fightlvl,
-			fightxp: Game.player.fightxp,
-			nextlvlfight: Game.player.nextlvlfight,
-
 		distance: Game.world.distance,
 		money: Game.world.money,
 		bought: Game.recipie.bought,
@@ -300,7 +289,19 @@ function saveGame() {
 		accessories: accessories,
 		map: map
 	};
+	var main = {
+		plantlvl: Game.player.plantlvl,
+		plantxp: Game.player.plantxp,
+		nextlvlplant: Game.player.nextlvlplant,
+		craftlvl: Game.player.craftlvl,
+		craftxp: Game.player.craftxp,
+		nextlvlcraft: Game.player.nextlvlcraft,
+		fightlvl: Game.player.fightlvl,
+		fightxp: Game.player.fightxp,
+		nextlvlfight: Game.player.nextlvlfight,
+	}
 	localStorage.setItem("save", JSON.stringify(save));
+	localStorage.setItem("main", JSON.stringify(main));
 }
 
 function loadGame() {
@@ -310,6 +311,21 @@ function loadGame() {
 
 	$('.recipieTable tr').hide();
 	$('.shoptab').hide();
+
+	if (localStorage.getItem("main") != undefined) {
+		var savegame = JSON.parse(localStorage.getItem("main"));
+
+		//experience
+			if (typeof savegame.plantlvl !== "undefined") Game.player.plantlvl = savegame.plantlvl;
+			if (typeof savegame.plantxp !== "undefined") Game.player.plantxp = savegame.plantxp;
+			if (typeof savegame.nextlvlplant !== "undefined") Game.player.nextlvlplant = savegame.nextlvlplant;
+			if (typeof savegame.craftlvl !== "undefined") Game.player.craftlvl = savegame.craftlvl;
+			if (typeof savegame.craftxp !== "undefined") Game.player.craftxp = savegame.craftxp;
+			if (typeof savegame.nextlvlcraft !== "undefined") Game.player.nextlvlcraft = savegame.nextlvlcraft;
+			if (typeof savegame.fightlvl !== "undefined") Game.player.fightlvl = savegame.fightlvl;
+			if (typeof savegame.fightxp !== "undefined") Game.player.fightxp = savegame.fightxp;
+			if (typeof savegame.nextlvlfight !== "undefined") Game.player.nextlvlfight = savegame.nextlvlfight;
+	}
 
 	if (localStorage.getItem("save") != undefined) {
 		var savegame = JSON.parse(localStorage.getItem("save"));
@@ -330,17 +346,6 @@ function loadGame() {
 		if (typeof savegame.weight !== "undefined") Game.player.weight = savegame.weight;
 		if (typeof savegame.totalweight !== "undefined") Game.player.totalweight = savegame.totalweight;
 
-			//experience
-				if (typeof savegame.plantlvl !== "undefined") Game.player.plantlvl = savegame.plantlvl;
-				if (typeof savegame.plantxp !== "undefined") Game.player.plantxp = savegame.plantxp;
-				if (typeof savegame.nextlvlplant !== "undefined") Game.player.nextlvlplant = savegame.nextlvlplant;
-				if (typeof savegame.craftlvl !== "undefined") Game.player.craftlvl = savegame.craftlvl;
-				if (typeof savegame.craftxp !== "undefined") Game.player.craftxp = savegame.craftxp;
-				if (typeof savegame.nextlvlcraft !== "undefined") Game.player.nextlvlcraft = savegame.nextlvlcraft;
-				if (typeof savegame.fightlvl !== "undefined") Game.player.fightlvl = savegame.fightlvl;
-				if (typeof savegame.fightxp !== "undefined") Game.player.fightxp = savegame.fightxp;
-				if (typeof savegame.nextlvlfight !== "undefined") Game.player.nextlvlfight = savegame.nextlvlfight;
-
 	//world values --------------------------------------------------------------
 		if (typeof savegame.distance !== "undefined") Game.world.distance = savegame.distance;
 		if (typeof savegame.money !== "undefined") Game.world.money = savegame.money;
@@ -358,18 +363,29 @@ function loadGame() {
 		unlockTest(); //unlocks storyline components
 		buffCheck(); //checks for accessory buffs
 		updateBought(); //loads your saved recipies
-
-
-		update(); //final update of new values
 	}
 	else { //makes a new map for first time users!
 		genNewMap();
 		constructMap();
 	}
+
+	update(); //final update of new values
 }
 
 function delGame() {
-	alert("You have died! The forest proved too strong.");
+	var end = confirm("Are you sure you want to reset the game? This will delete your save.");
+	if (end == true) {
+		localStorage.removeItem("save");
+		localStorage.removeItem("main");
+		location.reload();
+	}
+	else {
+		//keep playing
+	}
+}
+
+function softreset() {
+	alert("You black out. Awakening, you find your supplies have been lost.");
 	localStorage.removeItem("save");
 	location.reload();
 }
@@ -1250,7 +1266,7 @@ function collectwater() {
 
 function deathCheck() {
 	if (Game.player.health <= 0) {
-		delGame();
+		softreset();
 	}
 }
 
@@ -1775,7 +1791,7 @@ function removeFight() {
 	Game.enemy.type = "";
 }
 
-function leaveForest() {
+function leaveForest() { //unused
 	var end = confirm("You have reached the end of the game -- thank you so much for playing it! Leaving the forest will reset the game, with no reward. Are you sure?");
 	if (end == true) {
 		localStorage.removeItem("save");
@@ -2437,27 +2453,27 @@ function buyRecipie() {
 		Game.world.money -= Game.recipie.cost; //minus cost
 		$('.money').html(Game.world.money); //updates money
 
-		var number = Game.recipie.notbought[Math.floor(Math.random() * Game.recipie.notbought.length)];
-		var index = Game.recipie.notbought.indexOf(number);
-		Game.recipie.notbought.splice(index, 1);
+		var number = Game.recipie.notbought[Math.floor(Math.random() * Game.recipie.notbought.length)]; //gets random number from notbought
+		var index = Game.recipie.notbought.indexOf(number); //finds index of this number
+		Game.recipie.notbought.splice(index, 1); //removes this number
 
-		Game.recipie.bought.push(number);
+		Game.recipie.bought.push(number); //adds the number to the bought array
 	}
-	updateBought();
+	updateBought(); //calls the update function
+}
+
+function updateBought() {
+	$('.recipieTable tr').hide(); //hides all recipies
+	for (var i = 0; i < Game.recipie.bought.length; i++) {
+		$('.recipieTable tr').eq(Game.recipie.bought[i]).show(); //shows recipies that have been bought
+	}
+	$('.r_bought').html(Game.recipie.bought.length); //updates number of bought recipies
+	$('.r_total').html(Game.recipie.total); //updates total number of recipies
 }
 
 function getRandom(bottom, top) {
 	return Math.floor(Math.random() * (1 + top - bottom)) + bottom;
 }
-
-function updateBought() {
-	for (var i = 0; i < Game.recipie.bought.length; i++) {
-		$('.recipieTable tr').eq(Game.recipie.bought[i]).show();
-	}
-	$('.r_bought').html(Game.recipie.bought.length);
-	$('.r_total').html(Game.recipie.total);
-}
-
 
 
 
