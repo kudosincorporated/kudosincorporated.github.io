@@ -60,10 +60,16 @@ var Game = {
 		x_damage: 0
 	},
 	recipie: {
-		total: $('.recipieTable tr').length - 1,
+		total: $('.recipieTable tr').length,
+		notbought: [],
 		bought: [],
 		cost: 1
 	}
+}
+
+Game.recipie.notbought = [];
+for (var i = 0; i < Game.recipie.total; i++) {
+	Game.recipie.notbought.push(i);
 }
 
 var used = [];
@@ -308,6 +314,7 @@ function saveGame() {
 		distance: Game.world.distance,
 		money: Game.world.money,
 		bought: Game.recipie.bought,
+		notbought: Game.recipie.notbought,
 		zone: Game.world.zone,
 
 		//storyline
@@ -366,6 +373,7 @@ function loadGame() {
 		if (typeof savegame.distance !== "undefined") Game.world.distance = savegame.distance;
 		if (typeof savegame.money !== "undefined") Game.world.money = savegame.money;
 		if (typeof savegame.bought !== "undefined") Game.recipie.bought = savegame.bought;
+		if (typeof savegame.notbought !== "undefined") Game.recipie.notbought = savegame.notbought;
 		if (typeof savegame.zone !== "undefined") Game.world.zone = savegame.zone;
 		
 
@@ -2453,30 +2461,16 @@ function showBook() {
 }
 
 function buyRecipie() {
-	if (Game.recipie.bought.length <= Game.recipie.total) {
-		if (Game.world.money >= Game.recipie.cost) {
-			Game.world.money -= Game.recipie.cost;
-			$('.money').html(Game.world.money);
+	if (Game.recipie.notbought.length > 0 && Game.world.money >= Game.recipie.cost) {
+		Game.world.money -= Game.recipie.cost; //minus cost
+		$('.money').html(Game.world.money); //updates money
 
-			var chosen = getRandom(0, Game.recipie.total);
-			var index = Game.recipie.bought.indexOf(chosen);
+		var number = Game.recipie.notbought[Math.floor(Math.random() * Game.recipie.notbought.length)];
+		var index = Game.recipie.notbought.indexOf(number);
+		Game.recipie.notbought.splice(index, 1);
 
-			if (index == -1) {
-				$('.recipieTable tr').eq(chosen).show();
-				Game.recipie.bought.push(chosen);
-			}
-			else {
-				buyRecipie(); //try again
-			}
-		}
-		else {
-			alert("You cannot buy this recipie. It costs " + Game.recipie.cost + " gold and you have " + Game.world.money + " gold.");
-		}
+		Game.recipie.bought.push(number);
 	}
-	else {
-		alert("You have bought all the recipies!");
-	}
-
 	updateBought();
 }
 
@@ -2489,7 +2483,7 @@ function updateBought() {
 		$('.recipieTable tr').eq(Game.recipie.bought[i]).show();
 	}
 	$('.r_bought').html(Game.recipie.bought.length);
-	$('.r_total').html(Game.recipie.total + 1);
+	$('.r_total').html(Game.recipie.total);
 }
 
 

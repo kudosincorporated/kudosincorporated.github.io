@@ -587,9 +587,7 @@
 				</div>
 			</div>
 
-			<div style="text-align: center;">
-				<button class="btn-sm marginb" id="attack" onclick="attack()">Attack.</button>
-			</div>
+			<div><button class="btn-sm marginb" id="attack" onclick="attack()">Attack.</button></div>
 
 			<button class="toggle-btn marginb" id="bait" onclick="bait()">Bait.</button>
 				<div class="info">
@@ -598,6 +596,8 @@
 					Costs 1 red berries.
 				</div>
 			<button class="toggle-btn marginb" id="flee" onclick="flee()">Flee. (<span id="fleechance">0</span>% chance)</button>
+
+			<div class="grey marginb">You may perform actions at any time during a battle.</div>
 		</div>
 	</div>
 
@@ -633,6 +633,11 @@
 
 		<div id="changelog">
 			<ul>
+				<li><b>version 2.0.1</b></li>
+				<ul>
+					<li>Fixed the recipie bug.</li>
+					<li>Added a 'you may perform any actions' tooltip in the battle event.</li>
+				</ul>
 				<li><b>version 2.0</b></li>
 				<ul>
 					<li>Second reddit release! Wow, that's a lot of changes.</li>
