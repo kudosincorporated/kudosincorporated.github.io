@@ -18,6 +18,14 @@ var Game = {
 	tickspeed: 1000,
 	cost: {
 		community: 5
+	},
+	expedition: {
+		fishermen: 1,
+		time: 99,
+		totaltime: 99,
+		cost: 0,
+		type: 'fish',
+		reward: 'none'
 	}
 }
 
@@ -26,50 +34,68 @@ function prettify(input) {
 	return output;
 }
 
+function load() {
+	start();
+}
+
 function start() {
 	setInterval(idle, Game.tickspeed);
 	update();
 }
 
+function change(value, number) {
+	Game[value] += number;
+	animatedInc('.' + value, number);
+	update();
+}
+
+function animatedInc(resource, amount) {
+	if (amount > 0) {
+		var recinc = resource + ' + .posinc';
+		$(recinc).remove();
+		$(resource).after("<span class='posinc'> +" + amount + "</span>");
+		$(recinc).addClass("animate");
+	}
+	else if (amount < 0) {
+		var recinc = resource + ' + .neginc';
+		$(recinc).remove();
+		$(resource).after("<span class='neginc'> " + amount + "</span>");
+		$(recinc).addClass("animate");
+	}
+}
+
 function idle() {
 	if (Game.fish >= Game.community) {
-		Game.fish -= Game.community;
-		Game.money += Game.community / 10;
-		update();
-		$('.moneyps').html(Game.community / 10);
+		change("fish", -Game.community);
+		change("money", Game.community / 10);
 	}
 	if (Game.fishermen >= 1) {
-		Game.fish += Game.fishermen;
-		update();
+		change("fish", Game.fishermen);
 	}
 }
 
 function addFish(number) {
-	Game.fish++;
-	update();
+	change("fish", 1);
 }
 
 function addFisherman(number) {
 	if (Game.community >= number) {
-		Game.community -= number;
-		Game.fishermen += number;
-		update();
+		change("community", -number);
+		change("fishermen", number);
 	}
 }
 
 function removeFisherman(number) {
 	if (Game.fishermen >= number) {
-		Game.fishermen -= number;
-		Game.community += number;
-		update();
+		change("community", number);
+		change("fishermen", -number);
 	}
 }
 
 function expandCommunity() {
 	if (Game.money >= Game.cost.community) {
-		Game.money -= Game.cost.community;
-		Game.community += 1;
-		update();
+		change("money", -Game.cost.community);
+		change("community", 1);
 	}
 }
 
@@ -95,9 +121,56 @@ function hideModal() {
 	$('.modal-panel').hide();
 }
 
+function initExpedition(fishermen, time, cost, type, reward) {
+	Game.expedition.fishermen = fishermen;
+	Game.expedition.time = time;
+	Game.expedition.totaltime = time;
+	Game.expedition.cost = cost;
+	Game.expedition.type = type;
+	Game.expedition.reward = reward;
+	update();
+}
+
+function startExpedition() {
+	if (Game.fishermen >= Game.expedition.fishermen) {
+		change("fishermen", -Game.expedition.fishermen);
+		window.int = setInterval(expedition, Game.tickspeed);
+	}
+	else {
+		alert("You need at least one fisherman to embark on the expedition!");
+	}
+}
+
+function expedition() {
+	if (Game[Game.expedition.type] <= 0) {
+		clearInterval(int);
+		$('#exp_inner').css({
+			"width" : "100%"
+		});
+		alert("The expedition is a failure. The fisherman comes back empty-handed.");
+		change("fishermen", Game.expedition.fishermen); //adds back the fisherman even if mission is a failure
+	}
+	else if (Game.expedition.time <= 0) {
+		clearInterval(int);
+		$('#exp_inner').css({
+			"width" : "100%"
+		});
+		alert("The expedition is a success!\nWIP");
+		change("fishermen", Game.expedition.fishermen);
+	}
+	else {
+		Game.expedition.time--;
+		change(Game.expedition.type, -Game.expedition.cost);
+		var percentage = (Game.expedition.time / Game.expedition.totaltime) * 100;
+		$('#exp_inner').css({
+			"width" : percentage + "%"
+		});
+	}
+}
+
 </script>
 </head>
-<body onload="start()">
+<body onload="load()">
 
 <div class="modal">
 	<div class="container">
@@ -105,7 +178,7 @@ function hideModal() {
 			<span class="exit" onclick="hideModal()">&#x00D7;</span>
 			<p>Fish Town, made by KudosInc.</p>
 			<p>Inspired by this reddit post as part of /r/incremental games' Mind Dump Mondays.</p>
-<div class="reddit-embed" data-embed-media="www.redditmedia.com" data-embed-parent="false" data-embed-live="false" data-embed-uuid="a8de63dc-925a-4e1c-962f-bb3329c94174" data-embed-created="2018-09-25T07:48:43.452Z"><a href="https://www.reddit.com/r/incremental_games/comments/9id93a/mind_dump_monday_20180924/e6jrh80/">Comment</a> from discussion <a href="https://www.reddit.com/r/incremental_games/comments/9id93a/mind_dump_monday_20180924/">Mind Dump Monday 2018-09-24</a>.</div><script async src="https://www.redditstatic.com/comment-embed.js"></script>
+			<div class="reddit-embed" data-embed-media="www.redditmedia.com" data-embed-parent="false" data-embed-live="false" data-embed-uuid="a8de63dc-925a-4e1c-962f-bb3329c94174" data-embed-created="2018-09-25T07:48:43.452Z"><a href="https://www.reddit.com/r/incremental_games/comments/9id93a/mind_dump_monday_20180924/e6jrh80/">Comment</a> from discussion <a href="https://www.reddit.com/r/incremental_games/comments/9id93a/mind_dump_monday_20180924/">Mind Dump Monday 2018-09-24</a>.</div><script async src="https://www.redditstatic.com/comment-embed.js"></script>
 		</div>
 	</div>
 </div>
@@ -113,7 +186,7 @@ function hideModal() {
 <div class="header">
 	<div class="container">
 		<h1 class="name">Fish Town</h1>
-		<div class="navbar">
+		<div style="float: right;">
 			<a class="btn btn-white" onclick="showPanel('#modal-info')">Info</a>
 		</div>
 		<div style="clear: both;"></div>
@@ -121,7 +194,7 @@ function hideModal() {
 </div>
 
 <div class="container">
-	<div class="left">
+	<div class="left" style="max-width: calc(100% - 14rem)">
 		<div class="title">Fish</div>
 		<button class="btn" onclick="addFish(1)">Go fishing.</button>
 		<div class="info">
@@ -150,8 +223,35 @@ function hideModal() {
 			<br>
 			Cost: <span class="cost_community">0</span> money
 		</div>
+
+		<div class="spacer"></div>
+
+		<div class="title">Expeditions</div>
+
+		<div class="expedition expedition_1">
+			<div class="desc_expedition" style="color: #999;">
+				You could heard growling sounds from just outside the village grounds. They probably require some investigation.
+			</div>
+
+			<div class="spacer-sm">
+				<button class="btn" onclick="initExpedition(1, 20, 1, 'fish', 'none'), startExpedition()">Begin expedition.</button>
+				<div class="info">
+					You send a hopeful explorer out into the wilderness.
+					<br>
+					<i>As they venture, they will consume supplies. If their supply runs out before the expedition ends it will be a failure.</i>
+					<br>
+					Time: 20 seconds
+					<br>
+					Cost: 20 fish, 1 fisherman
+				</div>
+			</div>
+
+			<div class="bar" id="exp_bar">
+				<div class="inner" id="exp_inner"></div>
+			</div>
+		</div>
 	</div>
-	<div class="right" style="width: 200px;">
+	<div class="right" style="width: 12rem;">
 		<table class="stats">
 			<tr>
 				<th colspan="2">You</th>
@@ -170,7 +270,7 @@ function hideModal() {
 
 		<table class="stats">
 			<tr>
-				<th colspan="3">Resorces</th>
+				<th colspan="2">Resorces</th>
 			</tr>
 			<tr>
 				<td>Fish</td>
@@ -186,7 +286,7 @@ function hideModal() {
 
 		<table class="stats">
 			<tr>
-				<th colspan="3">Population</th>
+				<th colspan="2">Population</th>
 			</tr>
 			<tr>
 				<td>Community</td>
@@ -222,9 +322,14 @@ body, button {
 	font-family: 'Roboto', sans-serif;
 }
 
+.modal > .container {
+	height: 100%;
+	overflow: auto;
+}
+
 .modal {
 	display: none;
-	position: absolute;
+	position: fixed;
 	height: 100%;
 	width: 100%;
 	background-color: rgba(0,0,0,0.6);
@@ -235,6 +340,8 @@ body, button {
 	margin: 4rem 1rem;
 	padding: 1rem;
 	border-radius: 4px;
+	max-height: calc(100% - 8rem);
+	overflow: auto;
 }
 
 .exit {
@@ -249,7 +356,11 @@ body, button {
 }
 
 .spacer {
-	margin: 2rem;
+	margin: 2rem 0;
+}
+
+.spacer-sm {
+	margin: 1rem 0;
 }
 
 .grey {
@@ -277,6 +388,7 @@ body, button {
 }
 
 .info {
+	max-width: 25%;
 	display: none;
 	position: absolute;
 	font-size: 0.9em;
@@ -305,8 +417,8 @@ body, button {
 .header {
 	background-color: #eee;
 	box-shadow: inset 0px -2px 10px rgba(0,0,0,0.15);
-	height: 80px;
-	line-height: 80px;
+	height: 5rem;
+	line-height: 5rem;
 }
 
 .header + .container {
@@ -327,18 +439,16 @@ body, button {
 }
 
 .name {
+	font-size: 2em;
 	margin: 0;
 	float: left;
-}
-
-.navbar {
-	float: right;
+	font-weight: normal;
 }
 
 .title {
 	font-weight: bold;
 	padding: 0.5rem;
-	margin: 0.5rem 0;
+	margin: 0 0 0.5rem 0;
 	border-bottom: 1px solid #999;
 }
 
@@ -353,6 +463,54 @@ body, button {
 
 .stats tr {
 	border-bottom: 1px solid #999;
+}
+
+.stats td:not(:first-child) {
+	text-align: right;
+}
+
+.bar {
+	width: 50%;
+	background-color: #eee;
+	box-shadow: inset 0px 2px 8px rgba(0,0,0,0.05);
+}
+
+.inner {
+	width: 100%;
+	min-height: 1rem;
+	background-color: #60d288;
+	transition: 300ms linear;
+}
+
+.posinc {
+	position: absolute;
+	color: #60d288;
+}
+
+.neginc {
+	position: absolute;
+	color: #ff5050;
+	margin-left: 1rem;
+}
+
+
+.animate {
+	animation: animate 600ms ease;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+
+@keyframes animate {
+    0%   {
+    	text-indent: 0rem;
+    }
+    50%  {
+    	opacity: 1;
+    }
+    100% {
+    	text-indent: 1.5rem;
+    	opacity: 0;
+    }
 }
 
 </style>
