@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Fish Town</title>
+	<!-- jQuery -->
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+
+	<!-- fontawesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script type="text/javascript">
+
+var Game = {
+	fish: 0,
+	money: 0,
+	community: 1,
+	fishermen: 0,
+	tickspeed: 1000,
+	cost: {
+		community: 5
+	}
+}
+
+function prettify(input) {
+	var output = Math.round(input * 1000000)/1000000;
+	return output;
+}
+
+function start() {
+	setInterval(idle, Game.tickspeed);
+	update();
+}
+
+function idle() {
+	if (Game.fish >= Game.community) {
+		Game.fish -= Game.community;
+		Game.money += Game.community / 10;
+		update();
+		$('.moneyps').html(Game.community / 10);
+	}
+	if (Game.fishermen >= 1) {
+		Game.fish += Game.fishermen;
+		update();
+	}
+}
+
+function addFish(number) {
+	Game.fish++;
+	update();
+}
+
+function addFisherman(number) {
+	if (Game.community >= number) {
+		Game.community -= number;
+		Game.fishermen += number;
+		update();
+	}
+}
+
+function removeFisherman(number) {
+	if (Game.fishermen >= number) {
+		Game.fishermen -= number;
+		Game.community += number;
+		update();
+	}
+}
+
+function expandCommunity() {
+	if (Game.money >= Game.cost.community) {
+		Game.money -= Game.cost.community;
+		Game.community += 1;
+		update();
+	}
+}
+
+function update() {
+	$('.fish').html(Game.fish);
+	$('.money').html(prettify(Game.money));
+	$('.community').html(Game.community);
+	$('.fishermen').html(Game.fishermen);
+	$('.cost_community').html(Game.cost.community);
+}
+
+function showPanel(panel) {
+	$(panel).show();
+	showModal();
+}
+
+function showModal() {
+	$('.modal').show();
+}
+
+function hideModal() {
+	$('.modal').hide();
+	$('.modal-panel').hide();
+}
+
+</script>
+</head>
+<body onload="start()">
+
+<div class="modal">
+	<div class="container">
+		<div class="modal-panel" id="modal-info">
+			<span class="exit" onclick="hideModal()">&#x00D7;</span>
+			<p>Fish Town, made by KudosInc.</p>
+			<p>Inspired by this reddit post as part of /r/incremental games' Mind Dump Mondays.</p>
+<div class="reddit-embed" data-embed-media="www.redditmedia.com" data-embed-parent="false" data-embed-live="false" data-embed-uuid="a8de63dc-925a-4e1c-962f-bb3329c94174" data-embed-created="2018-09-25T07:48:43.452Z"><a href="https://www.reddit.com/r/incremental_games/comments/9id93a/mind_dump_monday_20180924/e6jrh80/">Comment</a> from discussion <a href="https://www.reddit.com/r/incremental_games/comments/9id93a/mind_dump_monday_20180924/">Mind Dump Monday 2018-09-24</a>.</div><script async src="https://www.redditstatic.com/comment-embed.js"></script>
+		</div>
+	</div>
+</div>
+
+<div class="header">
+	<div class="container">
+		<h1 class="name">Fish Town</h1>
+		<div class="navbar">
+			<a class="btn btn-white" onclick="showPanel('#modal-info')">Info</a>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="left">
+		<div class="title">Fish</div>
+		<button class="btn" onclick="addFish(1)">Go fishing.</button>
+		<div class="info">
+			Catch a fish from the local pond.
+		</div>
+
+		<div class="spacer"></div>
+
+		<div class="title">Manage</div>
+		<button class="btn" onclick="addFisherman(1)">Designate Fisherman.</button>
+		<div class="info">
+			Employs one member of the community as a fisherman.
+		</div>
+
+		<button class="btn" onclick="removeFisherman(1)">Remove Fisherman.</button>
+		<div class="info">
+			Relieves one fisherman from his or her duties.
+		</div>
+
+		<div class="spacer"></div>
+
+		<div class="title">Expand</div>
+		<button class="btn" onclick="expandCommunity()">Expand community.</button>
+		<div class="info">
+			Implores another person to join your community.
+			<br>
+			Cost: <span class="cost_community">0</span> money
+		</div>
+	</div>
+	<div class="right" style="width: 200px;">
+		<table class="stats">
+			<tr>
+				<th colspan="2">You</th>
+			</tr>
+			<tr>
+				<td>Rod</td>
+				<td>Wood Rod</td>
+			</tr>
+			<tr>
+				<td>Bait</td>
+				<td>Worms</td>
+			</tr>
+		</table>
+
+		<div class="spacer"></div>
+
+		<table class="stats">
+			<tr>
+				<th colspan="3">Resorces</th>
+			</tr>
+			<tr>
+				<td>Fish</td>
+				<td><span class="fish">0</span></td>
+			</tr>
+			<tr>
+				<td>Money</td>
+				<td><span class="money">0</span></td>
+			</tr>
+		</table>
+
+		<div class="spacer"></div>
+
+		<table class="stats">
+			<tr>
+				<th colspan="3">Population</th>
+			</tr>
+			<tr>
+				<td>Community</td>
+				<td><span class="community">0</span></td>
+			</tr>
+			<tr>
+				<td>Fishermen</td>
+				<td><span class="fishermen">0</span></td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<style type="text/css">
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+}
+
+body {
+	height: 100vh;
+	margin: 0;
+	font-size: 1em;
+	position: relative;
+}
+
+body, button {
+	font-family: 'Roboto', sans-serif;
+}
+
+.modal {
+	display: none;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0,0,0,0.6);
+}
+
+.modal-panel {
+	background-color: white;
+	margin: 4rem 1rem;
+	padding: 1rem;
+	border-radius: 4px;
+}
+
+.exit {
+	float: right;
+	font-size: 1.5em;
+	margin-top: -0.5rem;
+	cursor: pointer;
+}
+
+.exit:hover {
+	color: #ff5050;
+}
+
+.spacer {
+	margin: 2rem;
+}
+
+.grey {
+	color: #999;
+	font-size: 0.9em;
+}
+
+.btn {
+	cursor: pointer;
+	font-size: 1em;
+	padding: 0.3rem 0.8rem;
+	margin: 0.15rem 0;
+	border-radius: 4px;
+	background-color: #4da8e6;
+	border: 0;
+	color: white;
+}
+
+.btn:active {
+	background-color: #2093df;
+}
+
+.btn:focus {
+	outline: none;
+}
+
+.info {
+	display: none;
+	position: absolute;
+	font-size: 0.9em;
+	padding: 0.5rem;
+	margin: 0.2rem 0;
+	color: white;
+	background-color: rgba(0,0,0,0.6);
+	border-radius: 4px;
+}
+
+.btn:hover + .info,
+.btn + .info:hover {
+	display: block;
+}
+
+.btn-white {
+	color: #333;
+	background-color: white;
+	box-shadow: 0px 2px 10px rgba(0,0,0,0.15);
+}
+
+.btn-white:active {
+	background-color: white;
+}
+
+.header {
+	background-color: #eee;
+	box-shadow: inset 0px -2px 10px rgba(0,0,0,0.15);
+	height: 80px;
+	line-height: 80px;
+}
+
+.header + .container {
+	padding: 20px 0;
+}
+
+.container {
+	width: 50%;
+	margin: 0 auto;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.name {
+	margin: 0;
+	float: left;
+}
+
+.navbar {
+	float: right;
+}
+
+.title {
+	font-weight: bold;
+	padding: 0.5rem;
+	margin: 0.5rem 0;
+	border-bottom: 1px solid #999;
+}
+
+.stats {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.stats td, .stats th {
+	padding: 0.5rem;
+}
+
+.stats tr {
+	border-bottom: 1px solid #999;
+}
+
+</style>
+</body>
+</html>
