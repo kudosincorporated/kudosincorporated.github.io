@@ -13,20 +13,56 @@
 var Game = {
 	fish: 0,
 	money: 0,
+	population: 1,
 	community: 1,
 	fishermen: 0,
 	tickspeed: 1000,
+	paused: false,
+	items: [],
 	cost: {
-		community: 5
+		community: 4
 	},
 	expedition: {
+		number: 0,
 		fishermen: 1,
 		time: 99,
 		totaltime: 99,
 		cost: 0,
 		type: 'fish',
 		reward: 'none'
-	}
+	},
+	drops: [
+		{
+			name: 'Old Boot',
+			info: "A man's boot, worn out from years in the sea.",
+			value: 1
+		},
+		{
+			name: 'Seaweed',
+			info: 'Slimy seaweed dredged from the bottom of the ocean.',
+			value: 1
+		},
+		{
+			name: 'Woodenfish',
+			info: 'A fish made of wood? I guess so.',
+			value: 2
+		},
+		{
+			name: 'Silverfish',
+			info: 'This fish is shiny. Too shiny.',
+			value: 3
+		},
+		{
+			name: 'Goldenfish',
+			info: 'The goldenfish shimmers in the sunlight.',
+			value: 5
+		},
+		{
+			name: 'Diamondfish',
+			info: "This fish is made of diamonds. Don't eat it.",
+			value: 10
+		}
+	]
 }
 
 function prettify(input) {
@@ -34,12 +70,30 @@ function prettify(input) {
 	return output;
 }
 
+function getRandom(bottom, top) {
+	return Math.floor(Math.random() * (1 + top - bottom)) + bottom;
+}
+
 function load() {
 	start();
+	updateExpedition();
+}
+
+function pause() {
+	if (Game.paused == false) {
+		clearInterval(auto);
+		Game.paused = true;
+		$('.pauseCheck').addClass("checked");
+	}
+	else {
+		start();
+		Game.paused = false;
+		$('.pauseCheck').removeClass("checked");
+	}
 }
 
 function start() {
-	setInterval(idle, Game.tickspeed);
+	window.auto = setInterval(idle, Game.tickspeed);
 	update();
 }
 
@@ -95,6 +149,8 @@ function removeFisherman(number) {
 function expandCommunity() {
 	if (Game.money >= Game.cost.community) {
 		change("money", -Game.cost.community);
+		Game.population++;
+		Game.cost.community = Math.floor((Game.population * 10)/3) + 1;
 		change("community", 1);
 	}
 }
@@ -105,6 +161,12 @@ function update() {
 	$('.community').html(Game.community);
 	$('.fishermen').html(Game.fishermen);
 	$('.cost_community').html(Game.cost.community);
+	$('.expedition_number').html(Game.expedition.number);
+
+	$('.exp_fishermen').html(Game.expedition.fishermen);
+	$('.exp_time').html(Game.expedition.time);
+	$('.exp_cost').html(Game.expedition.totaltime * Game.expedition.cost);
+	$('.exp_type').html(Game.expedition.type);
 }
 
 function showPanel(panel) {
@@ -137,35 +199,106 @@ function startExpedition() {
 		window.int = setInterval(expedition, Game.tickspeed);
 	}
 	else {
-		alert("You need at least one fisherman to embark on the expedition!");
+		$('.log').html("You need more fishermen to embark on the expedition.");
 	}
 }
 
 function expedition() {
 	if (Game[Game.expedition.type] <= 0) {
-		clearInterval(int);
-		$('#exp_inner').css({
-			"width" : "100%"
-		});
-		alert("The expedition is a failure. The fisherman comes back empty-handed.");
-		change("fishermen", Game.expedition.fishermen); //adds back the fisherman even if mission is a failure
+
+			clearInterval(int);
+			$('#exp_inner').css({
+				"width" : "100%"
+			});
+			$('.log').html("The expedition is a failure. The fisherman comes back empty-handed.");
+			change("fishermen", Game.expedition.fishermen);
+			updateExpedition();
+
 	}
 	else if (Game.expedition.time <= 0) {
-		clearInterval(int);
-		$('#exp_inner').css({
-			"width" : "100%"
-		});
-		alert("The expedition is a success!\nWIP");
-		change("fishermen", Game.expedition.fishermen);
+
+			clearInterval(int);
+			$('#exp_inner').css({
+				"width" : "100%"
+			});
+
+			var dropNo = Math.floor(Math.random() * Game.drops.length);
+			var dropName = Game.drops[dropNo].name;
+			var dropInfo = Game.drops[dropNo].info;
+			var dropValue = Game.drops[dropNo].value;
+
+			newItem(dropName, dropInfo, dropValue);
+
+			var lc = dropName.toLowerCase();
+
+			$('.log').html("The expedition is a success! Your fisherman come back with a " + lc + ".");
+			change("fishermen", Game.expedition.fishermen);
+			Game.expedition.number++;
+			updateExpedition();
+
 	}
 	else {
-		Game.expedition.time--;
-		change(Game.expedition.type, -Game.expedition.cost);
-		var percentage = (Game.expedition.time / Game.expedition.totaltime) * 100;
-		$('#exp_inner').css({
-			"width" : percentage + "%"
-		});
+
+			Game.expedition.time--;
+			change(Game.expedition.type, -Game.expedition.cost);
+			var percentage = (Game.expedition.time / Game.expedition.totaltime) * 100;
+			$('#exp_inner').css({
+				"width" : percentage + "%"
+			});
+
 	}
+}
+
+function updateExpedition() {
+	var num = Game.expedition.number + 1;
+
+	var fishermen = Math.floor((num * 2)/9) + 1;
+	var time = Math.floor((num * 10)/3) + 1;
+	var cost = Math.floor((num * 1)/9) + 1;
+
+	initExpedition(fishermen, time, cost, 'fish', '');
+}
+
+function balanceTest() {
+	var i;
+	for (i = 0; i < 10; i++) {
+		var num = i + 1;
+
+		//values go here
+		var fishermen = Math.floor((num * 2)/9) + 1;
+		var time = Math.floor((num * 10)/3) + 1;
+		var cost = Math.floor((num * 1)/9) + 1;
+
+		console.log("[" + i + "] Fishermen: " + fishermen + " Time: " + time + " Cost: " + cost);
+	}
+}
+
+function newItem(name, info, value) {
+	Game.items.push({
+		name: name,
+		info: info,
+		value: value
+	});
+	updateItems();
+}
+
+function updateItems() {
+	$('.items').html("");
+	var i;
+	for (i = 0; i < Game.items.length; i++) {
+		$('.items').append(
+			"<div class='item'><div class='item_name'>" + Game.items[i].name + "</div><div class='btn sell' onclick='sell(" + i + ")'>Sell</div></div>" +
+			"<div class='info'>" + Game.items[i].info + "<br>Value: " + Game.items[i].value + "</div>"
+		);
+	}
+}
+
+function sell(number) {
+	var value = Game.items[number].value;
+	change("money", value);
+
+	Game.items.splice(number, 1);
+	updateItems();
 }
 
 </script>
@@ -186,14 +319,18 @@ function expedition() {
 <div class="header">
 	<div class="container">
 		<h1 class="name">Fish Town</h1>
+
 		<div style="float: right;">
 			<a class="btn btn-white" onclick="showPanel('#modal-info')">Info</a>
 		</div>
+
 		<div style="clear: both;"></div>
 	</div>
 </div>
 
 <div class="container">
+	<div class="log">Welcome to Fish Town! version 0.2</div>
+
 	<div class="left" style="max-width: calc(100% - 14rem)">
 		<div class="title">Fish</div>
 		<button class="btn" onclick="addFish(1)">Go fishing.</button>
@@ -226,23 +363,28 @@ function expedition() {
 
 		<div class="spacer"></div>
 
-		<div class="title">Expeditions</div>
+		<div class="title">
+			Expeditions
+			<div style="float: right; font-weight: normal;">
+				Total embarked: <span class="expedition_number">0</span>
+			</div>
+		</div>
+
+		<div style="color: #999;">
+			As your team adventurers, they will consume supplies. If their supply runs out before the expedition ends it will be a failure.
+		</div>
 
 		<div class="expedition expedition_1">
-			<div class="desc_expedition" style="color: #999;">
-				You could heard growling sounds from just outside the village grounds. They probably require some investigation.
+			<div class="desc_expedition" style="color: #444;">
+				Embark upon a fishing journey into the wilderness, with the promise of untold treasures at its end.
 			</div>
 
 			<div class="spacer-sm">
-				<button class="btn" onclick="initExpedition(1, 20, 1, 'fish', 'none'), startExpedition()">Begin expedition.</button>
+				<button class="btn" onclick="startExpedition()">Begin expedition.</button>
 				<div class="info">
-					You send a hopeful explorer out into the wilderness.
+					Time: <span class="exp_time">0</span> seconds
 					<br>
-					<i>As they venture, they will consume supplies. If their supply runs out before the expedition ends it will be a failure.</i>
-					<br>
-					Time: 20 seconds
-					<br>
-					Cost: 20 fish, 1 fisherman
+					Cost: <span class="exp_cost">0</span> <span class="exp_type">fish</span>, <span class="exp_fishermen">0</span> fishermen
 				</div>
 			</div>
 
@@ -290,13 +432,26 @@ function expedition() {
 			</tr>
 			<tr>
 				<td>Community</td>
-				<td><span class="community">0</span></td>
+				<td><span class="community">1</span></td>
 			</tr>
 			<tr>
 				<td>Fishermen</td>
 				<td><span class="fishermen">0</span></td>
 			</tr>
 		</table>
+
+		<div class="spacer" style="text-align: center;">
+			<div onclick="pause()" style="cursor: pointer;">
+				<span class="grey">Pause Idle Generation</span>
+				<div class="toggle pauseCheck"></div>
+			</div>
+		</div>
+
+		<div class="spacer"></div>
+
+		<div class="title" style="margin-bottom: 0;">Items</div>
+		<div class="items">
+		</div>
 	</div>
 </div>
 
@@ -322,6 +477,41 @@ body, button {
 	font-family: 'Roboto', sans-serif;
 }
 
+.log {
+	line-height: 2.5rem;
+	height: 2.5rem;
+	color: #333;
+	background-color: #f4f4f4;
+	box-shadow: inset 0px 2px 6px rgba(0,0,0,0.15);
+	border-radius: 1.25rem;
+	padding: 0 1.5rem;
+	white-space: nowrap;
+	overflow: hidden;
+	margin-bottom: 1rem;
+}
+
+.toggle {
+	display: inline-block;
+	height: 1.2rem;
+	width: 1.2rem;
+	border: 2px solid #ddd;
+	border-radius: 0.3rem;
+	cursor: pointer;
+	margin-bottom: -0.3rem;
+}
+
+.toggle.checked {
+	background-color: #88dda6;
+	border-color: #60d288;
+}
+
+.expedition {
+	margin: 1rem 0.5rem;
+	padding: 1rem;
+	border: 1px solid #ddd;
+	border-radius: 0.3rem;
+}
+
 .modal > .container {
 	height: 100%;
 	overflow: auto;
@@ -332,7 +522,8 @@ body, button {
 	position: fixed;
 	height: 100%;
 	width: 100%;
-	background-color: rgba(0,0,0,0.6);
+	background-color: rgba(0,0,0,0.5);
+	z-index: 99;
 }
 
 .modal-panel {
@@ -491,6 +682,34 @@ body, button {
 	position: absolute;
 	color: #ff5050;
 	margin-left: 1rem;
+}
+
+.item {
+	overflow: auto;
+	width: 100%;
+	padding: 0.5rem;
+	border-bottom: 1px solid #999;
+}
+
+.item_name {
+	float: left;
+	padding: 0.2rem 0;
+}
+
+.sell {
+	float: right;
+	padding: 0.2rem 1rem;
+	margin: 0;
+}
+
+.item + .info {
+	margin-left: 12.5rem;
+	margin-top: -2.7rem;
+}
+
+.item:hover + .info,
+.item + .info:hover {
+	display: block;
 }
 
 
