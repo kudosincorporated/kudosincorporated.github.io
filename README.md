@@ -13,3 +13,7 @@ Ultimatum is my second game, where you play as an emotional person with a big im
 Forager is my most polished game, a forest survival incremental with many cool mechanics
 
 [https://kudosincorporated.github.io/forager/main.html](https://kudosincorporated.github.io/forager/main.html)
+
+And finally Fish Town, a resource managment game inspired by a post in /r/incremental games.
+
+[https://kudosincorporated.github.io/fishtown](https://kudosincorporated.github.io/fishtown)
