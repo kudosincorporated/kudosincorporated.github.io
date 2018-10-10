@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script src="https://cdn.rawgit.com/konvajs/konva/2.4.1/konva.min.js"></script>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<meta charset="utf-8">
+	<title>Canvas Map Test</title>
+<style type="text/css">
+
+#container {
+	border: 1px solid black;
+	width: 600px;
+	height: 600px;
+	overflow: hidden;
+}
+
+</style>
+</head>
+<body>
+	<div id="container"></div>
+	<div>Hovering: <span class="coords"></span> <span class="info"></span></div>
+	<div><small>Arrow keys to move. Click and drag to move the map.</small></div>
+
+	<script>
+		var width = 600;
+		var height = 600;
+		var size = 16;
+
+		var mapArray = [
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,1],
+			[1,1,1,1,1,1,1,1,1,2,2,2,2,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2],
+			[1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,4,4,4,4],
+			[1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4],
+			[1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4],
+			[1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4],
+			[1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4],
+			[1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4],
+			[1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4],
+			[1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4],
+			[1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3],
+			[2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3],
+			[2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,3,3,3,4,4,4,4,4,4,4,4,4,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,3,3,3,3,4,4,4,4,4,4,4,4,4,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,3,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,4,4,4,4,3,3,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[3,3,3,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[3,3,3,3,3,3,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+		];
+		var mapx = mapArray[0].length -1;
+		var mapy = mapArray.length -1;
+
+		var stage = new Konva.Stage({
+			container: 'container',
+			width: width,
+			height: height,
+			draggable: true
+		});
+
+		var layer = new Konva.Layer();
+		stage.add(layer);
+
+		var posX = 0;
+		var posY = 0;
+
+		for (var i=0; i < mapArray.length; i++) {
+			for (var j=0; j < mapArray[i].length; j++) {
+				if (mapArray[i][j]==0) {
+					layer.add(generateRect('#fff'));
+				}
+				if (mapArray[i][j]==1) {
+					layer.add(generateRect('#53c653'));
+				}
+				if (mapArray[i][j]==2) {
+					layer.add(generateRect('#e8e778'));
+				}
+				if (mapArray[i][j]==3) {
+					layer.add(generateRect('#f0f4f4'));
+				}
+				if (mapArray[i][j]==4) {
+					layer.add(generateRect('#009933'));
+				}
+				if (mapArray[i][j]==5) {
+					layer.add(generateRect('#bcb9a9'));
+				}
+				if (mapArray[i][j]==6) {
+					layer.add(generateRect('#babec4'));
+				}
+				if (mapArray[i][j]==7) {
+					layer.add(generateRect('#d56344'));
+				}
+				if (mapArray[i][j]==8) {
+					layer.add(generateRect('#888'));
+				}
+				posX+=size;
+			}
+			posX=0;
+			posY+=size;
+		}
+
+		function generateRect(color) {
+			return new Konva.Rect({
+				x: posX,
+				y: posY,
+				width: size,
+				height: size,
+				fill: color
+			});
+		}
+		layer.draw();
+
+
+		document.onkeydown = function(e) {
+			switch (e.keyCode) {
+			case 37:
+				left();
+				break;
+			case 38:
+				up();
+				break;
+			case 39:
+				right();
+				break;
+			case 40:
+				down();
+				break;
+			}
+			player.setX(x*size);
+			player.setY(y*size);
+			layer.draw();
+		};
+
+
+		var x = 0;
+		var y = 0;
+
+
+		function left() {
+			if (x > 0) {
+				x--;
+			}
+		}
+
+		function right() {
+			if (x < mapx) {
+				x++;
+			}
+		}
+
+		function up() {
+			if (y > 0) {
+				y--;
+			}
+		}
+
+		function down() {
+			if (y < mapy) {
+				y++;
+			}
+		}
+
+		var player = new Konva.Rect({
+			x: x,
+			y: y,
+			width: size,
+			height: size,
+			fill: 'gold'
+		});
+		layer.add(player);
+
+		var hover = new Konva.Rect({
+			x: x,
+			y: y,
+			width: size,
+			height: size,
+			stroke: 'white'
+		});
+
+
+		var h_layer = new Konva.Layer();
+		stage.add(h_layer);
+		h_layer.add(hover);
+
+
+		stage.on('mousemove', function (e) {
+			var x = e.evt.clientX;
+			var y = e.evt.clientY;
+
+			var stagex = stage.attrs.x ? stage.attrs.x : 0;
+			var stagey = stage.attrs.y ? stage.attrs.y : 0;
+
+			var cleanx = Math.round((x - stagex)/size);
+			var cleany = Math.round((y - stagey)/size);
+
+			hover.setX((cleanx-1)*size);
+			hover.setY((cleany-1)*size);
+			h_layer.draw();
+
+			$('.coords').html(cleanx + ", " + cleany);
+
+			if (cleany < mapy+2 && cleanx < mapx+2 && cleany > 0 && cleanx > 0) {
+				var type = mapArray[cleany-1][cleanx-1];
+			}
+			var tile;
+			switch (type) {
+				case 1:
+					tile = "Forest";
+					break;
+				case 2:
+					tile = "Desert";
+					break;
+				case 3:
+					tile = "Snow";
+					break;
+				case 4:
+					tile = "Jungle";
+					break;
+				default:
+					tile = '?';
+			}
+			$('.info').html(tile);
+		});
+
+		layer.draw();
+	</script>
+</body>
+</html>
