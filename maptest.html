@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<script src="https://cdn.rawgit.com/konvajs/konva/2.4.1/konva.min.js"></script>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<title>Canvas Map Test</title>
+<style type="text/css">
+
+#container {
+	border: 1px solid black;
+	width: 512px;
+	height: 512px;
+	overflow: hidden;
+}
+
+</style>
+</head>
+<body>
+	<div id="container"></div>
+	<div>Hovering: <span class="coords"></span> <span class="info"></span></div>
+
+	<script>
+		var width = 512;
+		var height = 512;
+		var size = 32;
+
+		var mapArray = [
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,1,1],
+			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,1],
+			[1,1,1,1,1,1,1,1,1,2,2,2,2,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2],
+			[1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,2,2,4,4,4,4],
+			[1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4],
+			[1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4],
+			[1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4],
+			[1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4],
+			[1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4],
+			[1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4],
+			[1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4],
+			[1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
+			[2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3],
+			[2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3],
+			[2,2,2,2,2,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,4,3,3,3,4,4,4,4,4,4,4,4,4,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,4,4,4,4,4,3,3,3,3,4,4,4,4,4,4,4,4,4,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,3,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,4,4,4,4,3,3,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[3,3,3,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[3,3,3,3,3,3,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+			[3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
+		];
+		var mapx = mapArray[0].length -1;
+		var mapy = mapArray.length -1;
+
+		var stage = new Konva.Stage({
+			container: 'container',
+			width: width,
+			height: height
+		});
+
+		var layer = new Konva.Layer();
+		stage.add(layer);
+
+		var posX = 0;
+		var posY = 0;
+
+		function getTile(id) {
+			switch (id) {
+				case 1:
+					return {
+						type: "Forest",
+						color: "#53c653"
+					}
+					break;
+				case 2:
+					return {
+						type: "Desert",
+						color: "#e8e778"
+					}
+					break;
+				case 3:
+					return {
+						type: "Taiga",
+						color: "#f0f4f4"
+					}
+					break;
+				case 4:
+					return {
+						type: "Jungle",
+						color: "#009933"
+					}
+					break;
+				default:
+					return {
+						type: "none",
+						color: "transparent"
+					}
+			}
+		}
+
+		for (var i=0; i < mapArray.length; i++) {
+			for (var j=0; j < mapArray[i].length; j++) {
+				layer.add(generateRect( getTile(mapArray[i][j]).color ));
+				posX+=size;
+			}
+			posX=0;
+			posY+=size;
+		}
+
+		function generateRect(color) {
+			return new Konva.Rect({
+				x: posX,
+				y: posY,
+				width: size,
+				height: size,
+				fill: color
+			});
+		}
+		layer.draw();
+
+
+		document.onkeydown = function(e) {
+			switch (e.keyCode) {
+			case 37:
+				left();
+				break;
+			case 38:
+				up();
+				break;
+			case 39:
+				right();
+				break;
+			case 40:
+				down();
+				break;
+			}
+
+			updateworld();
+		};
+
+		function updateworld() {
+			var sx = width/2 - x*size;
+			var sy = height/2 - y*size;
+
+			if (sx <= 0) {
+				stage.setX(sx);
+			}
+			if (sy <= 0) {
+				stage.setY(sy);
+			}
+
+			player.setX(x*size);
+			player.setY(y*size);
+			layer.draw();
+		}
+
+		var x = 0;
+		var y = 0;
+
+
+		function left() {
+			if (x > 0) {
+				x--;
+			}
+		}
+
+		function right() {
+			if (x < mapx) {
+				x++;
+			}
+		}
+
+		function up() {
+			if (y > 0) {
+				y--;
+			}
+		}
+
+		function down() {
+			if (y < mapy) {
+				y++;
+			}
+		}
+
+		var player = new Konva.Rect({
+			x: x,
+			y: y,
+			width: size,
+			height: size,
+			fill: 'gold'
+		});
+		layer.add(player);
+
+		stage.on('mousemove', function (e) {
+			var x = e.evt.clientX;
+			var y = e.evt.clientY;
+
+			var stagex = stage.attrs.x ? stage.attrs.x : 0;
+			var stagey = stage.attrs.y ? stage.attrs.y : 0;
+
+			var cleanx = Math.round((x - stagex)/size);
+			var cleany = Math.round((y - stagey)/size);
+
+			$('.coords').html(cleanx + ", " + cleany);
+
+			if (cleany < mapy+2 && cleanx < mapx+2 && cleany > 0 && cleanx > 0) {
+				var type = mapArray[cleany-1][cleanx-1];
+			}
+			var tile = getTile(type).type;
+			$('.info').html(tile);
+		});
+
+		layer.draw();
+	</script>
+</body>
+</html>
