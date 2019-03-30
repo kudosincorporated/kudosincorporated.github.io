@@ -1,0 +1,263 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 14px;
+}
+
+body {
+	font-size: 1rem;
+	margin: 0;
+	height: 100vh;
+}
+
+body, button {
+	font-family: 'Roboto Slab', sans-serif;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.wrapper {
+	height: 100%;
+	text-align: center;
+	overflow: hidden;
+}
+
+table {
+	margin: 0 auto;
+}
+
+.game {
+	width: 300px;
+	height: 500px;
+	padding: 50px 0;
+	/*border: 1px solid black;*/
+	box-sizing: content-box;
+	margin: 0 auto;
+	margin-top: 30px;
+	overflow: hidden;
+	font-size: 0;
+	position: relative;
+	background-image: url('images/water.png');
+}
+
+.tiles,
+.player_cover {
+	margin-top: -50px;
+}
+
+.player_cover {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 100%;
+}
+
+/* begin tiles */
+
+.tile {
+	display: inline-block;
+	position: relative;
+	height: 50px;
+	width: 50px;
+	font-size: 1rem;
+	image-rendering: pixelated;
+	background-size: 300%;
+}
+
+.tile,
+.tile:after {
+	background-image: url('images/spritesheet_8x8.png');
+}
+
+.water {
+	background-image: none;
+}
+
+.logs1 {
+	background-position: 0 0;
+}
+
+.logs2 {
+	background-position: -50px 0;
+}
+
+.logs3 {
+	background-position: -100px 0;
+}
+
+.rocks1 {
+	background-position: 0 -50px;
+}
+
+.rocks2 {
+	background-position: -50px -50px;
+}
+
+.rocks3 {
+	background-position: -100px -50px;
+}
+
+.tree1:after {
+	background-position: 0 -150px;
+}
+
+.tree2:after {
+	background-position: -50px -150px;
+}
+
+.tree3:after {
+	background-position: -100px -150px;
+}
+
+.tree {
+	background-image: none;
+}
+
+.tree:after {
+	content: "";
+	display: block;
+	height: 100%;
+	width: 100%;
+	z-index: 999;
+	background-size: 300%;
+	transform: scale(1.5);
+	position: relative;
+	bottom: 25%;
+}
+
+/* end tiles */
+
+@keyframes jump {
+	0% {
+		transform: scale(1);
+		margin-top: 0rem;
+	}
+	50% {
+		transform: scale(1.2);
+		margin-top: -1rem;
+	}
+	100% {
+		transform: scale(1);
+		margin-top: 0rem;
+	}
+}
+
+.jump {
+	animation-name: jump;
+	animation-duration: 300ms;
+}
+
+@keyframes arise {
+	0% {
+		transform: scale(0);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.arise {
+	animation-name: arise;
+	animation-duration: 1000ms;
+	animation-fill-mode: forwards;
+}
+
+@keyframes descend {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(0);
+		opacity: 0;
+	}
+}
+
+.descend {
+	animation-name: descend;
+	animation-duration: 1000ms;
+	animation-fill-mode: forwards;
+}
+
+.gameover {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	background-image: linear-gradient(#111, transparent);
+	color: white;
+	font-size: 1rem;
+	z-index: 999;
+}
+
+.gameover h1 {
+	color: cornflowerblue;
+}
+
+.player {
+	display: block;
+	height: 50px;
+	width: 50px;
+	position: absolute;
+	top: 0;
+	transition: 300ms;
+	background-image: url('images/playersprite2.png');
+	background-size: 300%;
+	background-position: 0 0;
+}
+
+.playerUp {
+	background-position: 0 100%;
+}
+
+.playerLeft {
+	background-position: 100% 0;
+}
+
+.playerRight {
+	background-position: 0 0;
+}
+
+.playerDown {
+	background-position: 0 50%;
+}
+
+.on {
+	background-color: red;
+}
+
+.startBtn {
+	width: 120px;
+	padding: 10px;
+	background-color: #eee;
+	border: 2px solid #ccc;
+	color: #222;
+	font-size: 0.9rem;
+	margin: 0 auto;
+	cursor: pointer;
+}
+
+.startBtn:hover {
+	background-color: #ddd;
+	border-color: #bbb;
+}
+
+.spacer {
+	margin: 20px 0;
+}
