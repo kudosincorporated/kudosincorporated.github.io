@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Forager 3</title>
+	<!-- FORAGER 3 PROTOTYPE by u/KudosInc. Uploaded 29/7/19 -->
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link type="text/css" rel="stylesheet" href="css.css">
+</head>
+<body class="no-stacks iso" onload="pageLoad();">
+
+<div id="loader">
+	loading...
+</div>
+
+<div class="wrapper" id="wrapper" style="display: none;">
+	<div class="sidebar">
+		<div class="col-inside">
+			<div class="tabmenu">
+				<div class="row">
+					<div class="col">
+						<div class="tab forage-page selected" onclick="tabClick(this);">Forage <i class="fa fa-tree" aria-hidden="true"></i></div>
+					</div>
+					<div class="col">
+						<div class="tab explore-page" onclick="tabClick(this);">Explore <i class="fa fa-map" aria-hidden="true"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="card stats-card">
+				<div class="card-title">STATS</div>
+				<table class="table text-center" style="font-size: 1.2em;">
+					<tr>
+						<td style="width: 10%;"><span class="red-color"><i class="fa fa-heartbeat" aria-hidden="true"></i></span></td>
+						<td><div class="progress-bar health"><div class="inner red">100</div></div></td>
+					</tr>
+					<tr>
+						<td><span class="blue-color"><i class="fa fa-tint" aria-hidden="true"></i></span></td>
+						<td><div class="progress-bar thirst"><div class="inner blue">100</div></div></td>
+					</tr>
+					<tr>
+						<td><span class="yellow-color"><i class="fa fa-eye-slash" aria-hidden="true"></i></span></td>
+						<td><div class="progress-bar energy"><div class="inner yellow">100</div></div></td>
+					</tr>
+				</table>
+
+				<table class="table stats-table">
+					<tr class="herbology">
+						<td>Herbology</td>
+						<td>(lvl. <span class="level">#</span>)</td>
+						<td>
+							<div class="progress-bar">
+								<div class="inner green" style="width: 0%;"><span class="lvlprog">#</span></div>
+							</div>
+						</td>
+					</tr>
+					<tr class="craftsmanship">
+						<td>Craftsmanship</td>
+						<td>(lvl. <span class="level">#</span>)</td>
+						<td>
+							<div class="progress-bar">
+								<div class="inner orange" style="width: 0%;"><span class="lvlprog">#</span></div>
+							</div>
+						</td>
+					</tr>
+					<tr class="fortitude">
+						<td>Fortitude</td>
+						<td>(lvl. <span class="level">#</span>)</td>
+						<td>
+							<div class="progress-bar">
+								<div class="inner purple" style="width: 0%;"><span class="lvlprog">#</span></div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="card">
+				<div class="card-title">LOG <div class="move-right"><button class="btn btn-sm clear-btn" onclick="clearLog();">Clear</button></div></div>
+				<div class="log"></div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+	</div>
+	<div class="page forage-page">
+		<div class="col-inside">
+			<div class="overlay"></div>
+			<div class="row">
+				<div class="col">
+					<div class="card text-center">
+						<div class="card-title">FORAGE</div>
+						<button class="btn forage-btn btn-huge" onclick="sendcart();">Forage <i class="fa fa-tree" aria-hidden="true"></i></button>
+						<p class="text-center"><span class="subtitle">Current Tile:</span> <b><span class="currentTile">###</span></b></p>
+						<div class="foragebox">
+							<div class="box-row">
+								<div class="box"><span class="weight"></span><span class="name"></span></div>
+								<div class="box"><span class="weight"></span><span class="name"></span></div>
+								<div class="box"><span class="weight"></span><span class="name"></span></div>
+							</div>
+							<div class="box-row">
+								<div class="box"><span class="weight"></span><span class="name"></span></div>
+								<div class="box"><span class="weight"></span><span class="name"></span></div>
+								<div class="box"><span class="weight"></span><span class="name"></span></div>
+							</div>
+							<div class="box-row">
+								<div class="box"><span class="weight"></span><span class="name"></span></div>
+								<div class="box"><span class="weight"></span><span class="name"></span></div>
+								<div class="box"><span class="weight"></span><span class="name"></span></div>
+							</div>
+						</div>
+						<div class="progress-bar thinbar main-bar">
+							<div class="inner trans-sm yellow"></div>
+						</div>
+						<button class="btn btn-sm" onclick="discardAll();">Discard All <i class="fa fa-ban" aria-hidden="true"></i></button>
+					</div>
+				</div>
+				<div class="col">
+					<div class="card text-center">
+						<div class="card-title">INVENTORY <div class="move-right"><button class="btn btn-sm clear-btn" onclick="stackToggle();">Toggle Stacks</button></div></div>
+						<p>Hover items for more information, click them to craft.</p>
+						<div>Carry weight: <b><span class="c_weight">#</span>/<span class="total_weight">#</span></b></div>
+						<div class="inventory-cover">
+							<div class="inv"></div>
+						</div>
+						<div class="title">Craftbox</div>
+						<div class="craftbox">
+							<div class="line1"></div>
+							<div class="line2"></div>
+							<div class="row">
+								<div class="col ingredients-col">
+									<div class="ing1">
+										<div class="box"></div>
+									</div>
+									<div class="ing2">
+										<div class="box"></div>
+									</div>
+								</div>
+								<div class="col outcome-col">
+									<div class="out">
+										<div class="box"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<p>Crafting Possibilies</p>
+						<p class="craft-possibles"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="page explore-page">
+		<div class="col-inside">
+			<div class="overlay">
+				<div class="card fight-card">
+					<div class="card-title">An Enemy Appears</div>
+					<div class="row" style="width: 50%; margin: 0 auto;">
+						<div class="col">
+							<div class="player-thumb"><b>You</b></div>
+						</div>
+						<div class="col">
+							<div>VS</div>
+						</div>
+						<div class="col">
+							<div class="enemy-thumb"><b><span class="enemy-name">##</span></b></div>
+						</div>
+					</div>
+					<p><span class="enemy-desc">##</span></p>
+					<p><div class="progress-bar">
+						<div class="inner fight-inner red">##</div>
+					</div></p>
+					<p><button class="btn attack-btn" onclick="attackEnemy();">Attack</button></p>
+					<p>
+						<button class="btn btn-sm" onclick="bait();">Bait</button>
+						<button class="btn btn-sm" onclick="flee();">Flee (<span class="fleechance">##</span>% chance)</button>
+					</p>
+					<p>Baiting an enemy costs 1 red berries and increases flee chance.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<div class="card text-center">
+						<div class="card-title">EXPLORE</div>
+						<p>Careful, there are beasts in the forest. Gather supplies before embarking.</p>
+						<p><button class="btn explore-btn btn-huge" onclick="explore();">Explore <i class="fa fa-map" aria-hidden="true"></i></button></p>
+						<div class="block">
+							<table class="table" style="table-layout: fixed;">
+								<tr>
+									<td><span class="currentTile tile-title">###</span></td>
+									<td>Progress: <span class="prog-c">##</span>/<span class="prog-max">##</span></td>
+								</tr>
+							</table>
+							<div>
+								<div class="progress-bar tile-progress">
+									<div class="inner plateau trans-sm"></div>
+								</div>
+								<div class="progress-bar thinbar explore-progress">
+									<div class="inner trans-sm blue"></div>
+								</div>
+							</div>
+						</div>
+						<p>Fast travel locations:</p>
+						<div class="row block movement-choices">
+							<div class="col">
+								<button class="btn btn-sm forest white-color disabled">
+									Forest 1
+									<div class="choice forest1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+								<button class="btn btn-sm forest white-color disabled">
+									Forest 2
+									<div class="choice forest2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+								<button class="btn btn-sm forest white-color disabled">
+									Forest 3
+									<div class="choice forest3"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+								<button class="btn btn-sm forest white-color disabled">
+									Forest 4
+									<div class="choice forest4"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+							</div>
+							<div class="col">
+								<button class="btn btn-sm desert disabled">
+									Desert 1
+									<div class="choice desert1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+								<button class="btn btn-sm desert disabled">
+									Desert 2
+									<div class="choice desert2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+								<button class="btn btn-sm desert disabled">
+									Desert 3
+									<div class="choice desert3"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+							</div>
+							<div class="col">
+								<button class="btn btn-sm taiga disabled">
+									Taiga 1
+									<div class="choice taiga1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+								<button class="btn btn-sm taiga disabled">
+									Taiga 2
+									<div class="choice taiga2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+							</div>
+							<div class="col">
+								<button class="btn btn-sm mountain white-color disabled">
+									Mountain 1
+									<div class="choice mountain1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+								<button class="btn btn-sm mountain white-color disabled">
+									Peak 1
+									<div class="choice peak1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+								<button class="btn btn-sm plateau disabled">
+									Plateau 1
+									<div class="choice plateau1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="card">
+						<div class="card-title text-center">MAP <div class="move-right"><button class="btn btn-sm clear-btn" onclick="mapToggle();">Toggle Iso</button></div></div>
+						<p class="text-center">Click the tiles for more information.</p>
+						<p class="text-center"><span class="subtitle">Current Tile:</span> <b><span class="currentTile">###</span></b></p>
+						<div class="map-cover">
+							<table class="map-table">
+								<tr>
+									<td>										<div class="tile no-tile"></div></td>
+									<td class="bottom-passage">					<div class="tile forest forest1 player">F1<div class="cover"></div></td>
+									<td>										<div class="tile no-tile"></div></td>
+								</tr>
+								<tr>
+									<td>										<div class="tile no-tile"></div></td>
+									<td class="bottom-passage">					<div class="tile forest forest2">F2<div class="cover"></div></td>
+									<td>										<div class="tile no-tile"></div></td>
+								</tr>
+								<tr>
+									<td class="bottom-passage">					<div class="tile desert desert1">D1<div class="cover"></div></div></td>
+									<td class="bottom-passage left-passage">	<div class="tile forest forest3">F3<div class="cover"></div></div></td>
+									<td>										<div class="tile no-tile"></div></td>
+								</tr>
+								<tr>
+									<td class="bottom-passage">					<div class="tile desert desert2">D2<div class="cover"></div></div></td>
+									<td class="left-passage">					<div class="tile forest forest4">F4<div class="cover"></div></div></td>
+									<td class="bottom-passage left-passage">	<div class="tile taiga taiga1">T1<div class="cover"></div></div></td>
+								</tr>
+								<tr>
+									<td>										<div class="tile desert desert3">D3<div class="cover"></div></div></td>
+									<td class="bottom-passage">					<div class="tile plateau plateau1">Pl1<div class="cover"></div></div></td>
+									<td class="bottom-passage">					<div class="tile taiga taiga2">T2<div class="cover"></div></div></td>
+								</tr>
+								<tr>
+									<td>										<div class="tile no-tile"></div></td>
+									<td>										<div class="tile mountain peak1">Pe1<div class="cover"></div></div></td>
+									<td class="left-passage">					<div class="tile mountain mountain1">M1<div class="cover"></div></div></td>
+								</tr>
+							</table>
+						</div>
+
+						<!--<div class="arrow-buttons">
+							<div><button class="btn btn-sm" disabled><i class="fa fa-arrow-up" aria-hidden="true"></i></button></div>
+							<div><button class="btn btn-sm"><i class="fa fa-arrow-down" aria-hidden="true"></i></button></div>
+							<div><button class="btn btn-sm" disabled><i class="fa fa-arrow-left" aria-hidden="true"></i></button></div>
+							<div><button class="btn btn-sm" disabled><i class="fa fa-arrow-right" aria-hidden="true"></i></button></div>
+						</div>-->
+
+						<div class="biome-cards block" style="display: none;">
+							<div class="card forest1">
+								<div class="card-title tile-title forest white-color">Forest 1</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card forest2">
+								<div class="card-title tile-title forest white-color">Forest 2</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card forest3">
+								<div class="card-title tile-title forest white-color">Forest 3</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card forest4">
+								<div class="card-title tile-title forest white-color">Forest 4</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card desert1">
+								<div class="card-title tile-title desert">Desert 1</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card desert2">
+								<div class="card-title tile-title desert">Desert 2</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card desert3">
+								<div class="card-title tile-title desert">Desert 3</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card taiga1">
+								<div class="card-title tile-title taiga">Taiga 1</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card taiga2">
+								<div class="card-title tile-title taiga">Taiga 2</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card mountain1">
+								<div class="card-title tile-title mountain white-color">Mountain 1</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card peak1">
+								<div class="card-title tile-title mountain white-color">Peak 1</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+
+							<div class="card plateau1">
+								<div class="card-title tile-title plateau">Plateau 1</div>
+								<div class="title">Finds</div>
+								<div class="flora"></div>
+								<div class="title">Animals</div>
+								<div class="fauna"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="js.js"></script>
+<script type="text/javascript">
+	function pageLoad() {
+		document.getElementById("loader").style.display = "none";
+		document.getElementById("wrapper").style.display = "block";
+	}
+</script>
+</body>
+</html>
