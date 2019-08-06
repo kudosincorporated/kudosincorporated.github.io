@@ -42,37 +42,15 @@
 						<td><span class="yellow-color"><i class="fa fa-eye-slash" aria-hidden="true"></i></span></td>
 						<td><div class="progress-bar energy"><div class="inner yellow">100</div></div></td>
 					</tr>
+					<tr>
+						<td><span class="purple-color"><i class="fa fa-user" aria-hidden="true"></i></span></td>
+						<td><div class="progress-bar exp"><div class="inner purple">100</div></div></td>
+					</tr>
 				</table>
 
-				<table class="table stats-table">
-					<tr class="herbology">
-						<td>Herbology</td>
-						<td>(lvl. <span class="level">#</span>)</td>
-						<td>
-							<div class="progress-bar">
-								<div class="inner green" style="width: 0%;"><span class="lvlprog">#</span></div>
-							</div>
-						</td>
-					</tr>
-					<tr class="craftsmanship">
-						<td>Craftsmanship</td>
-						<td>(lvl. <span class="level">#</span>)</td>
-						<td>
-							<div class="progress-bar">
-								<div class="inner orange" style="width: 0%;"><span class="lvlprog">#</span></div>
-							</div>
-						</td>
-					</tr>
-					<tr class="fortitude">
-						<td>Fortitude</td>
-						<td>(lvl. <span class="level">#</span>)</td>
-						<td>
-							<div class="progress-bar">
-								<div class="inner purple" style="width: 0%;"><span class="lvlprog">#</span></div>
-							</div>
-						</td>
-					</tr>
-				</table>
+				<!--<table class="table stats-table">
+					redacted; see previous versions for copy paste
+				</table>-->
 			</div>
 			<div class="card">
 				<div class="card-title">LOG <div class="move-right"><button class="btn btn-sm clear-btn" onclick="clearLog();">Clear</button></div></div>
@@ -117,11 +95,13 @@
 					<div class="card text-center">
 						<div class="card-title">INVENTORY <div class="move-right"><button class="btn btn-sm clear-btn" onclick="stackToggle();">Toggle Stacks</button></div></div>
 						<p>Hover items for more information, click them to craft.</p>
-						<div>Carry weight: <b><span class="c_weight">#</span>/<span class="total_weight">#</span></b></div>
+						<div><span class="subtitle">Carry weight:</span> <b><span class="c_weight">#</span>/<span class="total_weight">#</span></b></div>
 						<div class="inventory-cover">
 							<div class="inv"></div>
 						</div>
-						<div class="title">Craftbox</div>
+					</div>
+					<div class="card text-center">
+						<div class="card-title">CRAFTBOX</div>
 						<div class="craftbox">
 							<div class="line1"></div>
 							<div class="line2"></div>
@@ -141,7 +121,7 @@
 								</div>
 							</div>
 						</div>
-						<p>Crafting Possibilies</p>
+						<p><b>Crafting Possibilies</b></p>
 						<p class="craft-possibles"></p>
 					</div>
 				</div>
@@ -180,13 +160,13 @@
 				<div class="col">
 					<div class="card text-center">
 						<div class="card-title">EXPLORE</div>
-						<p>Careful, there are beasts in the forest. Gather supplies before embarking.</p>
 						<p><button class="btn explore-btn btn-huge" onclick="explore();">Explore <i class="fa fa-map" aria-hidden="true"></i></button></p>
+						<p>Careful, there are beasts in the forest. Gather supplies before embarking.</p>
 						<div class="block">
 							<table class="table" style="table-layout: fixed;">
 								<tr>
 									<td><span class="currentTile tile-title">###</span></td>
-									<td>Progress: <span class="prog-c">##</span>/<span class="prog-max">##</span></td>
+									<td><span class="subtitle">Progress:</span> <b><span class="prog-c">##</span>/<span class="prog-max">##</span></b></td>
 								</tr>
 							</table>
 							<div>
@@ -231,18 +211,16 @@
 									Desert 3
 									<div class="choice desert3"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
 								</button>
-							</div>
-							<div class="col">
 								<button class="btn btn-sm taiga disabled">
 									Taiga 1
 									<div class="choice taiga1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
 								</button>
+							</div>
+							<div class="col">
 								<button class="btn btn-sm taiga disabled">
 									Taiga 2
 									<div class="choice taiga2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
 								</button>
-							</div>
-							<div class="col">
 								<button class="btn btn-sm mountain white-color disabled">
 									Mountain 1
 									<div class="choice mountain1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
@@ -305,6 +283,11 @@
 							<div><button class="btn btn-sm" disabled><i class="fa fa-arrow-left" aria-hidden="true"></i></button></div>
 							<div><button class="btn btn-sm" disabled><i class="fa fa-arrow-right" aria-hidden="true"></i></button></div>
 						</div>-->
+
+						<div class="text-center">
+							<p><span class="subtitle">Total Items Found:</span> <b><span class="finds">##</span></b></p>
+							<!--<div class="all-items"></div>-->
+						</div>
 
 						<div class="biome-cards block" style="display: none;">
 							<div class="card forest1">

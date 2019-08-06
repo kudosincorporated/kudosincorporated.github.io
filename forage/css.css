@@ -17,6 +17,9 @@ body {
 	margin: 0;
 	height: 100%;
 	overflow: hidden;
+	background-image: url(bg.jpg);
+	background-size: cover;
+	background-position: center;
 }
 
 body, button {
@@ -45,17 +48,30 @@ body, button {
 	height: 100%;
 	overflow-x: hidden;
 	overflow-y: auto;
-	background-image: url(bg.jpg);
-	background-size: cover;
-	background-position: center;
 }
 
 .wrapper {
 	font-size: 1.5em;
+	width: 1200px;
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
 }
 
 .card {
 	padding: 1.5rem;
+	margin: 1.5rem;
+	background-color: white;
+	border: 1px solid #ccc;
+}
+
+.page .card {
+	padding-bottom: 3rem;
+}
+
+.sidebar .card {
+	margin: 0;
+	border: none;
 }
 
 .card-title {
@@ -289,6 +305,10 @@ body, button {
 	overflow-y: hidden;
 	margin: 0.5rem 0;
 	width: 100%;
+}
+
+.exp-level {
+	font-size: 0.75em;
 }
 
 .inner {
@@ -839,17 +859,23 @@ body.no-stacks .box.stacked {
 
 
 .sidebar {
-	position: fixed;
-	top: 0;
-	left: 0;
+	position: absolute;
+	top: 1.5rem;
+	left: 1rem;
 	width: 20%;
 	min-width: 25rem;
-	height: 100%;
 	z-index: 9999;
 }
 
+.sidebar .col-inside {
+	background-image: none;
+	background-color: white;
+	padding-bottom: 3rem;
+	border: 1px solid #ccc;
+}
+
 .page {
-	width: 80%;
+	width: calc(80% - 4.5rem);
 	height: 100%;
 	position: absolute;
 	top: 0;
@@ -857,16 +883,11 @@ body.no-stacks .box.stacked {
 }
 
 .page.forage-page {
-	right: 0;
+	right: 1rem;
 }
 
 .page.explore-page {
-	right: -80%;
-}
-
-.sidebar .col-inside {
-	background-image: none;
-	background-color: #eee;
+	right: calc(-80% + 1rem);
 }
 
 .sidebar .card .card-title {
@@ -874,18 +895,8 @@ body.no-stacks .box.stacked {
 	font-weight: bold;
 }
 
-.sidebar .card {
-	margin: 1.5rem;
-	background-color: white;
-	border: 1px solid #ccc;
-}
-
-.card .card {
-	background-color: white;
-}
-
 .block {
-	width: 45rem;
+	width: 35rem;
 	margin: 0 auto;
 }
 
@@ -992,6 +1003,7 @@ body.no-stacks .box.stacked {
 .blue-color { color: #80bfff; }
 .yellow-color { color: #ffbf00; }
 .green-color { color: #70db70; }
+.purple-color { color: #a993ec; }
 
 .player-image { background-image: url(player.png); }
 
@@ -1111,20 +1123,5 @@ body.no-stacks .box.stacked {
 }
 
 @media only screen and (max-width: 1200px) {
-	.page > .col-inside > .row > .col {
-		display: block;
-		width: 100%;
-		height: auto;
-		padding-bottom: 3rem;
-	}
-
-	.sidebar .card {
-		background-color: transparent;
-		border: none;
-		margin: 0;
-	}
-
-	.sidebar .col-inside {
-		background-color: #f4f4f4;
-	}
+	/* unused */
 }

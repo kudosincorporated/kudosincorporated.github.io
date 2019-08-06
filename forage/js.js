@@ -43,23 +43,14 @@ var Game = {
 	forage_cost: 1,
 	explore_cost: 1,
 	enemy: {},
-	herbology:  {
+	exp:  {
 		level: 0,
 		current: 0,
 		max: 100,
-		inc: 10
-	},
-	craftsmanship:  {
-		level: 0,
-		current: 0,
-		max: 100,
-		inc: 20
-	},
-	fortitude:  {
-		level: 0,
-		current: 0,
-		max: 100,
-		inc: 5
+		herbology_inc: 10,
+		craftsmanship_inc: 20,
+		fortitude_inc: 1,
+		explore_inc: 5
 	}
 }
 
@@ -1723,8 +1714,8 @@ $(document).ready(function() {
 	updateWeight();
 	updateCurrentTile();
 
-	//initial update of bars
-	updateBars();
+	//initial update of stats (hp, thirst, ene, exp)
+	updateStats();
 
 	//initial update of map (possibly unecessary)
 	updateMap();
@@ -1735,6 +1726,9 @@ $(document).ready(function() {
 
 	//cant hurt to add dust
 	checkPossibles();
+
+	//cant hurt. yes it can.
+	checkTotalFounds();
 
 	//map click initialise
 	$('.biome-cards .card').hide();
@@ -1835,8 +1829,8 @@ $(document).ready(function() {
 			checkPossibles();
 
 			//adds craftsmanship
-			Game.craftsmanship.current += Game.craftsmanship.inc;
-			updateBars();
+			Game.exp.current += Game.exp.craftsmanship_inc;
+			updateStats();
 		}
 		else {
 			console.log("Clicked output but nothing craftable!");
@@ -1873,6 +1867,12 @@ $(document).ready(function() {
 	$('.biome-cards .card .spantab').addClass('unknown'); //makes items unknown
 	blurNames(); //blurs item names
 	checkIfFound(); //checks if items have been found
+
+
+	//tee hee
+	//var aaa = Object.keys(Item).sort();
+	//$('.all-items').html(aaa.map(getSpantab));
+
 
 	//newItem("pouch");
 	//devMode();
@@ -1928,12 +1928,12 @@ function tabClick(clicked) {
 			.replace('tab','')
 			.replace('selected','');
 	if (tab == 'forage-page') {
-		$('.page.forage-page').css({'right':'0'});
-		$('.page.explore-page').css({'right':'-80%'});
+		$('.page.forage-page').css({'right':'1rem'});
+		$('.page.explore-page').css({'right':'calc(-80% + 1rem)'});
 	}
 	else if (tab == 'explore-page') {
-		$('.page.forage-page').css({'right':'80%'});
-		$('.page.explore-page').css({'right':'0'});
+		$('.page.forage-page').css({'right':'calc(-80% + 1rem)'});
+		$('.page.explore-page').css({'right':'1rem'});
 	}
 	var tab_class = '.' + tab;
 	$('.tabmenu .tab').removeClass('selected');
@@ -2035,8 +2035,7 @@ function sendcart() {
 			}
 
 			//update herbology
-			Game.herbology.current += Game.herbology.inc;
-			updateBars();
+			Game.exp.current += Game.exp.herbology_inc;
 
 			//update costs
 			Game.energy.current -= Game.forage_cost;
@@ -2139,6 +2138,7 @@ function updateStats() {
 	Game.health.max = Game.health.base;
 	Game.thirst.max = Game.thirst.base;
 	Game.energy.max = Game.energy.base;
+
 	if (Item.amber_staff.found == true) Game.health.max += Item.amber_staff.interact.health;
 	if (Item.bracelet.found == true) Game.thirst.max += Item.bracelet.interact.thirst;
 	if (Item.snake_belt.found == true) Game.energy.max += Item.snake_belt.interact.energy;
@@ -2178,6 +2178,22 @@ function updateStats() {
 	$('.progress-bar.energy .inner').css({
 		"width" : energy + "%"
 	});
+
+	//exp update
+	if (Game.exp.current/Game.exp.max*100 >= 100) {
+		Game.exp.level++;
+		Game.exp.current = 0;
+		Game.exp.max += 20;
+		log("You level up!", "blue");
+	}
+
+	var exp = (Game.exp.current/Game.exp.max*100).toFixed(0);
+
+	$('.exp-level').html(Game.exp.level);
+	$('.progress-bar.exp .inner').html(exp);
+	$('.progress-bar.exp .inner').css({
+		"width" : exp + "%"
+	});
 }
 
 function playerDeath() {
@@ -2204,48 +2220,9 @@ function playerDeath() {
 	log("You black out. You awaken feeling groggy, and find some of your supplies lost.", "blue");
 }
 
-function updateBars() {
-	if (Game.herbology.current/Game.herbology.max*100 >= 100) {
-		Game.herbology.level++;
-		Game.herbology.current = 0;
-		Game.herbology.max += 20;
-		log("Your skills in foraging increase.", "green");
-	}
-	if (Game.craftsmanship.current/Game.craftsmanship.max*100 >= 100) {
-		Game.craftsmanship.level++;
-		Game.craftsmanship.current = 0;
-		Game.craftsmanship.max += 20;
-		log("Your craftsmanship skills increase.", "green");
-	}
-	if (Game.fortitude.current/Game.fortitude.max*100 >= 100) {
-		Game.fortitude.level++;
-		Game.fortitude.current = 0;
-		Game.herbology.max += 20;
-		log("Your fortitude increases in power.", "green");
-	}
-
-	var herb_lvlprog = Math.floor(Game.herbology.current/Game.herbology.max*100);
-	var craft_lvlprog = Math.floor(Game.craftsmanship.current/Game.craftsmanship.max*100);
-	var fort_lvlprog = Math.floor(Game.fortitude.current/Game.fortitude.max*100);
-
-	$('.herbology .lvlprog').html(herb_lvlprog);
-	$('.herbology .level').html(Game.herbology.level);
-	$('.herbology .progress-bar .inner').css({
-		"width" : herb_lvlprog + "%"
-	});
-
-	$('.craftsmanship .lvlprog').html(craft_lvlprog);
-	$('.craftsmanship .level').html(Game.craftsmanship.level);
-	$('.craftsmanship .progress-bar .inner').css({
-		"width" : craft_lvlprog + "%"
-	});
-
-	$('.fortitude .lvlprog').html(fort_lvlprog);
-	$('.fortitude .level').html(Game.fortitude.level);
-	$('.fortitude .progress-bar .inner').css({
-		"width" : fort_lvlprog + "%"
-	});
-}
+/*function updateBars() {
+	//redacted; see previous versions for copy paste
+}*/
 
 function updateItems() {
 	sort(Game.inv);
@@ -2269,6 +2246,21 @@ function updateItems() {
 
 	//check crafting possibilies (more slop)
 	checkPossibles();
+
+	//updateFounds (slooooppppp)
+	checkTotalFounds();
+}
+
+function checkTotalFounds() {
+	var items_array = Object.keys(Item);
+	var total_founds = items_array.length;
+	var founds = 0;
+	for (i = 0; i < total_founds; i++) {
+		if (Item[items_array[i]].found == true) {
+			founds++;
+		}
+	}
+	$('.finds').html(founds+"/"+total_founds);
 }
 
 function updateCraftbox() {
@@ -2411,6 +2403,9 @@ function explore() {
 			$('.explore-progress .inner').css("transition-duration","0ms");
 			$('.explore-progress .inner').css("width","100%");
 
+			//get exp
+			Game.exp.current += Game.exp.explore_inc;
+
 			//update costs
 			Game.thirst.current -= Game.explore_cost;
 			updateStats();
@@ -2474,9 +2469,9 @@ function attackEnemy() {
 		$('.fight-card .player-thumb').removeClass('player-attack');
 	}, 150);
 
-	//experience gain
-	Game.fortitude.current += Game.fortitude.inc;
-	updateBars();
+	//fortitude gain
+	Game.exp.current += Game.exp.fortitude_inc;
+	updateStats();
 
 	//enemy gets damaged
 	Game.enemy.health -= Game.total_damage;
