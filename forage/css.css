@@ -61,11 +61,10 @@ body, button {
 .card {
 	padding: 1.5rem;
 	margin: 1.5rem;
-	background-color: white;
-	border: 1px solid #ccc;
 }
 
 .page .card {
+	margin: 0;
 	padding-bottom: 3rem;
 }
 
@@ -106,7 +105,6 @@ body, button {
 }
 
 .stats-table {
-	margin-top: 1.5rem;
 	table-layout: fixed;
 }
 
@@ -348,11 +346,7 @@ body, button {
 }
 
 .clear-btn {
-	background-color: rgba(255,255,255,0.5);
-}
-
-.clear-btn:after {
-	display: none;
+	background-color: rgba(255,255,255,0.4);
 }
 
 .note {
@@ -595,9 +589,9 @@ body.no-stacks .box.stacked {
 
 .map-table {
 	position: relative;
-	margin: 1.5rem auto;
-	width: 22.5rem;
-	height: 45rem;
+	margin: 1rem auto;
+	width: 21rem;
+	height: 42rem;
 	border-collapse: collapse;
 }
 
@@ -612,20 +606,22 @@ body.no-stacks .box.stacked {
 }
 
 .iso .map-table {
-	margin: -9rem auto -4.5rem auto;
+	margin: -8rem auto;
 	transform: rotateX(60deg) rotateZ(-45deg);
+	position: relative;
+	left: -2rem;
 }
 
 .map-table tr td {
-	height: 7.5rem;
-	width: 7.5rem;
+	height: 7rem;
+	width: 7rem;
 	position: relative;
 }
 
 .tile {
 	position: absolute;
-	height: calc(100% - 1.5rem);
-	width: calc(100% - 1.5rem);
+	height: calc(100% - 1rem);
+	width: calc(100% - 1rem);
 	margin: 0.8rem;
 	bottom: 0;
 	left: 0;
@@ -692,7 +688,7 @@ body.no-stacks .box.stacked {
 }
 
 .map-table tr td.left-passage:after {
-	height: 7.5px;
+	height: 7px;
 	width: 30px;
 	top: calc(50% - 3.75px);
 	right: 60px;
@@ -700,7 +696,7 @@ body.no-stacks .box.stacked {
 
 .map-table tr td.bottom-passage:before {
 	height: 30px;
-	width: 7.5px;
+	width: 7px;
 	top: 60px;
 	left: calc(50% - 3.75px);
 }
@@ -803,10 +799,13 @@ body.no-stacks .box.stacked {
 
 
 .tabmenu {
+	font-size: 0;
 	background-color: #00b3b3;
 }
 
 .tabmenu .tab {
+	font-size: 1.5rem;
+	display: inline-block;
 	background-color: #00b3b3;
 	text-align: center;
 	padding: 1.5rem;
@@ -856,38 +855,66 @@ body.no-stacks .box.stacked {
 	height: 1rem;
 }
 
-
+.header {
+	position: relative;
+	left: 20%;
+	width: 80%;
+	margin: 0;
+}
 
 .sidebar {
 	position: absolute;
-	top: 1.5rem;
-	left: 1rem;
+	top: 0;
+	left: 0;
+	height: 100%;
 	width: 20%;
-	min-width: 25rem;
 	z-index: 9999;
+	background-color: #f4f4f4;
+	padding-bottom: 6rem;
 }
 
-.sidebar .col-inside {
-	background-image: none;
-	background-color: white;
-	padding-bottom: 3rem;
-	border: 1px solid #ccc;
+.sidebar .card .card-title {
+	margin-bottom: 0;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	margin: 0;
+	padding: 1rem;
+	margin: 0 -1.5rem;
+	text-align: center;
+}
+
+.footer .clear-btn {
+	background-color: transparent;
+	padding: 0.4rem;
+}
+
+.footer .reset:hover {
+	color: #ff5050;
 }
 
 .page {
-	width: calc(80% - 4.5rem);
+	background-color: white;
+	width: 80%;
 	height: 100%;
 	position: absolute;
-	top: 0;
+	top: 5rem;
 	transition: 500ms ease-out;
 }
 
+.page .card {
+	margin-top: 0;
+}
+
 .page.forage-page {
-	right: 1rem;
+	right: 0;
 }
 
 .page.explore-page {
-	right: calc(-80% + 1rem);
+	right: -80%;
 }
 
 .sidebar .card .card-title {

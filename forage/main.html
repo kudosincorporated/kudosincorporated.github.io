@@ -17,18 +17,8 @@
 <div class="wrapper" id="wrapper" style="display: none;">
 	<div class="sidebar">
 		<div class="col-inside">
-			<div class="tabmenu">
-				<div class="row">
-					<div class="col">
-						<div class="tab forage-page selected" onclick="tabClick(this);">Forage <i class="fa fa-tree" aria-hidden="true"></i></div>
-					</div>
-					<div class="col">
-						<div class="tab explore-page" onclick="tabClick(this);">Explore <i class="fa fa-map" aria-hidden="true"></i></div>
-					</div>
-				</div>
-			</div>
 			<div class="card stats-card">
-				<div class="card-title">STATS</div>
+				<div class="card-title">STATS <div class="move-right"><button class="btn btn-sm clear-btn">Options</button></div></div>
 				<table class="table text-center" style="font-size: 1.2em;">
 					<tr>
 						<td style="width: 10%;"><span class="red-color"><i class="fa fa-heartbeat" aria-hidden="true"></i></span></td>
@@ -42,10 +32,10 @@
 						<td><span class="yellow-color"><i class="fa fa-eye-slash" aria-hidden="true"></i></span></td>
 						<td><div class="progress-bar energy"><div class="inner yellow">100</div></div></td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td><span class="purple-color"><i class="fa fa-user" aria-hidden="true"></i></span></td>
 						<td><div class="progress-bar exp"><div class="inner purple">100</div></div></td>
-					</tr>
+					</tr>-->
 				</table>
 
 				<!--<table class="table stats-table">
@@ -56,7 +46,18 @@
 				<div class="card-title">LOG <div class="move-right"><button class="btn btn-sm clear-btn" onclick="clearLog();">Clear</button></div></div>
 				<div class="log"></div>
 				<div style="clear: both;"></div>
+				<div class="footer">
+					<!--<button class="btn btn-sm clear-btn">Info</button>-->
+					<button class="btn btn-sm clear-btn save" onclick="save()">Save</button>
+					<button class="btn btn-sm clear-btn reset" onclick="reset()">Reset</button>
+				</div>
 			</div>
+		</div>
+	</div>
+	<div class="header">
+		<div class="tabmenu">
+			<div class="tab forage-page selected" onclick="tabClick(this);">Forage <i class="fa fa-tree" aria-hidden="true"></i></div>
+			<div class="tab explore-page" onclick="tabClick(this);">Explore <i class="fa fa-map" aria-hidden="true"></i></div>
 		</div>
 	</div>
 	<div class="page forage-page">

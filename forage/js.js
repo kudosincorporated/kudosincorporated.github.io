@@ -4,7 +4,7 @@
 /* FORAGER 3 PROTOTYPE by u/KudosInc. Uploaded 29/7/19 */
 
 var Game = {
-	mine: [],
+	mine: ["", "", "", "", "", "", "", "", ""],
 	inv: [],
 	craftbox: [],
 	output: [],
@@ -1677,10 +1677,69 @@ var World = {
 	}
 }
 
+function save() {
+	var saveGame = Game;
+	var saveItem = Item;
+	var saveWorld = World;
+
+	localStorage.setItem("saveGame",JSON.stringify(saveGame));
+	localStorage.setItem("saveItem",JSON.stringify(saveItem));
+	localStorage.setItem("saveWorld",JSON.stringify(saveWorld));
+}
+
+function load() {
+	if (localStorage.getItem("saveGame") != undefined) {
+		var loadedGame = JSON.parse(localStorage.getItem("saveGame"));
+		if (typeof loadedGame !== "undefined") Game = loadedGame;
+	}
+
+	if (localStorage.getItem("saveItem") != undefined) {
+		var loadedItem = JSON.parse(localStorage.getItem("saveItem"));
+		if (typeof loadedItem !== "undefined") Item = loadedItem;
+	}
+
+	if (localStorage.getItem("saveWorld") != undefined) {
+		var loadedWorld = JSON.parse(localStorage.getItem("saveWorld"));
+		if (typeof loadedWorld !== "undefined") World = loadedWorld;
+	}
+}
+
+function reset() {
+	var end = confirm("Are you sure you want to reset the game? This will delete your save.");
+	if (end == true) {
+		localStorage.removeItem("saveGame");
+		localStorage.removeItem("saveItem");
+		localStorage.removeItem("saveWorld");
+		location.reload();
+	}
+}
+
+function update() {
+	//use sparingly, haha.
+	updateStats();
+	updateMine();
+	updateItems();
+	updateMap();
+	updateWeight();
+	updateCraftbox();
+	updateOutput();
+	updateCurrentTile();
+	unlockTiles();
+	checkPossibles();
+	checkTotalFounds();
+}
+
 $(document).ready(function() {
 
-	//adds "" to all mine slots
-	resetMine();
+	//loading game
+	load();
+
+	//big update time
+	update();
+
+	setInterval(function() {
+		save();
+	}, 10000);
 
 	//begin
 	log('You are stranded in a deep, dense forest.');
@@ -1710,26 +1769,6 @@ $(document).ready(function() {
 		updateItems();
 	});
 
-	//inital update of values to remove hashtags (#) i.e. weight numbers
-	updateWeight();
-	updateCurrentTile();
-
-	//initial update of stats (hp, thirst, ene, exp)
-	updateStats();
-
-	//initial update of map (possibly unecessary)
-	updateMap();
-
-	//initial update of unlocked tiles
-	unlockTiles();
-	//unlockChoices();
-
-	//cant hurt to add dust
-	checkPossibles();
-
-	//cant hurt. yes it can.
-	checkTotalFounds();
-
 	//map click initialise
 	$('.biome-cards .card').hide();
 	$('.biome-cards').show(); //html sets this to display: none;
@@ -1747,8 +1786,8 @@ $(document).ready(function() {
 				.replace('plateau','')
 				.replace('player','');
 		var biome_name = '.biome-cards .' + biome;
-		$('.biome-cards .card').slideUp(300);
-		$(biome_name).slideDown(300);
+		$('.biome-cards .card').hide();
+		$(biome_name).show();
 	});
 
 	//initialise arrow onto proper button
@@ -1763,8 +1802,8 @@ $(document).ready(function() {
 				.replace(/\s/g, '')
 				.replace('choice','');
 
-		$('.biome-cards .card').slideUp(300);
-		$('.'+name).slideDown(300);
+		$('.biome-cards .card').hide();
+		$('.'+name).show();
 
 		//selected button
 		$('.movement-choices .btn').removeClass('selected');
@@ -1838,11 +1877,6 @@ $(document).ready(function() {
 
 	});
 
-	//tabs
-	$('.main-cards .main-card').hide();
-	$('.main-cards').find('.forage').show(); //other tabs are html set to display: none;
-
-
 	//biome cards init
 	for (i = 0; i < World.tiles.length; i++) {
 		var world = World.tiles[i];
@@ -1868,13 +1902,10 @@ $(document).ready(function() {
 	blurNames(); //blurs item names
 	checkIfFound(); //checks if items have been found
 
-
 	//tee hee
 	//var aaa = Object.keys(Item).sort();
 	//$('.all-items').html(aaa.map(getSpantab));
 
-
-	//newItem("pouch");
 	//devMode();
 });
 
@@ -1928,12 +1959,12 @@ function tabClick(clicked) {
 			.replace('tab','')
 			.replace('selected','');
 	if (tab == 'forage-page') {
-		$('.page.forage-page').css({'right':'1rem'});
-		$('.page.explore-page').css({'right':'calc(-80% + 1rem)'});
+		$('.page.forage-page').css({'right':'0'});
+		$('.page.explore-page').css({'right':'-80%'});
 	}
 	else if (tab == 'explore-page') {
-		$('.page.forage-page').css({'right':'calc(-80% + 1rem)'});
-		$('.page.explore-page').css({'right':'1rem'});
+		$('.page.forage-page').css({'right':'80%'});
+		$('.page.explore-page').css({'right':'0'});
 	}
 	var tab_class = '.' + tab;
 	$('.tabmenu .tab').removeClass('selected');
@@ -2184,7 +2215,7 @@ function updateStats() {
 		Game.exp.level++;
 		Game.exp.current = 0;
 		Game.exp.max += 20;
-		log("You level up!", "blue");
+		//log("You level up!", "blue");
 	}
 
 	var exp = (Game.exp.current/Game.exp.max*100).toFixed(0);
