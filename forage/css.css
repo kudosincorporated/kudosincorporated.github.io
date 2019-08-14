@@ -565,6 +565,7 @@ body, button {
 	border-left: none;
 	height: 7rem;
 	margin: 0.5rem 0;
+	background-size: 4000%;
 }
 
 .inv .box.stacked .delmark {
@@ -1124,9 +1125,9 @@ body.no-stacks .box.stacked {
 .craft-bg { background-color: #70db70; }
 .core-bg { background-color: #3399ff; }
 
-.food { border-bottom: 3px solid #9d71f4; }
-.craftable { border-bottom: 3px solid #70db70; }
-.core { border-bottom: 3px solid #3399ff; }
+.food { border-bottom: 2px solid #9d71f4; }
+.craftable { border-bottom: 2px solid #70db70; }
+.core { border-bottom: 2px solid #3399ff; }
 
 .text-left { text-align: left; }
 .text-center { text-align: center; }

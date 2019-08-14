@@ -2368,7 +2368,6 @@ function unlockChoices() {
 function updateUnlocked() {
 	var no = World.tiles.length;
 	for (i = 0; i < no; i++) {
-		console.log("tet");
 		var add;
 		if (World[World.tiles[i]].unlocked == true) {
 			add = "<span class='green-color'>unlocked</span>"
