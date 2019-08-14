@@ -282,7 +282,7 @@ var Item = {
 	tree_bark: {
 		id: 'tree_bark',
 		name: 'tree bark',
-		desc: 'a slightly sweet, sticky substance.',
+		desc: 'a strong piece of bark.',
 		weight: 3,
 		found: false,
 		class: "craftable"
