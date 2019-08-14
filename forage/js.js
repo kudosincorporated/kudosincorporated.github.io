@@ -2,6 +2,7 @@
 /* ok bb. lets begin. */
 
 /* FORAGER 3 PROTOTYPE by u/KudosInc. Uploaded 29/7/19 */
+/* darkmode update 14/8/19 */
 
 var Game = {
 	mine: ["", "", "", "", "", "", "", "", ""],
@@ -177,7 +178,7 @@ var Interact = {
 		Game.energy.current += Item.steak.interact.energy;
 		updateStats();
 	},
-	eatLight_berries: function() {
+	eatLightBerries: function() {
 		log(Item.light_berries.interact.use);
 		removeItem("light_berries", 1);
 	},
@@ -1244,7 +1245,7 @@ var Enemy = {
 	rattlesnake: {
 		id: "rattlesnake",
 		name: "rattlesnake",
-		desc: "A rattlesnake suddenly appears under your feet. There's no escaping it.",
+		desc: "A rattlesnake suddenly appears under your feet. It will be hard to escape.",
 		drop_msg: "The rattlesnake's skin could make a good belt.",
 		drops: "snakeskin",
 		total_health: 15,
@@ -1724,7 +1725,7 @@ function update() {
 	updateCraftbox();
 	updateOutput();
 	updateCurrentTile();
-	unlockTiles();
+	updateUnlocked();
 	checkPossibles();
 	checkTotalFounds();
 }
@@ -1769,12 +1770,26 @@ $(document).ready(function() {
 		updateItems();
 	});
 
+	$('.map-cover').bind('mousemove', function(e){
+		$('.biome-cards').css({
+			left:  e.pageX + 20,
+			top:   e.pageY - 10
+		});
+	});
+
+	$('.map-table').on('mouseover', function(e){
+		$('.biome-cards').show();
+	});
+
+	$('.map-table').on('mouseleave', function(e){
+		$('.biome-cards').hide();
+	});
+
 	//map click initialise
 	$('.biome-cards .card').hide();
 	$('.biome-cards').show(); //html sets this to display: none;
-	$('.biome-cards .card.forest1').show();
 
-	$('.map-table').on('click', '.tile', function(e) {
+	$('.map-table').on('mouseover', '.tile', function(e) {
 		var biome =
 			e.target.className
 				.replace(/\s/g, '')
@@ -1790,30 +1805,23 @@ $(document).ready(function() {
 		$(biome_name).show();
 	});
 
-	//initialise arrow onto proper button
-	$('.movement-choices .btn').find('.'+Game.currentTile).parent().addClass('selected');
-
 	//fast travel initialise
-	$('.movement-choices').on('click', '.btn', function(e) {
-		$('.tile-progress .inner').css("transition-duration","0ms");
+	$('.map-table').on('click', '.tile', function(e) {
 
-		var name =
-			$(this).find('.choice').attr('class')
+		var biome =
+			e.target.className
 				.replace(/\s/g, '')
-				.replace('choice','');
+				.replace('tile','')
+				.replace('forest','')
+				.replace('desert','')
+				.replace('taiga','')
+				.replace('mountain','')
+				.replace('plateau','')
+				.replace('player','');
 
-		$('.biome-cards .card').hide();
-		$('.'+name).show();
-
-		//selected button
-		$('.movement-choices .btn').removeClass('selected');
-		$('.movement-choices .btn').find('.'+name).parent().addClass('selected');
-
-		if (Game.currentTile != name) {
+		if (Game.currentTile != biome && World[biome].unlocked == true) {
 			//travel to new tile
-			Game.currentTile = name;
-			//unlock this tile
-			World[name].unlocked = true;
+			Game.currentTile = biome;
 			//reset progress bar
 			updateMap();
 			//update current tile text
@@ -1884,29 +1892,29 @@ $(document).ready(function() {
 		//constructs drops
 		World[world].drops.sort(); //sorts alphabetically
 		var drops = World[world].drops;
-		$('.card .'+world+' .flora').html(drops.map(getSpantab));
+		$('.card.'+world+' .flora').html(drops.map(getSpantab));
 
 		//constructs enemies
 		if (World[world].enemies.length != 0) {
 			World[world].enemies.sort(); //sorts alphabetically
 			var enemies = World[world].enemies;
-			$('.card .'+world+' .fauna').html(enemies.map(getEnemySpantab));
+			$('.card.'+world+' .fauna').html(enemies.map(getEnemySpantab));
 		}
 		else {
-			$('.card .'+world+' .fauna').append('<div class="none">none.</div>');
+			$('.card.'+world+' .fauna').append('<div class="none">none.</div>');
 		}
 	}
 
 	//biome cards
-	$('.biome-cards .card .spantab').addClass('unknown'); //makes items unknown
+	//$('.biome-cards .card .spantab').addClass('unknown'); //makes items unknown
 	blurNames(); //blurs item names
 	checkIfFound(); //checks if items have been found
 
-	//tee hee
 	//var aaa = Object.keys(Item).sort();
 	//$('.all-items').html(aaa.map(getSpantab));
 
 	//devMode();
+	//halfDevMode();
 });
 
 function resetMine() {
@@ -2195,17 +2203,17 @@ function updateStats() {
 	var thirst = (Game.thirst.current/Game.thirst.max*100).toFixed(0);
 	var energy = (Game.energy.current/Game.energy.max*100).toFixed(0);
 
-	$('.progress-bar.health .inner').html(Game.health.current.toFixed(0));
+	$('.progress-bar.health .mid .value').html(Game.health.current.toFixed(0));
 	$('.progress-bar.health .inner').css({
 		"width" : health + "%"
 	});
 
-	$('.progress-bar.thirst .inner').html(Game.thirst.current.toFixed(0));
+	$('.progress-bar.thirst .mid .value').html(Game.thirst.current.toFixed(0));
 	$('.progress-bar.thirst .inner').css({
 		"width" : thirst + "%"
 	});
 
-	$('.progress-bar.energy .inner').html(Game.energy.current.toFixed(0));
+	$('.progress-bar.energy .mid .value').html(Game.energy.current.toFixed(0));
 	$('.progress-bar.energy .inner').css({
 		"width" : energy + "%"
 	});
@@ -2349,25 +2357,26 @@ function updateMap() {
 	$('.map-table').find("."+Game.currentTile).addClass('player');
 }
 
-function lockChoices() {
-	$('.movement-choices .btn').addClass("disabled");
-}
-
 function unlockChoices() {
 	var choices = World[Game.currentTile].m_choices;
 	for (v in choices) {
-		$('.movement-choices .btn').find("."+choices[v]).parent().removeClass("disabled");
+		World[choices[v]].unlocked = true;
 	}
+	updateUnlocked();
 }
 
-function unlockTiles() {
-	for (j in World.tiles) {
-		if (World[World.tiles[j]].progress >= World[World.tiles[j]].total) {
-			World[World.tiles[j]].unlocked = true;
+function updateUnlocked() {
+	var no = World.tiles.length;
+	for (i = 0; i < no; i++) {
+		console.log("tet");
+		var add;
+		if (World[World.tiles[i]].unlocked == true) {
+			add = "<span class='green-color'>unlocked</span>"
 		}
-		if (World[World.tiles[j]].unlocked == true) {
-			$('.movement-choices .btn').find("."+World.tiles[j]).parent().removeClass("disabled");
+		else {
+			add = "<span class='red-color'>locked</span>"
 		}
+		$('.biome-cards .card').eq(i).find('.card-title .status').html(add);
 	}
 }
 
@@ -2692,7 +2701,11 @@ function devMode() {
 		World[World.tiles[i]].progress = World[World.tiles[i]].total;
 	}
 	updateMap();
-	unlockTiles();
+	Game.base_cart = 0;
+	Game.base_explore = 0;
+}
+
+function halfDevMode() {
 	Game.base_cart = 0;
 	Game.base_explore = 0;
 }

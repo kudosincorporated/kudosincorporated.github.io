@@ -14,51 +14,151 @@
 	loading...
 </div>
 
-<div class="wrapper" id="wrapper" style="display: none;">
-	<div class="sidebar">
-		<div class="col-inside">
-			<div class="card stats-card">
-				<div class="card-title">STATS <div class="move-right"><button class="btn btn-sm clear-btn">Options</button></div></div>
-				<table class="table text-center" style="font-size: 1.2em;">
-					<tr>
-						<td style="width: 10%;"><span class="red-color"><i class="fa fa-heartbeat" aria-hidden="true"></i></span></td>
-						<td><div class="progress-bar health"><div class="inner red">100</div></div></td>
-					</tr>
-					<tr>
-						<td><span class="blue-color"><i class="fa fa-tint" aria-hidden="true"></i></span></td>
-						<td><div class="progress-bar thirst"><div class="inner blue">100</div></div></td>
-					</tr>
-					<tr>
-						<td><span class="yellow-color"><i class="fa fa-eye-slash" aria-hidden="true"></i></span></td>
-						<td><div class="progress-bar energy"><div class="inner yellow">100</div></div></td>
-					</tr>
-					<!--<tr>
-						<td><span class="purple-color"><i class="fa fa-user" aria-hidden="true"></i></span></td>
-						<td><div class="progress-bar exp"><div class="inner purple">100</div></div></td>
-					</tr>-->
-				</table>
+<div class="biome-cards" style="display: none;">
+	<div class="card forest1 selected">
+		<div class="card-title">FOREST 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
 
-				<!--<table class="table stats-table">
-					redacted; see previous versions for copy paste
-				</table>-->
-			</div>
-			<div class="card">
-				<div class="card-title">LOG <div class="move-right"><button class="btn btn-sm clear-btn" onclick="clearLog();">Clear</button></div></div>
-				<div class="log"></div>
-				<div style="clear: both;"></div>
-				<div class="footer">
-					<!--<button class="btn btn-sm clear-btn">Info</button>-->
-					<button class="btn btn-sm clear-btn save" onclick="save()">Save</button>
-					<button class="btn btn-sm clear-btn reset" onclick="reset()">Reset</button>
-					<span class="subtitle">v1.1</span>
+	<div class="card forest2">
+		<div class="card-title">FOREST 2 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card forest3">
+		<div class="card-title">FOREST 3 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card forest4">
+		<div class="card-title">FOREST 4 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card desert1">
+		<div class="card-title">DESERT 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card desert2">
+		<div class="card-title">DESERT 2 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card desert3">
+		<div class="card-title">DESERT  3<div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card taiga1">
+		<div class="card-title">TAIGA 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card taiga2">
+		<div class="card-title">TAIGA 2 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card mountain1">
+		<div class="card-title">MOUNTAIN 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card peak1">
+		<div class="card-title">PEAK 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card plateau1">
+		<div class="card-title">PLATEAU 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+</div>
+
+<div class="wrapper" id="wrapper" style="display: none;">
+	<div class="header">
+		<div class="circle-stats">
+			<div class="row text-center">
+				<div class="col">
+					<div class="progress-bar health">
+						<div class="inner trans-sm red"></div>
+						<div class="mid"><span class="value">###</span> <i class="fa fa-heartbeat" aria-hidden="true"></i></div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="progress-bar thirst">
+						<div class="inner trans-sm blue"></div>
+						<div class="mid"><span class="value">###</span> <i class="fa fa-tint" aria-hidden="true"></i></div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="progress-bar energy">
+						<div class="inner trans-sm yellow"></div>
+						<div class="mid"><span class="value">###</span> <i class="fa fa-eye-slash" aria-hidden="true"></i></div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="header">
 		<div class="tabmenu">
-			<div class="tab forage-page selected" onclick="tabClick(this);">Forage <i class="fa fa-tree" aria-hidden="true"></i></div>
+			<div class="tab forage-page selected" onclick="tabClick(this);">Forage <i class="fa 	 fa-tree" aria-hidden="true"></i></div>
 			<div class="tab explore-page" onclick="tabClick(this);">Explore <i class="fa fa-map" aria-hidden="true"></i></div>
+		</div>
+		<div class="header-right">
+			<button class="btn btn-sm clear-btn" onclick="clearLog();">Clear Log</button>
+			<button class="btn btn-sm clear-btn" onclick="stackToggle();">Toggle Stacks</button>
+			<button class="btn btn-sm clear-btn" onclick="mapToggle();">Toggle Iso</button>
+			<span class="tab-text">Forager 3 v1.1<br>by <a href="https://www.reddit.com/user/KudosInc/">KudosInc</a></span>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+	<div class="sidebar">
+		<div class="col-inside">
+			<div class="card">
+				<div class="log"></div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+		<div class="footer">
+			<!--<button class="btn btn-sm clear-btn">Info</button>-->
+			<button class="btn btn-sm clear-btn save" onclick="save()">Save</button>
+			<button class="btn btn-sm clear-btn reset" onclick="reset()">Reset</button>
 		</div>
 	</div>
 	<div class="page forage-page">
@@ -67,8 +167,12 @@
 			<div class="row">
 				<div class="col">
 					<div class="card text-center">
-						<div class="card-title">FORAGE</div>
-						<button class="btn forage-btn btn-huge" onclick="sendcart();">Forage <i class="fa fa-tree" aria-hidden="true"></i></button>
+						<button class="btn forage-btn btn-huge" onclick="sendcart();">
+							Forage
+						<div class="progress-bar main-bar">
+							<div class="inner trans-sm"></div>
+						</div>
+						</button>
 						<p class="text-center"><span class="subtitle">Current Tile:</span> <b><span class="currentTile">###</span></b></p>
 						<div class="foragebox">
 							<div class="box-row">
@@ -87,23 +191,18 @@
 								<div class="box"><span class="weight"></span><span class="name"></span></div>
 							</div>
 						</div>
-						<div class="progress-bar thinbar main-bar">
-							<div class="inner trans-sm yellow"></div>
-						</div>
 						<button class="btn btn-sm" onclick="discardAll();">Discard All <i class="fa fa-ban" aria-hidden="true"></i></button>
 					</div>
 				</div>
 				<div class="col">
 					<div class="card text-center">
-						<div class="card-title">INVENTORY <div class="move-right"><button class="btn btn-sm clear-btn" onclick="stackToggle();">Toggle Stacks</button></div></div>
-						<p>Hover items for more information, click them to craft.</p>
-						<div><span class="subtitle">Carry weight:</span> <b><span class="c_weight">#</span>/<span class="total_weight">#</span></b></div>
+						<div>Hover items for more information, click them to craft.</div>
+						<p><span class="subtitle">Carry weight:</span> <b><span class="c_weight">#</span>/<span class="total_weight">#</span></b></p>
 						<div class="inventory-cover">
 							<div class="inv"></div>
 						</div>
 					</div>
 					<div class="card text-center">
-						<div class="card-title">CRAFTBOX</div>
 						<div class="craftbox">
 							<div class="line1"></div>
 							<div class="line2"></div>
@@ -135,15 +234,17 @@
 			<div class="overlay">
 				<div class="card fight-card">
 					<div class="card-title">An Enemy Appears</div>
-					<div class="row" style="width: 50%; margin: 0 auto;">
-						<div class="col">
-							<div class="player-thumb"><b>You</b></div>
-						</div>
-						<div class="col">
-							<div>VS</div>
-						</div>
-						<div class="col">
-							<div class="enemy-thumb"><b><span class="enemy-name">##</span></b></div>
+					<div class="fight-row">
+						<div class="row" style="width: 50%; margin: 0 auto;">
+							<div class="col">
+								<div class="player-thumb"><b>You</b></div>
+							</div>
+							<div class="col">
+								<div>VS</div>
+							</div>
+							<div class="col">
+								<div class="enemy-thumb"><b><span class="enemy-name">##</span></b></div>
+							</div>
 						</div>
 					</div>
 					<p><span class="enemy-desc">##</span></p>
@@ -159,236 +260,63 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col">
-					<div class="card text-center">
-						<div class="card-title">EXPLORE</div>
-						<p><button class="btn explore-btn btn-huge" onclick="explore();">Explore <i class="fa fa-map" aria-hidden="true"></i></button></p>
-						<p>Careful, there are beasts in the forest. Gather supplies before embarking.</p>
-						<div class="block">
-							<table class="table" style="table-layout: fixed;">
-								<tr>
-									<td><span class="currentTile tile-title">###</span></td>
-									<td><span class="subtitle">Progress:</span> <b><span class="prog-c">##</span>/<span class="prog-max">##</span></b></td>
-								</tr>
-							</table>
-							<div>
-								<div class="progress-bar tile-progress">
-									<div class="inner plateau trans-sm"></div>
-								</div>
-								<div class="progress-bar thinbar explore-progress">
-									<div class="inner trans-sm blue"></div>
-								</div>
-							</div>
+				<div class="card text-center">
+					<button class="btn explore-btn btn-huge" onclick="explore();">
+						Explore
+						<div class="progress-bar explore-progress">
+							<div class="inner trans-sm"></div>
 						</div>
-						<p>Fast travel locations:</p>
-						<div class="row block movement-choices">
-							<div class="col">
-								<button class="btn btn-sm forest white-color disabled">
-									Forest 1
-									<div class="choice forest1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-								<button class="btn btn-sm forest white-color disabled">
-									Forest 2
-									<div class="choice forest2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-								<button class="btn btn-sm forest white-color disabled">
-									Forest 3
-									<div class="choice forest3"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-								<button class="btn btn-sm forest white-color disabled">
-									Forest 4
-									<div class="choice forest4"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-							</div>
-							<div class="col">
-								<button class="btn btn-sm desert disabled">
-									Desert 1
-									<div class="choice desert1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-								<button class="btn btn-sm desert disabled">
-									Desert 2
-									<div class="choice desert2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-								<button class="btn btn-sm desert disabled">
-									Desert 3
-									<div class="choice desert3"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-								<button class="btn btn-sm taiga disabled">
-									Taiga 1
-									<div class="choice taiga1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-							</div>
-							<div class="col">
-								<button class="btn btn-sm taiga disabled">
-									Taiga 2
-									<div class="choice taiga2"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-								<button class="btn btn-sm mountain white-color disabled">
-									Mountain 1
-									<div class="choice mountain1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-								<button class="btn btn-sm mountain white-color disabled">
-									Peak 1
-									<div class="choice peak1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-								<button class="btn btn-sm plateau disabled">
-									Plateau 1
-									<div class="choice plateau1"><i class="fa fa-arrow-right" aria-hidden="true"></i></div>
-								</button>
-							</div>
-						</div>
+					</button>
+					<p>Careful, there are beasts in the forest. Gather supplies before embarking.</p>
+					<div class="map-cover">
+						<table class="map-table">
+							<tr>
+								<td>										<div class="tile no-tile"></div></td>
+								<td class="bottom-passage">					<div class="tile forest forest1 player">F1<div class="cover"></div></td>
+								<td>										<div class="tile no-tile"></div></td>
+							</tr>
+							<tr>
+								<td>										<div class="tile no-tile"></div></td>
+								<td class="bottom-passage">					<div class="tile forest forest2">F2<div class="cover"></div></td>
+								<td>										<div class="tile no-tile"></div></td>
+							</tr>
+							<tr>
+								<td class="bottom-passage">					<div class="tile desert desert1">D1<div class="cover"></div></div></td>
+								<td class="bottom-passage left-passage">	<div class="tile forest forest3">F3<div class="cover"></div></div></td>
+								<td>										<div class="tile no-tile"></div></td>
+							</tr>
+							<tr>
+								<td class="bottom-passage">					<div class="tile desert desert2">D2<div class="cover"></div></div></td>
+								<td class="left-passage">					<div class="tile forest forest4">F4<div class="cover"></div></div></td>
+								<td class="bottom-passage left-passage">	<div class="tile taiga taiga1">T1<div class="cover"></div></div></td>
+							</tr>
+							<tr>
+								<td>										<div class="tile desert desert3">D3<div class="cover"></div></div></td>
+								<td class="bottom-passage">					<div class="tile plateau plateau1">Pl1<div class="cover"></div></div></td>
+								<td class="bottom-passage">					<div class="tile taiga taiga2">T2<div class="cover"></div></div></td>
+							</tr>
+							<tr>
+								<td>										<div class="tile no-tile"></div></td>
+								<td>										<div class="tile mountain peak1">Pe1<div class="cover"></div></div></td>
+								<td class="left-passage">					<div class="tile mountain mountain1">M1<div class="cover"></div></div></td>
+							</tr>
+						</table>
 					</div>
-				</div>
-				<div class="col">
-					<div class="card">
-						<div class="card-title text-center">MAP <div class="move-right"><button class="btn btn-sm clear-btn" onclick="mapToggle();">Toggle Iso</button></div></div>
-						<p class="text-center">Click the tiles for more information.</p>
-						<p class="text-center"><span class="subtitle">Current Tile:</span> <b><span class="currentTile">###</span></b></p>
-						<div class="map-cover">
-							<table class="map-table">
-								<tr>
-									<td>										<div class="tile no-tile"></div></td>
-									<td class="bottom-passage">					<div class="tile forest forest1 player">F1<div class="cover"></div></td>
-									<td>										<div class="tile no-tile"></div></td>
-								</tr>
-								<tr>
-									<td>										<div class="tile no-tile"></div></td>
-									<td class="bottom-passage">					<div class="tile forest forest2">F2<div class="cover"></div></td>
-									<td>										<div class="tile no-tile"></div></td>
-								</tr>
-								<tr>
-									<td class="bottom-passage">					<div class="tile desert desert1">D1<div class="cover"></div></div></td>
-									<td class="bottom-passage left-passage">	<div class="tile forest forest3">F3<div class="cover"></div></div></td>
-									<td>										<div class="tile no-tile"></div></td>
-								</tr>
-								<tr>
-									<td class="bottom-passage">					<div class="tile desert desert2">D2<div class="cover"></div></div></td>
-									<td class="left-passage">					<div class="tile forest forest4">F4<div class="cover"></div></div></td>
-									<td class="bottom-passage left-passage">	<div class="tile taiga taiga1">T1<div class="cover"></div></div></td>
-								</tr>
-								<tr>
-									<td>										<div class="tile desert desert3">D3<div class="cover"></div></div></td>
-									<td class="bottom-passage">					<div class="tile plateau plateau1">Pl1<div class="cover"></div></div></td>
-									<td class="bottom-passage">					<div class="tile taiga taiga2">T2<div class="cover"></div></div></td>
-								</tr>
-								<tr>
-									<td>										<div class="tile no-tile"></div></td>
-									<td>										<div class="tile mountain peak1">Pe1<div class="cover"></div></div></td>
-									<td class="left-passage">					<div class="tile mountain mountain1">M1<div class="cover"></div></div></td>
-								</tr>
-							</table>
-						</div>
 
-						<!--<div class="arrow-buttons">
-							<div><button class="btn btn-sm" disabled><i class="fa fa-arrow-up" aria-hidden="true"></i></button></div>
-							<div><button class="btn btn-sm"><i class="fa fa-arrow-down" aria-hidden="true"></i></button></div>
-							<div><button class="btn btn-sm" disabled><i class="fa fa-arrow-left" aria-hidden="true"></i></button></div>
-							<div><button class="btn btn-sm" disabled><i class="fa fa-arrow-right" aria-hidden="true"></i></button></div>
-						</div>-->
-
-						<div class="text-center">
-							<p><span class="subtitle">Total Items Found:</span> <b><span class="finds">##</span></b></p>
-							<!--<div class="all-items"></div>-->
-						</div>
-
-						<div class="biome-cards block" style="display: none;">
-							<div class="card forest1">
-								<div class="card-title tile-title forest white-color">Forest 1</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
+					<div class="block text-center">
+						<p>
+							<span class="subtitle">Current Tile:</span> <b><span class="currentTile">###</span></b>
+						</p>
+						<p>
+							<div class="progress-bar tile-progress">
+								<div class="inner plateau trans-sm"><span class="prog-c">##</span>/<span class="prog-max">##</span></div>
 							</div>
-
-							<div class="card forest2">
-								<div class="card-title tile-title forest white-color">Forest 2</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card forest3">
-								<div class="card-title tile-title forest white-color">Forest 3</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card forest4">
-								<div class="card-title tile-title forest white-color">Forest 4</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card desert1">
-								<div class="card-title tile-title desert">Desert 1</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card desert2">
-								<div class="card-title tile-title desert">Desert 2</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card desert3">
-								<div class="card-title tile-title desert">Desert 3</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card taiga1">
-								<div class="card-title tile-title taiga">Taiga 1</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card taiga2">
-								<div class="card-title tile-title taiga">Taiga 2</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card mountain1">
-								<div class="card-title tile-title mountain white-color">Mountain 1</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card peak1">
-								<div class="card-title tile-title mountain white-color">Peak 1</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-
-							<div class="card plateau1">
-								<div class="card-title tile-title plateau">Plateau 1</div>
-								<div class="title">Finds</div>
-								<div class="flora"></div>
-								<div class="title">Animals</div>
-								<div class="fauna"></div>
-							</div>
-						</div>
+						</p>
 					</div>
+
+					<p class="text-center">
+						<span class="subtitle">Total Items Found:</span> <b><span class="finds">##</span></b>
+					</p>
 				</div>
 			</div>
 		</div>
