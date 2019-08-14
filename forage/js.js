@@ -1906,7 +1906,7 @@ $(document).ready(function() {
 	}
 
 	//biome cards
-	//$('.biome-cards .card .spantab').addClass('unknown'); //makes items unknown
+	$('.biome-cards .card .spantab').addClass('unknown'); //makes items unknown
 	blurNames(); //blurs item names
 	checkIfFound(); //checks if items have been found
 

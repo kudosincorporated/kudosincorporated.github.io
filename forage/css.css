@@ -1155,7 +1155,8 @@ body.no-stacks .box.stacked {
 
 .player-image { background-image: url(player.png); }
 
-.box {
+.box,
+.thumb {
 	background-image: url(spritesheet.png);
 	background-size: 1000%;
 	background-position: 100% 100%;
