@@ -54,7 +54,7 @@ body, button {
 	width: 1200px;
 	margin: 0 auto;
 	position: relative;
-	overflow: hidden;
+	overflow-x: hidden;
 }
 
 .card {
@@ -217,6 +217,10 @@ body, button {
 	margin-right: 1rem;
 }
 
+.outcome-col .out .desc .btn {
+	display: none;
+}
+
 .craftbox .line1 {
 	width: 8rem;
 	height: 2px;
@@ -248,6 +252,7 @@ body, button {
 	height: 100%;
 	width: 100%;
 	background-color: transparent;
+	box-shadow: none;
 }
 
 .btn .progress-bar .inner {
@@ -256,7 +261,7 @@ body, button {
 
 .forage-btn .inner,
 .explore-btn .inner {
-	background-color: rgba(255,255,255,0.1);
+	background-color: rgba(0,0,0,0.15);
 }
 
 .btn {
@@ -270,6 +275,7 @@ body, button {
 	cursor: pointer;
 	position: relative;
 	transition: 300ms ease;
+	overflow: hidden;
 }
 
 .btn:after {
@@ -819,12 +825,14 @@ body.no-stacks .box.stacked {
 
 
 .tabmenu {
+	background-color: #28383e;
 	display: inline-block;
 	position: absolute;
 	top: 2rem;
 	left: 20%;
-	padding-left: 1rem;
+	margin-left: 1rem;
 	font-size: 0;
+	overflow: hidden;
 }
 
 .tabmenu .tab {
@@ -836,7 +844,6 @@ body.no-stacks .box.stacked {
 	color: white;
 	position: relative;
 	cursor: pointer;
-	background-color: #28383e;
 	border: 1px solid #3c545d;
 	transition: 500ms ease;
 }
@@ -847,7 +854,7 @@ body.no-stacks .box.stacked {
 
 .tabmenu .tab.selected {
 	padding: 1.5rem 6rem;
-	background-color: #141c1f;
+	background-color: rgba(0,0,0,0.2);
 	border: 1px solid #46626d;
 }
 
@@ -922,14 +929,13 @@ body.no-stacks .box.stacked {
 	position: absolute;
 	top: 9rem;
 	left: 0;
-	height: 100%;
+	height: calc(100% - 9rem);
 	width: 20%;
 	z-index: 9999;
 }
 
 .sidebar .col-inside {
 	background-color: #0a0e10;
-	padding-bottom: 5rem;
 }
 
 .circle-stats {
@@ -974,7 +980,7 @@ body.no-stacks .box.stacked {
 
 .footer {
 	position: absolute;
-	bottom: 10rem;
+	bottom: 0;
 	width: 100%;
 	margin: 0;
 	padding: 1rem;
@@ -991,7 +997,7 @@ body.no-stacks .box.stacked {
 
 .page {
 	width: 80%;
-	height: calc(100% - 8rem);
+	height: calc(100% - 9rem);
 	position: absolute;
 	top: 9rem;
 	padding-top: 1rem;
@@ -1073,9 +1079,13 @@ body.no-stacks .box.stacked {
 	display: none;
 }
 
+.forage-page .overlay {
+	width: 50%;
+}
+
 .fight-card {
 	background-color: #1d292f;
-    border: 1px solid #46626d;
+	border: 1px solid #46626d;
 	width: 60rem;
 	text-align: center;
 }
@@ -1091,6 +1101,11 @@ body.no-stacks .box.stacked {
 	padding-top: 2rem;
 	border-radius: 50% 50% 0 0;
 	margin: 3rem 0;
+}
+
+.fight-row .row {
+	width: 50%;
+	margin: 0 auto;
 }
 
 .fight-inner {
@@ -1116,6 +1131,183 @@ body.no-stacks .box.stacked {
 	width: 35rem;
 }
 
+.status {
+	position: relative;
+	top: 0.2rem;
+}
+
+.options {
+	position: absolute;
+	top: 0;
+	right: 14rem;
+	margin: 0.5rem 0;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+
+
+
+
+
+
+
+body.lm {
+	background-image: url(bg.jpg);
+}
+
+body.lm .wrapper {
+	color: #111;
+}
+
+body.lm .subtitle {
+	color: rgba(0,0,0,0.6);
+}
+
+body.lm .header {
+	background-color: #5cd65c;
+}
+
+body.lm .circle-stats .progress-bar {
+	background-color: transparent;
+}
+
+body.lm .circle-stats .progress-bar .mid {
+	color: white;
+	font-weight: bold;
+	background-color: #2eb82e;
+}
+
+body.lm .tabmenu {
+	background-color: #00b3b3;
+	border-radius: 5px;
+}
+
+body.lm .tabmenu .tab {
+	border: none;
+}
+
+body.lm .tabmenu .tab:hover {
+}
+
+body.lm .tabmenu .tab.selected {
+	border: none;
+}
+
+body.lm .btn {
+	background-color: #e4e4e4;
+	color: #444;
+	border: 0;
+	border-radius: 4px;
+	font-weight: bold;
+}
+
+body.lm .forage-btn .inner,
+body.lm .explore-btn .inner {
+	background-color: rgba(0,0,0,0.05);
+}
+
+body.lm .box {
+	background-color: white;
+	border: 1px solid #ccc;
+}
+
+body.lm .foragebox .box .name,
+body.lm .inv .box .name,
+body.lm .craftbox .box .name {
+	text-shadow:
+		-1px -1px 0 #fff,
+		1px -1px 0 #fff,
+		-1px 1px 0 #fff,
+		1px 1px 0 #fff;
+}
+
+body.lm .craftbox .line1,
+body.lm .craftbox .line2 {
+	background-color: #ccc;
+}
+
+body.lm .sidebar .col-inside {
+	background-color: #f4f4f4;
+}
+
+body.lm .progress-bar {
+	background-color: #eee;
+}
+
+body.lm .btn .progress-bar {
+	background-color: transparent;
+}
+
+body.lm .biome-cards .card {
+	color: #111;
+	background-color: white;
+	border: 1px solid #ccc;
+}
+
+body.lm .card-title {
+	color: white;
+	font-weight: bold;
+	background-color: #5cd65c;
+	border: none;
+}
+
+body.lm .status {
+	background-color: white;
+	padding: 0.2rem 1rem;
+	border-radius: 2px;
+}
+
+body.lm .weight.w-show {
+	background-color: #fff0b3;
+}
+
+body.lm .box + .desc {
+	background-color: #fff0b3;
+	border: none;
+}
+
+body.lm .btn-i {
+	color: white;
+	background-color: #00b3b3;
+}
+
+body.lm .box,
+body.lm.thumb {
+	background-image: url(spritesheet_outline.png);
+}
+
+body.lm .overlay {
+	background-color: rgba(0,0,0,0.2);
+}
+
+body.lm .fight-card {
+	background-color: white;
+	border: 1px solid #ccc;
+}
+
+body.lm .fight-row {
+	background-color: #f4f4f4;
+	border-bottom: 2px solid #ccc;
+}
+
+body.lm .spantab {
+	background-color: #ddd;
+}
+
+body.lm .spantab .blurred {
+	color: #666;
+}
+
+body.lm .spantab.unknown {
+	background-color: white;
+}
+
+body.lm .thumb {
+	background-color: #eee;
+	border: 2px solid #ccc;
+}
+
 
 
 
@@ -1128,6 +1320,10 @@ body.no-stacks .box.stacked {
 .food { border-bottom: 2px solid #9d71f4; }
 .craftable { border-bottom: 2px solid #70db70; }
 .core { border-bottom: 2px solid #3399ff; }
+
+body.lm .food { border-bottom: 2px solid #9d71f4; }
+body.lm .craftable { border-bottom: 2px solid #70db70; }
+body.lm .core { border-bottom: 2px solid #3399ff; }
 
 .text-left { text-align: left; }
 .text-center { text-align: center; }
@@ -1364,7 +1560,6 @@ body.no-stacks .box.stacked {
 @media only screen and (max-width: 1200px) {
 	.wrapper {
 		width: 100%;
-		overflow: auto;
 	}
 	.header {
 		position: static;
@@ -1403,5 +1598,9 @@ body.no-stacks .box.stacked {
 		display: block;
 		width: 100%;
 		height: auto;
+	}
+	.forage-page .overlay {
+		width: 100%;
+		height: 53rem;
 	}
 }

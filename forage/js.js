@@ -2712,9 +2712,13 @@ function halfDevMode() {
 
 
 
+function toggleOptions() {
+	$('.options').animate({width:'toggle'},350);
+}
 
-
-
+function lightModeToggle() {
+	$('body').toggleClass("lm");
+}
 
 function mapToggle() {
 	$('body').toggleClass('iso');
