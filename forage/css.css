@@ -936,6 +936,7 @@ body.no-stacks .box.stacked {
 
 .sidebar .col-inside {
 	background-color: #0a0e10;
+	padding-bottom: 4rem;
 }
 
 .circle-stats {
@@ -1140,10 +1141,18 @@ body.no-stacks .box.stacked {
 	position: absolute;
 	top: 0;
 	right: 14rem;
-	margin: 0.5rem 0;
 	overflow: hidden;
 	white-space: nowrap;
+	margin: 1rem 0;
+	line-height: 3rem;
+	text-align: center;
 }
+
+.options .btn.btn-sm {
+	margin: 0;
+}
+
+
 
 
 

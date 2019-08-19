@@ -5,6 +5,7 @@
 /* darkmode update 14/8/19 */
 
 var Game = {
+	mode: "darkmode",
 	mine: ["", "", "", "", "", "", "", "", ""],
 	inv: [],
 	craftbox: [],
@@ -1735,6 +1736,9 @@ $(document).ready(function() {
 	//loading game
 	load();
 
+	//mode
+	updateMode();
+
 	//big update time
 	update();
 
@@ -2256,7 +2260,11 @@ function playerDeath() {
 	updateCraftbox();
 	updateStats();
 
-	log("You black out. You awaken feeling groggy, and find some of your supplies lost.", "blue");
+	//removes progress >:)
+	World[Game.currentTile].progress = 0;
+
+	log("You black out.", "red");
+	log("You awaken feeling groggy, and find some of your supplies lost.", "blue");
 }
 
 /*function updateBars() {
@@ -2709,15 +2717,29 @@ function halfDevMode() {
 	Game.base_explore = 0;
 }
 
+function toggleMode() {
+	if (Game.mode == "darkmode") {
+		Game.mode = "lightmode";
+	}
+	else if (Game.mode == "lightmode") {
+		Game.mode = "darkmode";
+	}
+	updateMode();
+}
 
-
+function updateMode() {
+	if (Game.mode == "darkmode") {
+		$('body').removeClass("lm");
+		$('.mode-btn').text("Lights On");
+	}
+	else if (Game.mode == "lightmode") {
+		$('body').addClass("lm");
+		$('.mode-btn').text("Lights Off");
+	}
+}
 
 function toggleOptions() {
 	$('.options').animate({width:'toggle'},350);
-}
-
-function lightModeToggle() {
-	$('body').toggleClass("lm");
 }
 
 function mapToggle() {
