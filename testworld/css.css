@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-size: 1.4rem;
+	margin: 0;
+	height: 100vh;
+	background-color: #222;
+	color: #eee;
+}
+
+body, button {
+	font-family: 'Open Sans', sans-serif;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.container {
+	width: 50rem;
+	margin: 0 auto;
+}
+
+p {
+	text-align: center;
+	width: 72rem;
+}
+
+.map_cover {
+	position: relative;
+	display: inline-block;
+}
+
+.map {
+	font-size: 0;
+}
+
+.tile, .player {
+	position: relative;
+	font-size: 1.4rem;
+	display: inline-block;
+	height: 8rem;
+	width: 8rem;
+	background-color: #111;
+}
+
+.tile:after {
+	content: "";
+	position: absolute;
+	top: 10%;
+	left: 10%;
+	height: 80%;
+	width: 80%;
+	background-color: #333;
+	border-radius: 15%;
+}
+
+.tile.empty:after {
+	background-color: inherit;
+}
+
+.tile.spawn:after {
+	background-color: seagreen;
+}
+
+.player {
+	position: absolute;
+	background-color: transparent;
+	transition: 100ms ease;
+	pointer-events: none;
+}
+
+.player:after {
+	content: "";
+	position: absolute;
+	top: 20%;
+	left: 20%;
+	height: 60%;
+	width: 60%;
+	background-color: #20603b;
+	border-radius: 50%;
+}
+
+.desc-cards {
+	position: absolute;
+	z-index: 9999;
+	pointer-events: none;
+}
+
+.card {
+	display: inline-block;
+	padding: 1rem 2rem;
+	background-color: #2b2b2b;
+	border-radius: 5px;
+}
+
+.title {
+	font-size: 1.2em;
+	font-weight: bold;
+	margin-bottom: 1rem;
+	color: #999;
+}
+
+.btn {
+	background-color: #4b4b4b;
+	border: 0;
+	padding: 1rem 2rem;
+	font-weight: bold;
+	color: #eee;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.btn:focus {
+	outline: none;
+}
