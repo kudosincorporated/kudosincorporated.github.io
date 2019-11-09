@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>sidescr2</title>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+</head>
+<body onLoad="Load()" onKeyDown="Down(event)" onKeyUp="Up(event)">
+
+<div class="game">
+	<div class="window">
+		<img class="bg1" style="height: 1500px; width: 3000px;">
+		<div class="char"></div>
+		<div class="rbody splat-toggle">
+			<div class="rain front-row"></div>
+		</div>
+	</div>
+</div>
+
+<p>arrow keys</p>
+
+<!--<link type="text/css" rel="stylesheet" href="gfcss.css">-->
+<!--<script type="text/javascript" src="gfjs.js"></script>-->
+<style type="text/css">
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #111;
+	text-align: center;
+	color: white;
+}
+
+.game {
+	position: relative;
+	margin-bottom: 20rem;
+	margin: -350px 0;
+	transform: scale(0.5);
+}
+
+.window {
+	display: block;
+	margin: 0 auto;
+	height: 1500px;
+	width: 800px;
+	overflow: hidden;
+	position: relative;
+}
+
+.instructions {
+	position: absolute;
+	top: 300px;
+	display: block;
+	font-size: 0.9em;
+	color: grey;
+	text-align: left;
+	width: 400px;
+}
+
+.instructions p {
+	margin-top: 0;
+	margin-bottom: 5px;
+}
+
+.bg1 {
+	background-color: #eee;
+	background-image: url(images/haus.png);
+	background-position: 0 0;
+	background-size: 100% auto;
+}
+
+.char {
+	position: absolute;
+	bottom: 40px;
+	left: calc(50% - 40px);
+	height: 160px;
+	width: 80px;
+	background-size: 640px;
+	background-image: url(images/spritesheet_lg.png);
+	background-position: 0 0;
+}
+
+.animate {
+	animation: animate 800ms infinite;
+	animation-timing-function: steps(4);
+}
+
+@keyframes animate {
+	from {
+		background-position: 0 160px;
+	}
+	to {
+		background-position: -320px 160px;
+	}
+}
+
+.sitting {
+	animation: sitting 500ms;
+	animation-timing-function: steps(2);
+	animation-fill-mode: forwards;
+}
+
+@keyframes sitting {
+	from {
+		background-position: -160px 0;
+	}
+	to {
+		background-position: -320px 0;
+	}
+}
+
+.getup {
+	animation: getup 500ms;
+	animation-timing-function: steps(2);
+}
+
+@keyframes getup {
+	from {
+		background-position: -320px 0;
+	}
+	to {
+		background-position: -160px 0;
+	}
+}
+
+
+
+.rbody {
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	height: 100%;
+	width: 100%;
+	border: 1px solid white;
+}
+
+.rain {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.drop {
+  position: absolute;
+  bottom: 100%;
+  width: 15px;
+  height: 120px;
+  pointer-events: none;
+  animation: drop 0.5s linear infinite;
+}
+
+@keyframes drop {
+  0% {
+    transform: translateY(0vh);
+  }
+  75% {
+    transform: translateY(1635px);
+  }
+  100% {
+    transform: translateY(1635px);
+  }
+}
+
+.stem {
+  width: 3px;
+  height: 60%;
+  margin-left: 7px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.25));
+  animation: stem 0.5s linear infinite;
+}
+
+@keyframes stem {
+  0% {
+    opacity: 1;
+  }
+  65% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.splat {
+  width: 30px;
+  height: 20px;
+  border-top: 4px dotted rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  opacity: 1;
+  transform: scale(0);
+  animation: splat 0.5s linear infinite;
+  display: black;
+}
+
+@keyframes splat {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(0);
+  }
+  90% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+</style>
+<script type="text/javascript">
+
+
+var x = 0;
+var speed = 3;
+
+var pressedl = 0;
+var pressedr = 0;
+
+var sitting = false;
+
+function Down(e) {
+	cxc = e.keyCode;
+
+	if (cxc == 38 && sitting == true) {
+		getup();
+	}
+
+	if(cxc == 40) {
+		sit();
+	}
+
+	if(cxc == 37) {
+		pressedl = 1;
+	}
+	if(cxc == 39) {
+		pressedr = 1;
+	}
+}
+
+function Up(e) {
+	cxc = e.keyCode;
+
+	$('.char').removeClass("animate");
+	if(cxc == 37) {
+		pressedl = 0;
+	}
+	if(cxc == 39) {
+		pressedr = 0;
+	}
+}
+
+function sit() {
+	sitting = true;
+	$('.char').removeClass("getup");
+	$('.char').addClass("sitting");
+}
+
+function getup() {
+	sitting = false;
+	$('.char').removeClass("sitting");
+	$('.char').addClass("getup");
+	setTimeout(function() {
+		$('.char').removeClass("getup");
+	}, 500);
+}
+
+setInterval(function() {
+	if (pressedl == 1 && sitting == false) {
+		x += speed;
+		$('.char').addClass("animate");
+		$('.char').css({
+			"transform" : "scaleX(-1)"
+		});
+	}
+	if (pressedr == 1 && sitting == false) {
+		x -= speed;
+		$('.char').addClass("animate");
+		$('.char').css({
+			"transform" : "scaleX(1)"
+		});
+	}
+	update();
+}, 10);
+
+function update() {
+	var bgWidth = $('.bg1').width();
+	var windowWidth = $('.window').width();
+	if (x*-1 <= 0) {
+		x = 0;
+	}
+	if (x*-1 >= bgWidth - windowWidth) {
+		x = (bgWidth - windowWidth)*-1;
+	}
+	$('.bg1').css({
+		"margin-left" : x
+	});
+}
+
+var makeItRain = function() {
+  //clear out everything
+  $('.rain').empty();
+
+  var increment = 0;
+  var drops = "";
+
+  while (increment < 100) {
+    //couple random numbers to use for various randomizations
+    //random number between 98 and 1
+    var randoHundo = (Math.floor(Math.random() * (98 - 1 + 1) + 1));
+    //random number between 5 and 2
+    var randoFiver = (Math.floor(Math.random() * (5 - 2 + 1) + 2));
+    //increment
+    increment += randoFiver;
+    //add in a new raindrop with various randomizations to certain CSS properties
+    drops += '<div class="drop" style="left: ' + increment + '%; bottom: ' + (randoFiver + randoFiver - 1 + 100) + '%; animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"><div class="stem" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div><div class="splat" style="animation-delay: 0.' + randoHundo + 's; animation-duration: 0.5' + randoHundo + 's;"></div></div>';
+  }
+
+  $('.rain.front-row').append(drops);
+}
+
+makeItRain();
+</script>
+</body>
+</html>
