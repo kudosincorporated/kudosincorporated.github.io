@@ -2,25 +2,45 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>sidescr2</title>
+	<title>sidescr</title>
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 </head>
-<body onLoad="Load()" onKeyDown="Down(event)" onKeyUp="Up(event)">
+<body onKeyDown="Down(event)" onKeyUp="Up(event)">
 
 <div class="game">
 	<div class="window">
-		<img class="bg1" style="height: 1500px; width: 3000px;">
+		<img class="bg1" style="height: 1500px; width: 4100px;">
 		<div class="char"></div>
+
+		<div class="card start-card">
+			You feel out of place...<br>Don't worry! Belonging is just around the corner.
+		</div>
+
+		<div class="card key-card">
+			You need a key to enter here...
+		</div>
+		<div class="card open-card">
+			The door opens easily.<br><span class="mono">PRESS X</span>
+		</div>
+		<div class="card fly-card">
+			Nice job getting up here.<br>Here's your reward.<br><span class="mono">PRESS X TO FLY</span>
+		</div>
+		<div class="card tp-card">
+			Sit down, relax.<br>Here's a key, by the way.<br><span class="mono">PRESS X</span>
+		</div>
+		<div class="card end-card">
+			Hey! There you are. Come sit down.<br><span class="mono">PRESS X</span>
+		</div>
+
 		<div class="rbody splat-toggle">
 			<div class="rain front-row"></div>
 		</div>
 	</div>
 </div>
 
-<p>arrow keys</p>
+<p class="mono">ARROW KEYS TO MOVE<br>X TO INTERACT</p>
+<p class="inv"></p>
 
-<!--<link type="text/css" rel="stylesheet" href="gfcss.css">-->
-<!--<script type="text/javascript" src="gfjs.js"></script>-->
 <style type="text/css">
 * {
 	box-sizing: border-box;
@@ -48,23 +68,53 @@ body {
 	position: relative;
 }
 
-.instructions {
-	position: absolute;
-	top: 300px;
-	display: block;
-	font-size: 0.9em;
-	color: grey;
-	text-align: left;
-	width: 400px;
+.mono {
+	font-family: monospace;
+	font-variant: small-caps;
+	opacity: 0.5;
 }
 
-.instructions p {
-	margin-top: 0;
-	margin-bottom: 5px;
+.card {
+	display: block;
+	position: absolute;
+	padding: 2rem;
+	background-color: #21232c;
+	color: white;
+	font-size: 2em;
+}
+
+.card.start-card {
+	bottom: 300px;
+	left: 60px;
+}
+
+.card.key-card {
+	bottom: 300px;
+	left: 200px;
+}
+
+.card.open-card {
+	bottom: 300px;
+	left: 200px;
+}
+
+.card.fly-card {
+	top: 400px;
+	right: 20px;
+}
+
+.card.tp-card {
+	bottom: 300px;
+	right: 20px;
+}
+
+.card.end-card {
+	top: 320px;
+	right: 20px;
 }
 
 .bg1 {
-	background-color: #eee;
+	background-color: #000;
 	background-image: url(images/haus.png);
 	background-position: 0 0;
 	background-size: 100% auto;
@@ -92,6 +142,20 @@ body {
 	}
 	to {
 		background-position: -320px 160px;
+	}
+}
+
+.flying {
+	animation: flying 400ms infinite;
+	animation-timing-function: steps(3);
+}
+
+@keyframes flying {
+	from {
+		background-position: -320px 160px;
+	}
+	to {
+		background-position: -560px 160px;
 	}
 }
 
@@ -123,6 +187,15 @@ body {
 		background-position: -160px 0;
 	}
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -220,31 +293,55 @@ body {
 </style>
 <script type="text/javascript">
 
+var hasKey = false;
+var hasFlight = false;
+var thruDoor = false;
+var gameOver = false;
 
+var y = 40;
 var x = 0;
-var speed = 3;
+var speed = 6;
 
 var pressedl = 0;
 var pressedr = 0;
+var pressedu = 0;
+var pressedd = 0;
 
 var sitting = false;
 
 function Down(e) {
-	cxc = e.keyCode;
+	if (!gameOver) { //can't move if the game is over
+		cxc = e.keyCode;
 
-	if (cxc == 38 && sitting == true) {
-		getup();
-	}
+		if (cxc == 38) {
+			if (sitting == true) {
+				getup();
+			}
+			else if (hasFlight) {
+				pressedu = 1;
+			}
+		}
 
-	if(cxc == 40) {
-		sit();
-	}
+		if(cxc == 40) {
+			if (!hasFlight) {
+				sit();
+			}
+			else {
+				pressedd = 1;
+			}
+		}
 
-	if(cxc == 37) {
-		pressedl = 1;
-	}
-	if(cxc == 39) {
-		pressedr = 1;
+		if(cxc == 37) {
+			pressedl = 1;
+		}
+		if(cxc == 39) {
+			pressedr = 1;
+		}
+
+		//pressing x
+		if(cxc == 88) {
+			pressX();
+		}
 	}
 }
 
@@ -257,6 +354,12 @@ function Up(e) {
 	}
 	if(cxc == 39) {
 		pressedr = 0;
+	}
+	if(cxc == 38) {
+		pressedu = 0;
+	}
+	if(cxc == 40) {
+		pressedd = 0;
 	}
 }
 
@@ -290,6 +393,18 @@ setInterval(function() {
 			"transform" : "scaleX(1)"
 		});
 	}
+	if (pressedu == 1) {
+		y += speed;
+	}
+	if (pressedd == 1) {
+		y -= speed;
+	}
+
+	//flying animations
+	if (hasFlight) {
+		$('.char').addClass('flying');
+	}
+
 	update();
 }, 10);
 
@@ -305,7 +420,105 @@ function update() {
 	$('.bg1').css({
 		"margin-left" : x
 	});
+
+	//flying
+	$('.char').css({
+		'bottom': y + 'px'
+	});
+
+	$('.card').hide();
+	var left = x*-1;
+
+	if (left > -1 && left < 300) {
+		$('.start-card').show();
+	}
+	if (left > 300) {
+		$('.start-card').remove();
+	}
+
+	if (left > 950 && left < 1070) {
+		if (thruDoor) {
+			$('.fly-card').show();
+		}
+		else {
+			if (hasKey) {
+				$('.open-card').show();
+			}
+			else {
+				$('.key-card').show();
+			}
+		}
+	}
+	if (left > 2620 && left < 2740) {
+		if (!hasFlight) {
+			$('.tp-card').show();
+		}
+		else if (y > 700) {
+			$('.end-card').show();
+		}
+	}
 }
+
+function pressX() {
+	var left = x*-1;
+
+	if (left > 950 && left < 1070 && hasKey) {
+		if (!thruDoor) {
+			y = 700;
+			update();
+			$('.key-card').remove();
+			$('.open-card').remove();
+			thruDoor = true;
+		}
+		else {
+			$('.fly-card').remove();
+			hasFlight = true;
+			updateInv();
+		}
+	}
+	if (left > 2620 && left < 2740) {
+		if (!hasKey) {
+			$('.tp-card').remove();
+			hasKey = true;
+			updateInv();
+		}
+		else if (y > 700) {
+			$('.char').removeClass('flying');
+			x = -2570;
+			y = 1220;
+			update();
+			sit();
+			gameOver = true;
+			updateInv();
+		}
+	}
+}
+
+function updateInv() {
+	$('.inv').html('');
+	if (hasKey) {
+		$('.inv').append('<div>The Yellow Key</div>');
+	}
+	if (hasFlight) {
+		$('.inv').append('<div>The Gift of Flight</div>');
+	}
+	if (gameOver) {
+		$('.inv').append('<div>Belonging</div><div><span class="mono">(END)</span></div>');
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var makeItRain = function() {
   //clear out everything
