@@ -1,6 +1,6 @@
 # KudosInc Github
 
-##In no particular order.
+## In no particular order.
 
 **Arcade/frogger style game**
 
