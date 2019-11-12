@@ -1,17 +1,17 @@
 # KudosInc Github
 
-[kudosincorporated.github.io](kudosincorporated.github.io)
+[https://kudosincorporated.github.io](https://kudosincorporated.github.io)
 
-[kudosincorporated.github.io/fishtown.html](kudosincorporated.github.io/fishtown.html)
+[https://kudosincorporated.github.io/fishtown.html](https://kudosincorporated.github.io/fishtown.html)
 
-[kudosincorporated.github.io/maptest.html](kudosincorporated.github.io/maptest.html)
+[https://kudosincorporated.github.io/maptest.html](https://kudosincorporated.github.io/maptest.html)
 
-[kudosincorporated.github.io/sidescr.html](kudosincorporated.github.io/sidescr.html)
+[https://kudosincorporated.github.io/sidescr.html](https://kudosincorporated.github.io/sidescr.html)
 
-[kudosincorporated.github.io/ultimatum.html](kudosincorporated.github.io/ultimatum.html)
+[https://kudosincorporated.github.io/ultimatum.html](https://kudosincorporated.github.io/ultimatum.html)
 
-[kudosincorporated.github.io/forage/main.html](kudosincorporated.github.io/forage/main.html)
+[https://kudosincorporated.github.io/forage/main.html](https://kudosincorporated.github.io/forage/main.html)
 
-[kudosincorporated.github.io/orager/main.html](kudosincorporated.github.io/orager/main.html)
+[https://kudosincorporated.github.io/orager/main.html](https://kudosincorporated.github.io/orager/main.html)
 
-[kudosincorporated.github.io/testworld/index.html](kudosincorporated.github.io/testworld/index.html)
+[https://kudosincorporated.github.io/testworld/index.html](https://kudosincorporated.github.io/testworld/index.html)
