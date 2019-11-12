@@ -1,6 +1,10 @@
 # KudosInc Github
 
-Arcade/frogger style game
+In no particular order.
+
+Bold games are standouts.
+
+**Arcade/frogger style game
 
 [https://kudosincorporated.github.io](https://kudosincorporated.github.io)
 
@@ -12,7 +16,7 @@ Canvas map test
 
 [https://kudosincorporated.github.io/maptest.html](https://kudosincorporated.github.io/maptest.html)
 
-Sidescroller art game
+**Sidescroller art game**
 
 [https://kudosincorporated.github.io/sidescr.html](https://kudosincorporated.github.io/sidescr.html)
 
@@ -24,7 +28,7 @@ Forager version 1, a crafting incremental game
 
 [https://kudosincorporated.github.io/orager/main.html](https://kudosincorporated.github.io/forager/main.html)
 
-Forager version 2 [BIG changes!]
+**Forager version 2 [BIG changes!]**
 
 [https://kudosincorporated.github.io/forage/main.html](https://kudosincorporated.github.io/forage/main.html)
 
