@@ -1,5 +1,10 @@
-# kudosincorporated.github.io
+# KudosInc Github
 
-This is my repo for games! There's a bunch here if you can be bothered to dig em all up, but the main one is Forager, a survival-based incremental game.
-
-[https://kudosincorporated.github.io/forager/main.html](https://kudosincorporated.github.io/forager/main.html)
+kudosincorporated.github.io/ 
+kudosincorporated.github.io/fishtown.html
+kudosincorporated.github.io/maptest.html
+kudosincorporated.github.io/sidescr.html
+kudosincorporated.github.io/ultimatum.html
+kudosincorporated.github.io/forage/main.html
+fkudosincorporated.github.io/orager/main.html
+kudosincorporated.github.io/testworld/index.html
