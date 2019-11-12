@@ -1,10 +1,8 @@
 # KudosInc Github
 
-In no particular order.
+##In no particular order.
 
-Bold games are standouts.
-
-**Arcade/frogger style game
+**Arcade/frogger style game**
 
 [https://kudosincorporated.github.io](https://kudosincorporated.github.io)
 
