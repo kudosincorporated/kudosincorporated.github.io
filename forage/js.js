@@ -53,7 +53,8 @@ var Game = {
 		craftsmanship_inc: 20,
 		fortitude_inc: 1,
 		explore_inc: 5
-	}
+	},
+	un_recipes: 0
 }
 
 var Interact = {
@@ -155,14 +156,14 @@ var Interact = {
 
 		updateStats();
 	},
-	drinkMoss_soup: function() {
+	drinkMossSoup: function() {
 		log(Item.moss_soup.interact.use);
 		removeItem("moss_soup", 1);
 
 		Game.energy.current += Item.moss_soup.interact.energy;
 		updateStats();
 	},
-	drinkTriple_tea: function() {
+	drinkTripleTea: function() {
 		log(Item.triple_tea.interact.use);
 		removeItem("triple_tea", 1);
 
@@ -347,8 +348,8 @@ var Item = {
 		found: false,
 		interact: {
 			use: "The coffee brew works instantly, replenishing your energy levels.",
-			thirst: 10,
-			energy: 20
+			thirst: 15,
+			energy: 35
 		},
 		class: "food"
 	},
@@ -361,7 +362,7 @@ var Item = {
 		interact: {
 			use: "The roasted shroom tastes much better than it's raw counterpart.",
 			health: 20,
-			energy: 5
+			energy: 25
 		},
 		class: "food"
 	},
@@ -790,7 +791,7 @@ var Item = {
 	moss_soup: {
 		id: "moss_soup",
 		name: "moss soup",
-		desc: "why sleep when you can drink soup?<button class='btn btn-i' onclick='Interact.drinkMossSoup();'>Drink</button>",
+		desc: "why sleep when you can drink soup?<br><button class='btn btn-i' onclick='Interact.drinkMossSoup();'>Drink</button>",
 		weight: 2,
 		found: false,
 		interact: {
@@ -1207,9 +1208,9 @@ var Enemy = {
 		desc: "A large brown bear appears from out of the shadows. It does not look friendly.",
 		drop_msg: "You take a tooth from the mighty bear as a prize.",
 		drops: "bear_tooth",
-		total_health: 100,
-		health: 100,
-		damage: 20,
+		total_health: 60,
+		health: 60,
+		damage: 15,
 		response: 0.1,
 		flee_chance: 0.2,
 		drop_chance: 0.5,
@@ -1360,7 +1361,7 @@ var Enemy = {
 		name: "mountain goat",
 		desc: "A mountain goat stands peacefully on a rock. Or is that dangerously?",
 		drop_msg: "Goat's droppings are scattered around the area.",
-		drops: "fox_fur",
+		drops: "droppings",
 		total_health: 40,
 		health: 40,
 		damage: 6,
@@ -1729,10 +1730,11 @@ function update() {
 	updateUnlocked();
 	checkPossibles();
 	checkTotalFounds();
+	updateParchment();
+	unlockParchment();
 }
 
 $(document).ready(function() {
-
 	//loading game
 	load();
 
@@ -1919,6 +1921,7 @@ $(document).ready(function() {
 
 	//devMode();
 	//halfDevMode();
+
 });
 
 function resetMine() {
@@ -1973,10 +1976,17 @@ function tabClick(clicked) {
 	if (tab == 'forage-page') {
 		$('.page.forage-page').css({'right':'0'});
 		$('.page.explore-page').css({'right':'-80%'});
+		$('.page.parchment-page').css({'right':'-160%'});
 	}
 	else if (tab == 'explore-page') {
 		$('.page.forage-page').css({'right':'80%'});
 		$('.page.explore-page').css({'right':'0'});
+		$('.page.parchment-page').css({'right':'-80%'});
+	}
+	else if (tab == 'parchment-page') {
+		$('.page.forage-page').css({'right':'160%'});
+		$('.page.explore-page').css({'right':'80%'});
+		$('.page.parchment-page').css({'right':'0'});
 	}
 	var tab_class = '.' + tab;
 	$('.tabmenu .tab').removeClass('selected');
@@ -2147,6 +2157,7 @@ function updateMine() {
 
 	//resets classes on weight
 	$('.foragebox .box-row .box .weight').removeClass('w-show');
+	$('.foragebox .box-row .box .weight').html('');
 
 	for (i = 0; i < Game.mine.length; i++) {
 		if (Game.mine[i].name != undefined) {
@@ -2226,14 +2237,16 @@ function updateStats() {
 	if (Game.exp.current/Game.exp.max*100 >= 100) {
 		Game.exp.level++;
 		Game.exp.current = 0;
-		Game.exp.max += 20;
-		//log("You level up!", "blue");
+		Game.exp.max += 12;
+		log("Inspiration! You add a recipe to the parchment.", "blue");
+		unlockNextPar();
+		unlockParchment();
 	}
 
 	var exp = (Game.exp.current/Game.exp.max*100).toFixed(0);
 
 	$('.exp-level').html(Game.exp.level);
-	$('.progress-bar.exp .inner').html(exp);
+	$('.progress-bar.exp .inner').html(exp+'%');
 	$('.progress-bar.exp .inner').css({
 		"width" : exp + "%"
 	});
@@ -2242,8 +2255,8 @@ function updateStats() {
 function playerDeath() {
 	$('.overlay').fadeOut(300);
 
-	//removes half of player's items !!
-	for (i = 0; i < Game.inv.length; i+=2) { //i+=2 !!
+	//removes a third of the player's items !!
+	for (i = 0; i < Game.inv.length; i+=3) { //i+=3 !!
 		Game.inv.splice(i, 1);
 	}
 	Game.mine = [];
@@ -2296,6 +2309,9 @@ function updateItems() {
 
 	//updateFounds (slooooppppp)
 	checkTotalFounds();
+
+	//slop
+	unlockParchment();
 }
 
 function checkTotalFounds() {
@@ -2308,6 +2324,7 @@ function checkTotalFounds() {
 		}
 	}
 	$('.finds').html(founds+"/"+total_founds);
+	//$('.finds-percent').html(Math.floor(founds/total_founds*100));
 }
 
 function updateCraftbox() {
@@ -2457,7 +2474,24 @@ function explore() {
 			Game.thirst.current -= Game.explore_cost;
 			updateStats();
 
-			enemyEncounter();
+			var add_enc = 0;
+			if (checkForItem("power_horn")) add_enc = Item.power_horn.interact.enc_chance;
+			var total_enc = World[Game.currentTile].enc_chance + add_enc;
+			if (total_enc >= Math.random()) {
+				enemyEncounter();
+			}
+			else {
+				if (World[Game.currentTile].progress % 4 == 0) { //if the current progress is divisible by 4, send a log message
+					log("You keep travelling.");
+				}
+				else {
+					if (Math.random <= 0.3) { //else just send a message ya know
+						log("You keep travelling.");
+					}
+				}
+			}
+
+
 		}, Game.total_explore);
 	}
 	else {
@@ -2466,26 +2500,22 @@ function explore() {
 }
 
 function enemyEncounter() {
-	var add_enc = 0;
-	if (checkForItem("power_horn")) add_enc = Item.power_horn.interact.enc_chance;
-	var total_enc = World[Game.currentTile].enc_chance + add_enc;
-	if (total_enc >= Math.random()) {
-		if (World[Game.currentTile].enemies != []) { //insurace, checks if there is an enemy array
-			var chosen = rand(World[Game.currentTile].enemies);
-			var enemy = Enemy[chosen];
+	$('.fight-card').show();
+	if (World[Game.currentTile].enemies != []) { //insurace, checks if there is an enemy array
+		var chosen = rand(World[Game.currentTile].enemies);
+		var enemy = Enemy[chosen];
 
-			Game.enemy = JSON.parse(JSON.stringify(enemy)); //weird way of cloing object
-			//"found" enemy
-			Enemy[Game.enemy.id].found = true;
-			updateEnemy();
+		Game.enemy = JSON.parse(JSON.stringify(enemy)); //weird way of cloing object
+		//"found" enemy
+		Enemy[Game.enemy.id].found = true;
+		updateEnemy();
 
-			$('.overlay').fadeIn(300);
-			$('.overlay').css({
-				"display" : "inline-flex"
-			});
-			$('.fight-card .btn').prop('disabled', false);
-			log(Game.enemy.desc);
-		}
+		$('.overlay').fadeIn(300);
+		$('.overlay').css({
+			"display" : "inline-flex"
+		});
+		$('.fight-card .btn').prop('disabled', false);
+		log(Game.enemy.desc);
 	}
 }
 
@@ -2636,7 +2666,7 @@ function getSpantab(x) {
 	return full_item;
 }
 
-//sloppy i know.
+//sloppy i know. later: its fine broooo. wanna see me do it again?
 
 function getEnemySpantab(x) {
 	var full_item =
@@ -2645,6 +2675,58 @@ function getEnemySpantab(x) {
 		'</div>';
 	return full_item;
 }
+
+//the parchment update
+
+function updateParchment() {
+	$('.parchment').html('');
+	var length = Object.keys(Recipe).length;
+	for (i = 0; i < length; i++) {
+		$('.parchment').append('<tr class="locked"></tr>');
+		$('.parchment tr').eq(i).append('<td></td><td></td>');
+		for (v in Recipe[i].comp) {
+			var full_comp =
+				'<div class="box '+Recipe[i].comp[v]+'">'+
+				'<span class="name">'+Item[Recipe[i].comp[v]].name+'</span>'+
+				'</div>';
+			$('.parchment tr').eq(i).find('td:eq(0)').append(full_comp);
+		}
+		var full_output =
+			'<div class="box '+Recipe[i].output+'">'+
+			'<span class="name">'+Item[Recipe[i].output].name+'</span>'+
+			'</div>';
+		$('.parchment tr').eq(i).find('td:eq(1)').append(full_output);
+	}
+}
+
+function unlockParchment() {
+	//unlocks according to level system
+	for (j = 0; j < Game.un_recipes; j++) {
+		$('.parchment').find('tr').eq(j).removeClass("locked");
+	}
+
+	//unlocks if you have found the item
+	var items_array = Object.keys(Item);
+	var length = items_array.length;
+	for (i = 0; i < length; i++) {
+		if (Item[items_array[i]].found == true) {
+			console.log(items_array[i]);
+			$('.parchment').find('tr td:last-of-type .'+items_array[i]).parent().parent().removeClass("locked");
+		}
+	}
+}
+
+function unlockNextPar() {
+	var num_recipes = Object.keys(Recipe).length;
+	if (Game.un_recipes < num_recipes) {
+		Game.un_recipes++;
+	}
+}
+
+
+
+
+
 
 
 

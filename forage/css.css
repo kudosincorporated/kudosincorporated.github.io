@@ -29,6 +29,12 @@ body, button {
 .wrapper {
 	font-size: 1.5rem;
 	height: 100%;
+	color: #f4f4f4;
+	width: 1400px;
+	margin: 0 auto;
+	overflow-x: hidden;
+	position: relative;
+	left: 100px;
 }
 
 .row {
@@ -49,12 +55,19 @@ body, button {
 	overflow-y: auto;
 }
 
-.wrapper {
-	color: #f4f4f4;
+.container {
+	float: left;
+	height: 100%;
 	width: 1200px;
-	margin: 0 auto;
 	position: relative;
-	overflow-x: hidden;
+}
+
+.container:nth-of-type(1) {
+	height: auto;
+}
+
+.container:nth-of-type(2) {
+	height: calc(100% - 9rem);
 }
 
 .card {
@@ -149,11 +162,6 @@ body, button {
 	border: 1px solid #32444e;
 	background-size: cover;
 	background-position: center;
-}
-
-.foragebox .box,
-.inv .box,
-.craftbox .box {
 	padding: 0.5rem;
 	text-align: center;
 	display: inline-flex;
@@ -162,9 +170,7 @@ body, button {
 	vertical-align: top;
 }
 
-.foragebox .box .name,
-.inv .box .name,
-.craftbox .box .name {
+.box .name {
 	font-weight: bold;
 	letter-spacing: 1px;
 	text-shadow:
@@ -329,10 +335,6 @@ body, button {
 	box-shadow: inset 0px 2px 4px rgba(0,0,0,0.1);
 	overflow-y: hidden;
 	width: 100%;
-}
-
-.exp-level {
-	font-size: 0.75em;
 }
 
 .inner {
@@ -856,6 +858,7 @@ body.no-stacks .box.stacked {
 	padding: 1.5rem 6rem;
 	background-color: rgba(0,0,0,0.2);
 	border: 1px solid #46626d;
+	box-shadow: inset 0 -4px #46626d;
 }
 
 .header-right {
@@ -922,16 +925,18 @@ body.no-stacks .box.stacked {
 	height: 9rem;
 	width: 100%;
 	margin: 0;
-	padding-top: 0.5rem;
+	padding: 0.5rem 0;
+	z-index: 999;
+	overflow: hidden;
 }
 
 .sidebar {
 	position: absolute;
-	top: 9rem;
+	top: 0;
 	left: 0;
-	height: calc(100% - 9rem);
+	height: 100%;
 	width: 20%;
-	z-index: 9999;
+	z-index: 999;
 }
 
 .sidebar .col-inside {
@@ -998,9 +1003,9 @@ body.no-stacks .box.stacked {
 
 .page {
 	width: 80%;
-	height: calc(100% - 9rem);
+	height: 100%;
 	position: absolute;
-	top: 9rem;
+	top: 0;
 	padding-top: 1rem;
 	transition: 500ms ease-out;
 }
@@ -1015,6 +1020,10 @@ body.no-stacks .box.stacked {
 
 .page.explore-page {
 	right: -80%;
+}
+
+.page.parchment-page {
+	right: -160%;
 }
 
 .sidebar .card .card-title {
@@ -1066,22 +1075,23 @@ body.no-stacks .box.stacked {
 }
 
 .overlay {
-	height: 100%;
-	width: 100%;
+	height: calc(100% - 4rem);
+	width: calc(100% - 4rem);
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: 2rem;
+	left: 2rem;
 	background-color: rgba(0,0,0,0.75);
+	box-shadow: 0 0 2rem 2rem rgba(0,0,0,1);
 	text-align: center;
 	display: inline-flex;
 	justify-content: center;
 	align-items: center;
-	z-index: 999;
+	z-index: 99;
 	display: none;
 }
 
 .forage-page .overlay {
-	width: 50%;
+	width: 45%;
 }
 
 .fight-card {
@@ -1140,7 +1150,7 @@ body.no-stacks .box.stacked {
 .options {
 	position: absolute;
 	top: 0;
-	right: 14rem;
+	right: 15rem;
 	overflow: hidden;
 	white-space: nowrap;
 	margin: 1rem 0;
@@ -1151,6 +1161,93 @@ body.no-stacks .box.stacked {
 .options .btn.btn-sm {
 	margin: 0;
 }
+
+
+
+
+
+
+.parchment {
+	margin: 0 auto;
+	width: 570px;
+}
+
+.parchment .box {
+	height: 6rem;
+	width: 6rem;
+}
+
+.parchment tr {
+	display: inline-block;
+}
+
+.parchment tr:nth-of-type(odd) {
+	float: left;
+}
+
+.parchment tr:nth-of-type(even) {
+	float: right;
+}
+
+.parchment tr td {
+	padding: 1.5rem 1rem;
+}
+
+.parchment tr td {
+	position: relative;
+}
+
+.parchment tr td:nth-of-type(1) .box {
+	margin-right: 3rem;
+}
+
+.parchment tr td:nth-of-type(1):after {
+	content: "+";
+	opacity: 0.5;
+	font-size: 1.5em;
+	height: 2rem;
+	line-height: 2rem;
+	width: 2rem;
+	text-align: center;
+	position: absolute;
+	top: calc(50% - 1rem);
+	left: calc(50% - 2.5rem);
+}
+
+.parchment tr td:nth-of-type(2):after {
+	content: ">>";
+	opacity: 0.5;
+	font-size: 1.5em;
+	height: 2rem;
+	line-height: 2rem;
+	width: 2rem;
+	text-align: center;
+	position: absolute;
+	top: calc(50% - 1rem);
+	left: -3rem;
+}
+
+.parchment tr.locked td .box {
+	background-image: none;
+	font-size: 0;
+}
+
+.parchment tr.locked td .box .name:after {
+	content: "???";
+	font-size: 1.5rem;
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	top: calc(50% - 1rem);
+	left: 0;
+}
+
+.ergh {
+	background-color: red;
+}
+
+
+
 
 
 
@@ -1221,9 +1318,7 @@ body.lm .box {
 	border: 1px solid #ccc;
 }
 
-body.lm .foragebox .box .name,
-body.lm .inv .box .name,
-body.lm .craftbox .box .name {
+body.lm .box .name {
 	text-shadow:
 		-1px -1px 0 #fff,
 		1px -1px 0 #fff,
@@ -1320,7 +1415,10 @@ body.lm .thumb {
 
 
 
-
+::-webkit-scrollbar { width: 1rem; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #888; }
+::-webkit-scrollbar-thumb:hover { background: #666; }
 
 .food-bg { background-color: #9d71f4; }
 .craft-bg { background-color: #70db70; }
@@ -1567,11 +1665,20 @@ body.lm .core { border-bottom: 2px solid #3399ff; }
 }
 
 @media only screen and (max-width: 1200px) {
-	.wrapper {
-		width: 100%;
+	body {
+		padding-left: 0;
 	}
-	.header {
-		position: static;
+
+	.wrapper,
+	.container {
+		width: 100%;
+		float: none;
+		left: 0;
+	}
+	.container:nth-of-type(1) {
+		position: sticky;
+		top: 0;
+		z-index: 9999;
 		height: auto;
 	}
 	.circle-stats {
@@ -1583,9 +1690,10 @@ body.lm .core { border-bottom: 2px solid #3399ff; }
 		display: none;
 	}
 	.sidebar {
-		position: relative;
+		position: fixed;
 		float: left;
-		top: 0;
+		top: 9rem;
+		left: 0;
 		height: auto;
 	}
 	.footer {
@@ -1610,6 +1718,6 @@ body.lm .core { border-bottom: 2px solid #3399ff; }
 	}
 	.forage-page .overlay {
 		width: 100%;
-		height: 53rem;
+		height: 50rem;
 	}
 }
