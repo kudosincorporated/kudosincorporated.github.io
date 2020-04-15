@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Maths Test</title>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+
+<div class="wrapper">
+	<div class="container">
+		<h1>Maths Test</h1>
+
+		<pre>x is equal to <span class="x">x</span></pre>
+		<pre>y is equal to <span class="y">y</span></pre>
+
+		<div class="box_cover">
+			<div class="box"></div>
+		</div>
+
+	</div>
+</div>
+
+<style type="text/css">
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-size: 1.6rem;
+	margin: 0;
+	height: 100vh;
+}
+
+body, button {
+	font-family: monospace;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.container {
+	width: 50em;
+	margin: 0 auto;
+}
+
+.box_cover {
+	text-align: center;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+
+	border: 1px solid black;
+	height: 100px;
+	width: 100px;
+}
+
+.box {
+	background-color: blue;
+	height: 0%;
+	width: 0%;
+}
+</style>
+
+<script type="text/javascript">
+var x = 1;
+var y = 0;
+
+$(document).ready(function() {
+
+	calculate();
+
+	setInterval(function() {
+		x++;
+		calculate();
+	}, 1);
+
+})
+
+function calculate() {
+
+	y = -1 * (500/Math.sqrt(x+25) - 100);
+	updateValues();
+
+}
+
+
+function updateValues() {
+
+	$('.x').html(x);
+	$('.y').html(y);
+
+	$('.box').css({
+		"height" : y + "%",
+		"width" : y + "%"
+	})
+
+}
+
+</script>
+</body>
+</html>
