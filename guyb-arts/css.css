@@ -1,0 +1,258 @@
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-size: 1.6rem;
+	margin: 0;
+	height: 100vh;
+}
+
+body, button {
+	font-family: monospace;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.wrapper {
+	height: 100%;
+	background-color: #eee;
+}
+
+.container {
+	background-color: white;
+	height: 100%;
+	width: 95%;
+	margin: 0 auto;
+}
+
+
+
+
+.row .col:not(:last-of-type) {
+	border-right: 1px solid black;
+}
+
+.row .col {
+	padding: 2rem;
+}
+
+.map {
+	font-size: 0;
+	display: inline-block;
+	border: 1px solid black;
+	width: calc(12rem + 2px);
+}
+
+.map .tile {
+	position: relative;
+	font-size: 1.6rem;
+	display: inline-block;
+	height: 3rem;
+	width: 3rem;
+	border-right: 1px solid black;
+	border-top: 1px solid black;
+	transform: rotate(90deg);
+}
+
+.map .tile .inner {
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	line-height: 200%;
+	text-align: center;
+	cursor: default;
+}
+
+.map .tile .inner.pointer {
+	cursor: pointer;
+}
+
+.data {
+	background-color: #eee;
+	color: #999;
+	border: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+	height: 12rem;
+	overflow-y: hidden;
+	overflow-x: hidden;
+	white-space: nowrap;
+}
+
+.subtitle {
+	font-size: 0.8em;
+	opacity: 0.75;
+}
+
+.btn {
+	margin: 1rem 0;
+	background-color: #eee;
+	border: 2px outset #999;
+	cursor: pointer;
+}
+
+.btn:active {
+	background-color: #ddd;
+	border: 2px inset #999;
+}
+
+.btn:focus {
+	outline: none;
+}
+
+
+.header {
+	margin: 3rem 0;
+	text-align: center;
+}
+
+.big-text {
+	font-size: 4em;
+	vertical-align: middle;
+	opacity: 0.5;
+}
+
+.map_cover {
+	display: inline-block;
+}
+
+.cards {
+	display: none;
+	position: absolute;
+	z-index: 999;
+}
+
+.card {
+	padding: 1rem;
+	background-color: white;
+	border: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+}
+
+.left {
+	float: left;
+	padding: 1rem;
+	width: 50%;
+}
+
+.right {
+	float: right;
+	padding-right: 1rem;
+	width: 50%;
+}
+
+.data-buyers {
+	font-size: 0.8em;
+}
+
+.buyer {
+	position: relative;
+	display: block;
+	margin-bottom: 1rem;
+	border: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+	overflow: hidden;
+}
+
+.buyer:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+.buyer .company {
+	font-weight: bold;
+}
+
+.buyer .tagline1,
+.buyer .tagline2 {
+	opacity: 0.75;
+	font-style: italic;
+}
+
+.quote {
+	padding: 2rem;
+	margin-top: -2rem;
+	background-color: #555;
+	color: #eee;
+	text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.appear {
+	animation: appear 300ms ease;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+
+@keyframes appear {
+	0% {
+		transform: scale(0);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.disappear {
+	animation: disappear 300ms ease;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+
+@keyframes disappear {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(0);
+		opacity: 0;
+	}
+}
+
+
+
+.envy { background-color: green; }
+.joy { background-color: gold; }
+.anger { background-color: red; }
+.pity { background-color: brown; }
+.bore { background-color: turquoise; }
+.laugh { background-color: orangered; }
