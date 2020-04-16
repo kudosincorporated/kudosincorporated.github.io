@@ -30,7 +30,7 @@ body, button {
 
 .wrapper {
 	height: 100%;
-	background-color: #eee;
+	background-color: #5DD39E;
 }
 
 .container {
@@ -54,18 +54,18 @@ body, button {
 .map {
 	font-size: 0;
 	display: inline-block;
+	width: calc(16rem + 3px);
 	border: 1px solid black;
-	width: calc(12rem + 2px);
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
 }
 
 .map .tile {
 	position: relative;
 	font-size: 1.6rem;
 	display: inline-block;
-	height: 3rem;
-	width: 3rem;
-	border-right: 1px solid black;
-	border-top: 1px solid black;
+	height: 4rem;
+	width: 4rem;
 	transform: rotate(90deg);
 }
 
@@ -76,7 +76,7 @@ body, button {
 	position: absolute;
 	top: 0;
 	left: 0;
-	line-height: 200%;
+	line-height: 250%;
 	text-align: center;
 	cursor: default;
 }
@@ -193,12 +193,110 @@ body, button {
 .quote {
 	padding: 2rem;
 	margin-top: -2rem;
-	background-color: #555;
+	background-color: #348AA7;
 	color: #eee;
 	text-align: center;
 }
 
+.btn.big-btn {
+	position: relative;
+	height: 4rem;
+	padding: 0 2rem;
+	color: transparent;
+}
 
+.progress-bar {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.progress-bar .inside {
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.1);
+	transition: 300ms linear;
+}
+
+.btn .btn-text {
+	color: black;
+	width: 100%;
+	height: 100%;
+	line-height: 3.7rem;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 99;
+}
+
+.btn:disabled {
+	cursor: default;
+	pointer-events: none;
+	opacity: 0.75;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+	border: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+}
+
+.table tr td {
+	padding: 0.5rem;
+}
+
+.table tr td:not(:first-of-type) {
+	text-align: center;
+}
+
+.log {
+	list-style-type: none;
+	margin: 0;
+	padding: 1rem;
+	border: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+	font-size: 0.8em;
+	height: 12rem;
+	overflow: hidden;
+}
+
+.log li {
+	position: relative;
+	margin: 0.5rem;
+	width: 100%;
+}
+
+.log li .new {
+	display: inline;
+}
+
+.log li .face {
+	display: inline-block;
+	height: 3rem;
+	width: 3rem;
+	line-height: 3rem;
+	text-align: center;
+	border-radius: 50%;
+	transform: rotate(90deg);
+	margin-right: 1rem;
+	vertical-align: middle;
+}
+
+.disabled {
+	background-color: #eee;
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.disabled .btn {
+	background-color: #ccc;
+}
 
 
 
@@ -250,9 +348,9 @@ body, button {
 
 
 
-.envy { background-color: green; }
-.joy { background-color: gold; }
-.anger { background-color: red; }
-.pity { background-color: brown; }
-.bore { background-color: turquoise; }
-.laugh { background-color: orangered; }
+.envy { background-color: #525174; }
+.joy { background-color: #BCE784; }
+.anger { background-color: #513B56; }
+.pity { background-color: #348AA7; }
+.bore { background-color: #76bdd5; }
+.laugh { background-color: #5DD39E; }

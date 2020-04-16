@@ -5,7 +5,11 @@ var Game = {
 		sellnum: 1
 	},
 	humans: {
-		users: 0
+		users: 1,
+		usersps: 0,
+		notoriety: 0,
+		notorietyps: 0,
+		carttime: 3000
 	},
 	experience: {
 		map: [],
@@ -58,6 +62,13 @@ var Game = {
 			'the arts',
 			'their mother'
 		],
+		join: [
+			'They like ',
+			"They can't live without ",
+			'They absolutly despise ',
+			'They use the internet for ',
+			'More than anything else, they love '
+		],
 		company: [
 			'Americorp',
 			'Datatech',
@@ -108,7 +119,16 @@ $(document).ready(function() {
 		addEmote();
 		updateExp();
 
-	}, 1000)
+	}, 1000);
+
+	setInterval(function() {
+
+		Game.humans.users += Game.humans.usersps;
+		Game.humans.notoriety += Game.humans.notorietyps;
+
+		updateValues();
+
+	}, 1000);
 
 	$('.map').on('mousedown', '.tile', function() {
 		var ind = $(this).index();
@@ -162,9 +182,11 @@ $(document).ready(function() {
 
 		Game.experience.dataBuyers.splice(ind, 1);
 
-		Game.experience.data = 0;
+		if (Game.experience.data != 0) {
+			Game.main.sellnum++;
+		}
 
-		Game.main.sellnum++;
+		Game.experience.data = 0;
 
 		$('.data .entry').slideUp();
 		updateValues();
@@ -181,6 +203,8 @@ $(document).ready(function() {
 		Game.experience.map[i] = newUser(rand(Game.experience.emotes), rand(Game.rands.name), randInt(13, 50), rand(Game.rands.type), rand(Game.rands.topic));
 		updateExp();
 	}
+
+	log("You have joined.");
 
 })
 
@@ -251,6 +275,12 @@ function updateDataBuyers() {
 		Game.experience.dataBuyers = Game.experience.dataBuyers.slice(0,5);
 	}
 	$('.data-buyers').html(Game.experience.dataBuyers.map(getData));
+	if (Game.experience.data == 0) {
+		$('.data-buyers .buyer').addClass('disabled');
+	}
+	else {
+		$('.data-buyers .buyer').removeClass('disabled');
+	}
 }
 
 function getData(array) {
@@ -296,6 +326,59 @@ function newDataBuyer(company, tagline1, tagline2, multi) {
 	}
 }
 
+function recruitUser() {
+	$('.big-btn .progress-bar .inside').css("transition-duration",Game.humans.carttime+"ms");
+	$('.big-btn .progress-bar .inside').css("width","0%");
+
+	$('.big-btn').prop('disabled', true);
+
+	setTimeout(function() {
+
+		$('.big-btn').prop('disabled', false);
+
+		$('.big-btn .progress-bar .inside').css("transition-duration","0ms");
+		$('.big-btn .progress-bar .inside').css("width","100%");
+
+		logUser(rand(Game.rands.name));
+
+		Game.humans.users++;
+
+		updateValues();
+
+	}, 3000);
+}
+
+function log(text) {
+	$('.log').prepend('<li><div class="face"></div><div class="new">'+text+'</div></li>');
+	$('.log li').eq(0).find('.face').html(':)');
+	$('.log li').eq(0).find('.face').addClass("joy");
+	$('.log li').eq(0).hide();
+	$('.log li').eq(0).slideDown();
+}
+
+function logUser(name) {
+	var randm = Math.random();
+	if (randm <= 0.5) {
+		$('.log').prepend('<li><div class="face"></div><div class="new">'+name+' has joined. '+rand(Game.rands.join)+rand(Game.rands.topic)+'.</div></li>');
+	}
+	else if (randm <= 0.75) {
+		$('.log').prepend('<li><div class="face"></div><div class="new">'+name+' has joined. They are related to '+rand(Game.rands.name)+'.</div></li>');
+	}
+	else {
+		$('.log').prepend('<li><div class="face"></div><div class="new">'+name+' has joined. They are am employee at '+rand(Game.rands.company)+'.</div></li>');
+	}
+	$('.log li').eq(0).find('.face').html(emoticon(rand(Game.experience.emotes)));
+	$('.log li').eq(0).find('.face').addClass(rand(Game.experience.emotes));
+	$('.log li').eq(0).hide();
+	$('.log li').eq(0).slideDown();
+}
+
+
+
+
+
+
+
 
 
 
@@ -334,8 +417,17 @@ function emoticon(tag) {
 }
 
 function updateValues() {
+	//calculations
+	Game.humans.usersps = (Game.humans.users*1.05)/100;
+	Game.humans.notorietyps = (Game.humans.users*1.05)/200;
+
 	$('.money').html(Game.main.money.toFixed(2));
 	$('.data-amt').html(Game.experience.data);
+	$('.deals').html(Game.main.sellnum - 1);
+	$('.users').html(Game.humans.users.toFixed(0));
+	$('.usersps').html(Game.humans.usersps.toFixed(1));
+	$('.notoriety').html(Game.humans.notoriety.toFixed(0));
+	$('.notorietyps').html(Game.humans.notorietyps.toFixed(2));
 }
 
 
