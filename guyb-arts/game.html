@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<title>page</title>
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="css.css">
 </head>
 <body>
@@ -18,17 +19,26 @@
 <div class="wrapper">
 	<div class="container">
 		<div class="header">
-			<p class="subtitle">"Humans are a resource. Their experience is mined as data for profit. Behaviour is elicited and predicted." - Shoshana Zuboff (2019)</p>
-			<p>Money: <span class="big-text"><span class="subtitle">$</span><span class="money">#</span></span></p>
-			<p>You are an intrepid social media startup.</p>
+			<p class="subtitle top-quote">"Humans are a resource. Their experience is mined as data for profit. Behaviour is elicited and predicted." - Shoshana Zuboff (2019)</p>
+
+			<div class="tutorial">
+				<div style="margin: 5rem;"></div>
+
+				<p>This is an <a class="link" target="_blank" href="https://en.wikipedia.org/wiki/Incremental_game">incremental game</a> in three parts.</p>
+				<p>In it, you play as an intrepid new social media platform.</p>
+
+				<div style="margin: 5rem;"></div>
+
+				<p><button class="btn lrg" onclick="start();">Start</button></p>
+			</div>
 		</div>
-		<div class="row">
+		<div class="row main-row">
 			<div class="col" style="width: 25%;">
-				<p class="quote">"Humans are a resource."</p>
+				<p class="quote">Part 1<br>"Humans are a resource."</p>
 
-				<p class="subtitle">As a fledgeling organisation, the first order of business is to manually recruit users.</p>
+				<p class="subtitle">You are an intrepid social media startup. As a fledgling organisation, the first order of business is to manually recruit users.</p>
 
-				<button class="btn big-btn" onclick="recruitUser();">
+				<button class="btn lrg big-btn" onclick="recruitUser();">
 					Recruit User
 					<div class="btn-text">Recruit User</div>
 					<div class="progress-bar">
@@ -36,7 +46,9 @@
 					</div>
 				</button>
 
-				<p class="subtitle">We can grow the platform through word of mouth. The more users on the site, the faster additional users generate.</p>
+				<p class="subtitle">The platform can grow through word of mouth. The more users on the site, the faster additional users generate. Also increasing slowly is the platform's notoriety.</p>
+
+				<p>STATISTICS</p>
 
 				<table class="table">
 					<tr>
@@ -52,9 +64,74 @@
 				</table>
 
 				<p><ul class="log"></ul></p>
+
+				<p>UPGRADES</p>
+
+				<p class="subtitle">Part 2 will unlock once the final upgrade has been bought.</p>
+
+				<div class="upgrades">
+					<div class="upgrade one">
+						<div class="left">
+							<div>Attention Economy</div>
+							<div class="subtitle">Understanding the attention economy to improve marketing.<br>(More users per manual recruitment.)</div>
+						</div>
+						<div class="right">
+							<button class="btn" onclick="upgradeOne();">Buy<div class="subtitle">Cost: 5 notoriety</div></button>
+						</div>
+					</div>
+
+					<div class="upgrade two">
+						<div class="left">
+							<div>Upgraded Affordances</div>
+							<div class="subtitle">Improves UX allows users to spend hours on the platform.<br>(Doubles users per second.)</div>
+						</div>
+						<div class="right">
+							<button class="btn" onclick="upgradeTwo();">Buy<div class="subtitle">Cost: 25 notoriety</div></button>
+						</div>
+					</div>
+
+					<div class="upgrade three">
+						<div class="left">
+							<div>Multimodal Media</div>
+							<div class="subtitle">The platform transcends all the limitations of Web 2.0.<br>(Doubles notoriety per second.)</div>
+						</div>
+						<div class="right">
+							<button class="btn" onclick="upgradeThree();">Buy<div class="subtitle">Cost: 50 notoriety</div></button>
+						</div>
+					</div>
+
+					<div class="upgrade four">
+						<div class="left">
+							<div>Shadow Profiling</div>
+							<div class="subtitle">Hidden accounts for users who haven't joined yet. Spooky!<br>(Doubles the amount of users.)</div>
+						</div>
+						<div class="right">
+							<button class="btn" onclick="upgradeFour();">Buy<div class="subtitle">Cost: 100 notoriety</div></button>
+						</div>
+					</div>
+
+					<div class="upgrade five">
+						<div class="left">
+							<div>Affect Theory</div>
+							<div class="subtitle">Unlocks the next stage.</div>
+						</div>
+						<div class="right">
+							<button class="btn" onclick="upgradeFive();">Buy<div class="subtitle">Cost: 250 notoriety</div></button>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="col">
-				<p class="quote">"Their experience is mined as data for profit."</p>
+				<p class="quote">Part 2<br>"Their experience is mined as data for profit."</p>
+
+				<p class="money-bar">Money: <span class="big-text"><span class="subtitle">$</span><span class="money">#</span></span></p>
+
+				<div class="end-screen">
+					<p>Your once small platform has grown into a powerhouse through mastery of the attention economy, affect theory and dataveillance. Thanks for playing!</p>
+
+					<p>(: GAME END :)</p>
+				</div>
+
 				<div class="row">
 					<div class="col">
 						<p>USER EXPERIENCES</p>
@@ -70,13 +147,54 @@
 						<p class="subtitle">Our servers store every piece of data on all our users. We currently have <span class="data-amt">#</span>,000,000,000,000 bytes of data.</p>
 						<p><div class="data"></div></p>
 						<p>POTENTIAL BUYERS</p>
-						<p class="subtitle">Senator, we run ads.<br>Deals made: <span class="deals">#</span></p>
+						<p class="subtitle">Senator, we run ads.</p>
+						<p class="subtitle">Part 3 will unlock when data has been sold to 5 companies. <span class="deals">#</span> deals have been made so far.</p>
 						<p><div class="data-buyers"></div></p>
 					</div>
 				</div>
 			</div>
 			<div class="col" style="width: 25%;">
-				<p class="quote">"Behaviour is elicited and predicted."</p>
+				<p class="quote">Part 3<br>"Behaviour is elicited and predicted."</p>
+
+				<p>ALGORITHM</p>
+
+				<p class="subtitle">As data gets fed into our algorithm, it predicts what new trends will appear months in advance. Then, we can choose what our users see to make this trend the next big thing!</p>
+
+				<p class="subtitle">Once a new trend appears, click and drag the face to make users look at it.</p>
+
+				<p class="trend-cover">
+					<button class="btn lrg trend-btn disabled" onclick="createTrend();">
+						Generate New Trend<br><span class="subtitle">Cost: All Data</span>
+						<div class="progress-bar">
+							<div class="inside"></div>
+						</div>
+					</button>
+				</p>
+
+				<p class="trendbox">TREND: <span class="output"><span class="subtitle">no trends found yet</span></span></p>
+
+				<div class="beh-above">
+					<div class="left"></div>
+					<div class="right">Possible Trends</div>
+					<div style="clear: both;"></div>
+				</div>
+				<div class="beh-cover">
+					<div class="slider">
+						<div class="drag"><span class="smiley">.|</span></div>
+					</div>
+					<div class="choices">
+						<div class="choice hovered"></div>
+						<div class="choice"></div>
+						<div class="choice"></div>
+						<div class="choice"></div>
+						<div class="choice"></div>
+						<div class="choice"></div>
+						<div class="choice"></div>
+						<div class="choice"></div>
+						<div class="choice"></div>
+						<div class="choice"></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

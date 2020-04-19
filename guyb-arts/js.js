@@ -104,7 +104,39 @@ var Game = {
 			'Emotion',
 			'Poodles',
 			'AI',
+		],
+		choiceOne: [
+			'dancing',
+			'tumbling',
+			'squeaky',
+			'singing',
+			'untrustworthy',
+			'hilarious',
+			'dangerous',
+			'scary'
+		],
+		choiceTwo: [
+			'monkeys',
+			'people',
+			'cars',
+			'dogs',
+			'politicians',
+			'bloggers',
+			'cats',
+			'clowns'
 		]
+	},
+	upgrade: {
+		userclick: 1,
+		upsDouble: false,
+		notrDouble: false,
+		endGame: false
+	},
+	beh: {
+		trendtime: 6000,
+		trendsDone: 1,
+		trend: 'nothing yet',
+		selected: ''
 	}
 }
 
@@ -119,16 +151,16 @@ $(document).ready(function() {
 		addEmote();
 		updateExp();
 
-	}, 1000);
+	}, 1500);
 
 	setInterval(function() {
 
-		Game.humans.users += Game.humans.usersps;
-		Game.humans.notoriety += Game.humans.notorietyps;
+		if (Game.beh.selected == Game.beh.trend) {
+			Game.main.money += Math.pow(10, Game.beh.trendsDone);
+			$('.money').html(Game.main.money.toFixed(2));
+		}
 
-		updateValues();
-
-	}, 1000);
+	}, 100);
 
 	$('.map').on('mousedown', '.tile', function() {
 		var ind = $(this).index();
@@ -187,7 +219,6 @@ $(document).ready(function() {
 		}
 
 		Game.experience.data = 0;
-
 		$('.data .entry').slideUp();
 		updateValues();
 		updateDataBuyers();
@@ -195,18 +226,158 @@ $(document).ready(function() {
 	});
 
 
+	$('.drag').draggable({
+		axis: 'y',
+		containment: 'parent'
+	});
+
+	$('body').on('mouseup', function(e){
+		var p = $('.drag');
+		var position = p.position();
+
+		var slot = Math.round(position.top / 40) * 40;
+		$('.drag').css("top",slot+"px");
+
+		var ind = slot/40;
+		Game.beh.selected = $('.choices .choice').eq(ind).text();
+
+		checkIfSelected();
+
+	});
+
+	$('.drag').on('mouseup', function() {
+		$('.drag').addClass('bop');
+		setTimeout(function() {
+			$('.drag').removeClass('bop');
+		}, 300);
+	});
+
+	$('.beh-cover').on('mousemove', function(e){
+		var p = $('.drag');
+		var position = p.position();
+		var slot = Math.round(position.top / 40) * 40;
+		var ind = slot/40;
+
+		$('.choices .choice').removeClass('hovered');
+		$('.choices .choice').eq(ind).addClass('hovered');
+	});
+
+
 
 
 
 	//for testing
-	for (i = 0; i < Game.experience.height*Game.experience.width; i++) {
+	/*for (i = 0; i < Game.experience.height*Game.experience.width; i++) {
 		Game.experience.map[i] = newUser(rand(Game.experience.emotes), rand(Game.rands.name), randInt(13, 50), rand(Game.rands.type), rand(Game.rands.topic));
 		updateExp();
-	}
+	}*/
 
 	log("You have joined.");
 
-})
+	generateChoices();
+
+});
+
+function start() {
+	$('.tutorial').hide();
+
+	$('.main-row > .col').eq(0).css({
+		"opacity" : "1",
+		"pointer-events" : "auto"
+	});
+
+	setInterval(function() {
+
+		if (!Game.upgrade.upsDouble) {
+			Game.humans.users += Game.humans.usersps;
+		}
+		else {
+			Game.humans.users += Game.humans.usersps * 2;
+		}
+		
+		if (!Game.upgrade.notrDouble) {
+			Game.humans.notoriety += Game.humans.notorietyps;
+		}
+		else {
+			Game.humans.notoriety += Game.humans.notorietyps * 2;
+		}
+
+		updateValues();
+
+		if (Game.upgrades.endGame == true) {
+			setTimeout(function() {
+
+				$('.end-screen').slideDown();
+
+			}, 20000)
+		}
+
+	}, 1000);
+}
+
+function upgradeOne() {
+	if (Game.humans.notoriety >= 5) {
+		Game.humans.notoriety -= 5;
+		Game.upgrade.userclick = 5;
+		$('.upgrades .one').slideUp();
+		setTimeout(function() { $('.upgrades .one').remove(); }, 400);
+	}
+}
+
+function upgradeTwo() {
+	if (Game.humans.notoriety >= 25) {
+		Game.humans.notoriety -= 25;
+		Game.upgrade.upsDouble = true;
+		$('.upgrades .two').slideUp();
+		setTimeout(function() { $('.upgrades .two').remove(); }, 400);
+	}
+}
+
+function upgradeThree() {
+	if (Game.humans.notoriety >= 50) {
+		Game.humans.notoriety -= 50;
+		Game.upgrade.notrDouble = true;
+		$('.upgrades .three').slideUp();
+		setTimeout(function() { $('.upgrades .three').remove(); }, 400);
+	}
+}
+
+function upgradeFour() {
+	if (Game.humans.notoriety >= 100) {
+		Game.humans.notoriety -= 100;
+		Game.humans.users = Game.humans.users*2;
+		updateValues();
+		$('.upgrades .four').slideUp();
+		setTimeout(function() { $('.upgrades .four').remove(); }, 400);
+	}
+}
+
+function upgradeFive() {
+	if (Game.humans.notoriety >= 250) {
+		Game.humans.notoriety -= 250;
+		
+		$('.main-row > .col').eq(1).css({
+			"opacity" : "1",
+			"pointer-events" : "auto"
+		});
+
+		$('.upgrades .five').slideUp();
+		setTimeout(function() { $('.upgrades .five').remove(); }, 400);
+	}
+}
+
+function checkIfSelected() {
+	if (Game.beh.selected == Game.beh.trend) {
+		$('.trendbox').css("background-color","#BCE784");
+		$('.drag').addClass('boost');
+		$('.drag .smiley').html('.D');
+	}
+	else {
+		$('.trendbox').css("background-color","#76bdd5");
+		$('.drag').removeClass('boost');
+		$('.drag .smiley').html('.|');
+	}
+}
 
 function createExp() {
 	Game.experience.map = [];
@@ -302,12 +473,12 @@ function getData(array) {
 }
 
 function getMulti(num) {
-	var x = Game.experience.data^2;
+	var x = Math.pow(2, Game.experience.data);
 	if (Game.experience.data == 0) {
 		return 0;
 	}
 	else {
-		return x/num * (1.01 * Game.main.sellnum);
+		return x/num * (100 * Game.main.sellnum);
 	}
 }
 
@@ -341,11 +512,11 @@ function recruitUser() {
 
 		logUser(rand(Game.rands.name));
 
-		Game.humans.users++;
+		Game.humans.users += Game.upgrade.userclick;
 
 		updateValues();
 
-	}, 3000);
+	}, Game.humans.carttime);
 }
 
 function log(text) {
@@ -372,6 +543,56 @@ function logUser(name) {
 	$('.log li').eq(0).hide();
 	$('.log li').eq(0).slideDown();
 }
+
+function generateChoices() {
+	var num = $('.choices .choice').length;
+	for (i = 0; i < num; i++) {
+		$('.choices .choice').eq(i).html(rand(Game.rands.choiceOne) + " " + rand(Game.rands.choiceTwo));
+	}
+}
+
+function createTrend() {
+	$('.trend-btn .progress-bar .inside').css("transition-duration",Game.beh.trendtime+"ms");
+	$('.trend-btn .progress-bar .inside').css("width","0%");
+
+	$('.trend-btn').prop('disabled', true);
+
+	Game.experience.data = 0;
+	$('.data .entry').slideUp();
+	updateValues();
+	updateDataBuyers();
+
+	Game.beh.trendsDone++;
+
+	setTimeout(function() {
+
+		$('.trend-btn').prop('disabled', false);
+
+		$('.trend-btn .progress-bar .inside').css("transition-duration","0ms");
+		$('.trend-btn .progress-bar .inside').css("width","100%");
+
+		generateChoices();
+
+		var num = $('.choices .choice').length-1;
+
+		var trend = $('.choices .choice').eq(randInt(1, num)).text();
+
+		Game.beh.trend = trend;
+
+		$('.output').html(trend);
+
+	}, Game.beh.trendtime);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -418,16 +639,75 @@ function emoticon(tag) {
 
 function updateValues() {
 	//calculations
-	Game.humans.usersps = (Game.humans.users*1.05)/100;
-	Game.humans.notorietyps = (Game.humans.users*1.05)/200;
+	Game.humans.usersps = (Game.humans.users*1.05)/25;
+	Game.humans.notorietyps = (Game.humans.users*1.05)/50;
 
 	$('.money').html(Game.main.money.toFixed(2));
 	$('.data-amt').html(Game.experience.data);
 	$('.deals').html(Game.main.sellnum - 1);
 	$('.users').html(Game.humans.users.toFixed(0));
-	$('.usersps').html(Game.humans.usersps.toFixed(1));
+	if (!Game.upgrade.upsDouble) {
+		$('.usersps').html(Game.humans.usersps.toFixed(1));
+	}
+	else {
+		$('.usersps').html((Game.humans.usersps * 2).toFixed(1));
+	}
 	$('.notoriety').html(Game.humans.notoriety.toFixed(0));
-	$('.notorietyps').html(Game.humans.notorietyps.toFixed(2));
+	if (!Game.upgrade.notrDouble) {
+		$('.notorietyps').html(Game.humans.notorietyps.toFixed(1));
+	}
+	else {
+		$('.notorietyps').html((Game.humans.notorietyps * 2).toFixed(1));
+	}
+
+	if (Game.humans.users >= 10) {
+		$('.upgrades .one').slideDown();
+	}
+	if (Game.humans.notoriety >= 5) {
+		$('.upgrades .two').slideDown();
+	}
+	if (Game.humans.notoriety >= 25) {
+		$('.upgrades .three').slideDown();
+	}
+	if (Game.humans.notoriety >= 50) {
+		$('.upgrades .four').slideDown();
+	}
+	if (Game.humans.notoriety >= 100) {
+		$('.upgrades .five').slideDown();
+	}
+
+	$('.upgrades .upgrade').removeClass('disabled');
+	if (Game.humans.notoriety <= 5) {
+		$('.upgrades .one').addClass('disabled');
+	}
+	if (Game.humans.notoriety <= 25) {
+		$('.upgrades .two').addClass('disabled');
+	}
+	if (Game.humans.notoriety <= 50) {
+		$('.upgrades .three').addClass('disabled');
+	}
+	if (Game.humans.notoriety <= 100) {
+		$('.upgrades .four').addClass('disabled');
+	}
+	if (Game.humans.notoriety <= 250) {
+		$('.upgrades .five').addClass('disabled');
+	}
+
+	$('.trend-btn').removeClass('disabled');
+	if (Game.experience.data <= 0) {
+		$('.trend-btn').addClass('disabled');
+	}
+
+	if (Game.main.money > 0) {
+		$('.money-bar').slideDown();
+	}
+
+	if (Game.main.sellnum-1 >= 5) {
+		$('.main-row > .col').eq(2).css({
+			"opacity" : "1",
+			"pointer-events" : "auto"
+		});
+	}
 }
 
 

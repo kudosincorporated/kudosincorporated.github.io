@@ -29,7 +29,7 @@ body, button {
 }
 
 .wrapper {
-	height: 100%;
+	min-height: 100%;
 	background-color: #5DD39E;
 }
 
@@ -43,9 +43,7 @@ body, button {
 
 
 
-.row .col:not(:last-of-type) {
-	border-right: 1px solid black;
-}
+
 
 .row .col {
 	padding: 2rem;
@@ -174,7 +172,9 @@ body, button {
 	overflow: hidden;
 }
 
-.buyer:after {
+.buyer:after,
+.card:after,
+.upgrade:after {
 	content: "";
 	display: block;
 	clear: both;
@@ -298,6 +298,187 @@ body, button {
 	background-color: #ccc;
 }
 
+.upgrade {
+	margin: 1rem 0;
+	padding: 1rem;
+	border: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+	display: none; /* XD */
+}
+
+.upgrade .left,
+.upgrade .right {
+	padding: 0;
+	width: auto;
+}
+
+.upgrade .left {
+	width: 55%;
+}
+
+.upgrade .btn {
+	padding: 1rem 2rem;
+}
+
+.beh-cover {
+	height: calc(40rem + 3px);
+	border: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+}
+
+.choices {
+	font-size: 0.8em;
+	width: calc(100% - 6rem);
+	float: right;
+}
+
+.choices .choice {
+	position: relative;
+	height: 4rem;
+	line-height: 4rem;
+	padding-left: 1rem;
+}
+
+.choices .choice:nth-of-type(2n) {
+	background-color: #eee;
+}
+
+.choices .choice:after {
+	content: "";
+	display: block;
+	position: absolute;
+	left: -6rem;
+	bottom: 0;
+	width: 6rem;
+	height: 100%;
+	background: #eee;
+}
+
+.choices .choice:nth-of-type(2n):after {
+	background-color: #ccc;
+}
+
+.beh-cover .slider {
+	position: relative;
+	background-color: #ddd;
+	padding: 0 1rem;
+	height: 100%;
+	float: left;
+}
+
+.drag {
+	height: 4rem;
+	width: 4rem;
+	line-height: 4rem;
+	text-align: center;
+	border-radius: 50%;
+	overflow: hidden;
+	cursor: pointer;
+	z-index: 99;
+	background-color: #76bdd5;
+	border: 2px solid #348aa7;
+	color: #348aa7;
+}
+
+.drag .smiley {
+	display: inline-block;
+	font-size: 1.5em;
+	position: relative;
+	left: 45%;
+	transform: rotate(90deg);
+}
+
+.choices .choice.hovered:after {
+	box-shadow: inset -4px 0 0 rgba(0,0,0,0.3);
+}
+
+.drag:active {
+	transform: scale(1.1);
+}
+
+.beh-above {
+	margin-bottom: -1px;
+}
+
+.beh-above .left {
+	width: 6rem;
+}
+
+.beh-above .right {
+	font-size: 0.8em;
+	font-weight: bold;
+	width: calc(100% - 6rem);
+	background-color: #ddd;
+	border: 1px solid black;
+	border-right: 2px solid black;
+	padding: 1rem;
+}
+
+.trendbox {
+	padding: 1rem;
+	border: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+	background-color: #76bdd5;
+}
+
+.drag.boost {
+	background-color: #BCE784;
+	border: 2px solid #6faa22;
+	color: #6faa22;
+}
+
+.btn.lrg {
+	height: 4rem;
+	padding: 0 2rem;
+}
+
+.trend-btn {
+	position: relative;
+}
+
+.top-quote,
+.header {
+	margin-top: 0;
+}
+
+.top-quote {
+	padding-top: 2rem;
+}
+
+.main-row > .col:nth-of-type(1),
+.main-row > .col:nth-of-type(2),
+.main-row > .col:nth-of-type(3) {
+	opacity: 0;
+	pointer-events: none;
+	transition: 1s ease;
+}
+
+.money-bar,
+.end-screen {
+	display: none;
+}
+
+.money-bar,
+.end-screen {
+	text-align: center;
+}
+
+.end-screen {
+	width: 80%;
+	margin: 0 auto;
+	padding: 1rem;
+	background-color: #BCE784;
+	border: 1px solid black;
+	border-right: 2px solid black;
+	border-bottom: 2px solid black;
+}
+
+a.link {
+	color: blue;
+}
 
 
 
@@ -311,6 +492,28 @@ body, button {
 
 
 
+
+
+
+
+
+.bop {
+	animation: bop 300ms ease;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+
+@keyframes bop {
+	0% {
+		transform: rotate(20deg);
+	}
+	75% {
+		transform: rotate(-10deg);
+	}
+	100% {
+		transform: rotate(0deg);
+	}
+}
 
 .appear {
 	animation: appear 300ms ease;
