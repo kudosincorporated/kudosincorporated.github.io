@@ -617,6 +617,10 @@ function createTrend() {
 
 		$('.output').html(trend);
 
+		checkIfSelected();
+
+		Game.upgrade.endGame = true;
+
 	}, Game.beh.trendtime);
 }
 
