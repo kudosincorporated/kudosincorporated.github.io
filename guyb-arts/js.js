@@ -107,13 +107,25 @@ var Game = {
 		],
 		choiceOne: [
 			'dancing',
-			'tumbling',
-			'squeaky',
 			'singing',
 			'untrustworthy',
 			'hilarious',
 			'dangerous',
-			'scary'
+			'scary',
+			'laughing',
+			'mindless',
+			'jittery',
+			'laid-back',
+			'clumsy',
+			'killer',
+			'overzealous',
+			'happy',
+			'goofy',
+			'enthusiastic',
+			'narcissistic',
+			'overachieving',
+			'cute',
+			'adorable'
 		],
 		choiceTwo: [
 			'monkeys',
@@ -123,7 +135,19 @@ var Game = {
 			'politicians',
 			'bloggers',
 			'cats',
-			'clowns'
+			'clowns',
+			'comedians',
+			'bureaucrats',
+			'gorillas',
+			'vloggers',
+			'babies',
+			'murderers',
+			'policemen',
+			'celebrities',
+			'reporters',
+			'cartoons',
+			'CEOs',
+			'dolphins'
 		]
 	},
 	upgrade: {
@@ -278,6 +302,18 @@ $(document).ready(function() {
 
 });
 
+function devMode() {
+	$('.tutorial').hide();
+
+	$('.main-row > .col').css({
+		"opacity" : "1",
+		"pointer-events" : "auto"
+	});
+
+	$('.money-bar').show();
+	$('.end-screen').show();
+}
+
 function start() {
 	$('.tutorial').hide();
 
@@ -309,7 +345,7 @@ function start() {
 
 				$('.end-screen').slideDown();
 
-			}, 20000)
+			}, 10000);
 		}
 
 	}, 1000);

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 * {
 	box-sizing: border-box;
 }
@@ -13,7 +15,7 @@ body {
 }
 
 body, button {
-	font-family: monospace;
+	font-family: 'Roboto', sans-serif;
 }
 
 .row {
@@ -53,9 +55,6 @@ body, button {
 	font-size: 0;
 	display: inline-block;
 	width: calc(16rem + 3px);
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 }
 
 .map .tile {
@@ -84,11 +83,9 @@ body, button {
 }
 
 .data {
+	font-family: monospace;
 	background-color: #eee;
 	color: #999;
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 	height: 12rem;
 	overflow-y: hidden;
 	overflow-x: hidden;
@@ -106,16 +103,6 @@ body, button {
 	border: 2px outset #999;
 	cursor: pointer;
 }
-
-.btn:active {
-	background-color: #ddd;
-	border: 2px inset #999;
-}
-
-.btn:focus {
-	outline: none;
-}
-
 
 .header {
 	margin: 3rem 0;
@@ -141,9 +128,6 @@ body, button {
 .card {
 	padding: 1rem;
 	background-color: white;
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 }
 
 .left {
@@ -166,9 +150,6 @@ body, button {
 	position: relative;
 	display: block;
 	margin-bottom: 1rem;
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 	overflow: hidden;
 }
 
@@ -196,13 +177,6 @@ body, button {
 	background-color: #348AA7;
 	color: #eee;
 	text-align: center;
-}
-
-.btn.big-btn {
-	position: relative;
-	height: 4rem;
-	padding: 0 2rem;
-	color: transparent;
 }
 
 .progress-bar {
@@ -241,9 +215,6 @@ body, button {
 	width: 100%;
 	border-collapse: collapse;
 	table-layout: fixed;
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 }
 
 .table tr td {
@@ -258,9 +229,6 @@ body, button {
 	list-style-type: none;
 	margin: 0;
 	padding: 1rem;
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 	font-size: 0.8em;
 	height: 12rem;
 	overflow: hidden;
@@ -301,9 +269,6 @@ body, button {
 .upgrade {
 	margin: 1rem 0;
 	padding: 1rem;
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 	display: none; /* XD */
 }
 
@@ -323,9 +288,6 @@ body, button {
 
 .beh-cover {
 	height: calc(40rem + 3px);
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 }
 
 .choices {
@@ -411,16 +373,11 @@ body, button {
 	font-weight: bold;
 	width: calc(100% - 6rem);
 	background-color: #ddd;
-	border: 1px solid black;
-	border-right: 2px solid black;
 	padding: 1rem;
 }
 
 .trendbox {
 	padding: 1rem;
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 	background-color: #76bdd5;
 }
 
@@ -435,7 +392,8 @@ body, button {
 	padding: 0 2rem;
 }
 
-.trend-btn {
+.trend-btn,
+.big-btn {
 	position: relative;
 }
 
@@ -471,9 +429,6 @@ body, button {
 	margin: 0 auto;
 	padding: 1rem;
 	background-color: #BCE784;
-	border: 1px solid black;
-	border-right: 2px solid black;
-	border-bottom: 2px solid black;
 }
 
 a.link {
@@ -482,11 +437,58 @@ a.link {
 
 
 
+/* CSS REDESIGN :) */
 
 
 
+.log,
+.map {
+	background-color: #f4f4f4;
+	box-shadow: inset 0 4px 0 #ddd;
+}
 
+.data {
+	border: 10px solid #aaa;
+	background-color: #aaa;
+	color: white;
+}
 
+.map {
+	width: 16rem;
+}
+
+.buyer,
+.upgrade,
+.card {
+	background-color: white;
+	padding: 1rem;
+	border: 1px solid #eee;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.btn,
+.btn:active {
+	position: relative;
+	border: none;
+}
+
+.btn {
+	background-color: #9be4c3;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+	border-radius: 4px;
+}
+
+.btn:active {
+	top: 1px;
+}
+
+.btn:disabled {
+	top: 1px;
+}
+
+.btn {
+	padding: 1rem;
+}
 
 
 
