@@ -304,7 +304,7 @@ function start() {
 
 		updateValues();
 
-		if (Game.upgrades.endGame == true) {
+		if (Game.upgrade.endGame == true) {
 			setTimeout(function() {
 
 				$('.end-screen').slideDown();
