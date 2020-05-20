@@ -951,15 +951,6 @@ body.no-stacks .box.stacked {
 	margin-left: 1rem;
 }
 
-.tab-text {
-	margin-left: 1rem;
-	font-size: 1.2rem;
-	text-align: center;
-	display: inline-block;
-	height: 2em;
-	line-height: 1em;
-}
-
 .tab-text a {
 	color: white;
 }
@@ -1109,8 +1100,8 @@ hr {
 .btn-i {
 	margin: 0.5rem 0;
 	color: white;
-	font-size: 0.9em;
 	padding: 0.3rem 1.6rem;
+	font-size: 0.8em;
 }
 
 .overlay {
@@ -1311,6 +1302,11 @@ hr {
 	width: 8rem;
 	line-height: 8rem;
 	text-align: center;
+}
+
+.inv .box.nouse {
+	background-color: rgba(0,0,0,0.5);
+	opacity: 0.5;
 }
 
 

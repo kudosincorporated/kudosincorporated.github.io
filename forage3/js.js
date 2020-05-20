@@ -59,10 +59,15 @@ var Game = {
 		fortitude_inc: 1,
 		explore_inc: 10
 	},
-	un_recipes: 0
+	un_recipes: 0,
+	power_horn: false
 }
 
 var Interact = {
+	togglePowerHorn: function() {
+		Game.power_horn = !Game.power_horn;
+		updateItems();
+	},
 	eatBlueBerries: function() {
 		log(Item.blue_berries.interact.use);
 		removeItem("blue_berries", 1);
@@ -359,7 +364,7 @@ var Item = {
 	sharp_rock: {
 		id: "sharp_rock",
 		name: "sharp rock",
-		desc: "it's sharp enough to be used as a weapon.",
+		desc: "it's sharp and rocky.",
 		button: '',
 		weight: 1,
 		found: false,
@@ -807,7 +812,7 @@ var Item = {
 		id: "power_horn",
 		name: "power horn",
 		desc: "the sound of the yak's horn scares away most creatures.<br><span class='extra core-bg'>Decreases chance to encounter enemies.</span>",
-		button: "",
+		button: "<button class='btn btn-i' onclick='Interact.togglePowerHorn();'>Toggle</button>",
 		weight: 0,
 		found: false,
 		interact: {
@@ -1262,8 +1267,8 @@ var Enemy = {
 		health: 15,
 		damage: 3,
 		response: 0.2,
-		flee_chance: 0.5,
-		drop_chance: 0.5,
+		flee_chance: 0.6,
+		drop_chance: 1,
 		found: false
 	},
 	racoon: {
@@ -1276,8 +1281,8 @@ var Enemy = {
 		health: 25,
 		damage: 3,
 		response: 0.5,
-		flee_chance: 0.2,
-		drop_chance: 0.5,
+		flee_chance: 0.3,
+		drop_chance: 0.75,
 		found: false
 	},
 	deer: {
@@ -1291,7 +1296,7 @@ var Enemy = {
 		damage: 5,
 		response: 0.1,
 		flee_chance: 1,
-		drop_chance: 0.5,
+		drop_chance: 1,
 		found: false
 	},
 	bear: {
@@ -1304,8 +1309,8 @@ var Enemy = {
 		health: 60,
 		damage: 15,
 		response: 0.1,
-		flee_chance: 0.2,
-		drop_chance: 0.5,
+		flee_chance: 0.3,
+		drop_chance: 0.75,
 		found: false
 	},
 	armadillo: {
@@ -1318,8 +1323,8 @@ var Enemy = {
 		health: 100,
 		damage: 5,
 		response: 0.1,
-		flee_chance: 0.6,
-		drop_chance: 0.5,
+		flee_chance: 0.7,
+		drop_chance: 1,
 		found: false
 	},
 	boar: {
@@ -1332,8 +1337,8 @@ var Enemy = {
 		health: 50,
 		damage: 10,
 		response: 0.2,
-		flee_chance: 0.3,
-		drop_chance: 0.5,
+		flee_chance: 0.4,
+		drop_chance: 1,
 		found: false
 	},
 	rattlesnake: {
@@ -1346,8 +1351,8 @@ var Enemy = {
 		health: 15,
 		damage: 25,
 		response: 0.2,
-		flee_chance: 0.1,
-		drop_chance: 0.5,
+		flee_chance: 0.2,
+		drop_chance: 0.75,
 		found: false
 	},
 	scorpion: {
@@ -1360,8 +1365,8 @@ var Enemy = {
 		health: 20,
 		damage: 10,
 		response: 0.3,
-		flee_chance: 0.6,
-		drop_chance: 0.5,
+		flee_chance: 0.7,
+		drop_chance: 0.75,
 		found: false
 	},
 	cougar: {
@@ -1374,8 +1379,8 @@ var Enemy = {
 		health: 60,
 		damage: 15,
 		response: 0.4,
-		flee_chance: 0.2,
-		drop_chance: 0.5,
+		flee_chance: 0.3,
+		drop_chance: 0.75,
 		found: false
 	},
 	lemming: {
@@ -1389,7 +1394,7 @@ var Enemy = {
 		damage: 1,
 		response: 0.9,
 		flee_chance: 1,
-		drop_chance: 0.5,
+		drop_chance: 0.75,
 		found: false
 	},
 	wolf: {
@@ -1402,8 +1407,8 @@ var Enemy = {
 		health: 40,
 		damage: 15,
 		response: 0.4,
-		flee_chance: 0.2,
-		drop_chance: 0.5,
+		flee_chance: 0.3,
+		drop_chance: 1,
 		found: false
 	},
 	yak: {
@@ -1417,7 +1422,7 @@ var Enemy = {
 		damage: 15,
 		response: 0.2,
 		flee_chance: 0.8,
-		drop_chance: 0.5,
+		drop_chance: 0.75,
 		found: false
 	},
 	vulture: {
@@ -1430,8 +1435,8 @@ var Enemy = {
 		health: 20,
 		damage: 20,
 		response: 0.3,
-		flee_chance: 0.5,
-		drop_chance: 0.5,
+		flee_chance: 0.6,
+		drop_chance: 0.75,
 		found: false
 	},
 	fox: {
@@ -1444,8 +1449,8 @@ var Enemy = {
 		health: 25,
 		damage: 5,
 		response: 0.6,
-		flee_chance: 0.5,
-		drop_chance: 0.5,
+		flee_chance: 0.6,
+		drop_chance: 1,
 		found: false
 	},
 	mountain_goat: {
@@ -1458,8 +1463,8 @@ var Enemy = {
 		health: 40,
 		damage: 6,
 		response: 0.4,
-		flee_chance: 0.5,
-		drop_chance: 0.5,
+		flee_chance: 0.6,
+		drop_chance: 0.75,
 		found: false
 	},
 	hare: {
@@ -1472,8 +1477,8 @@ var Enemy = {
 		health: 50,
 		damage: 15,
 		response: 0.5,
-		flee_chance: 0.3,
-		drop_chance: 0.5,
+		flee_chance: 0.4,
+		drop_chance: 1,
 		found: false
 	},
 	mouse: {
@@ -1487,7 +1492,7 @@ var Enemy = {
 		damage: 0,
 		response: 0,
 		flee_chance: 1,
-		drop_chance: 0.5,
+		drop_chance: 0.75,
 		found: false
 	},
 	bluejay: {
@@ -1501,7 +1506,7 @@ var Enemy = {
 		damage: 0,
 		response: 0,
 		flee_chance: 1,
-		drop_chance: 0.5,
+		drop_chance: 0.75,
 		found: false
 	}
 }
@@ -1577,7 +1582,7 @@ var World = {
 		'desert1'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [
 			'rabbit',
 			'racoon'
@@ -1607,7 +1612,7 @@ var World = {
 		'taiga1'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [
 			'deer',
 			'bear'
@@ -1627,7 +1632,7 @@ var World = {
 		'desert2'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [],
 		lore: 'A large, barren desert looms before you. Sunburned shrubs and tumbleweeds dot the landscape, interrupted by the occasional vivid flower.'
 	},
@@ -1648,7 +1653,7 @@ var World = {
 		'desert3'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [
 			'armadillo',
 			'boar'
@@ -1673,7 +1678,7 @@ var World = {
 		'desert2'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [
 			'rattlesnake',
 			'scorpion'
@@ -1693,7 +1698,7 @@ var World = {
 		'taiga2'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [
 			'cougar',
 			'lemming'
@@ -1716,7 +1721,7 @@ var World = {
 		'mountain1'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [
 			'wolf',
 			'yak'
@@ -1736,7 +1741,7 @@ var World = {
 		'peak1'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [
 			'vulture',
 			'fox'
@@ -1756,7 +1761,7 @@ var World = {
 		'plateau1'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [
 			'mountain_goat',
 			'hare'
@@ -1775,7 +1780,7 @@ var World = {
 		'peak1'
 		],
 		unlocked: false,
-		enc_chance: 0.25,
+		enc_chance: 0.3,
 		enemies: [
 			'mouse',
 			'bluejay'
@@ -2533,6 +2538,16 @@ function updateItems() {
 
 	//slop
 	unlockParchment();
+
+	//sloppp ;))
+	if (Game.power_horn) {
+		$('.inv .power_horn').addClass("nouse");
+		$('.inv .power_horn .name').text("OFF");
+	}
+	else {
+		$('.inv .power_horn').removeClass("nouse");
+		$('.inv .power_horn .name').text("power horn");
+	}
 }
 
 function sortClass(array) {
@@ -2716,7 +2731,7 @@ function explore() {
 			updateStats();
 
 			var add_enc = 0;
-			if (checkForItem("power_horn")) add_enc = Item.power_horn.interact.enc_chance;
+			if (checkForItem("power_horn") && Game.power_horn) add_enc = Item.power_horn.interact.enc_chance;
 			var total_enc = World[Game.currentTile].enc_chance + add_enc;
 			if (total_enc >= Math.random()) {
 				enemyEncounter();
