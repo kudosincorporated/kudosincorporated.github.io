@@ -1,0 +1,1702 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+/* FORAGER 3 PROTOTYPE by u/KudosInc. Uploaded 29/7/19 */
+/* Released 20/5/2020 */
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+	height: 100%;
+}
+
+body {
+	position: relative;
+	font-size: 1rem;
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
+	background-image: url(darkbg.jpg);
+	background-size: cover;
+	background-position: center;
+}
+
+body, button {
+	font-family: 'Lato', sans-serif;
+}
+
+.wrapper {
+	font-size: 1.5rem;
+	height: 100%;
+	color: #f4f4f4;
+	width: 100%;
+	margin: 0 auto;
+	overflow-x: hidden;
+	position: relative;
+}
+
+.row {
+	width: 100%;
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+
+.col {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.col-inside {
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.container {
+	float: left;
+	height: 100%;
+	width: 100%;
+	position: relative;
+}
+
+.card {
+	padding: 1.5rem;
+	margin: 1.5rem;
+}
+
+.page .card {
+	margin: 0;
+	padding-bottom: 3rem;
+}
+
+.sidebar .card {
+	margin: 0;
+	border: none;
+}
+
+.card-title {
+	margin: -1rem;
+	margin-bottom: 1.5rem;
+	padding: 1.5rem;
+	background-color: #141c1f;
+    border-bottom: 1px solid #46626d;
+	position: relative;
+}
+
+.heading {
+	font-size: 1.8em;
+}
+
+.subtitle {
+	color: rgba(255,255,255,0.6);
+}
+
+.extra {
+	display: inline-block;
+	background-color: #777;
+	padding: 0.25rem 0.5rem;
+	border-radius: 2px;
+	color: white;
+	font-style: normal;
+	margin: 0.5rem 0;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.stats-table {
+	table-layout: fixed;
+}
+
+.stats-table tr td {
+	height: 3rem;
+	line-height: 3rem;
+	white-space: nowrap;
+	overflow: hidden;
+	padding: 0 0.5rem;
+}
+
+.stats-table tr td:first-of-type {
+	width: 50%;
+}
+
+.style-box {
+	border-radius: 50%;
+	background-color: rgba(255,255,255,0.03);
+}
+
+.foragebox {
+	height: 34rem;
+	width: 34rem;
+	padding: 4rem;
+	margin: 2rem auto;
+	font-size: 0;
+}
+
+.foragebox .box {
+	border: 2px solid rgba(255,255,255,0.05);
+}
+
+.inv {
+	min-height: 9rem;
+	text-align: left;
+}
+
+.inv .box {
+	cursor: default;
+}
+
+.box {
+	/*background-color: #141b1f;
+	border: 1px solid #32444e;*/
+	font-size: 1.5rem;
+	position: relative;
+	display: inline-block;
+	height: 8rem;
+	width: 8rem;
+	background-size: cover;
+	background-position: center;
+	padding: 0.5rem;
+	text-align: center;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	vertical-align: top;
+}
+
+.box .name {
+	font-weight: bold;
+	letter-spacing: 1px;
+	text-shadow:
+		-1px -1px 0 #000,
+		1px -1px 0 #000,
+		-1px 1px 0 #000,
+		1px 1px 0 #000,
+		0 0 2px black,
+		0 0 3px black;
+	pointer-events: none;
+	color: white;
+}
+
+.foragebox .box-row .box:not(:last-of-type) {
+	margin-right: 1rem;
+}
+
+.foragebox .box-row:not(:last-of-type) .box {
+	margin-bottom: 1rem;
+}
+
+.craftbox {
+	margin: 2rem auto;
+	width: 30rem;
+	height: 30rem;
+	padding: 2rem;
+	position: relative;
+}
+
+.ingredients-col .ing1 {
+	position: absolute;
+	top: 3rem;
+	left: 0;
+	margin: 2rem;
+}
+
+.ingredients-col .ing2 {
+	position: absolute;
+	bottom: 3rem;
+	left: 0;
+	margin: 2rem;
+}
+
+.outcome-col .out {
+	position: absolute;
+	right: 0;
+	top: calc(50% - 6rem);
+	margin: 2rem;
+	margin-right: 1rem;
+}
+
+.outcome-col .out .desc .btn {
+	display: none;
+}
+
+.craftbox .line1 {
+	width: 8rem;
+	height: 1px;
+	background-color: #32444e;
+	position: absolute;
+	top: 35%;
+	left: calc(50% - 3.5rem);
+	transform: rotate(15deg);
+}
+
+.craftbox .line2 {
+	width: 8rem;
+	height: 1px;
+	background-color: #32444e;
+	position: absolute;
+	bottom: 35%;
+	left: calc(50% - 3.5rem);
+	transform: rotate(-15deg);
+}
+
+.inventory-cover {
+	margin: 2rem auto;
+}
+
+.btn .progress-bar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: transparent;
+	box-shadow: none;
+}
+
+.btn .progress-bar .inner {
+	height: 100%;
+}
+
+.forage-btn .inner,
+.explore-btn .inner {
+	background-color: rgba(255,255,255,0.1);
+}
+
+.btn {
+	position: relative;
+	text-transform: uppercase;
+	background-color: #0a0e10;
+	border: 2px solid #46606d;
+	color: #eee;
+	font-size: 1.4rem;
+	padding: 1rem 3rem;
+	cursor: pointer;
+	position: relative;
+	transition: 300ms ease;
+	overflow: hidden;
+}
+
+.btn:after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	border-radius: 4px;
+	background-color: rgba(0,0,0,0);
+	transition: 100ms ease;
+}
+
+.btn:hover {
+	border-color: #638a9c;
+}
+
+.btn:focus {
+	outline: none;
+}
+
+.btn:active {
+	top: 0.1rem;
+}
+
+.btn:active:after {
+	background-color: rgba(0,0,0,0.05);
+}
+
+.btn:disabled {
+	border-color: #46606d;
+	cursor: default;
+	opacity: 0.75;
+	top: 0.1rem;
+}
+
+.btn-sm {
+	font-size: 1.2rem;
+	padding: 0.6rem 1.8rem;
+}
+
+.btn-huge {
+	font-size: 1.5rem;
+	padding: 1rem 3.5rem;
+}
+
+.progress-bar {
+	background-color: rgba(40, 56, 62, 0.6);
+	box-shadow: inset 0px 2px 4px rgba(0,0,0,0.1);
+	overflow-y: hidden;
+	width: 100%;
+}
+
+.inner {
+	height: 2.5rem;
+	line-height: 2.5rem;
+	font-size: 1.4rem;
+	text-align: center;
+	color: white;
+	overflow: hidden;
+	background-color: rgba(51, 153, 51, 0.3);
+}
+
+.stats-card .inner {
+	transition: 300ms ease-out;
+}
+
+.trans-sm {
+	transition: 300ms linear;
+	width: 100%;
+}
+
+.stats-card .progress-bar {
+	float: right;
+}
+
+.main-bar {
+	display: block;
+	width: 30rem;
+	margin: 0 auto;
+	margin-bottom: 2rem;
+	float: none;
+}
+
+.move-right {
+	position: absolute;
+	top: 1.3rem;
+	right: 1rem;
+}
+
+.clear-btn {
+	background-color: transparent;
+}
+
+.note {
+	margin-bottom: 1rem;
+	clear: both;
+	padding: 1rem;
+}
+
+.note div.timestamp {
+	font-size: 0.8em;
+	opacity: 0.75;
+	margin-bottom: 0.5rem;
+}
+
+.animate {
+	position: relative;
+	animation: animate 600ms ease;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+
+@keyframes animate {
+	0% {
+		left: 1rem;
+		opacity: 0;
+	}
+	100% {
+		left: 0;
+		opacity: 1;
+	}
+}
+
+.appear {
+	animation: appear 600ms ease;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+
+@keyframes appear {
+	0% {
+		transform: scale(0.75) rotate(-2deg);
+	}
+	50% {
+		transform: rotate(2deg);
+	}
+	100% {
+		transform: scale(1) rotate(0deg);
+	}
+}
+
+.player-thumb,
+.enemy-thumb {
+	position: relative;
+}
+
+.player-attack {
+	position: relative;
+	animation: player-attack 150ms ease-in;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+
+@keyframes player-attack {
+	0% {
+		left: 0;
+		transform: rotate(3deg);
+	}
+	50% {
+		left: 6rem;
+		transform: rotate(-3deg);
+	}
+	100% {
+		left: 0;
+		transform: rotate(0deg);
+	}
+}
+
+.enemy-attack {
+	position: relative;
+	animation: enemy-attack 300ms ease-in;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards;
+}
+
+@keyframes enemy-attack {
+	0% {
+		right: 0;
+		transform: rotate(3deg);
+	}
+	50% {
+		right: 6rem;
+		transform: rotate(-3deg);
+	}
+	100% {
+		right: 0;
+		transform: rotate(0deg);
+	}
+}
+
+
+
+
+/* item classes */
+
+.pointer {
+	cursor: pointer;
+}
+
+.weight {
+	position: absolute;
+	font-size: 0.8em;
+	top: 0;
+	left: 0;
+	line-height: 2rem;
+	height: 2rem;
+	width: 2rem;
+	text-align: center;
+	background-color: rgba(255,255,255,0.05);
+	opacity: 0;
+}
+
+.weight.w-show {
+	opacity: 0;
+	transition: 300ms;
+	transition-delay: 800ms;
+}
+
+.foragebox .box:hover .weight.w-show {
+	opacity: 1;
+	transition: 0ms;
+	transition-delay: 0ms;
+}
+
+.inv .box {
+	margin-left: 0.5rem;
+	margin-bottom: 0.5rem;
+	vertical-align: top;
+}
+
+.inv .box .no {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	line-height: 2rem;
+	height: 2rem;
+	width: 2rem;
+	text-align: center;
+	font-size: 0.8em;
+	opacity: 0;
+}
+
+body.no-stacks .inv .box .no {
+	opacity: 1;
+}
+
+.inv .box.stacked .delmark {
+	display: none;
+}
+
+.inv .box.stacked {
+	box-shadow: none;
+}
+
+.inv {
+	position: relative;
+}
+
+.box + .desc {
+	text-align: left;
+	white-space: nowrap;
+	display: inline-block;
+	position: absolute;
+	margin-left: -8rem;
+	margin-top: 10rem;
+	width: 8rem;
+	z-index: 999;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.box + .desc:after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: -2rem;
+	left: 0;
+	height: 150%;
+	width: 80%;
+	background-color: transparent;
+	z-index: -1;
+}
+
+.box:hover + .desc,
+.box + .desc:hover {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.inv .box.stacked:hover + .desc,
+.inv .box.stacked + .desc:hover {
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* EAT and weight marks */
+
+.box + .desc i {
+	display: block;
+	padding: 1rem;
+}
+
+.box + .desc .btn.btn-i {
+	width: 100%;
+	margin: 0;
+}
+
+.box + .desc .weight-mark {
+	background-color: rgba(255,255,255,0.1);
+	padding: 0.5rem 1rem;
+}
+
+.inv .box.stacked {
+	width: 2rem;
+	font-size: 0;
+	opacity: 0.9;
+	margin-left: 0;
+	border-left: none;
+	height: 7rem;
+	margin: 0.5rem 0;
+	background-size: 4000%;
+}
+
+.inv .box.stacked .no {
+	background-color: transparent;
+}
+
+.inv .box.stacked .delmark {
+	font-size: 1.5rem;
+	opacity: 0.75;
+}
+
+body.no-stacks .box.stacked .delmark {
+	font-size: 0;
+}
+
+body.no-stacks .box.stacked {
+	width: 0;
+	padding: 0;
+}
+
+.delmark {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	height: 2rem;
+	width: 2rem;
+	line-height: 2rem;
+	text-align: center;
+	user-select: none;
+	cursor: pointer;
+}
+
+.delmark:hover {
+	color: red;
+}
+
+
+
+
+
+/* map */
+
+.map-table {
+	position: relative;
+	margin: 1rem auto;
+	width: 27rem;
+	height: 49rem;
+	border-collapse: collapse;
+}
+
+.iso .map-table:after {
+	content: "";
+	display: block;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	top: 3rem;
+	right: 3rem;
+}
+
+.iso .map-table {
+	margin: -8rem auto;
+	transform: rotateX(60deg) rotateZ(-45deg);
+	position: relative;
+	left: -2rem;
+}
+
+.map-table tr td {
+	height: 9rem;
+	width: 9rem;
+	position: relative;
+}
+
+.tile {
+	position: absolute;
+	height: calc(100% - 1rem);
+	width: calc(100% - 1rem);
+	margin: 0.8rem;
+	bottom: 0;
+	left: 0;
+	transition: 150ms ease;
+	cursor: pointer;
+	color: /*rgba(255,255,255,0.8)*/ transparent;
+	line-height: 6rem;
+	text-align: center;
+	font-size: 2rem;
+	user-select: none;
+
+	z-index: 1;
+	transform: scale(1) rotateZ(45deg) scaleY(1.5);
+}
+
+.tile:hover {
+	transform: scale(1.1) rotateZ(45deg) scaleY(1.5);
+}
+
+.tile.player {
+	z-index: 9999;
+}
+
+.tile.player:before {
+	content: "";
+	display: block;
+	position: absolute;
+	bottom: -5%;
+	left: -5%;
+	height: 110%;
+	width: 110%;
+	background-image: url(player.png);
+	background-size: cover;
+	pointer-events: none;
+	z-index: 999;
+}
+
+.iso .tile.player:before {
+	transform: scale(0.7) scaleY(1.5);
+	bottom: 0.5rem;
+}
+
+.cover {
+	position: absolute;
+	height: 0%;
+	width: 100%;
+	top: 0%;
+	left: 0%;
+	background-color: transparent; /*rgba(121, 210, 121, 0.5)*/
+	transition: 100ms linear;
+	pointer-events: none;
+}
+
+.no-tile {
+	display: none;
+}
+
+.map-table tr td:after,
+.map-table tr td:before {
+	content: "";
+	display: block;
+	position: absolute;
+	background-color: rgba(255,255,255,0.8);
+	border-radius: 5px;
+}
+
+.map-table tr td.left-passage:after {
+	top: 10%;
+	left: 0;
+	height: 8rem;
+	width: 10px;
+	transform: rotate(90deg);
+}
+
+.map-table tr td.bottom-passage:before {
+	top: 50%;
+	left: calc(50% - 10px);
+	height: 8rem;
+	width: 10px;
+}
+
+.locktile .tile {
+	background-image: url(tiles_dark.png);
+}
+
+.map-table tr td.locktile.left-passage:after,
+.map-table tr td.locktile.bottom-passage:before {
+	opacity: 1;
+}
+
+.craftbox .ingredients-col .box {
+	border: 2px solid rgba(255,255,255,0.05);
+}
+
+.craftbox .outcome-col .box {
+	border: 2px solid rgba(255,255,255,0.05);
+}
+
+.tile-title {
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.title {
+	/*font-weight: bold;*/
+}
+
+.flora, .fauna {
+	font-size: 0;
+}
+
+.none {
+	font-size: 1.3rem;
+	margin: 1rem;
+}
+
+
+/* SPANTAB UPDATE */
+
+.spantab {
+	display: inline-block;
+	background-color: rgba(39, 55, 63, 0.6);
+	font-size: 1.5rem;
+	height: 3rem;
+	line-height: 3rem;
+	margin: 0.5rem;
+}
+
+.spantab > * {
+	display: inline-block;
+}
+
+.spantab .item-name,
+.spantab .blurred {
+	padding: 0 1rem;
+}
+
+.spantab .item-name,
+.spantab.unknown .blurred,
+.locked .spantab .blurred {
+	display: inline-block;
+}
+
+.spantab .blurred,
+.spantab.unknown .item-name,
+.locked .spantab .item-name {
+	display: none;
+}
+
+.spantab .thumb {
+	background-color: rgba(255,255,255,0.05);
+	height: 3rem;
+	width: 3rem;
+	vertical-align: middle;
+	float: left;
+}
+
+.spantab.unknown .thumb,
+.locked .spantab .thumb {
+	display: none;
+}
+
+.spantab.unknown .blurred,
+.locked .spantab .blurred {
+	color: rgba(255,255,255,0.3);
+}
+
+.header,
+.circles-cover {
+	background-image: url(darkbg.jpg);
+	background-size: cover;
+	background-position: 0 100%;
+}
+
+.circles-cover {
+	width: 100%;
+}
+
+.circle-stats {
+	width: 75%;
+	display: block;
+	height: 9rem;
+	line-height: 9rem;
+	padding: 0 2rem;
+	margin: auto;
+	text-align: center;
+}
+
+.circle-stats .progress-bar {
+	display: inline-block;
+	position: relative;
+	text-align: left;
+	height: 6rem;
+	width: 6rem;
+	border-radius: 50%;
+	overflow: hidden;
+	box-shadow: none;
+	transform: rotate(-45deg);
+	vertical-align: middle;
+	margin-top: -1rem;
+	background-color: transparent;
+}
+
+.circle-stats .progress-bar .inner {
+	height: 100%;
+}
+
+.circle-stats .progress-bar .mid {
+	background-color: #141b1f;
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	height: 5rem;
+	line-height: 5rem;
+	width: 5rem;
+	border-radius: 50%;
+	margin: 0.5rem;
+	text-align: center;
+	transform: rotate(45deg);
+}
+
+.tabmenu {
+	font-size: 0;
+	display: block;
+	width: 45rem;
+	margin: 2rem auto;
+}
+
+.tabmenu .tab {
+	position: relative;
+	display: inline-block;
+	width: 25%;
+	padding: 1.5rem 0;
+	transition: 300ms ease;
+
+	cursor: pointer;
+	font-size: 1.5rem;
+	border: 2px solid transparent;
+	text-align: center;
+	font-weight: bold;
+	color: white;
+}
+
+.tabmenu .tab:hover {
+	background-color: rgba(0,0,0,0.05);
+	border: 1px solid #3c545d;
+}
+
+.tabmenu .tab.selected {
+	width: 50%;
+
+	background-color: rgba(0,0,0,0.2);
+	border: 2px solid #46626d;
+	/*box-shadow: inset 0 -4px #46626d;*/
+}
+
+.header-right {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 9rem;
+	line-height: 9rem;
+	padding: 0 1rem;
+}
+
+.header-right .btn-sm {
+	padding: 0.4rem 0.8rem;
+	margin-left: 1rem;
+}
+
+.tab-text {
+	margin-left: 1rem;
+	font-size: 1.2rem;
+	text-align: center;
+	display: inline-block;
+	height: 2em;
+	line-height: 1em;
+}
+
+.tab-text a {
+	color: white;
+}
+
+/*.arrow-buttons {
+	position: relative;
+	height: 6rem;
+	width: 13rem;
+	margin: 0 auto;
+}
+
+.arrow-buttons div {
+	position: absolute;
+}
+
+.arrow-buttons div .btn.btn-sm {
+	width: 4rem;
+	padding: 0.3rem 0;
+}
+
+.arrow-buttons div:nth-of-type(1) { left: calc(50% - 2rem); top: 0; }
+.arrow-buttons div:nth-of-type(2) { left: calc(50% - 2rem); top: 46%; }
+.arrow-buttons div:nth-of-type(3) { top: 25%; left: 0; }
+.arrow-buttons div:nth-of-type(4) { top: 25%; right: 0; }
+
+.arrow-buttons .btn.btn-sm:disabled {
+	color: #aaa;
+	opacity: 0.6;
+}*/
+
+.thinbar {
+	height: 1rem;
+}
+
+.header {
+	position: relative;
+	height: 9rem;
+	width: 80%;
+	margin: 0;
+	float: right;
+	z-index: 100;
+	overflow: hidden;
+}
+
+.sidebar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 20%;
+	z-index: 100;
+}
+
+.footer {
+	position: static;
+	margin: 0 auto;
+	bottom: 0;
+	width: 100%;
+	padding: 1rem;
+	text-align: center;
+}
+
+.footer .btn-sm {
+	padding: 0.4rem;
+}
+
+.footer .reset:hover {
+	color: #ff5050;
+}
+
+hr {
+	width: 50%;
+	opacity: 0.25;
+	margin: 4rem auto;
+}
+
+.page {
+	width: 80%;
+	height: calc(100% - 9rem);
+	position: absolute;
+	top: 9rem;
+	padding-top: 1rem;
+	transition: 500ms ease-out;
+	border: 0px solid transparent;
+}
+
+.page .card {
+	margin-top: 0;
+}
+
+.page.forage-page {
+	right: 0;
+}
+
+.page.explore-page {
+	right: -80%;
+}
+
+.page.parchment-page {
+	right: -160%;
+}
+
+.block {
+	width: 35rem;
+	margin: 0 auto;
+}
+
+.explore-page .block {
+	width: 50rem;
+}
+
+.map-desc {
+	padding: 3rem;
+	background-color: rgba(255,255,255,0.1);
+}
+
+.movement-choices .btn {
+	margin-bottom: 1rem;
+	position: relative;
+	overflow: hidden;
+}
+
+.btn.disabled {
+	pointer-events: none;
+	user-select: none;
+	background-color: #eee;
+	color: transparent;
+}
+
+.unusable {
+	opacity: 0.75;
+	pointer-events: none;
+}
+
+.movement-choices .btn .choice {
+	position: absolute;
+	top: calc(50% - 0.7em);
+	left: -1.5rem;
+	transition: 150ms ease-out;
+}
+
+.movement-choices .btn:hover .choice,
+.movement-choices .btn.selected .choice {
+	left: 0;
+}
+
+.btn-i {
+	margin: 0.5rem 0;
+	color: white;
+	font-size: 0.9em;
+	padding: 0.3rem 1.6rem;
+}
+
+.overlay {
+	height: calc(100% - 4rem);
+	width: calc(100% - 4rem);
+	position: absolute;
+	top: 2rem;
+	left: 2rem;
+	background-color: rgba(0,0,0,0.75);
+	box-shadow: 0 0 2rem 2rem rgba(0,0,0,1);
+	text-align: center;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 99;
+	display: none;
+}
+
+.forage-page .overlay {
+	width: 45%;
+}
+
+.fight-card {
+	background-color: #1d292f;
+	border: 1px solid #46626d;
+	width: 60rem;
+	text-align: center;
+}
+
+.fight-card .card-title {
+	margin: -1.5rem;
+	margin-bottom: 1.5rem;
+}
+
+.fight-row {
+	background-color: #28383e;
+	border-bottom: 2px solid #46626d;
+	padding-top: 2rem;
+	border-radius: 50% 50% 0 0;
+	margin: 3rem 0;
+}
+
+.fight-row .row {
+	width: 60%;
+	margin: 0 auto;
+}
+
+.fight-inner {
+	margin: 0 auto;
+	transition: 100ms ease;
+}
+
+.biome-cards {
+	color: white;
+	font-size: 1.3rem;
+	position: absolute;
+	float: left;
+	z-index: 9999;
+	pointer-events: none;
+	width: 35rem;
+}
+
+.biome-cards .card {
+	margin: 1rem auto;
+	padding: 1rem;
+	background-color: #1d292f;
+	border: 1px solid #46626d;
+	z-index: 999;
+}
+
+.biome-cards .card-title .move-right {
+	text-transform: uppercase;
+}
+
+.status {
+	position: relative;
+	top: 0.2rem;
+}
+
+/*.options {
+	position: absolute;
+	top: 0;
+	right: 15rem;
+	overflow: hidden;
+	white-space: nowrap;
+	margin: 1rem 0;
+	line-height: 3rem;
+	text-align: center;
+}
+
+.options .btn.btn-sm {
+	margin: 0;
+}*/
+
+
+/* PARCHMENT 3 */
+
+
+.parchment {
+	border-collapse: collapse;
+	table-layout: fixed;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.parchment tr {
+	/*display: inline-block;
+	width: 33.3%;*/
+}
+
+.parchment tr td {
+	display: inline-block;
+	width: 50%;
+}
+
+.parchment tr td:nth-of-type(2n+1) {
+	text-align: right;
+}
+
+.parchment tr td:nth-of-type(2n) {
+	text-align: left;
+	white-space: nowrap;
+}
+
+.key .box {
+	pointer-events: none;
+}
+
+/* modal */
+
+.modal {
+	position: absolute;
+	top: 10%;
+	left: calc(50% - 30rem);
+	z-index: 999;
+	background-color: #1d292f;
+	border: 1px solid #46626d;
+	width: 60rem;
+	text-align: center;
+}
+
+.modal .card-title .move-right {
+	top: 0.5rem;
+	right: 0.5rem;
+}
+
+.card-title .btn {
+	padding: 0.6rem 1rem;
+}
+
+.btn.options {
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+.s-title {
+	font-size: 0;
+	left: 5px;
+	width: 95%;
+	height: 1px;
+	background-color: #32444e;
+	margin: 3rem 0;
+}
+
+.item-cards {
+	color: white;
+	font-size: 1.4rem;
+	position: absolute;
+	float: left;
+	z-index: 9999;
+	pointer-events: none;
+}
+
+.item-cards .card {
+	margin: 1rem auto;
+	padding: 1rem;
+	background-color: #1d292f;
+	border: 1px solid #46626d;
+	z-index: 999;
+}
+
+.item-cards .card .head .name {
+	margin-right: 3rem;
+}
+
+.item-cards .card .head {
+	margin: -1rem -1rem 1rem -1rem;
+	padding: 1rem;
+	background-color: rgba(255,255,255,0.1);
+}
+
+.dust {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 8rem;
+	width: 8rem;
+	line-height: 8rem;
+	text-align: center;
+}
+
+
+
+/* other thingz ! */
+
+
+
+::-webkit-scrollbar { width: 1rem; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #888; }
+::-webkit-scrollbar-thumb:hover { background: #666; }
+
+.food-bg { background-color: #9d71f4; }
+.craft-bg { background-color: #70db70; }
+.core-bg { background-color: #3399ff; }
+
+.food { box-shadow: inset 0 -80px 0 rgba(157, 113, 244, 0.1); }
+.craftable { box-shadow: inset 0 -80px 0 rgba(112, 219, 112, 0.1); }
+.core { box-shadow: inset 0 -80px 0 rgba(51, 153, 255, 0.1); }
+
+.inv .food { box-shadow: 0 20px 0 rgba(157, 113, 244, 0.4); }
+.inv .craftable { box-shadow: 0 20px 0 rgba(112, 219, 112, 0.4); }
+.inv .core { box-shadow: 0 20px 0 rgba(51, 153, 255, 0.4); }
+
+.inv .box.food.stacked { box-shadow: 0 20px 0 rgba(157, 113, 244, 0.4); }
+.inv .box.craftable.stacked { box-shadow: 0 20px 0 rgba(112, 219, 112, 0.4); }
+.inv .box.core.stacked { box-shadow: 0 20px 0 rgba(51, 153, 255, 0.4); }
+
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+.inv .box {
+	margin-bottom: 25px;
+	background-color: rgba(255,255,255,0.05);
+	border-bottom: 0;
+}
+
+.inv .box.stacked {
+	background-color: rgba(255,255,255,0.1);
+}
+
+.inv .box .no,
+.inv .box .delmark {
+	bottom: -20px;
+}
+
+.right {
+	float: right;
+}
+
+.left {
+	float: left;
+}
+
+.forest,
+.desert,
+.taiga,
+.mountain,
+.plateau {
+	background-image: url(tiles.png);
+	background-size: 300%;
+}
+
+.forest {
+	/*background-color: #529862;*/
+	background-position: 50% 0;
+}
+.desert {
+	/*background-color: #e0ba81;*/
+	background-position: 100% 0;
+}
+.taiga {
+	/*background-color: #f0f5f0;*/
+	background-position: 0 50%;
+}
+.mountain {
+	/*background-color: #72716b;*/
+	background-position: 0 0;
+}
+.plateau {
+	/*background-color: #79d279;*/
+	background-position: 50% 50%;
+}
+
+/*.red,
+.blue,
+.green,
+.yellow {
+	background-image: url(colours.jpg);
+	background-size: 250%;
+}
+
+.circle-stats .progress-bar .inner {
+	background-size: 1000%;
+}
+
+.red {
+	background-color: #ff8080;
+	background-position: 0 0;
+}
+.blue {
+	background-color: #80bfff;
+	background-position: 0 100%;
+}
+.yellow {
+	background-color: #ffdf80;
+	background-position: 100% 100%;
+}
+.green {
+	background-color: #81e481;
+	background-position: 100% 0;
+}*/
+
+.red {
+	background-color: rgba(255, 128, 128, 0.5);
+}
+.blue {
+	background-color: rgba(128, 191, 255, 0.5);
+}
+.yellow {
+	background-color: rgba(255, 223, 128, 0.5);
+}
+.green {
+	background-color: rgba(129, 228, 129, 0.5);
+}
+
+.orange { background-color: #ffbf80; }
+.purple { background-color: #a993ec; }
+
+.white-color { color: #ffffff; }
+.red-color { color: #ff8080; }
+.blue-color { color: #80bfff; }
+.yellow-color { color: #ffbf00; }
+.green-color { color: #70db70; }
+.purple-color { color: #a993ec; }
+
+.player-image { background-image: url(player.png); }
+
+.box,
+.thumb {
+	background-image: url(spritesheet.png);
+	background-size: 1000%;
+	background-position: 100% 100%;
+}
+
+.amber { background-position: 0 0; }
+.amber_staff { background-position: 11% 0; }
+.bear_tooth { background-position: 22% 0; }
+.blue_berries { background-position: 33% 0; }
+.boar_armour { background-position: 44% 0; }
+.boarskin { background-position: 55% 0; }
+.bone_sword { background-position: 66% 0; }
+.bones { background-position: 77% 0; }
+.bracelet { background-position: 88% 0; }
+.branch { background-position: 99% 0; }
+.bread { background-position: 0 11%; }
+.charcoal { background-position: 11% 11%; }
+.clear_water { background-position: 22% 11%; }
+.coffee_brew { background-position: 33% 11%; }
+.cooked_hare { background-position: 44% 11%; }
+.cooked_rabbit { background-position: 55% 11%; }
+.cornflower { background-position: 66% 11%; }
+.cougar_pouch { background-position: 77% 11%; }
+.cougarskin { background-position: 88% 11%; }
+.crude_map { background-position: 99% 11%; }
+.dandelion { background-position: 0 22%; }
+.dark_berries { background-position: 11% 22%; }
+.daylily { background-position: 22% 22%; }
+.deerskin { background-position: 33% 22%; }
+.droppings { background-position: 44% 22%; }
+.dry_grass { background-position: 55% 22%; }
+.firepit { background-position: 66% 22%; }
+.flask { background-position: 77% 22%; }
+.flint { background-position: 88% 22%; }
+.fox_fur { background-position: 99% 22%; }
+.gold_shard { background-position: 0 33%; }
+.green_berries { background-position: 11% 33%; }
+.hare_meat { background-position: 22% 33%; }
+.hay { background-position: 33% 33%; }
+.hide_gloves { background-position: 44% 33%; }
+.leather { background-position: 55% 33%; }
+.leather_bag { background-position: 66% 33%; }
+.leaves { background-position: 77% 33%; }
+.lemming_tooth { background-position: 88% 33%; }
+.light_berries { background-position: 99% 33%; }
+.lucky_trinket { background-position: 0 44%; }
+.marigold { background-position: 11% 44%; }
+.milkcap { background-position: 22% 44%; }
+.moss_soup { background-position: 33% 44%; }
+.ointment { background-position: 44% 44%; }
+.opium { background-position: 55% 44%; }
+.orange_berries { background-position: 66% 44%; }
+.palm_leaf { background-position: 77% 44%; }
+.pear_soup { background-position: 88% 44%; }
+.pebbles { background-position: 99% 44%; }
+.pine_cone { background-position: 0 55%; }
+.poppy { background-position: 11% 55%; }
+.pouch { background-position: 22% 55%; }
+.power_horn { background-position: 33% 55%; }
+.prickly_pear { background-position: 44% 55%; }
+.purple_berries { background-position: 55% 55%; }
+.rabbit_meat { background-position: 66% 55%; }
+.raw_meat { background-position: 77% 55%; }
+.red_berries { background-position: 88% 55%; }
+.roasted_milkcap { background-position: 99% 55%; }
+.roots { background-position: 0 66%; }
+.sharp_rock { background-position: 11% 66%; }
+.shell { background-position: 22% 66%; }
+.slingshot { background-position: 33% 66%; }
+.snake_belt { background-position: 44% 66%; }
+.snakeskin { background-position: 55% 66%; }
+.spear { background-position: 66% 66%; }
+.steak { background-position: 77% 66%; }
+.sticky_sap { background-position: 88% 66%; }
+.stinger { background-position: 99% 66%; }
+.thistle { background-position: 0 77%; }
+.toadflax { background-position: 11% 77%; }
+.torch { background-position: 22% 77%; }
+.tree_bark { background-position: 33% 77%; }
+.tree_sap { background-position: 44% 77%; }
+.triple_tea { background-position: 55% 77%; }
+.twigs { background-position: 66% 77%; }
+.wolf_armour { background-position: 77% 77%; }
+.wolfskin { background-position: 88% 77%; }
+.wood_moss { background-position: 99% 77%; }
+.wooly_mullein { background-position: 0 88%; }
+.yak_horn { background-position: 11% 88%; }
+
+/*.amber { background-image: url(images/amber.png); }
+.amber_staff { background-image: url(images/amber_staff.png); }
+.bear_tooth { background-image: url(images/bear_tooth.png); }
+.blue_berries { background-image: url(images/blue_berries.png); }
+.boar_armour { background-image: url(images/boar_armour.png); }
+.boarskin { background-image: url(images/boarskin.png); }
+.bone_sword { background-image: url(images/bone_sword.png); }
+.bones { background-image: url(images/bones.png); }
+.bracelet { background-image: url(images/bracelet.png); }
+.branch { background-image: url(images/branch.png); }
+.bread { background-image: url(images/bread.png); }
+.charcoal { background-image: url(images/charcoal.png); }
+.clear_water { background-image: url(images/clear_water.png); }
+.coffee_brew { background-image: url(images/coffee_brew.png); }
+.cooked_hare { background-image: url(images/cooked_hare.png); }
+.cooked_rabbit { background-image: url(images/cooked_rabbit.png); }
+.cornflower { background-image: url(images/cornflower.png); }
+.cougar_pouch { background-image: url(images/cougar_pouch.png); }
+.cougarskin { background-image: url(images/cougarskin.png); }
+.crude_map { background-image: url(images/crude_map.png); }
+.dandelion { background-image: url(images/dandelion.png); }
+.dark_berries { background-image: url(images/dark_berries.png); }
+.daylily { background-image: url(images/daylily.png); }
+.deerskin { background-image: url(images/deerskin.png); }
+.droppings { background-image: url(images/droppings.png); }
+.dry_grass { background-image: url(images/dry_grass.png); }
+.firepit { background-image: url(images/firepit.png); }
+.flask { background-image: url(images/flask.png); }
+.flint { background-image: url(images/flint.png); }
+.fox_fur { background-image: url(images/fox_fur.png); }
+.gold_shard { background-image: url(images/gold_shard.png); }
+.green_berries { background-image: url(images/green_berries.png); }
+.hare_meat { background-image: url(images/hare_meat.png); }
+.hay { background-image: url(images/hay.png); }
+.hide_gloves { background-image: url(images/hide_gloves.png); }
+.leather { background-image: url(images/leather.png); }
+.leather_bag { background-image: url(images/leather_bag.png); }
+.leaves { background-image: url(images/leaves.png); }
+.lemming_tooth { background-image: url(images/lemming_tooth.png); }
+.light_berries { background-image: url(images/light_berries.png); }
+.lucky_trinket { background-image: url(images/lucky_trinket.png); }
+.marigold { background-image: url(images/marigold.png); }
+.milkcap { background-image: url(images/milkcap.png); }
+.moss_soup { background-image: url(images/moss_soup.png); }
+.ointment { background-image: url(images/ointment.png); }
+.opium { background-image: url(images/opium.png); }
+.orange_berries { background-image: url(images/orange_berries.png); }
+.palm_leaf { background-image: url(images/palm_leaf.png); }
+.pear_soup { background-image: url(images/pear_soup.png); }
+.pebbles { background-image: url(images/pebbles.png); }
+.pine_cone { background-image: url(images/pine_cone.png); }
+.poppy { background-image: url(images/poppy.png); }
+.pouch { background-image: url(images/pouch.png); }
+.power_horn { background-image: url(images/power_horn.png); }
+.prickly_pear { background-image: url(images/prickly_pear.png); }
+.purple_berries { background-image: url(images/purple_berries.png); }
+.rabbit_meat { background-image: url(images/rabbit_meat.png); }
+.raw_meat { background-image: url(images/raw_meat.png); }
+.red_berries { background-image: url(images/red_berries.png); }
+.roasted_milkcap { background-image: url(images/roasted_milkcap.png); }
+.roots { background-image: url(images/roots.png); }
+.sharp_rock { background-image: url(images/sharp_rock.png); }
+.shell { background-image: url(images/shell.png); }
+.slingshot { background-image: url(images/slingshot.png); }
+.snake_belt { background-image: url(images/snake_belt.png); }
+.snakeskin { background-image: url(images/snakeskin.png); }
+.spear { background-image: url(images/spear.png); }
+.steak { background-image: url(images/steak.png); }
+.sticky_sap { background-image: url(images/sticky_sap.png); }
+.stinger { background-image: url(images/stinger.png); }
+.thistle { background-image: url(images/thistle.png); }
+.toadflax { background-image: url(images/toadflax.png); }
+.torch { background-image: url(images/torch.png); }
+.tree_bark { background-image: url(images/tree_bark.png); }
+.tree_sap { background-image: url(images/tree_sap.png); }
+.triple_tea { background-image: url(images/triple_tea.png); }
+.twigs { background-image: url(images/twigs.png); }
+.wolf_armour { background-image: url(images/wolf_armour.png); }
+.wolfskin { background-image: url(images/wolfskin.png); }
+.wood_moss { background-image: url(images/wood_moss.png); }
+.wooly_mullein { background-image: url(images/wooly_mullein.png); }
+.yak_horn { background-image: url(images/yak_horn.png); }*/
+
+/*.rabbit { background-image: url(images/rabbit.png); }
+.racoon { background-image: url(images/racoon.png); }
+.deer { background-image: url(images/deer.png); }
+.bear { background-image: url(images/bear.png); }
+.armadillo { background-image: url(images/armadillo.png); }
+.boar { background-image: url(images/boar.png); }
+.rattlesnake { background-image: url(images/rattlesnake.png); }
+.scorpion { background-image: url(images/scorpion.png); }
+.cougar { background-image: url(images/cougar.png); }
+.lemming { background-image: url(images/lemming.png); }
+.wolf { background-image: url(images/wolf.png); }
+.yak { background-image: url(images/yak.png); }
+.vulture { background-image: url(images/vulture.png); }
+.fox { background-image: url(images/fox.png); }
+.mountain_goat { background-image: url(images/mountain_goat.png); }
+.hare { background-image: url(images/hare.png); }
+.mouse { background-image: url(images/mouse.png); }
+.bluejay { background-image: url(images/bluejay.png); }*/
+
+#loader {
+	height: 100%;
+	width: 100%;
+	font-size: 3rem;
+	background-color: #0a0e10;
+	color: #f4f4f4;
+	font-variant: small-caps;
+	text-align: center;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/*@media only screen and (max-width: 1200px) {
+	.tabmenu {
+		display: none;
+	}
+	.page {
+		float: left;
+		width: calc(100% - 2rem);
+		height: auto;
+		position: static;
+		top: 0;
+		right: 0;
+		border: 2px solid rgba(255,255,255,0.05);
+		margin: 1rem;
+	}
+	.header {
+		width: calc(100% - 35rem);
+		float: right;
+		margin-bottom: 11rem;
+	}
+	.sidebar {
+		position: static;
+		width: 35rem;
+		float: left;
+		height: auto;
+	}
+	.sidebar .card {
+		position: absolute;
+		top: 9rem;
+		left: 0;
+		border: 2px solid rgba(255,255,255,0.05);
+		width: calc(100% - 2rem);
+		margin: 1rem;
+		max-height: 9rem;
+		overflow: hidden;
+	}
+	.sidebar .log .note {
+		display: inline-block;
+		width: 30.3%;
+		margin-right: 2rem;
+		margin-bottom: 4rem;
+		float: none;
+		vertical-align: top;
+	}
+}*/
