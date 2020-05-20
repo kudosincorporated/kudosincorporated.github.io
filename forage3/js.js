@@ -2440,26 +2440,29 @@ function updateStats() {
 function playerDeath() {
 	$('.overlay').fadeOut(300);
 
-	//removes a third of the player's items !!
+	//removes a third of the player's items !! (but not core items :))
 	for (i = 0; i < Game.inv.length; i+=3) { //i+=3 !!
-		Game.inv.splice(i, 1);
+		if (Game.inv[i].class != "core") {
+			Game.inv.splice(i, 1);
+		}
 	}
+
 	Game.mine = [];
 	resetMine();
 	Game.craftbox = [];
 	Game.output = [];
 
-	Game.health.current = 60;
-	Game.thirst.current = 60;
-	Game.energy.current = 60;
+	Game.health.current = 50;
+	Game.thirst.current = 50;
+	Game.energy.current = 50;
 
 	updateItems();
 	updateMine();
 	updateCraftbox();
 	updateStats();
 
-	//removes progress >:)
-	World[Game.currentTile].progress = 0;
+	//removes progress >:) BAD IDEA!!!!!!!!!!!
+	//World[Game.currentTile].progress = 0;
 
 	log("You black out.", "red");
 	log("You awaken feeling groggy, and find some of your supplies lost.", "blue");
