@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+	<!-- FORAGER 3 PROTOTYPE by u/KudosInc. -->
+	<!-- Released 20/5/2020 -->
+	<!-- One year in the making... so happy it's done! If you have any questions or anything, don't hesitate to msg me on Reddit. <3 All -->
+<head>
+	<meta charset="utf-8">
+	<title>Forage 3</title>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link type="text/css" rel="stylesheet" href="css.css">
+</head>
+<body class="iso no-stacks" onload="pageLoad();">
+
+<div id="loader">
+	loading...
+</div>
+
+<div class="item-cards" style="display: none;">
+	<div class="card">
+		<div class="head">
+			<div class="left"><span class="subtitle">class:</span> <span class="name">name</span></div>
+			<div class="right"><span class="subtitle">weight:</span> <span class="heavy">#</span></div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="body">
+			<div><i><span class="descrip">descrip</span></i></div>
+		</div>
+	</div>
+</div>
+
+<div class="biome-cards" style="display: none;">
+	<div class="card forest1 selected">
+		<div class="card-title">FOREST 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card forest2">
+		<div class="card-title">FOREST 2 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card forest3">
+		<div class="card-title">FOREST 3 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card forest4">
+		<div class="card-title">FOREST 4 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card desert1">
+		<div class="card-title">DESERT 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card desert2">
+		<div class="card-title">DESERT 2 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card desert3">
+		<div class="card-title">DESERT  3<div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card taiga1">
+		<div class="card-title">TAIGA 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card taiga2">
+		<div class="card-title">TAIGA 2 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card mountain1">
+		<div class="card-title">MOUNTAIN 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card peak1">
+		<div class="card-title">PEAK 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+
+	<div class="card plateau1">
+		<div class="card-title">PLATEAU 1 <div class="move-right"><span class="status">###</span></div></div>
+		<div class="title">Possible Forages</div>
+		<div class="flora"></div>
+		<div class="title">Possible Encounters</div>
+		<div class="fauna"></div>
+	</div>
+</div>
+
+<div class="wrapper" id="wrapper" style="display: none;">
+
+	<div class="modal card" style="display: none;">
+		<div class="card-title">Forage 3 <div class="move-right"><button class="btn btn-sm clear-btn" onclick="closeModal();">✕</button></div></div>
+		<div>
+			<div class="tab-text">
+				v3.2.2 by <a href="https://www.reddit.com/user/KudosInc/" target="_blank">KudosInc</a>
+				<br><br>
+				(With immeasurable thanks to Acod.)
+			</div>
+		</div>
+		<hr>
+		<p>
+			<span class="subtitle">Total Items Found:</span>
+			<b><span class="finds">##</span></b>
+			<span>(<span class="finds-percent">##</span>%)</span>
+		</p>
+		<p>
+			<span class="subtitle">Total Enemies Encountered:</span>
+			<b><span class="efinds">##</span></b>
+			<span>(<span class="efinds-percent">##</span>%)</span>
+		</p>
+		<hr>
+		<p>Options</p>
+		<p>
+			<button class="btn btn-sm clear-btn" onclick="stackToggle();">Toggle Item Stacking</button>
+			<button class="btn btn-sm clear-btn" onclick="titleToggle();">Toggle Inventory Sort</button>
+			<!-- <button class="btn btn-sm clear-btn mode-btn" onclick="toggleMode();">Lights On</button> -->
+		</p>
+		<hr>
+		<div class="footer">
+			<button class="btn btn-sm clear-btn save" onclick="save()">Save</button>
+			<button class="btn btn-sm clear-btn reset" onclick="reset()">Reset</button>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="sidebar">
+			<div class="circles-cover">
+				<div class="circle-stats">
+					<div class="row">
+						<div class="col">
+							<div class="progress-bar health">
+								<div class="inner trans-sm red"></div>
+								<div class="mid"><span class="value" title="Health">###</span> <i class="fa fa-heartbeat" aria-hidden="true"></i></div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="progress-bar energy">
+								<div class="inner trans-sm yellow"></div>
+								<div class="mid"><span class="value" title="Energy (Foraging)">###</span> <i class="fa fa-eye-slash" aria-hidden="true"></i></div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="progress-bar thirst">
+								<div class="inner trans-sm blue"></div>
+								<div class="mid"><span class="value" title="Thirst (Exploring)">###</span> <i class="fa fa-tint" aria-hidden="true"></i></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card">
+				<div class="log"></div>
+				<div style="clear: both;"></div>
+			</div>
+		</div>
+
+		<div class="header">
+			<div class="tabmenu">
+				<div class="tab forage-page selected" onclick="tabClick(this);">Forage <i class="fa 	 fa-tree" aria-hidden="true"></i></div>
+				<div class="tab explore-page" onclick="tabClick(this);">Explore <i class="fa fa-map" aria-hidden="true"></i></div>
+				<div class="tab parchment-page" onclick="tabClick(this);">Recipe Book <i class="fa fa-file" aria-hidden="true"></i></div>
+			</div>
+			<div class="header-right">
+				<button class="btn btn-sm clear-btn options" onclick="openModal();"><i class="fa fa-bars" aria-hidden="true"></i></button>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+
+		<div class="page forage-page">
+			<div class="col-inside">
+				<div class="overlay"></div>
+				<div class="row">
+					<div class="col">
+						<div class="card text-center">
+							<button class="btn forage-btn btn-huge" onclick="sendcart();">
+								Forage
+							<div class="progress-bar main-bar">
+								<div class="inner trans-sm"></div>
+							</div>
+							</button>
+							<p class="text-center"><span class="subtitle">Current Tile:</span> <b><span class="currentTile">###</span></b></p>
+							<div class="foragebox style-box">
+								<div class="box-row">
+									<div class="box"><span class="name"></span></div>
+									<div class="box"><span class="name"></span></div>
+									<div class="box"><span class="name"></span></div>
+								</div>
+								<div class="box-row">
+									<div class="box"><span class="name"></span></div>
+									<div class="box"><span class="name"></span></div>
+									<div class="box"><span class="name"></span></div>
+								</div>
+								<div class="box-row">
+									<div class="box"><span class="name"></span></div>
+									<div class="box"><span class="name"></span></div>
+									<div class="box"><span class="name"></span></div>
+								</div>
+							</div>
+							<button class="btn btn-sm" onclick="discardAll();">Discard All <i class="fa fa-ban" aria-hidden="true"></i></button>
+						</div>
+					</div>
+					<div class="col">
+						<div class="card text-center">
+							<div>Hover items for more information, click them to craft.</div>
+							<p><span class="subtitle">Carry weight:</span> <b><span class="c_weight">#</span>/<span class="total_weight">#</span></b></p>
+							<div class="inventory-cover">
+								<div class="inv"></div>
+							</div>
+						</div>
+						<div class="card text-center">
+							<div class="craftbox style-box">
+								<div class="line1"></div>
+								<div class="line2"></div>
+								<div class="row">
+									<div class="col ingredients-col">
+										<div class="ing1">
+											<div class="box"></div>
+										</div>
+										<div class="ing2">
+											<div class="box"></div>
+										</div>
+									</div>
+									<div class="col outcome-col">
+										<div class="out">
+											<div class="box"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<p><b>Crafting Possibilities</b></p>
+							<p class="subtitle">It's possible to craft these items with your current inventory.</p>
+							<p class="craft-possibles"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page explore-page">
+			<div class="col-inside">
+				<div class="overlay">
+					<div class="card fight-card" style="display: none;">
+						<div class="card-title">An Enemy Appears</div>
+						<div class="fight-row">
+							<div class="row">
+								<div class="col">
+									<div class="player-thumb"><b>You</b></div>
+								</div>
+								<div class="col">
+									<div>VS</div>
+								</div>
+								<div class="col">
+									<div class="enemy-thumb"><b><span class="enemy-name">##</span></b></div>
+								</div>
+							</div>
+						</div>
+						<p><span class="enemy-desc">##</span></p>
+						<p><div class="progress-bar">
+							<div class="inner fight-inner red">##</div>
+						</div></p>
+						<p><button class="btn attack-btn" onclick="attackEnemy();">Attack</button></p>
+						<p>
+							<button class="btn btn-sm" onclick="bait();">Bait</button>
+							<button class="btn btn-sm" onclick="flee();">Flee (<span class="fleechance">##</span>% chance)</button>
+						</p>
+						<p>Baiting an enemy costs 1 red berries and increases flee chance.</p>
+						<p class="subtitle">Hint: You can access your inventory during a fight.</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="card text-center">
+						<button class="btn explore-btn btn-huge" onclick="explore();">
+							Explore
+							<div class="progress-bar explore-progress">
+								<div class="inner trans-sm"></div>
+							</div>
+						</button>
+						<p>Gather supplies before embarking. There are beasts deep in the forest. </p>
+						<p class="subtitle">Hover tiles for more information, click them to fast travel.</p>
+						<div class="map-cover">
+							<table class="map-table">
+								<tr>
+									<td>										<div class="tile no-tile"></div></td>
+									<td class="bottom-passage">					<div class="tile forest forest1 player">F1<div class="cover"></div></td>
+									<td>										<div class="tile no-tile"></div></td>
+								</tr>
+								<tr>
+									<td>										<div class="tile no-tile"></div></td>
+									<td class="bottom-passage">					<div class="tile forest forest2">F2<div class="cover"></div></td>
+									<td>										<div class="tile no-tile"></div></td>
+								</tr>
+								<tr>
+									<td class="bottom-passage">					<div class="tile desert desert1">D1<div class="cover"></div></div></td>
+									<td class="bottom-passage left-passage">	<div class="tile forest forest3">F3<div class="cover"></div></div></td>
+									<td>										<div class="tile no-tile"></div></td>
+								</tr>
+								<tr>
+									<td class="bottom-passage">					<div class="tile desert desert2">D2<div class="cover"></div></div></td>
+									<td class="left-passage">					<div class="tile forest forest4">F4<div class="cover"></div></div></td>
+									<td class="bottom-passage left-passage">	<div class="tile taiga taiga1">T1<div class="cover"></div></div></td>
+								</tr>
+								<tr>
+									<td>										<div class="tile desert desert3">D3<div class="cover"></div></div></td>
+									<td class="bottom-passage">					<div class="tile plateau plateau1">Pl1<div class="cover"></div></div></td>
+									<td class="bottom-passage">					<div class="tile taiga taiga2">T2<div class="cover"></div></div></td>
+								</tr>
+								<tr>
+									<td>										<div class="tile no-tile"></div></td>
+									<td>										<div class="tile mountain peak1">Pe1<div class="cover"></div></div></td>
+									<td class="left-passage">					<div class="tile mountain mountain1">M1<div class="cover"></div></div></td>
+								</tr>
+							</table>
+						</div>
+
+						<div class="block text-center">
+							<p>
+								<span class="subtitle">Current Tile:</span> <b><span class="currentTile">###</span></b>
+							</p>
+							<p>
+								<div class="map-desc">###</div>
+							</p>
+							<p class="tile-prog-cover">
+								<div class="progress-bar tile-progress">
+									<div class="inner trans-sm"><span class="prog-c">##</span>/<span class="prog-max">##</span></div>
+								</div>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="page parchment-page">
+			<div class="col-inside text-center">
+				<div class="overlay"></div>
+				<p>Gain experience by foraging, exploring or fighting. Leveling up unlocks crafting recipes.</p>
+				<p><span class="subtitle">Experience Level: </span><b><span class="exp-level">#</span></b></p>
+				<p></p>
+				<div class="block">
+					<div class="progress-bar exp">
+						<div class="inner trans-sm"></div>
+					</div>
+				</div>
+				<hr style="opacity: 0;">
+				<p><b>Crafting Recipes</b></p>
+				<table class="table parchment"></table>
+				<hr style="opacity: 0;">
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="js.js"></script>
+<script type="text/javascript">
+	function pageLoad() {
+		document.getElementById("loader").style.display = "none";
+		document.getElementById("wrapper").style.display = "block";
+	}
+</script>
+</body>
+</html>
