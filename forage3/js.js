@@ -1495,11 +1495,11 @@ var Enemy = {
 		drop_chance: 0.75,
 		found: false
 	},
-	bluejay: {
-		id: "bluejay",
-		name: "bluejay",
-		desc: "A bluejay sings from the top of a tall tree.",
-		drop_msg: "The song wasn't even that bad...",
+	duck: {
+		id: "duck",
+		name: "duck",
+		desc: "A duck quacks from the middle of a tranqil pond.",
+		drop_msg: "The quack wasn't even that annoying...",
 		drops: "light_berries",
 		total_health: 5,
 		health: 5,
@@ -1783,7 +1783,7 @@ var World = {
 		enc_chance: 0.3,
 		enemies: [
 			'mouse',
-			'bluejay'
+			'duck'
 		],
 		lore: 'The lush grass feels soft and comforting underfoot. You notice a warm glow emanating from deeper in the foggy distance and it dawns on you: the journey is over.'
 	}
