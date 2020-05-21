@@ -392,7 +392,7 @@ var Item = {
 		weight: 1,
 		found: false,
 		interact: {
-			use: "The roasted shroom tastes much better than it's raw counterpart.",
+			use: "The roasted shroom tastes much better than its raw counterpart.",
 			health: 20,
 			energy: 25
 		},
@@ -648,7 +648,7 @@ var Item = {
 	shell: {
 		id: "shell",
 		name: "shell",
-		desc: "hard shell of the armordillo.",
+		desc: "hard shell of the armadillo.",
 		button: "",
 		weight: 3,
 		found: false,
@@ -965,7 +965,7 @@ var Item = {
 	raw_meat: {
 		id: "raw_meat",
 		name: "raw meat",
-		desc: "its raw, its meat. not much else is known.",
+		desc: "it's raw, it's meat. not much else is known.",
 		button: "",
 		weight: 4,
 		found: false,
@@ -983,7 +983,7 @@ var Item = {
 	steak: {
 		id: "steak",
 		name: "steak",
-		desc: "thick, juciy steak. it reeks of meat.",
+		desc: "thick, juicy steak. it reeks of meat.",
 		button: "<button class='btn btn-i' onclick='Interact.eatSteak();'>Eat</button>",
 		weight: 3,
 		found: false,
@@ -1261,7 +1261,7 @@ var Enemy = {
 		id: "rabbit",
 		name: "rabbit",
 		desc: "This rabbit's eyes are bloodred. It looks just about ready to kill.",
-		drop_msg: "You skin the rabbit and take it's meat.",
+		drop_msg: "You skin the rabbit and take its meat.",
 		drops: "rabbit_meat",
 		total_health: 15,
 		health: 15,
@@ -1330,7 +1330,7 @@ var Enemy = {
 	boar: {
 		id: "boar",
 		name: "boar",
-		desc: "A boar rears it's ugly head from across the desert. It's eyes stare intently.",
+		desc: "A boar rears it's ugly head from across the desert. Its eyes stare intently.",
 		drop_msg: "You strip the hide off the fallen boar.",
 		drops: "boarskin",
 		total_health: 50,
@@ -1358,7 +1358,7 @@ var Enemy = {
 	scorpion: {
 		id: "scorpion",
 		name: "scorpion",
-		desc: "A scorpion lunges at you. It's stinger looks plump and dangerous.",
+		desc: "A scorpion lunges at you. Its stinger looks plump and dangerous.",
 		drop_msg: "You sever the stinger from the scorpion, now free from venom.",
 		drops: "stinger",
 		total_health: 20,
@@ -1372,7 +1372,7 @@ var Enemy = {
 	cougar: {
 		id: "cougar",
 		name: "cougar",
-		desc: "A sleek cougar steps out from a cave. Looks like you entered it's territory.",
+		desc: "A sleek cougar steps out from a cave. Looks like you've entered its territory.",
 		drop_msg: "The cougar's skin could make a good improvement to your pouch.",
 		drops: "cougarskin",
 		total_health: 60,
@@ -1387,7 +1387,7 @@ var Enemy = {
 		id: "lemming",
 		name: "lemming",
 		desc: "A lemming freezes at the edge of a cliff. It points its head inquisitively towards you.",
-		drop_msg: "One of the lemmings two front teeth comes loose.",
+		drop_msg: "One of the lemming's two front teeth comes loose.",
 		drops: "lemming_tooth",
 		total_health: 5,
 		health: 5,
@@ -1401,7 +1401,7 @@ var Enemy = {
 		id: "wolf",
 		name: "wolf",
 		desc: "You hear a wolf snarling behind you. Turning around, you can see it prepare to pounce.",
-		drop_msg: "You strip the wolf of it's powerful hide.",
+		drop_msg: "You strip the wolf of its powerful hide.",
 		drops: "wolfskin",
 		total_health: 40,
 		health: 40,
@@ -1415,7 +1415,7 @@ var Enemy = {
 		id: "yak",
 		name: "yak",
 		desc: "A yak lumbers across the high outcrops of the mountain.",
-		drop_msg: "The fallen yak has no use for it's horn anymore.",
+		drop_msg: "The fallen yak has no use for its horn anymore.",
 		drops: "yak_horn",
 		total_health: 75,
 		health: 75,
@@ -1442,7 +1442,7 @@ var Enemy = {
 	fox: {
 		id: "fox",
 		name: "fox",
-		desc: "A fox comes out of its den, trying to protect it's territory.",
+		desc: "A fox comes out of its den, trying to protect its territory.",
 		drop_msg: "The fox's fur is impossibly silky and a vivid orange colour.",
 		drops: "fox_fur",
 		total_health: 25,
@@ -1470,7 +1470,7 @@ var Enemy = {
 	hare: {
 		id: "hare",
 		name: "hare",
-		desc: "A hare stands before you. It's muscles ripple under the setting sun. It's eyes, bloodshot, stare deep into your soul.",
+		desc: "A hare stands before you. It's muscles ripple under the setting sun. Its eyes, bloodshot, stare deep into your soul.",
 		drop_msg: "The raw meat of the fallen hare will taste like victory.",
 		drops: "hare_meat",
 		total_health: 50,
@@ -2391,8 +2391,8 @@ function updateStats() {
 	if (Game.thirst.current < 0) Game.thirst.current = 0;
 	if (Game.energy.current < 0) Game.energy.current = 0;
 	if (Game.health.current > Game.health.max) Game.health.current = Game.health.max;
-	if (Game.thirst.current > Game.thirst.max) Game.thirst.current = Game.health.max;
-	if (Game.energy.current > Game.energy.max) Game.energy.current = Game.health.max;
+	if (Game.thirst.current > Game.thirst.max) Game.thirst.current = Game.thirst.max;
+	if (Game.energy.current > Game.energy.max) Game.energy.current = Game.energy.max;
 
 	//deathcheck
 	//triggers from health at zero or thirst + energy at zero
