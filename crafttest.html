@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>page</title>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+<style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-size: 1.4rem;
+	margin: 0;
+	height: 100vh;
+}
+
+body, button {
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.container {
+	position: relative;
+	width: 50%;
+	margin: 0 auto;
+}
+
+.items,
+.input,
+.output,
+.card {
+	background-color: white;
+	display: inline-block;
+	padding: 1rem;
+	border: 1px solid black;
+	min-height: 5rem;
+	min-width: 10rem;
+	vertical-align: top;
+}
+
+.items {
+	background-color: #cce6ff;
+}
+
+.input {
+	background-color: #ffffcc;
+	min-height: 10rem;
+}
+
+.output {
+	background-color: #ffe6cc;
+}
+
+.entry {
+	background-color: white;
+	margin: 5px;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.entry:hover {
+	box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.entry .weight,
+.card-title .weight {
+	float: right;
+	margin-left: 5px;
+}
+
+.tag {
+	display: inline-block;
+	background-color: #eee;
+	padding: 5px;
+	margin: 5px;
+}
+
+.card-title {
+	border-bottom: 1px solid black;
+}
+
+.card {
+	width: 20rem;
+	position: absolute;
+	left: -23rem;
+	top: 16rem;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+	<div class="card info-card">
+		<div class="card-title">
+			<span class="name">name</span>
+			<span class="weight">weight</span>
+		</div>
+		<div class="card-body">
+			<div class="tags">tags</div>
+		</div>
+	</div>
+
+	<p>buttons</p>
+	<p>
+		<button onclick="addItem(inv, 'branch');">Give me a branch!</button>
+		<button onclick="addItem(inv, 'fern');">Give me a fern!</button>
+		<button onclick="addItem(inv, 'bear_tooth');">Give me a bear tooth!</button>
+		<button onclick="addItem(inv, 'bamboo');">Give me bamboo!</button>
+		<br><br>
+		<button onclick="clearInv();">Clear inventory</button>
+	</p>
+
+	<p>inventory</p>
+	<div class="items">
+		<div class="inv"></div>
+	</div>
+
+	<br>
+
+	<p>input</p>
+	<div class="input"></div>
+
+	<p>output</p>
+	<div class="output"></div>
+
+	<p>crafting recipes</p>
+	<p>
+		<div><span class="tag">long and sturdy</span> + <span class="tag">small and sharp</span> = spear</div>
+		<div><span class="tag">big and flexible</span> + <span class="tag">long and sturdy</span> = shelter</div>
+	</p>
+</div>
+
+<script type="text/javascript">
+var inv = [];
+var input = [];
+var output = [];
+
+var Items = {};
+
+class Item {
+	constructor(name, id, weight, tags) {
+		this.name = name;
+		this.id = id;
+		this.weight = weight;
+		this.tags = tags;
+	}
+}
+
+function NEWITEM(name, id, weight, tags) {
+	Items[id] = new Item(
+		name,
+		id,
+		weight,
+		tags
+	);
+}
+
+$(document).ready(function() {
+
+	NEWITEM(
+		'branch',
+		'branch',
+		2,
+		[
+			'long',
+			'sturdy'
+		]
+	);
+
+	NEWITEM(
+		'fern',
+		'fern',
+		3,
+		[
+			'big',
+			'thick',
+			'flexible'
+		]
+	);
+
+	NEWITEM(
+		'bear tooth',
+		'bear_tooth',
+		1,
+		[
+			'small',
+			'sharp'
+		]
+	);
+
+	NEWITEM(
+		'bamboo',
+		'bamboo',
+		2,
+		[
+			'long',
+			'sturdy'
+		]
+	);
+
+	addItem(inv, 'branch');
+	addItem(inv, 'fern');
+	addItem(inv, 'bear_tooth');
+	addItem(inv, 'bamboo');
+
+	$('.inv').on('click', '.entry', function() {
+		if (input.length < 2) {
+			var ind = $(this).index();
+			input.push(inv[ind]);
+			inv.splice(ind, 1);
+
+			if (input.length == 2) {
+				checkOutput();
+			}
+
+			update();
+		}
+	});
+
+	$('.input').on('click', '.entry', function() {
+		var ind = $(this).index();
+		inv.push(input[ind]);
+		input.splice(ind, 1);
+		output = [];
+
+		update();
+	});
+
+	$('.output').on('click', '.entry', function() {
+		var ind = $(this).index();
+		inv.push(output[ind]);
+		output.splice(ind, 1);
+		input = [];
+
+		update();
+	});
+
+	$('body').on('mouseover', '.entry', function() {
+		var id = $(this).find('.name').text().replace(/ /g,"_");
+		$('.info-card .name').html(Items[id].name);
+		$('.info-card .weight').html(Items[id].weight);
+		$('.info-card .tags').html("");
+		for (i = 0; i < Items[id].tags.length; i++) {
+			$('.info-card .tags').append('<span class="tag '+Items[id].tags[i]+'">'+Items[id].tags[i]+'</span>');
+		}
+	});
+
+});
+
+function addItem(array, name) {
+	array.push(Items[name]);
+
+	update();
+}
+
+function checkOutput() {
+	//input.length == 2 is already checked
+
+	var item1 = input[0].tags;
+	var item2 = input[1].tags;
+
+	var tags = input[0].tags.concat(input[1].tags);
+
+	//spear
+	if (has(tags, 'long') && has(tags, 'sturdy') && has(tags, 'small') && has(tags, 'sharp')) {
+		//checks for right input
+		var mainitem;
+		var seconditem;
+
+		if (has(item1, 'long')) {
+			mainitem = input[0].name;
+			seconditem = input[1].name;
+		}
+		else {
+			mainitem = input[1].name;
+			seconditem = input[0].name;
+		}
+
+		//the actual stuff
+		var newname = mainitem + " spear (" + seconditem + " tip)";
+		var newid = newname.replace(/ /g,"_");
+
+		NEWITEM(
+			newname,
+			newid,
+			input[0].weight + input[1].weight,
+			[
+				'weapon',
+				'long'
+			]
+		);
+
+		addItem(output, newid);
+	}
+	//shelter
+	else if (has(tags, 'big') && has(tags, 'flexible') && has(tags, 'long') && has(tags, 'sturdy')) {
+		//checks for right input
+		var mainitem;
+		var seconditem;
+
+		if (has(item1, 'big')) {
+			mainitem = input[0].name;
+			seconditem = input[1].name;
+		}
+		else {
+			mainitem = input[1].name;
+			seconditem = input[0].name;
+		}
+
+		//the actual stuff
+		var newname = mainitem + " shelter (" + seconditem + " reinforced)";
+		var newid = newname.replace(/ /g,"_");
+
+		NEWITEM(
+			newname,
+			newid,
+			input[0].weight + input[1].weight,
+			[
+				'shelter',
+				'big'
+			]
+		);
+
+		addItem(output, newid);
+	}
+	else {
+		console.log('nothing possible');
+	}	
+}
+
+function has(array, tag) {
+	if (array.indexOf(tag) == -1) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+function clearInv() {
+	inv = [];
+	update();
+}
+
+function update() {
+	$('.inv').html(inv.map(getItem));
+	$('.input').html(input.map(getItem));
+	$('.output').html(output.map(getItem));
+}
+
+function getItem(array) {
+	var fullItem = "<div class='entry'><span class='name'>"+array.name+"</span> <span class='weight'>"+array.weight+"</span></div>";
+	return fullItem;
+}
+
+function rand(array) {
+	return array[Math.floor(Math.random() * array.length)];
+}
+
+function findTile(x, y, array) {
+	return array[y * width + x];
+}
+
+function randInt(bottom, top) {
+	return Math.floor(Math.random() * (top - bottom + 1)) + bottom;
+}
+</script>
+</body>
+</html>
