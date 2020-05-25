@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>islandgen</title>
+	<!-- KudosInc 26/5/2020 -->
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="css.css">
+</head>
+<body>
+
+<div class="wrapper">
+	<p>noise island generation!</p>
+
+	<div class="slidecontainer" id="size">
+	  <p>Size</p>
+	  <input type="range" min="1" max="100" value="50" class="slider">
+	  <p>Value: <span class="val"></span>/100</p>
+	</div>
+
+	<div class="slidecontainer" id="perlin">
+	  <p>Noise</p>
+	  <input type="range" min="1" max="50" value="15" class="slider">
+	  <p>Value: <span class="val"></span>/50</p>
+	</div>
+
+	<div class="slidecontainer" id="heightmap">
+	  <p>Depth</p>
+	  <input type="range" min="1" max="100" value="50" class="slider">
+	  <p>Value: <span class="val"></span>/100</p>
+	</div>
+
+	<button onclick="newSeed(), create();" class="btn">new seed</button>
+
+	<p>
+		<canvas></canvas>
+	</p>
+</div>
+
+<script type="text/javascript" src="noisejs-master/perlin.js"></script>
+<script type="text/javascript" src="js.js"></script>
+</body>
+</html>
