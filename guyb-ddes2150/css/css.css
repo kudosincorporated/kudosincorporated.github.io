@@ -1,0 +1,215 @@
+@font-face {
+	font-family: 'Kalam';
+	src: url(../Kalam-Regular.ttf);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-size: 1.6rem;
+	font-family: sans-serif;
+
+	background: rgb(76,76,148);
+	background: linear-gradient(200deg,
+				rgba(76,76,148,1) 0%,
+				rgba(106,76,147,1) 35%,
+				rgba(202,90,146,1) 100%,
+				rgba(112,76,148,1) 100%);
+
+	background-attachment: fixed;
+}
+
+html, body, #wrapper, .row, .col {
+	height: 100%;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	display: table-cell;
+	vertical-align: top;
+}
+
+#wrapper {
+	padding: 8px;
+}
+
+#id_card {
+	position: relative;
+	font-family: sans-serif;
+	width: 440px;
+	height: 230px;
+	background-color: white;
+	border-radius: 10px;
+	margin: 20px;
+	box-sizing: content-box;
+}
+
+.photo {
+	position: relative;
+	float: left;
+	height: 160px;
+	width: 160px;
+	border: 2px solid grey;
+	margin: 10px;
+	background-color: #ccc;
+}
+
+.head {
+	position: absolute;
+	top: 20%;
+	left: 10%;
+	width: 80%;
+	height: 80%;
+
+	font-family: monospace;
+	font-size: 3em;
+	background-color: grey;
+	color: white;
+	border: 2px solid white;
+	border-bottom: 0;
+
+	text-align: center;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.head .face {
+	transform: rotate(90deg);
+}
+
+.info {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	margin: 10px;
+}
+
+.lfk {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 10px;
+	text-align: center;
+	padding-top: 15%;
+	width: 210px;
+	height: 210px;
+	border: 2px solid grey;
+	margin: 10px;
+}
+
+.big_text {
+	font-size: 3em;
+}
+
+#todo {
+	font-family: 'Kalam', serif;
+	width: 300px;
+	height: 300px;
+	padding: 20px;
+	margin: 20px;
+
+	background-color: #f7f7a1;
+}
+
+.block {
+	background-color: rgba(0,0,0,0.5);
+	color: white;
+	padding: 20px;
+	margin: -8px;
+	height: calc(100% + 16px);
+}
+
+.know_clr {
+	color: black;
+}
+
+#canvas_col {
+	position: relative;
+	width: 800px;
+}
+
+.mono {
+	font-family: monospace;
+	font-size: 20px;
+	color: white;
+	margin: 20px;
+}
+
+#id_card, #todo {
+	box-shadow: 10px 10px 20px rgba(0,0,0,0.5);
+}
+
+
+
+
+/*@media only screen and (max-height: 700px) {
+	#canvas {
+		transform: scale(0.5);
+		position: absolute;
+		top: -25%;
+		left: -50%;
+	}
+
+	#canvas_col {
+		width: 400px;
+	}
+}
+
+@media only screen and (max-width: 1200px) {
+	#canvas {
+		transform: scale(0.5);
+		position: absolute;
+		top: -25%;
+		left: -50%;
+	}
+
+	#canvas_col {
+		width: 400px;
+	}
+	
+	.col {
+		display: block;
+	}
+
+	#id_card_cover {
+		float: left;
+	}
+
+	#todo_cover {
+		float: right;
+	}
+}*/
+
+@media only screen and (max-height: 700px) {
+	#canvas {
+		height: 400px;
+		width: 400px;
+	}
+
+	#canvas_col {
+		width: 400px;
+	}
+}
+
+@media only screen and (max-width: 1200px) {
+	.col {
+		display: block;
+	}
+
+	.block, .row, .col {
+		height: auto;
+	}
+}
