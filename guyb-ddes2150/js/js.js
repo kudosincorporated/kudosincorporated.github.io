@@ -2,7 +2,7 @@
 
 
 	//omigosh i love yavascript
-	//time to declare global variables 😎
+	//time to declare global variables :sunglasses:
 
 
 
@@ -565,22 +565,22 @@ $(window).on('load', function() {
 				getPeth();
 			}
 			updateTodo();
+		} else {
+			var nx = GAME.player.peth[0].x - GAME.player.x;
+			var ny = GAME.player.peth[0].y - GAME.player.y;
+
+			GAME.player.x += nx/10;
+			GAME.player.y += ny/10;
+
+			loop++;
+
+			if (loop == 100) {
+				loop = 0;
+				GAME.player.peth.splice(0, 1);
+			}
+
+			render();
 		}
-
-		var nx = GAME.player.peth.length != 0 ? GAME.player.peth[0].x - GAME.player.x : 0;
-		var ny = GAME.player.peth.length != 0 ? GAME.player.peth[0].y - GAME.player.y : 0;
-
-		GAME.player.x += nx/10;
-		GAME.player.y += ny/10;
-
-		loop++;
-
-		if (loop == 100) {
-			loop = 0;
-			GAME.player.peth.splice(0, 1);
-		}
-
-		render();
 	}
 
 	setTimeout(function() {
@@ -589,19 +589,12 @@ $(window).on('load', function() {
 
 
 	$(window).focus(function() {
-		console.log('focused');
 		reqAnimDraw = requestAnimationFrame(draw);
-		loop = 0;
-		GAME.player.x = Math.round(GAME.player.x);
-		GAME.player.y = Math.round(GAME.player.y);
 	});
 
 	$(window).blur(function() {
-		console.log('blurred');
 		cancelAnimationFrame(reqAnimDraw);
 	});
-
-
 
 })
 
