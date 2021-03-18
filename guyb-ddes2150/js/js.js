@@ -395,10 +395,14 @@ $(window).on('load', function() {
 
 	//PATHFINDING
 
-	function newPerson() {
+	function newPerson(per) {
+		if (per != undefined) {
+			GAME.player = per;
+		} else {
+
 		GAME.player = {};
 
-		GAME.peth = [];
+		GAME.player.peth = [];
 
 		GAME.player.name = rand(names);
 		GAME.player.age = randInt(16,80);
@@ -420,7 +424,6 @@ $(window).on('load', function() {
 			});
 		}
 
-
 		for (let i = 0; i < randInt(1,3); i++) {
 			if (Math.random() < GAME.player.knowledge) {
 				nds.push(rand(special));
@@ -428,6 +431,7 @@ $(window).on('load', function() {
 				nds.push(rand(normal));
 			}
 		}
+
 		nds.push({
 			name: "",
 			id: "leave",
@@ -439,6 +443,7 @@ $(window).on('load', function() {
 
 		GAME.player.colour = new Color(randInt(0,255), randInt(0,255), randInt(0,255));
 
+		}
 
 		//update id card
 		$('.name').html(GAME.player.name);
@@ -474,7 +479,7 @@ $(window).on('load', function() {
 	easystar.setAcceptableTiles([0]);
 
 	function getPeth() {
-		GAME.peth = [];
+		GAME.player.peth = [];
 
 		GAME.player.x = Math.round(GAME.player.x);
 		GAME.player.y = Math.round(GAME.player.y);
@@ -484,7 +489,7 @@ $(window).on('load', function() {
 				console.log("Path was not found!");
 			} else {
 				for (let i = 0; i < path.length; i++) {
-					GAME.peth.push({
+					GAME.player.peth.push({
 						x: path[i].x,
 						y: path[i].y
 					});
@@ -505,7 +510,43 @@ $(window).on('load', function() {
 	}
 
 
-	newPerson();
+	newPerson({
+		peth: [],
+		name: 'Peter Kiely',
+		age: 72,
+		face: ':{',
+		x: GAME.entry.x,
+		y: GAME.entry.y,
+		knowledge: 0.1,
+		needs: [
+			{
+				name: "Say hello to the librarian. (Front desk)",
+				id: "qr",
+				x: 1,
+				y: 6
+			},
+			{
+				name: "I need to respond to my emails. (Computers)",
+				id: "k_comp_1",
+				x: 3,
+				y: 1
+			},
+			{
+				name: "I'd like to catch up on the news. (Computers)",
+				id: "k_comp_2",
+				x: 3,
+				y: 1
+			},
+			{
+				name: "",
+				id: "leave",
+				x: GAME.exit.x,
+				y: GAME.exit.y
+			}
+		],
+		colour: new Color(185, 145, 95)
+	});
+
 	getPeth();
 
 
@@ -515,7 +556,7 @@ $(window).on('load', function() {
 	function draw() {
 		reqAnimDraw = requestAnimationFrame(draw);
 
-		if (GAME.peth.length == 0) {
+		if (GAME.player.peth.length == 0) {
 			GAME.player.needs.splice(0, 1);
 			if (GAME.player.needs.length != 0) {
 				getPeth();
@@ -526,8 +567,8 @@ $(window).on('load', function() {
 			updateTodo();
 		}
 
-		var nx = GAME.peth.length != 0 ? GAME.peth[0].x - GAME.player.x : 0;
-		var ny = GAME.peth.length != 0 ? GAME.peth[0].y - GAME.player.y : 0;
+		var nx = GAME.player.peth.length != 0 ? GAME.player.peth[0].x - GAME.player.x : 0;
+		var ny = GAME.player.peth.length != 0 ? GAME.player.peth[0].y - GAME.player.y : 0;
 
 		GAME.player.x += nx/10;
 		GAME.player.y += ny/10;
@@ -536,7 +577,7 @@ $(window).on('load', function() {
 
 		if (loop == 100) {
 			loop = 0;
-			GAME.peth.splice(0, 1);
+			GAME.player.peth.splice(0, 1);
 		}
 
 		render();
@@ -550,6 +591,9 @@ $(window).on('load', function() {
 	$(window).focus(function() {
 		console.log('focused');
 		reqAnimDraw = requestAnimationFrame(draw);
+		loop = 0;
+		GAME.player.x = Math.round(GAME.player.x);
+		GAME.player.y = Math.round(GAME.player.y);
 	});
 
 	$(window).blur(function() {
