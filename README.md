@@ -2,13 +2,19 @@
 
 (Games in no particular order)
 
-| Title | Desc | Link |
-| --- | --- | --- |
-| 80mil | Arcade/frogger style game | [https://kudosincorporated.github.io](https://kudosincorporated.github.io) |
-| Fishtown | Incremental about a fishing village [Unfinished] | [https://kudosincorporated.github.io/fishtown.html](https://kudosincorporated.github.io/fishtown.html) |
-| -- | Canvas map test | [https://kudosincorporated.github.io/maptest.html](https://kudosincorporated.github.io/maptest.html) |
-| SIDESCR | Sidescroller art game | [https://kudosincorporated.github.io/sidescr.html](https://kudosincorporated.github.io/sidescr.html) |
-| Ultimatum | Incremental about happiness/sadness | [https://kudosincorporated.github.io/ultimatum.html](https://kudosincorporated.github.io/ultimatum.html) |
-| Forager Incremental | Forager version 1, a crafting incremental game | [https://kudosincorporated.github.io/orager/main.html](https://kudosincorporated.github.io/forager/main.html) |
-| Forage | Forager version 2 [BIG changes!] | [https://kudosincorporated.github.io/forage/main.html](https://kudosincorporated.github.io/forage/main.html) |
-| -- | DOM map test | [https://kudosincorporated.github.io/testworld/index.html](https://kudosincorporated.github.io/testworld/index.html) |
+| Title | Desc |
+| --- | --- |
+| forage |  |
+| forage3 |  |
+| forager |  |
+| guyb-arts |  |
+| guyb-ddes2150 |  |
+| images |  |
+| islandgen |  |
+| testworld |  |
+| crafttest |  |
+| fishtown |  |
+| maptest |  |
+| mathstest |  |
+| sidescr |  |
+| ultimatum |  |
