@@ -4,17 +4,18 @@
 
 | Title | Desc |
 | --- | --- |
-| forage |  |
-| forage3 |  |
-| forager |  |
-| guyb-arts |  |
-| guyb-ddes2150 |  |
-| images |  |
-| islandgen |  |
-| testworld |  |
-| crafttest |  |
-| fishtown |  |
-| maptest |  |
-| mathstest |  |
-| sidescr |  |
-| ultimatum |  |
+| 80mil | Frogger clone |
+| Soulless | WIP |
+| forage | forest survival/collection game |
+| forage3 | 2nd v |
+| forager | 3rd/final v |
+| guyb-arts | uni assessment |
+| guyb-ddes2150 | uni assessment |
+| islandgen | perlin noise |
+| testworld | tunnel generator |
+| crafttest | crafting sim |
+| fishtown | unfinished incremental |
+| maptest | html canvas testing |
+| mathstest | DOM/maths testing |
+| sidescr | uni assessment |
+| ultimatum | happiness/sadness incremental |
