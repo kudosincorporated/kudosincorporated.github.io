@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>MONOCHROMYTHICA</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="css/normalize.css">
+
+	<link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+
+<div class="container">
+	<div id="header"></div>
+	<div class="row">
+		<div class="col">
+			<div class="section">
+				<div class="title-img" id="actions"></div>
+				<div class="block">
+
+					<div class="sep">
+						<div class="btn"><div class="num z"></div></div>
+						<div class="btn"><div class="num x"></div></div>
+						<div class="btn"><div class="num ua"></div></div>
+					</div>
+					<div class="sep">
+						<div class="btn invis"></div>
+						<div class="btn"><div class="num la"></div></div>
+						<div class="btn"><div class="num da"></div></div>
+						<div class="btn"><div class="num ra"></div></div>
+					</div>
+
+					<!--<div class="row">
+						<div class="col">
+							<div class="sep">
+								<div class="btn"><div class="num z"></div></div>
+								<div class="btn"><div class="num x"></div></div>
+								<div class="btn"><div class="num ua"></div></div>
+							</div>
+							<div class="sep">
+								<div class="btn invis"></div>
+								<div class="btn"><div class="num la"></div></div>
+								<div class="btn"><div class="num da"></div></div>
+								<div class="btn"><div class="num ra"></div></div>
+							</div>
+						</div>
+						<div class="col faded" style="width: 100px;">
+							<div id="mouse"></div>
+						</div>
+					</div>-->
+				</div>
+			</div>
+			<div class="section bottom">
+				<div class="title-img" id="journal">
+					<div class="notes">
+						<div class="note">
+							<div class="num g"></div>
+							<div class="num a"></div>
+							<div class="num m"></div>
+							<div class="num e"></div>
+							<div class="num p"></div>
+							<div class="num l"></div>
+							<div class="num a"></div>
+							<div class="num y"></div>
+							<div class="num blank"></div>
+							<div class="num t"></div>
+							<div class="num e"></div>
+							<div class="num s"></div>
+							<div class="num t"></div>
+						</div>
+
+						<div class="note">
+							<div class="num blank"></div>
+						</div>
+
+						<div class="note">
+							<div class="num da"></div>
+							<div class="num blank"></div>
+							<div class="num w"></div>
+							<div class="num a"></div>
+							<div class="num l"></div>
+							<div class="num k"></div>
+							<div class="num blank"></div>
+							<div class="num d"></div>
+							<div class="num o"></div>
+							<div class="num w"></div>
+							<div class="num n"></div>
+							<div class="num blank"></div>
+							<div class="num da"></div>
+						</div>
+
+						<!--<div class="note">
+							<div class="num h"></div>
+							<div class="num o"></div>
+							<div class="num m"></div>
+							<div class="num e"></div>
+							<div class="num blank"></div>
+							<div class="img house"></div>
+						</div>
+						<div class="note">
+							<div class="num m"></div>
+							<div class="num a"></div>
+							<div class="num r"></div>
+							<div class="num k"></div>
+							<div class="num e"></div>
+							<div class="num t"></div>
+							<div class="num blank"></div>
+							<div class="img market"></div>
+						</div>
+
+						<div class="note">
+							<div class="num f"></div>
+							<div class="num o"></div>
+							<div class="num r"></div>
+							<div class="num a"></div>
+							<div class="num g"></div>
+							<div class="num e"></div>
+							<div class="num blank"></div>
+							<div class="img grass"></div>
+							<div class="num blank"></div>
+							<div class="num ra"></div>
+							<div class="num blank"></div>
+							<div class="img seeds"></div>
+						</div>
+						<div class="note">
+							<div class="num s"></div>
+							<div class="num o"></div>
+							<div class="num w"></div>
+							<div class="num blank"></div>
+							<div class="img seeds"></div>
+							<div class="num blank"></div>
+							<div class="num ra"></div>
+							<div class="num blank"></div>
+							<div class="img sow"></div>
+							<div class="num blank"></div>
+							<div class="num ra"></div>
+							<div class="num blank"></div>
+							<div class="img plant"></div>
+						</div>
+						<div class="note">
+							<div class="num s"></div>
+							<div class="num e"></div>
+							<div class="num l"></div>
+							<div class="num l"></div>
+							<div class="num blank"></div>
+							<div class="img plant"></div>
+							<div class="num blank"></div>
+							<div class="num ra"></div>
+							<div class="num blank"></div>
+							<div class="img coin"></div>
+						</div>-->
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col" style="width: 736px;">
+			<div class="section">
+				<div id="game">
+					<div id="zzz" style="display: none;">
+						<div class="num z"></div>
+						<div class="num z"></div>
+						<div class="num z"></div>
+					</div>
+					<canvas id="canvas"></canvas>
+					<div id="player"></div>
+					<div id="click" style="display: none;"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="section">
+				<div class="title-img" id="inventory"></div>
+				<div class="block">
+					<div id="inv"></div>
+				</div>
+			</div>
+			<div class="section bottom">
+				<div class="progress-bar">
+					<div class="inner"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--<div id="info">
+		<div class="num s"></div>
+		<div class="num e"></div>
+		<div class="num l"></div>
+		<div class="num l"></div>
+</div>-->
+
+<!--
+<div class="img scythe"></div>
+<br>
+<div class="num one"></div>
+<div class="num two"></div>
+<div class="num three"></div>
+<div class="num four"></div>
+<div class="num five"></div>
+<div class="num six"></div>
+<div class="num seven"></div>
+<div class="num eight"></div>
+<div class="num nine"></div>
+<div class="num zero"></div>
+<div class="num dash"></div>
+<div class="num slash"></div>
+<br>
+<div class="num no"></div>
+<div class="num yes"></div>
+<div class="num hl"></div>
+<div class="num dude"></div>
+<div class="num dot"></div>
+<div class="num comma"></div>
+<div class="num colon"></div>
+<div class="num semi"></div>
+<div class="num lsb"></div>
+<div class="num rsb"></div>
+<div class="num lb"></div>
+<div class="num rb"></div>
+<div class="num la"></div>
+<div class="num ua"></div>
+<div class="num da"></div>
+<div class="num ra"></div>
+<br>
+<div class="num a"></div>
+<div class="num b"></div>
+<div class="num c"></div>
+<div class="num d"></div>
+<div class="num e"></div>
+<div class="num f"></div>
+<div class="num g"></div>
+<div class="num h"></div>
+<div class="num i"></div>
+<div class="num j"></div>
+<div class="num k"></div>
+<div class="num l"></div>
+<div class="num m"></div>
+<div class="num n"></div>
+<div class="num o"></div>
+<div class="num p"></div>
+<div class="num q"></div>
+<div class="num r"></div>
+<div class="num s"></div>
+<div class="num t"></div>
+<div class="num u"></div>
+<div class="num v"></div>
+<div class="num w"></div>
+<div class="num x"></div>
+<div class="num y"></div>
+<div class="num z"></div>
+<div class="num em"></div>
+<div class="num qm"></div>
+-->
+
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/easystar-0.4.4.min.js"></script>
+<script src="js/perlin.js"></script>
+<script src="js/js.js"></script>
+</body>
+</html>
