@@ -1,6 +1,6 @@
 # KudosInc Github
 
-(Games in no particular order)
+Games I've made
 
 | Title | Desc |
 | --- | --- |
