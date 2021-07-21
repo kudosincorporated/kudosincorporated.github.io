@@ -2,15 +2,19 @@
 
 var renderDebugMode = false;
 var disableInput = false;
+var firstZone = true;
+var seedDisplacement = 0;
+
 
 var GAME = {
 	canv: {
 		size: 32,
 		pixel: 0,
-		h: 23
+		h: 25
 	},
 	map: [],
 	nextSpot: [],
+	RAMmap: [],
 	grid: [],
 	inv: [],
 	selected: 'none',
@@ -18,28 +22,42 @@ var GAME = {
 		x: 1,
 		y: 1,
 		dir: [0,1],
-		targetFar: true
+		targetFar: true,
+		facing: 'down',
+		RAMx: 0,
+		RAMy: 0
 	},
 	day: 0,
 	showDir: false,
 	nighttime: false,
 	rx: 11,
 	speed: 800,
-	enemies: [],
-	kills: 0
+	kills: 0,
+	money: 0,
+	lives: 1,
+	chanceOf: {
+		monsterSpawn: 0.02,
+		lootSpawn: 0.05
+	},
+	weapon: 'fists',
+	weaponMatrix: [],
+	inRoom: false,
+	roomNumber: 0
 }
 
 var DISP = {
+	dirs: ['up', 'down', 'left', 'right'],
 	mid: { //use 'mid' for no displacement
 		x: 1, y: 1
 	}, up: {
-		x: 1, y: 0
+		//r is rotations for weapon rendering
+		x: 1, y: 0, r: 1
 	}, down: {
-		x: 1, y: 2
+		x: 1, y: 2, r: 3
 	}, left: {
-		x: 0, y: 1
+		x: 0, y: 1, r: 2
 	}, right: {
-		x: 2, y: 1
+		x: 2, y: 1, r: 4
 	}
 }
 
@@ -47,34 +65,33 @@ var TILESET = {
 	grass: ['grass_1','grass_2','herb_3'],
 	ocean: ['river'],
 	barren: ['ground'],
+	lootBoxes: ['crate_1','vase_1','barrel_1','chest_1'],
+	sand: ['sand_1','sand_2','pebbles'],
+	cliff: ['cliff_1','cliff_2'],
 
 	trees: ['tree_1','tree_2','tree_3','tree_4','tree_5','tree_6','tree_7'],
 	rocks: ['rocks_1','rocks_2','rocks_3','rocks_4'],
 
-	trees_all: ['tree_1','tree_2','tree_3','tree_4','tree_5'],
-	trees_rocks: ['tree_1','tree_2','tree_3','tree_4','tree_5','rocks_1','rocks_2','rocks_3','rocks_4'], //5:4 (all included)
-	rocks_all: ['rocks_1','rocks_2','rocks_3','rocks_4'],
+	house: ['table','nightstand','bed','bookshelf','clothes','rug_1','rug_2'],
 
-	grassy: ['grass_1','grass_2','herb_3','ground','ground','ground'], //1:1
-	rocky: ['rocks_1','rocks_2','ground','ground'], //1:1
-	treey: ['tree_1','tree_2','tree_3','ground'], //3:1
-	herbs: ['herb_1','herb_2','herb_3','herb_4','rocks_2'],
-
-	ground: ['grass_1','grass_2','herb_3','ground','ground','ground','ground','ground','ground','ground','ground'],
-	graveyard: ['grave_1','grave_2','herb_1','ground','ground','ground','ground','ground','ground','ground','ground','ground','ground'],
-	flowerfield: ['flowers_1','flowers_2','grass_1','ground','ground','ground','ground'],
-	cratezone: ['crate','bridge','ground','ground','ground','ground','ground','ground','ground','ground','ground','ground'],
-	alchemistheaven: ['herb_1','herb_2','herb_3','herb_4','flowers_1','flowers_2','river','ground','ground','ground','ground'],
-	ruins: ['bridge','path_cent','path_horz','path_vert','crate','sand_1','ground','ground','ground','ground']
+	treasure: ['coin_1','coin_2','coin_3','coin_4','coin_5','coin_6','coin_7','coin_8']
 }
 
-var BIOMES = {
-	outer: ['trees_all','trees_rocks','rocks_all'],
-	inner: ['grass','rocky','treey','herbs'],
-	middle: ['ground'/*,'graveyard','flowerfield','cratezone','alchemistheaven','ruins'*/]
+var BUILD = {
+	shop: {
+		arr: [
+			['shop_vert','shopkeep','shop_vert'],
+			['shop_llc','shop_horz','shop_lrc'],
+			['ground','ground','ground']
+		]
+	}
 }
 
 var TILE = {
+	test: 		{ sx: 4, sy: 6, block: false, colour: 'logcabin' },
+	test_2: 	{ sx: 5, sy: 7, block: false, colour: 'grey' },
+	blank: 		{ sx: 5, sy: 7, block: false },
+	invisidoor: { sx: 6, sy: 7, block: false, isDoor: true },
 	tree_1:		{ sx: 0, sy: 0, block: true, colour: 'green', name: 'pine tree', drops: [{n:'timber',c:1,mi:1,ma:2},{n:'acorns',c:1,mi:1,ma:2}], change: 'stump', },
 	tree_2:		{ sx: 1, sy: 0, block: true, colour: 'green', name: 'willow tree', drops: [{n:'timber',c:1,mi:1,ma:1},{n:'acorns',c:1,mi:1,ma:2}], change: 'stump', },
 	tree_3:		{ sx: 2, sy: 0, block: true, colour: 'green', name: 'oak tree', drops: [{n:'timber',c:1,mi:1,ma:3},{n:'acorns',c:1,mi:1,ma:2}], change: 'stump', },
@@ -89,18 +106,17 @@ var TILE = {
 	rocks_2: 	{ sx: 7, sy: 0, block: true, colour: 'desert', name: 'gibber', drops: [{n:'rock',c:1,mi:1,ma:2}], change: 'pebbles' },
 	rocks_3: 	{ sx: 6, sy: 9, block: true, colour: 'desert', name: 'rocks', drops: [{n:'rock',c:1,mi:2,ma:3}], change: 'pebbles' },
 	rocks_4: 	{ sx: 7, sy: 9, block: true, colour: 'desert', name: 'stones', drops: [{n:'rock',c:1,mi:1,ma:2}], change: 'pebbles' },
-	pebbles: 	{ sx: 0, sy: 11, block: false, colour: 'desert', name: 'pebbles', drops: [{n:'rock',c:0.5,mi:1,ma:1}], change: 'ground' },
+	pebbles: 	{ sx: 0, sy: 11, block: false, colour: 'sand', name: 'pebbles', drops: [{n:'rock',c:0.5,mi:1,ma:1}], change: 'ground' },
 	bush: 		{ sx: 6, sy: 0, block: true, colour: 'green' },
-	ground:		{ sx: 6, sy: 7, block: false, name: 'ground',
-				  desc: "Careful! Enemies can sense you here." },
+	ground:		{ sx: 6, sy: 7, block: false, name: 'ground' },
 	herb_1: 	{ sx: 0, sy: 2, block: false, colour: 'green', name: 'dandelion' },
 	herb_2: 	{ sx: 1, sy: 2, block: false, colour: 'green', name: 'cornflower' },
 	herb_3: 	{ sx: 2, sy: 2, block: false, colour: 'green', name: 'bloomflower', drops: [{n:'jute',c:1,mi:1,ma:1}], change: 'ground' },
 	herb_4: 	{ sx: 3, sy: 2, block: false, colour: 'green', name: 'jute' },
 	flowers_1: 	{ sx: 6, sy: 3, block: false, colour: 'flowers' },
 	flowers_2: 	{ sx: 7, sy: 3, block: false, colour: 'flowers' },
-	weeds_1: 	{ sx: 6, sy: 3, block: false, colour: 'green' },
-	weeds_2: 	{ sx: 7, sy: 3, block: false, colour: 'green' },
+	weeds_1: 	{ sx: 6, sy: 3, block: false, colour: 'green', drops: [], change: 'ground' },
+	weeds_2: 	{ sx: 7, sy: 3, block: false, colour: 'green', drops: [], change: 'ground' },
 	grass_1: 	{ sx: 1, sy: 6, block: false, colour: 'green', name: 'grass', drops: [{n:'seeds',c:1,mi:1,ma:2}], change: 'ground' },
 	grass_2: 	{ sx: 2, sy: 6, block: false, colour: 'green', name: 'grass', drops: [{n:'seeds',c:1,mi:1,ma:2}], change: 'ground' },
 	path_vert: 	{ sx: 4, sy: 1, block: false, colour: 'desert' },
@@ -114,13 +130,29 @@ var TILE = {
 	cornflower: { sx: 5, sy: 5, block: false, colour: 'shiny', collect: true },
 	berries: 	{ sx: 6, sy: 5, block: false, colour: 'shiny', collect: true },
 	branch: 	{ sx: 7, sy: 5, block: false, colour: 'shiny', collect: true },
-	river: 		{ sx: 3, sy: 6, block: false, colour: 'blue', name: 'river', drops: [], change: 'ground' },
+	river: 		{ sx: 3, sy: 6, block: false, colour: 'blue', name: 'river',
+				  desc: "Most enemies cannot detect you in water." },
+	river_vert: { sx: 0, sy: 14, block: true, colour: 'blue', },
+	spray: 		{ sx: 1, sy: 14, block: false, colour: 'white', },
 	bridge: 	{ sx: 5, sy: 6, block: false, colour: 'desert', drops: [{n:'timber',c:1,mi:1,ma:1}], change: 'ground' },
-	crate: 		{ sx: 4, sy: 6, block: true, colour: 'desert' },
+	crate_1: 	{ sx: 0, sy: 12, block: true, colour: 'shiny', name: 'crate', drops: [], change: 'crate_2', isLoot: true,
+				  desc: "Open it!" },
+	crate_2: 	{ sx: 1, sy: 12, block: false, colour: 'grey', name: 'empty crate', drops: [], change: 'ground' },
+	vase_1: 	{ sx: 2, sy: 12, block: true, colour: 'shiny', name: 'vase', drops: [], change: 'vase_2', isLoot: true,
+				  desc: "Open it!" },
+	vase_2: 	{ sx: 3, sy: 12, block: false, colour: 'grey', name: 'empty vase', drops: [], change: 'ground' },
+	barrel_1: 	{ sx: 4, sy: 12, block: true, colour: 'shiny', name: 'barrel', drops: [], change: 'barrel_2', isLoot: true,
+				  desc: "Open it!" },
+	barrel_2: 	{ sx: 5, sy: 12, block: false, colour: 'grey', name: 'empty barrel', drops: [], change: 'ground' },
+	chest_1: 	{ sx: 6, sy: 12, block: true, colour: 'shiny', name: 'chest', drops: [], change: 'chest_2', isLoot: true,
+				  desc: "Open it!" },
+	chest_2: 	{ sx: 7, sy: 12, block: false, colour: 'grey', name: 'empty chest', drops: [], change: 'ground' },
 	grave_1: 	{ sx: 4, sy: 3, block: true, colour: 'grey' },
 	grave_2: 	{ sx: 5, sy: 3, block: true, colour: 'grey' },
-	bloodgrave: { sx: 5, sy: 3, block: true, colour: 'bloody', name: 'bloody grave',
-				  desc: "The grave of a dead monster." },
+	bloodgrave: { sx: 5, sy: 3, block: true, colour: 'bloody', name: 'bloody grave', drops: [{n:'bloodgrave',c:1,mi:1,ma:1}], change: 'pebbles',
+				  desc: "The gory grave of a dead monster." },
+	watergrave: { sx: 5, sy: 3, block: true, colour: 'blue', name: 'watery grave', drops: [{n:'watergrave',c:1,mi:1,ma:1}], change: 'river',
+				  desc: "The watery grave of a dead monster." },
 	npc_1: 		{ sx: 4, sy: 2, block: true, colour: 'grey' },
 	portal: 	{ sx: 2, sy: 3, block: false, colour: 'blue' },
 	ocean: 		{ sx: 2, sy: 7, block: false, colour: 'blue' },
@@ -130,7 +162,7 @@ var TILE = {
 	house: 		{ sx: 1, sy: 3, block: true, colour: 'shiny' },
 	scythe: 	{ sx: 3, sy: 4, block: false, colour: 'shiny', drops: [{n:'scythe',c:1,mi:1,ma:1}], change: 'ground' },
 	market: 	{ sx: 3, sy: 3, block: true, colour: 'shiny' },
-	shopkeep: 	{ sx: 4, sy: 2, block: false, colour: 'white' },
+	shopkeep: 	{ sx: 4, sy: 2, block: false, colour: 'white', isSecret: true },
 	farmer: 	{ sx: 5, sy: 2, block: false, colour: 'white' },
 	goalie: 	{ sx: 6, sy: 2, block: false, colour: 'white' },
 	kiddo: 		{ sx: 7, sy: 2, block: false, colour: 'white' },
@@ -139,14 +171,127 @@ var TILE = {
 	crop: 		{ sx: 2, sy: 2, block: false, colour: 'flowers', drops: [{n:'crop',c:1,mi:1,ma:1}], change: 'sow' },
 	torchpole: 	{ sx: 4, sy: 11, block: true, colour: 'grey' },
 	wall: 		{ sx: 3, sy: 10, block: true, colour: 'grey' },
-	carcass: 	{ sx: 5, sy: 11, block: false, colour: 'bloody' }
+	carcass: 	{ sx: 5, sy: 11, block: false, colour: 'bloody' },
+	shop_vert: 	{ sx: 0, sy: 13, block: true, colour: 'grey' },
+	shop_llc: 	{ sx: 1, sy: 13, block: true, colour: 'grey' },
+	shop_horz: 	{ sx: 2, sy: 13, block: true, colour: 'grey' },
+	shop_lrc: 	{ sx: 3, sy: 13, block: true, colour: 'grey' },
+	shop_ulc: 	{ sx: 4, sy: 13, block: true, colour: 'grey' },
+	shop_urc: 	{ sx: 5, sy: 13, block: true, colour: 'grey' },
+	rubble_1: 	{ sx: 0, sy: 15, block: true, colour: 'desert' },
+	rubble_2: 	{ sx: 1, sy: 15, block: true, colour: 'desert' },
+	rubble_3: 	{ sx: 2, sy: 15, block: true, colour: 'desert' },
+	rubble_4: 	{ sx: 3, sy: 15, block: true, colour: 'desert' },
+	rubble_5: 	{ sx: 3, sy: 14, block: true, colour: 'green' },
+	cliff_1: 	{ sx: 2, sy: 14, block: true, colour: 'logcabin' },
+	cliff_2: 	{ sx: 3, sy: 14, block: true, colour: 'logcabin' },
+	house_ul: 	{ sx: 8, sy: 0, block: true, colour: 'logcabin' },
+	house_ur: 	{ sx: 9, sy: 0, block: true, colour: 'logcabin' },
+	house_ll: 	{ sx: 8, sy: 1, block: true, colour: 'logcabin' },
+	house_lr: 	{ sx: 9, sy: 1, block: false, colour: 'logcabin', isDoor: true },
+	hut_ul: 	{ sx: 8, sy: 2, block: true, colour: 'sand' },
+	hut_ur: 	{ sx: 9, sy: 2, block: true, colour: 'sand' },
+	hut_ll: 	{ sx: 8, sy: 3, block: true, colour: 'sand' },
+	hut_lr: 	{ sx: 9, sy: 3, block: true, colour: 'sand' },
+	door: 		{ sx: 0, sy: 16, block: false, colour: 'desert', isDoor: true },
+	wall_2: 	{ sx: 1, sy: 16, block: true, colour: 'logcabin' },
+	wall_3: 	{ sx: 2, sy: 16, block: true, colour: 'logcabin' },
+
+	table: 		{ sx: 3, sy: 16, block: true, colour: 'logcabin' },
+	nightstand: { sx: 4, sy: 16, block: true, colour: 'logcabin' },
+	bed: 		{ sx: 5, sy: 16, block: true, colour: 'bloody' },
+	bookshelf: 	{ sx: 4, sy: 17, block: true, colour: 'logcabin' },
+	clothes: 	{ sx: 5, sy: 17, block: true, colour: 'bloody' },
+	rug_1: 		{ sx: 6, sy: 17, block: false, colour: 'flowers' },
+	rug_2: 		{ sx: 7, sy: 17, block: false, colour: 'flowers' }
+}
+
+var ENTITY = {
+	detail: {
+		spray: 		{ sx: 4, sy: 10 },
+		grasstop: 	{ sx: 4, sy: 11 },
+		doorglow: 	{ sx: 2, sy: 11 }
+	},
+	enemy: {
+		smurg: 			{ sx: 0, sy: 8 },
+		riversprite: 	{ sx: 1, sy: 8 }
+	},
+	treasure: {
+		coin_1: { sx: 0, sy: 9 },
+		coin_2: { sx: 1, sy: 9 },
+		coin_3: { sx: 2, sy: 9 },
+		coin_4: { sx: 3, sy: 9 },
+		coin_5: { sx: 4, sy: 9 },
+		coin_6: { sx: 5, sy: 9 },
+		coin_7: { sx: 6, sy: 9 },
+		coin_8: { sx: 7, sy: 9 }
+	}
+}
+
+var WEAPON = {
+	fists: {
+		arr: [
+			[0,0,0],
+			[0,0,0],
+			[0,1,0]
+		]
+	},
+	dagger: {
+		arr: [
+			[0,0,0],
+			[0,0,0],
+			[1,0,1]
+		]
+	},
+	mace: {
+		arr: [
+			[0,0,0],
+			[0,0,0],
+			[2,1,2]
+		]
+	},
+	sword: {
+		arr: [
+			[0,0,0],
+			[1,0,1],
+			[0,1,0]
+		]
+	},
+	flail: {
+		arr: [
+			[0,1,0],
+			[2,0,2],
+			[1,0,1]
+		]
+	},
+	staff: {
+		arr: [
+			[0,1,0],
+			[1,0,1],
+			[0,1,0]
+		]
+	},
+	whip: {
+		arr: [
+			[1,0,1],
+			[0,0,0],
+			[1,0,1]
+		]
+	},
+	scythe: {
+		arr: [
+			[0,0,0],
+			[1,0,1],
+			[2,1,2]
+		]
+	}
 }
 
 var spritesheet = new Image();
 	spritesheet.src = 'tiles_outline-export.png'; //tiles.png
 
 var numbers = new Image();
-	numbers.src = 'numbers.png'; //numbers.png
+	numbers.src = 'numbers-export.png'; //numbers.png
 
 $(window).on('load', function() {
 
@@ -177,10 +322,25 @@ $(window).on('load', function() {
 	GAME.player.x = Math.floor(GAME.canv.h/2);
 	GAME.player.y = Math.floor(GAME.canv.h/2);
 
+
+
+
 	class Tile {
 		constructor(name) {
 			this.name = name;
 			this.colour = getColor(TILE[this.name].colour);
+
+			var hasSecret = false;
+			if (TILE[this.name].isSecret != undefined) hasSecret = TILE[this.name].isSecret;
+			this.hasSecret = hasSecret;
+
+			var isLoot = false;
+			if (TILE[this.name].isLoot != undefined) isLoot = TILE[this.name].isLoot;
+			this.isLoot = isLoot;
+
+			var isDoor = false;
+			if (TILE[this.name].isDoor != undefined) isDoor = TILE[this.name].isDoor;
+			this.isDoor = isDoor;
 		}
 		sx() {
 			return TILE[this.name].sx*64;
@@ -195,7 +355,56 @@ $(window).on('load', function() {
 				return false;
 			}
 		}
+		collect() {
+			//collect treasure
+			for (let b = 0; b < GAME.map.entities.length; b++) {
+				if (GAME.map.entities[b].x == GAME.player.x && GAME.map.entities[b].y == GAME.player.y) {
+
+					if (GAME.map.entities[b].whatIsIt == 'treasure') {
+						GAME.money += GAME.map.entities[b].attr.value;
+						updCoins();
+						GAME.map.entities.splice(b, 1);
+						render(GAME.map, 'mid');
+					}
+
+				}
+			}
+
+			//enter doorways
+			if (GAME.map.arr[GAME.player.x][GAME.player.y].isDoor) {
+				if (!GAME.inRoom) {
+					for (let i=0; i < GAME.map.rooms.length; i++) {
+						if (GAME.player.x == GAME.map.rooms[i].x && GAME.player.y == GAME.map.rooms[i].y) {
+							GAME.roomNumber = i;
+						}
+					}
+
+					GAME.player.RAMx = GAME.player.x;
+					GAME.player.RAMy = GAME.player.y;
+
+					GAME.player.x = GAME.map.rooms[GAME.roomNumber].a+Math.floor(GAME.map.rooms[GAME.roomNumber].w/2);
+					GAME.player.y = GAME.map.rooms[GAME.roomNumber].b+GAME.map.rooms[GAME.roomNumber].h;
+
+					GAME.RAMmap = GAME.map;
+					GAME.map = GAME.map.rooms[GAME.roomNumber];
+				} else {
+					GAME.map.rooms[GAME.roomNumber] = GAME.map;
+					GAME.map = GAME.RAMmap;
+
+					GAME.player.x = GAME.player.RAMx;
+					GAME.player.y = GAME.player.RAMy;
+				}
+
+				GAME.inRoom = !GAME.inRoom;
+			}
+		}
 	}
+
+	function updCoins() {
+		$('#coins').html(getNumberDOM(GAME.money));
+	}
+
+	updCoins();
 
 	class Item {
 		constructor(name, amt) {
@@ -237,21 +446,40 @@ $(window).on('load', function() {
 		}
 	}
 
-
-
-	//Adding enemies
-
-	class Enemy {
-		constructor(type, x, y) {
-			this.type = type;
+	//adding mobs/coins/details
+	class Entity {
+		constructor(whatIsIt, x, y, attr) { //sx and sy are spritesheet coordinates
+			this.whatIsIt = whatIsIt;
 			this.x = x;
 			this.y = y;
-			this.path = [];
+			this.attr = attr;
+		}
+		sx() {
+			return ENTITY[this.whatIsIt][this.attr.name].sx*32;
+		}
+		sy() {
+			return ENTITY[this.whatIsIt][this.attr.name].sy*32;
 		}
 	}
 
-	function addEnemy(type, x, y) {
-		GAME.enemies.push(new Enemy(type, x, y));
+
+
+	class Map {
+		constructor() {
+			this.arr = [];
+			this.elevation = [];
+			this.vision = [];
+			this.entities = [];
+			this.enemies = [];
+			this.rooms = [];
+		}
+		addEntity(whatIsIt, x, y, attr) {
+			if (firstZone && whatIsIt == 'enemy') {
+				//
+			} else {
+				this.entities.push(new Entity(whatIsIt, x, y, attr));
+			}
+		}
 	}
 
 
@@ -283,8 +511,7 @@ $(window).on('load', function() {
 						$('#inv .item').eq(oc).addClass('selected');
 					}
 				} else if (c == 1) {
-					var string = getNumberString(test[y]);
-					$('#inv .item').eq(oc).append('<span class="num '+numToWord(string.charAt(0))+'"></span><span class="num '+numToWord(string.charAt(1))+'"></span>');
+					$('#inv .item').eq(oc).append(getNumberDOM(test[y]));
 				}
 				c++;
 			}
@@ -297,17 +524,17 @@ $(window).on('load', function() {
 		}
 	}
 
+	//cool thing to activate
+	/*setInterval(function() {
+		seedDisplacement += 1;
+		GAME.map = create();
+		render(GAME.map, 'mid');
+	}, 100);*/
 
-
+	noise.seed(Math.random());
 
 	function create() {
-		var nMap = {
-			arr: [],
-			elevation: [],
-			vision: []
-		}
-
-		noise.seed(Math.random());
+		var nMap = new Map();
 
 		//MAKE ALL GROUND
 		function farVal() { //findFarthestDist
@@ -357,15 +584,19 @@ $(window).on('load', function() {
 			return biome;
 		}
 
+		//generate forest biome
 		var biome = generateBiome();
 
-		console.log(
+		/*console.log(
 			'outer: trees: '+biome.outer.trees+'\n'+
 			'       rocks: '+biome.outer.rocks+'\n'+
 			'inner: dense: '+biome.inner.dense+'\n'+
 			'       light: '+biome.inner.light+'\n'+
 			'middle: '+biome.middle
-		);
+		);*/
+
+		//generate structures list UNUSED !!!
+		var structs = [];
 
 		for (var x = 0; x < GAME.canv.h; x++) {
 			nMap.arr.push([]);
@@ -374,7 +605,7 @@ $(window).on('load', function() {
 
 			for (var y = 0; y < GAME.canv.h; y++) {
 
-				var et = noise.perlin2(x / 8, y / 8);
+				var et = noise.perlin2(x / 8, (y+seedDisplacement) / 8);
 				et = (et+1)/2; //normalise an array of -1/1 to 0/1;
 
 					//making a circle
@@ -388,7 +619,7 @@ $(window).on('load', function() {
 					t = (t + farVal()) / (farVal() + 0);
 					t = t-1;
 					/////////////////////////
-					nMap.vision[x].push(t*3.5); //3.5 a good value for nightt1me
+					nMap.vision[x].push(t); //3.5 a good value for nightt1me
 					/////////////////////////
 
 				var et_t = et*t;
@@ -407,8 +638,16 @@ $(window).on('load', function() {
 					} else if (et > 0.4) {
 						nMap.arr[x].push(new Tile( rand(biome.inner.dense) ));
 
-						if (Math.random() < 0.01) { //1 in 100 chance?
-							addEnemy('smurg', x, y);
+						if (Math.random() < GAME.chanceOf.monsterSpawn) { //1 in 100 chance?
+							nMap.addEntity('enemy', x, y, {
+								name: 'smurg',
+								grave: 'bloodgrave',
+								path: []
+							});
+						}
+
+						if (Math.random() < GAME.chanceOf.lootSpawn) { //1 in 100 chance
+							nMap.arr[x][y] = new Tile( rand(TILESET.lootBoxes) );
 						}
 
 					} else {
@@ -418,7 +657,7 @@ $(window).on('load', function() {
 				} else { //outer (rest)
 
 					if (et > 0.5) {
-						nMap.arr[x].push(new Tile( rand(biome.outer.trees) ));
+						nMap.arr[x].push(new Tile(	rand(biome.outer.trees) ));
 					} else {
 						nMap.arr[x].push(new Tile( rand(biome.outer.rocks) ));
 					}
@@ -427,8 +666,9 @@ $(window).on('load', function() {
 			}
 		}
 
+
 		//spawning river !!!
-		ry = 0;
+		var ry = 0;
 
 		while (ry < GAME.canv.h) {
 			var dirs = ['left','right','down','down'];
@@ -437,15 +677,24 @@ $(window).on('load', function() {
 			while (len > 0) {
 				nMap.arr[GAME.rx][ry] = new Tile('river');
 
+				//spawning riversprites?
+				if (Math.random() < GAME.chanceOf.monsterSpawn) { //1 in 100 chance?
+					nMap.addEntity('enemy', GAME.rx, ry, {
+						name: 'riversprite',
+						grave: 'watergrave',
+						path: []
+					});
+				}
+
 				var way = [-1,1];
 				var nway = rand(way);
 				if (GAME.rx + nway > 2 && GAME.rx + nway < GAME.canv.h-2) {
 					nMap.arr[GAME.rx + rand(way)][ry] = new Tile('river');
 				}
 
-				if (dir == 'left' && GAME.rx > 0) {
+				if (dir == 'left' && GAME.rx > 3) { //river cant go into the wall
 					GAME.rx--;
-				} else if (dir == 'right' && GAME.rx < GAME.canv.h-1) {
+				} else if (dir == 'right' && GAME.rx < GAME.canv.h-4) { //river cant go into the wall
 					GAME.rx++;
 				} else {
 					ry++;
@@ -455,14 +704,247 @@ $(window).on('load', function() {
 			}
 		}
 
+		//spawning walls ??
+		var wlkr = 0;
+
+		while (wlkr < GAME.canv.h) {
+			var lft = Math.round(nMap.elevation[0][wlkr]*5);
+			var rgh = Math.round(nMap.elevation[GAME.canv.h-1][wlkr]*5);
+
+			while (lft > 0) {
+				nMap.arr[lft-1][wlkr] = new Tile( rand(TILESET.cliff) );
+				if (!firstZone) {
+					if (Math.random() < 0.2) {
+						nMap.addEntity('detail', lft-1, wlkr, {
+							name: 'grasstop'
+						});
+					}
+				} else if (wlkr > 5) {
+					if (Math.random() < 0.2) {
+						nMap.addEntity('detail', lft-1, wlkr, {
+							name: 'grasstop'
+						});
+					}
+				}
+				lft--;
+			}
+
+			while (rgh > 0) {
+				nMap.arr[GAME.canv.h - rgh][wlkr] = new Tile( rand(TILESET.cliff) );
+				if (!firstZone) {
+					if (Math.random() < 0.2) {
+						nMap.addEntity('detail', GAME.canv.h - rgh, wlkr, {
+							name: 'grasstop'
+						});
+					}
+				} else if (wlkr > 5) {
+					if (Math.random() < 0.2) {
+						nMap.addEntity('detail', GAME.canv.h - rgh, wlkr, {
+							name: 'grasstop'
+						});
+					}
+				}
+				rgh--;
+			}
+
+			wlkr++;
+		}
+
 		//pathways
 		/*for (let i = 0; i < GAME.canv.h; i++) {
-			nMap.arr[Math.floor(GAME.canv.h/2)][i] = new Tile('ground');
-			nMap.arr[i][Math.floor(GAME.canv.h/2)] = new Tile('ground');
+			nMap.arr[0][i] = new Tile( rand(TILESET.cliff) );
+			nMap.arr[GAME.canv.h-1][i] = new Tile( rand(TILESET.cliff) );
 		}*/
+
+		if (firstZone) {
+			//spawning cliff ??
+			var cs = 0;
+			var dFt = 0; //distanceFromTop
+
+			while (cs < GAME.canv.h) {
+				var ychange = Math.round(nMap.elevation[cs][dFt]*10);
+				var mu = dFt+ychange;
+				
+				var foundTile = nMap.arr[cs][mu].name;
+				if (foundTile == 'river') {
+					nMap.arr[cs][mu] = new Tile( 'river_vert' );
+					nMap.arr[cs][mu+1] = new Tile( 'river_vert' );
+					nMap.arr[cs][mu+2] = new Tile( 'river_vert' );
+					nMap.arr[cs][mu+3] = new Tile( 'river_vert' );
+					nMap.arr[cs][mu+4] = new Tile( 'river' );
+
+					nMap.addEntity('detail', cs, mu+3, {
+						name: 'spray'
+					});
+				} else {
+					nMap.arr[cs][mu] = new Tile( rand(TILESET.cliff) );
+					nMap.arr[cs][mu+1] = new Tile( rand(TILESET.cliff) );
+					nMap.arr[cs][mu+2] = new Tile( rand(TILESET.cliff) );
+					nMap.arr[cs][mu+3] = new Tile( rand(TILESET.cliff) );
+					nMap.arr[cs][mu+4] = new Tile( rand(TILESET.cliff) );
+
+					if (Math.random() > 0.5){
+						nMap.addEntity('detail', cs, mu, {
+							name: 'grasstop'
+						});
+					}
+				}
+
+				while (mu > 0) {
+					var damn = nMap.arr[cs][mu-1].name;
+					if (damn == 'river') {
+						nMap.arr[cs][mu-1] = new Tile( 'river' );
+					} else {
+						nMap.arr[cs][mu-1] = new Tile( rand(biome.outer.trees) );
+					}
+
+					mu--;
+				}
+				cs++;
+			}
+		}
+
+
+		//making a shop !
+		/*
+		structs.push({
+			type: 'shop',
+			x: 1,
+			y: 1
+		});
+		*/
+
+
+		for (let i=0; i < structs.length; i++) {
+			var s = structs[i];
+			createStructure(s.type, s.x, s.y, s.h, s.w);
+		}
+
+		function createStructure(type, x, y, height, width) {
+			if (BUILD[type] != undefined) {
+				for (let a=0; a < BUILD[type].arr[0].length; a++) {
+					for (let b=0; b < BUILD[type].arr.length; b++) {
+						if (x+a < GAME.canv.h && y+b < GAME.canv.h) {
+							if (BUILD[type].arr[b][a] == '') {
+								//do nothing
+							} else {
+								nMap.arr[x+a][y+b] = new Tile( BUILD[type].arr[b][a] );
+							}
+						}
+					}
+				}
+			} else {
+				for (let a=0; a < width; a++) {
+					for (let b=0; b < height; b++) {
+						if (x+a < GAME.canv.h && y+b < GAME.canv.h) {
+							nMap.arr[x+a][y+b] = new Tile( 'flowers_1' );
+						}
+					}
+				}
+			}
+		}
+
+
+
+		//spawn cabins!
+		var cabinSpawnTries = 1;
+		while (cabinSpawnTries > 0) {
+			var r = {
+				x: randInt(2, GAME.canv.h-3),
+				y: randInt(2, GAME.canv.h-3)
+			}
+
+			function isTreeTile(x,y) {
+				if (TILESET.trees.indexOf(nMap.arr[x][y].name) != -1) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+			if (!firstZone) {
+				if (isTreeTile(r.x-1,r.y-1) && isTreeTile(r.x,r.y-1) && isTreeTile(r.x-1,r.y) && isTreeTile(r.x,r.y)) {
+					nMap.arr[r.x-1][r.y-1] = new Tile( 'house_ul' );
+					nMap.arr[r.x][r.y-1] = new Tile( 'house_ur' );
+					nMap.arr[r.x-1][r.y] = new Tile( 'house_ll' );
+					nMap.arr[r.x][r.y] = new Tile( 'house_lr' );
+
+					nMap.addEntity('detail', r.x, r.y, {
+						name: 'doorglow'
+					});
+
+					nMap.rooms.push( createRoom(r.x, r.y) );
+				}
+			}
+
+			cabinSpawnTries--;
+		}
+
+
+
+
+
+		//nMap.arr[x+a][y+b] = new Tile( 'ground' );
+
+		//console.log('BAD x+a: '+(x+a)+' y+b: '+(y+b)+' '+'max: '+(GAME.canv.h-1));
+
+		firstZone = false;
+		return nMap;
+	}
+
+	//create rooms
+	function createRoom(x, y) {
+		var nMap = new Map();
+
+		var maxTreasure = 4;
+
+		nMap.x = x;
+		nMap.y = y;
+		nMap.w = 6;
+		nMap.h = 6;
+		nMap.a = Math.floor(GAME.canv.h/2 - nMap.w/2);
+		nMap.b = Math.floor(GAME.canv.h/2 - nMap.h/2);
+
+		for (var x = 0; x < GAME.canv.h; x++) {
+			nMap.arr.push([]);
+			for (var y = 0; y < GAME.canv.h; y++) {
+				if (x < nMap.a+nMap.w+1 && x >= nMap.a-1 && y < nMap.b+nMap.h+1 && y >= nMap.b-1) {
+					if (x < nMap.a+nMap.w && x >= nMap.a && y < nMap.b+nMap.h && y >= nMap.b) {
+						
+						if (Math.random() > 0.3) {
+							nMap.arr[x].push(new Tile( 'ground' ));
+						} else {
+							if (maxTreasure > 0) {
+								nMap.arr[x].push(new Tile( rand(TILESET.lootBoxes) ));
+								maxTreasure--;
+							} else {
+								nMap.arr[x].push(new Tile( rand(TILESET.house) ));
+							}
+						}
+
+					} else {
+						if (y == nMap.b-1 || y == nMap.b+nMap.h) {
+							nMap.arr[x].push(new Tile( 'wall_2' ));
+						} else {
+							nMap.arr[x].push(new Tile( 'wall_3' ));
+						}
+					}
+				} else {
+					nMap.arr[x].push(new Tile( 'ground' ));
+				}
+			}
+		}
+
+		nMap.arr[nMap.a+Math.floor(nMap.w/2)][nMap.b+nMap.h-1] = new Tile( 'ground' );
+		nMap.arr[nMap.a+Math.floor(nMap.w/2)][nMap.b+nMap.h] = new Tile( 'door' );
+		nMap.arr[nMap.a+Math.floor(nMap.w/2)][nMap.b+nMap.h+1] = new Tile( 'invisidoor' );
 
 		return nMap;
 	}
+
+
+
+
 
 	function render(mapToRender, dir) {
 		function setupGrid() {
@@ -483,73 +965,68 @@ $(window).on('load', function() {
 
 		setupGrid();
 
+		//draw tiles
 		for (var x = 0; x < GAME.canv.h; x++) {
 			for (var y = 0; y < GAME.canv.h; y++) {
-				var xsize = x*GAME.canv.size + x*GAME.canv.pixel;
-				var ysize = y*GAME.canv.size + y*GAME.canv.pixel;
-
-					xsize += GAME.canv.h*GAME.canv.size*DISP[dir].x;
-					ysize += GAME.canv.h*GAME.canv.size*DISP[dir].y;
-
-				//if (x == 0 && y == 0) console.log(xsize+" "+ysize);
+				var pos = position(x, y, dir);
 
 				ctx.beginPath();
-				ctx.rect(xsize, ysize, GAME.canv.size, GAME.canv.size);
+				ctx.rect(pos.px, pos.py, GAME.canv.size, GAME.canv.size);
 				ctx.fillStyle = mapToRender.arr[x][y].colour;
 				ctx.fill();
 
-				ctx.drawImage(spritesheet, mapToRender.arr[x][y].sx(), mapToRender.arr[x][y].sy(), 64, 64, xsize, ysize, GAME.canv.size, GAME.canv.size);
-
-				if (GAME.showDir) {
-					if (GAME.player.targetFar) {
-						if (x == GAME.player.x+GAME.player.dir[0] && y == GAME.player.y+GAME.player.dir[1]) {
-							switch (GAME.player.dir.toString()) {
-								case "1,0":
-									ctx.drawImage(numbers, 64, 96, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-									//ctx.drawImage(numbers, 0+128, 224, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-									break;
-								case "0,-1":
-									ctx.drawImage(numbers, 64, 96, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-									//ctx.drawImage(numbers, 32+128, 224, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-									break;
-								case "0,1":
-									ctx.drawImage(numbers, 64, 96, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-									//ctx.drawImage(numbers, 64+128, 224, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-									break;
-								case "-1,0":
-									ctx.drawImage(numbers, 64, 96, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-									//ctx.drawImage(numbers, 96+128, 224, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-									break;
-								default:
-									ctx.drawImage(numbers, 0, 0, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-							}
-						}
-					} else {
-						if (x == GAME.player.x && y == GAME.player.y) {
-							ctx.drawImage(numbers, 64, 96, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
-						}
-					}
-				}
+				ctx.drawImage(spritesheet, mapToRender.arr[x][y].sx(), mapToRender.arr[x][y].sy(), 64, 64, pos.px, pos.py, GAME.canv.size, GAME.canv.size);
 			}
 		}
 
-		//render the smurgs!
-		for (let i = 0; i < GAME.enemies.length; i++) {
-			var x = GAME.enemies[i].x;
-			var y = GAME.enemies[i].y;
 
-			var xsize = x*GAME.canv.size + x*GAME.canv.pixel;
-			var ysize = y*GAME.canv.size + y*GAME.canv.pixel;
+		//render weapon!
 
-				xsize += GAME.canv.h*GAME.canv.size*DISP[dir].x;
-				ysize += GAME.canv.h*GAME.canv.size*DISP[dir].y;
+		if (GAME.showDir) {
+			if (GAME.player.targetFar) {
+				for (let a=0; a < WEAPON[GAME.weapon].arr[0].length; a++) {
+					for (let b=0; b < WEAPON[GAME.weapon].arr.length; b++) {
 
-			ctx.beginPath();
-			ctx.rect(xsize+8, ysize, GAME.canv.size-16, GAME.canv.size-20);
-			ctx.fillStyle = '#252525';
-			ctx.fill();
+						var ww = WEAPON[GAME.weapon].arr[0].length;
+						var wd = Math.floor(ww/2);
 
-			ctx.drawImage(numbers, 0, 256, 32, 32, xsize, ysize, GAME.canv.size, GAME.canv.size);
+						var pos = position(GAME.player.x+a-wd, GAME.player.y+b-wd, dir);
+
+						if (GAME.weaponMatrix.length > 0) { //just make sure it's defined
+							if (GAME.weaponMatrix[a][b] == 1) {
+								ctx.drawImage(numbers, 0*32, 3*32, 32, 32, pos.px, pos.py, GAME.canv.size, GAME.canv.size);
+							} else if (GAME.weaponMatrix[a][b] == 2) {
+								ctx.drawImage(numbers, 0*32, 3*32, 32, 32, pos.px, pos.py, GAME.canv.size, GAME.canv.size); //5*32, 10*32
+							}
+						}
+
+					}
+				}
+
+				var pos = position(GAME.player.x+GAME.player.dir[0], GAME.player.y+GAME.player.dir[1], dir);
+				ctx.drawImage(numbers, 2*32, 3*32, 32, 32, pos.px, pos.py, GAME.canv.size, GAME.canv.size);
+			} else {
+				var pos = position(GAME.player.x, GAME.player.y, dir);
+				ctx.drawImage(numbers, 2*32, 3*32, 32, 32, pos.px, pos.py, GAME.canv.size, GAME.canv.size);
+			}
+		}
+
+		//render entities !
+		for (let i = 0; i < GAME.map.entities.length; i++) {
+			let e = GAME.map.entities[i];
+
+			var pos = position(e.x, e.y, dir);
+
+			if (GAME.map.entities[i].whatIsIt == 'treasure') {
+				ctx.save();
+				ctx.beginPath();
+				ctx.rect(pos.px+4, pos.py+4, GAME.canv.size-8, GAME.canv.size-8);
+				ctx.fillStyle = "#252525";
+				ctx.fill();
+				ctx.restore();
+			}
+
+			ctx.drawImage(numbers, e.sx(), e.sy(), 32, 32, pos.px, pos.py, GAME.canv.size, GAME.canv.size);
 		}
 
 
@@ -563,18 +1040,14 @@ $(window).on('load', function() {
 		if (GAME.nighttime) {
 			for (var x = 0; x < GAME.canv.h; x++) {
 				for (var y = 0; y < GAME.canv.h; y++) {
-					var xsize = x*GAME.canv.size + x*GAME.canv.pixel;
-					var ysize = y*GAME.canv.size + y*GAME.canv.pixel;
-
-						xsize += GAME.canv.h*GAME.canv.size*DISP[dir].x;
-						ysize += GAME.canv.h*GAME.canv.size*DISP[dir].y;
+					var pos = position(x, y, dir);
 
 					var mapx = x - (GAME.player.x - Math.floor(GAME.canv.h/2));
 					var mapy = y - (GAME.player.y - Math.floor(GAME.canv.h/2));
 
 					if (GAME.map.vision[mapx] != undefined) {
 						if (GAME.map.vision[mapx][mapy] != undefined) {
-							ctx.globalAlpha = GAME.map.vision[mapx][mapy];
+						;	ctx.globalAlpha = GAME.map.vision[mapx][mapy]*3.5; //3.5 a good value for nighttime
 						} else {
 						ctx.globalAlpha = 1;
 						}
@@ -583,28 +1056,16 @@ $(window).on('load', function() {
 					}
 
 					ctx.beginPath();
-					ctx.rect(xsize, ysize, GAME.canv.size, GAME.canv.size);
+					ctx.rect(pos.px, pos.py, GAME.canv.size, GAME.canv.size);
 					ctx.fillStyle = "#252525";
 					ctx.fill();
 
 					ctx.globalAlpha = 1;
-
-					if (renderDebugMode) {
-						ctx.font = "10px monospace";
-						ctx.fillStyle = 'white';
-						ctx.fillText(GAME.vision[x][y].toFixed(2), mapx*GAME.canv.size, mapy*GAME.canv.size);
-					}
-
 				}
 			}
 		}
 
 		if (renderDebugMode) {
-			ctx.beginPath();
-			ctx.rect(0, 0, canvas.width, canvas.height);
-			ctx.fillStyle = 'black';
-			ctx.fill();
-
 			for (let x = 0; x < GAME.map.arr[0].length; x++) {
 				for (let y = 0; y < GAME.map.arr.length; y++) {
 					var xsize = x*GAME.canv.size + x*GAME.canv.pixel + canvas.width/3;
@@ -615,10 +1076,10 @@ $(window).on('load', function() {
 					ctx.beginPath();
 					//ctx.globalAlpha = GAME.map.elevation[x][y]; //Used to visualise the elevation, unused now because highest values arent near 1.
 					if (TILE[GAME.map.arr[x][y].name].block) {
-						ctx.fillStyle = 'tomato';
+						ctx.fillStyle = 'Coral';
 					} else {
 						if (GAME.map.arr[x][y].name != 'ground') {
-							ctx.fillStyle = 'seagreen';
+							ctx.fillStyle = 'DarkSlateGrey';
 						} else {
 							ctx.fillStyle = 'black';
 						}
@@ -715,6 +1176,139 @@ $(window).on('load', function() {
 
 	}
 
+	function playerTakesDamage() {
+		disableInput = true;
+		var cycle = 500;
+		var iterations = Math.floor(GAME.canv.h/2);
+		var ringSize = 5;
+
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		$('#player').addClass('hit');
+
+		for (let i=0; i < iterations; i++) {
+			setTimeout(function() {
+				var mapToRender = GAME.map;
+
+				//Add this to make it a pulsing ring.
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+				for (var x = 0; x < GAME.canv.h; x++) {
+					for (var y = 0; y < GAME.canv.h; y++) {
+						var nx = x + GAME.player.x - Math.floor(GAME.canv.h/2);
+						var ny = y + GAME.player.y - Math.floor(GAME.canv.h/2);
+
+						var pos = position(nx, ny, 'mid');
+
+						if (GAME.map.vision[nx] != undefined) {
+							if (GAME.map.vision[nx][ny] != undefined) {
+								ctx.save();
+								ctx.beginPath();
+								ctx.rect(pos.px, pos.py, GAME.canv.size, GAME.canv.size);
+								ctx.fillStyle = '#ff5050';
+
+								var tile_vision = GAME.map.vision[x][y]*10 * 2.5; //the multiplication is the ratio of how much you can see
+								if (tile_vision < i && tile_vision > i-ringSize) {
+									if (tile_vision < iterations-ringSize-1) {
+										ctx.fill();
+										ctx.drawImage(spritesheet, mapToRender.arr[nx][ny].sx(), mapToRender.arr[nx][ny].sy(), 64, 64, pos.px, pos.py, GAME.canv.size, GAME.canv.size);
+									}
+								}
+
+								ctx.restore();
+							}
+						}
+					}
+				}
+			}, (cycle/iterations)*i);
+		}
+
+		setTimeout(function() {
+			disableInput = false;
+			$('#player').removeClass('hit');
+			render(GAME.map,'mid');
+		}, cycle);
+	}
+
+	function sonarSense() {
+		disableInput = true;
+		var cycle = 500;
+		var iterations = Math.floor(GAME.canv.h/2);
+		var ringSize = 3;
+
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		for (let i=0; i < iterations; i++) {
+			setTimeout(function() {
+				var mapToRender = GAME.map;
+
+				//Add this to make it a pulsing ring.
+				//ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+				for (var x = 0; x < GAME.canv.h; x++) {
+					for (var y = 0; y < GAME.canv.h; y++) {
+						var nx = x + GAME.player.x - Math.floor(GAME.canv.h/2);
+						var ny = y + GAME.player.y - Math.floor(GAME.canv.h/2);
+
+						var pos = position(nx, ny, 'mid');
+
+						if (GAME.map.vision[nx] != undefined) {
+							if (GAME.map.vision[nx][ny] != undefined) {
+								ctx.save();
+								ctx.beginPath();
+								ctx.rect(pos.px, pos.py, GAME.canv.size, GAME.canv.size);
+
+								if (GAME.map.arr[nx][ny].hasSecret) {
+									ctx.fillStyle = 'FloralWhite';
+								} else if (GAME.map.arr[nx][ny].isLoot) {
+									ctx.fillStyle = 'Khaki';
+								} else {
+									if (GAME.map.arr[nx][ny].name == 'river') {
+										ctx.fillStyle = 'mediumturquoise';
+									} else {
+										if (TILE[GAME.map.arr[nx][ny].name].block) {
+											ctx.fillStyle = 'SeaGreen';
+										} else {
+											ctx.fillStyle = 'DarkSlateGrey';
+										}
+									}
+								}
+
+								var tile_vision = GAME.map.vision[x][y]*10 * 1; //the multiplication is the ratio of how much you can see
+								if (tile_vision < i && tile_vision > i-ringSize) {
+									if (tile_vision < iterations-ringSize-1) {
+										ctx.fill();
+										ctx.drawImage(spritesheet, mapToRender.arr[nx][ny].sx(), mapToRender.arr[nx][ny].sy(), 64, 64, pos.px, pos.py, GAME.canv.size, GAME.canv.size);
+
+										for (let i=0; i < GAME.map.entities.length; i++) {
+											if (nx == GAME.map.entities[i].x && ny == GAME.map.entities[i].y) {
+												switch (GAME.map.entities[i].whatIsIt) {
+													case 'enemy':
+														ctx.drawImage(numbers, 2*32, 10*32, 32, 32, pos.px, pos.py, GAME.canv.size, GAME.canv.size);
+														break;
+													case 'treasure':
+														ctx.drawImage(numbers, 3*32, 10*32, 32, 32, pos.px, pos.py, GAME.canv.size, GAME.canv.size);
+														break;
+													default:
+														//dont draw
+												}
+											}
+										}
+									}
+								}
+								ctx.restore();
+							}
+						}
+					}
+				}
+			}, (cycle/iterations)*i);
+		}
+
+		setTimeout(function() {
+			disableInput = false;
+		}, cycle);
+	}
+
 	$('body').on('keydown', function(e) {
 		GAME.showDir = true;
 
@@ -729,13 +1323,7 @@ $(window).on('load', function() {
 					walk('left');
 					break;
 				case 38: //Up arrow key
-					if (GAME.player.y <= 0) {
-						GAME.player.y = GAME.canv.h-1;
-						slideWorld('up');
-						renderPlayer(GAME.speed);
-					} else {
-						walk('up');
-					}
+					walk('up');
 					break;
 				case 39: //right arrow key
 					walk('right');
@@ -751,19 +1339,19 @@ $(window).on('load', function() {
 					break;
 
 				case 87: //W key
-					GAME.player.dir = [0,-1];
+					changeDir('up');
 					render(GAME.map, 'mid');
 					break;
 				case 65: //A key
-					GAME.player.dir = [-1,0];
+					changeDir('left');
 					render(GAME.map, 'mid');
 					break;
 				case 83: //S key
-					GAME.player.dir = [0,1];
+					changeDir('down');
 					render(GAME.map, 'mid');
 					break;
 				case 68: //D key
-					GAME.player.dir = [1,0];
+					changeDir('right');
 					render(GAME.map, 'mid');
 					break;
 
@@ -781,6 +1369,14 @@ $(window).on('load', function() {
 
 				case 67: //C key
 					goToSleep();
+					break;
+
+				case 86: //V key
+					sonarSense();
+					break;
+
+				case 66: //B key
+					//
 					break;
 
 				case 49:
@@ -833,12 +1429,56 @@ $(window).on('load', function() {
 
 	//////////////////////////////////////////
 
-	function walk(choice) {
-		var dirs = ['up', 'down', 'left', 'right'];
+	function changeDir(dir) {
+		switch (dir) {
+			case 'up':
+				GAME.player.dir = [DISP.up.x-1,DISP.up.y-1];
+				GAME.player.facing = 'up';
+				break;
+			case 'down':
+				GAME.player.dir = [DISP.down.x-1,DISP.down.y-1];
+				GAME.player.facing = 'down';
+				break;
+			case 'left':
+				GAME.player.dir = [DISP.left.x-1,DISP.left.y-1];
+				GAME.player.facing = 'left';
+				break;
+			case 'right':
+				GAME.player.dir = [DISP.right.x-1,DISP.right.y-1];
+				GAME.player.facing = 'right';
+				break;
+			default:
+				//default
+		}
 
+		GAME.weaponMatrix = WEAPON[GAME.weapon].arr.slice(0);
+
+		//https://code.likeagirl.io/rotate-an-2d-matrix-90-degree-clockwise-without-create-another-array-49209ea8b6e6
+		function rotate(matrix) {          // function statement
+		    const N = matrix.length - 1;   // use a constant
+		    // use arrow functions and nested map;
+		    const result = matrix.map((row, i) => 
+		         row.map((val, j) => matrix[N - j][i])
+		    );
+		    matrix.length = 0;       // hold original array reference
+		    matrix.push(...result);  // Spread operator
+		    return matrix;
+		}
+
+		for (let i=0; i < DISP[GAME.player.facing].r; i++) {
+			GAME.weaponMatrix = rotate(GAME.weaponMatrix);
+		}
+
+		GAME.showDir = true;
+
+		//make enemies move (enemys turn; not in walk())
+		enemysTurn();
+	}
+
+	function walk(choice) {
 		var d;
 		if (choice == undefined) {
-			d = rand(dirs);
+			d = rand(DISP.dirs);
 		} else {
 			d = choice;
 		}
@@ -848,31 +1488,42 @@ $(window).on('load', function() {
 				if (GAME.map.arr[GAME.player.x][GAME.player.y-1].colDetect()) {
 					GAME.player.y--;
 				} //else { walk(); }
-				GAME.player.dir = [0,-1];
+				changeDir('up');
 				break;
 			case 'down':
 				if (GAME.map.arr[GAME.player.x][GAME.player.y+1].colDetect()) {
 					GAME.player.y++;
 				} //else { walk(); }
-				GAME.player.dir = [0,1];
+				changeDir('down');
 				break;
 			case 'left':
 				if (GAME.map.arr[GAME.player.x-1][GAME.player.y].colDetect()) {
 					GAME.player.x--;
 				} //else { walk(); }
-				GAME.player.dir = [-1,0];
+				changeDir('left');
 				break;
 			case 'right':
 				if (GAME.map.arr[GAME.player.x+1][GAME.player.y].colDetect()) {
 					GAME.player.x++;
 				} //else { walk(); }
-				GAME.player.dir = [1,0];
+				changeDir('right');
 				break;
 			default:
 				//default
 		}
 
-		//make enemies move
+		//things to do
+		GAME.map.arr[GAME.player.x][GAME.player.y].collect();
+
+		//render the map (so that the white box appears!)
+		render(GAME.map, 'mid');
+
+		//move the player
+		renderPlayer();
+	}
+
+	function enemysTurn() {
+		///////////////////
 
 			easystar.setGrid(GAME.grid);
 			easystar.enableSync();
@@ -880,55 +1531,88 @@ $(window).on('load', function() {
 
 		///////////////////
 
-		if (GAME.map.arr[GAME.player.x][GAME.player.y].name == "ground") {
+		easystar.stopAvoidingAllAdditionalPoints();
 
-			easystar.stopAvoidingAllAdditionalPoints();
-
-			for (let i = 0; i < GAME.enemies.length; i++) {
-
-				easystar.findPath(GAME.enemies[i].x, GAME.enemies[i].y, GAME.player.x, GAME.player.y, function( path ) {
-					if (path === null) {
-						//GAME.enemies.splice(i, 1);
-					} else {
-						if (path.length >= 1) {
-							GAME.enemies[i].x = path[1].x;
-							GAME.enemies[i].y = path[1].y;
-							easystar.avoidAdditionalPoint(path[1].x, path[1].y);
-						}
+		function enemyWalkTowardsPlayer(i) {
+			easystar.findPath(GAME.map.entities[i].x, GAME.map.entities[i].y, GAME.player.x, GAME.player.y, function( path ) {
+				if (path === null) {
+					//GAME.enemies.splice(i, 1);
+				} else {
+					if (path.length >= 1) {
+						GAME.map.entities[i].x = path[1].x;
+						GAME.map.entities[i].y = path[1].y;
+						easystar.avoidAdditionalPoint(path[1].x, path[1].y);
 					}
-				});
-
-			}
-
-			easystar.calculate();
-
+				}
+			});
 		}
 
+		function enemyWalkRandomly(i) {
+			easystar.findPath(GAME.map.entities[i].x, GAME.map.entities[i].y, randInt(0,GAME.canv.h-1), randInt(0,GAME.canv.h-1), function( path ) {
+				if (path === null) {
+					//GAME.enemies.splice(i, 1);
+				} else {
+					if (path.length >= 1) {
+						GAME.map.entities[i].x = path[1].x;
+						GAME.map.entities[i].y = path[1].y;
+						easystar.avoidAdditionalPoint(path[1].x, path[1].y);
+					}
+				}
+			});
+		}
 
-		//Enemies dissapear when they walk into you. (and the player dies)
-		for (let b = 0; b < GAME.enemies.length; b++) {
-			if (GAME.enemies[b].x == GAME.player.x && GAME.enemies[b].y == GAME.player.y) {
-				GAME.enemies.splice(b, 1);
-				$('#player').hide();
-				GAME.showDir = false;
-				GAME.map.arr[GAME.player.x][GAME.player.y] = new Tile('grave_1');
-				render(GAME.map, 'mid');
-				disableInput = true;
-				setTimeout(function() {
-					alert('You died!');
-				}, 100);
+		for (let i = 0; i < GAME.map.entities.length; i++) {
+			if (GAME.map.entities[i].whatIsIt == 'enemy') {
+				if (GAME.map.entities[i].attr.name == 'smurg') {
+					if (GAME.map.arr[GAME.player.x][GAME.player.y].name != 'river') {
+						enemyWalkTowardsPlayer(i);
+					}
+				} else if (GAME.map.entities[i].attr.name == 'riversprite') {
+					if (GAME.map.arr[GAME.player.x][GAME.player.y].name == 'river') {
+						enemyWalkTowardsPlayer(i);
+					} else {
+						enemyWalkRandomly(i);
+					}
+				}
 			}
 		}
 
+		easystar.calculate();
 
-		//things to do
-		//GAME.map.arr[GAME.player.x][GAME.player.y].collect();
+		for (let i = 0; i < GAME.map.entities.length; i++) {
+			if (GAME.map.entities[i].x == GAME.player.x && GAME.map.entities[i].y == GAME.player.y) {
+				if (GAME.map.entities[i].whatIsIt == 'enemy') {
+					GAME.map.entities.splice(i, 1);
 
-		//render the map (so that the white box appears!)
-		render(GAME.map, 'mid');
+					GAME.lives--;
 
-		//move the player
-		renderPlayer();
+					if (GAME.lives < 0) {
+						$('#canvas').addClass('death');
+						GAME.nighttime = true;
+						$('#player').hide();
+						GAME.showDir = false;
+						GAME.map.arr[GAME.player.x][GAME.player.y] = new Tile('grave_1');
+						render(GAME.map, 'mid');
+						disableInput = true;
+						/*setTimeout(function() {
+							alert('You died!');
+						}, 100);*/
+					} else {
+						playerTakesDamage();
+						playerAction();
+					}
+
+					updHealth();
+				}
+			}
+		}
+	}
+
+	function updHealth() {
+		$('#lives').html('');
+		for (let i=0; i < GAME.lives; i++) {
+			$('#lives').append('<div class="num heart"></div>');
+		}
 	}
 
 	function renderPlayer(val) {
@@ -945,17 +1629,9 @@ $(window).on('load', function() {
 		});
 	}
 
-	GAME.map = create();
-	render(GAME.map, 'mid');
-
 	function updKills() {
-		var killsString = getNumberString(GAME.kills);
-		$('#kills').html('');
-		$('#kills').append('<div class="num '+numToWord(killsString.charAt(0))+'"></div>');
-		$('#kills').append('<div class="num '+numToWord(killsString.charAt(1))+'"></div>');
+		$('#kills').html(getNumberDOM(GAME.kills));
 	}
-
-	updKills();
 
 	//sleepy time sleeping player sleep etc
 
@@ -994,10 +1670,6 @@ $(window).on('load', function() {
 
 		setTimeout(function() {
 			GAME.day++;
-			var numtext = getNumberString(GAME.day);
-			$('#time').html('');
-			$('#time').append('<div class="num '+numToWord(numtext.charAt(0))+'"></div>');
-			$('#time').append('<div class="num '+numToWord(numtext.charAt(1))+'"></div>');
 
 			//changing tiles
 			for (var x = 0; x < GAME.canv.h; x++) {
@@ -1026,17 +1698,51 @@ $(window).on('load', function() {
 		}, cycleTime);
 	}
 
+	function randomPlaceOneMoney(x, y) {
+		var value = randInt(0,7);
+		var coin = TILESET.treasure[value];
+		var dirv = [0,1,2,3];
+
+		var check = 4;
+		while (check > 0) {
+			var s = rand(dirv);
+			var rng = DISP[DISP.dirs[s]];
+			if (TILE[GAME.map.arr[x + rng.x - 1][y + rng.y - 1].name].block != true) {
+				GAME.map.addEntity('treasure', x + rng.x - 1, y + rng.y - 1, {
+					name: coin,
+					value: value
+				});
+				check = 0;
+			} else {
+				dirv.splice(s, 1);
+				check--;
+			}
+		}
+	}
+
 	function tryToCollect(cx, cy) {
+		var areAttacking = false;
 
 		//firstly, try to kill the enemy
-		for (let i=0; i < GAME.enemies.length; i++) {
-			if (GAME.enemies[i].x == cx && GAME.enemies[i].y == cy) {
-				GAME.map.arr[GAME.enemies[i].x][GAME.enemies[i].y] = new Tile( 'bloodgrave' );
-				GAME.enemies.splice(i, 1);
-				GAME.kills++;
+		for (let i=0; i < GAME.map.entities.length; i++) {
+			if (GAME.map.entities[i].whatIsIt == 'enemy') {
+				if (GAME.map.entities[i].x == cx && GAME.map.entities[i].y == cy) {
+					if (GAME.map.entities[i].attr.grave != undefined) {
+						GAME.map.arr[GAME.map.entities[i].x][GAME.map.entities[i].y] = new Tile( GAME.map.entities[i].attr.grave );
+					} else {
+						GAME.map.arr[GAME.map.entities[i].x][GAME.map.entities[i].y] = new Tile( 'bloodgrave' );
+					}
 
-				render(GAME.map, 'mid');
-				updKills();
+					//spawn money
+					randomPlaceOneMoney(GAME.map.entities[i].x, GAME.map.entities[i].y);
+
+					GAME.map.entities.splice(i, 1);
+					GAME.kills++;
+					render(GAME.map, 'mid');
+					updKills();
+
+					areAttacking = true;
+				}
 			}
 		}
 
@@ -1044,29 +1750,25 @@ $(window).on('load', function() {
 
 		if (GAME.player.x < cx-1 || GAME.player.x > cx+1 || GAME.player.y < cy-1 || GAME.player.y > cy+1) {
 			//false
-		} else {
-			if (TILE[tname].drops != undefined) { //first check for drops
-				for (let i = 0; i < TILE[tname].drops.length; i++) {
-					var drops = TILE[tname].drops[i];
-					if (Math.random() <= drops.c) {
-						addItem(drops.n, randInt(drops.mi, drops.ma));
+		} else if (!areAttacking) {
+			if (TILE[tname].change != undefined) { //first check for drops
+				GAME.map.arr[cx][cy] = new Tile(TILE[tname].change);
+
+				if (TILE[tname].drops != undefined) {
+					for (let i = 0; i < TILE[tname].drops.length; i++) {
+						var drops = TILE[tname].drops[i];
+						if (Math.random() <= drops.c) {
+							addItem(drops.n, randInt(drops.mi, drops.ma));
+						}
 					}
 				}
 
-				GAME.map.arr[cx][cy] = new Tile(TILE[tname].change);
-				render(GAME.map, 'mid');
-				playerAction();
-			} else if (tname == 'house') {
-
-				goToSleep();
-
-			} else if (tname == 'market') {
-				
-				if (hasItem('crop')) {
-					removeItem('crop', 1);
-					addItem('coin', 1);
+				if (TILE[tname].isLoot == true) {
+					randomPlaceOneMoney(cx, cy);
 				}
 
+				render(GAME.map, 'mid');
+				playerAction();
 			} else { //tile has no drops; i.e. its ground usually
 				switch (GAME.selected) {
 					case 'rock':
@@ -1182,8 +1884,8 @@ $(window).on('load', function() {
 	function slideWorld(dir) {
 		disableInput = true;
 
-		//should probably remove all enemies
-		GAME.enemies = [];
+		//render the mid just in case ;)
+		render(GAME.map, 'mid');
 
 		GAME.nextSpot = create();
 		render(GAME.nextSpot, dir);
@@ -1209,6 +1911,9 @@ $(window).on('load', function() {
 		}, GAME.speed);
 
 		$('#canvas').css('transition',GAME.speed+'ms linear');
+
+		//this is for sliding the world down, which is the only one supported right now
+		seedDisplacement += GAME.canv.h;
 	}
 
 
@@ -1216,8 +1921,25 @@ $(window).on('load', function() {
 
 
 
+	/*
 
+	class Fuck {
+		constructor() {
+			this.hgjkwh = [];
+		}
+		test() {
+			this.hgjkwh.push('test');
+			console.log(this.hgjkwh);
+		}
+	}
 
+	var tetje = [];
+
+	tetje = new Fuck();
+
+	tetje.test();
+
+	*/
 
 
 
@@ -1234,6 +1956,13 @@ $(window).on('load', function() {
 
 
 	//last minute inits
+	GAME.map = create();
+	render(GAME.map, 'mid');
+
+	updKills();
+	updHealth();
+
+	changeDir('down');
 	renderPlayer();
 
 }); //end of on.load
@@ -1249,7 +1978,15 @@ $(window).on('load', function() {
 
 
 
+function position(vx, vy, dir) { //value
+	var x = GAME.canv.size * (vx + GAME.canv.h*DISP[dir].x);
+	var y = GAME.canv.size * (vy + GAME.canv.h*DISP[dir].y);
 
+	return {
+		px: x,
+		py: y
+	}
+}
 
 function getColor(colour) {
 	var clr;
@@ -1281,8 +2018,11 @@ function getColor(colour) {
 		case 'bloody':
 			clr = [randInt(0, 10), randInt(75, 100), randInt(45, 55)];
 			break;
+		case 'logcabin':
+			clr = [randInt(10, 20), randInt(30, 50), randInt(40, 50)];
+			break;
 		default:
-			clr = clr = [0, 0, 0];
+			return 'transparent';
 	}
 	return 'hsl('+clr[0]+','+clr[1]+'%,'+clr[2]+'%)';
 }
@@ -1304,14 +2044,15 @@ function getRandomColor() {
 	return color;
 }
 
-function getNumberString(num) {
-	var amount = '';
-	if (num <= 9) {
-		amount += '0';
+function getNumberDOM(num) {
+	var final = '';
+	var numS = num.toString();
+	for (let i=0; i < numS.length; i++) {
+		final += '<div class="num ';
+		final += numToWord(numS.charAt(i));
+		final += '"></div>';
 	}
-	amount += num;
-
-	return amount;
+	return final;
 }
 
 function numToWord(num) {
