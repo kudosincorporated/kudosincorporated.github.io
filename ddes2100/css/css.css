@@ -95,6 +95,7 @@ body {
 .bio {
 	font-size: 0.6em;
 	margin: 1em;
+	margin-top: 5em;
 }
 
 #footer {
@@ -112,4 +113,15 @@ body {
 	border-radius: 50%;
 	background-color: white;
 	box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+.story {
+	position: absolute;
+	margin-top: -3em;
+	transform: rotate(-3deg);
+	font-size: 2em;
+}
+
+.story span {
+	font-size: 0.5em;
 }

@@ -17,6 +17,18 @@ var toys = [
 	'https://www.bhg.com.au/media/36084/ebay-toys-5.jpg?width=720&center=0.0,0.0',
 	'https://i.ebayimg.com/images/g/1OAAAOSwo8FfFd-t/s-l300.jpg'
 ];
+var names = [
+	'pinky',
+	'bloopey',
+	'blue',
+	'hobbes',
+	'squeaky',
+	'pogo',
+	'frubby',
+	'dinko',
+	'red',
+	'greenie'
+];
 
 $(function() {
 	
@@ -25,7 +37,7 @@ $(function() {
 			$('#posts .col').eq(i).append('<div class="post" data-tilt></div>');
 
 			$('#posts .col').eq(i).find('.post').eq(a).append('<img src="'+rand(toys)+'" class="img">');
-			$('#posts .col').eq(i).find('.post').eq(a).append('<div class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>');
+			$('#posts .col').eq(i).find('.post').eq(a).append('<div class="bio"><div class="story"><span>My toy,</span><br>'+rand(names)+'</div>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>');
 
 			$('#posts .col').eq(i).find('.post').eq(a).css({
 				'background-color':rand(palette)
