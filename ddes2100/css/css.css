@@ -55,6 +55,7 @@ body {
 	position: fixed;
 	top: 0;
 	left: 0;
+	font-size: 1.1vw;
 }
 
 .block {
@@ -69,6 +70,7 @@ body {
 	position: absolute;
 	top: 0;
 	left: 0;
+	width: 100%;
 }
 
 #posts {
