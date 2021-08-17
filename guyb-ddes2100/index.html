@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>index</title>
+	<title>toy.share</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="stylesheet" href="css/normalize.css">
@@ -18,7 +18,7 @@
 			<div class="container-inner"></div>
 			<img id="toy-image">
 			<div class="body">
-				<div id="toy-name" class="title"></div>
+				<div class="title">stories about <span class="toy-name">your toy</span></div>
 
 				<p class="sentiment">
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -32,7 +32,7 @@
 
 				<br>
 
-				<button>Collect this toy!</button>
+				<button class="modal_open" id="qr-code">Collect this toy!</button>
 			</div>
 		</div>
 	</div>
@@ -64,7 +64,32 @@
 
 				<br><br>
 
-				<button>Submit</button>
+				<button class="modal_open" id="qr-code">Submit</button>
+			</div>
+		</div>
+	</div>
+	<div class="modal" id="qr-code">
+		<div class="container">
+			<div class="container-inner"></div>
+			<div class="body">
+				<div class="title">Thank you!</div>
+
+				<img src="images/QRcode.png" class="image">
+
+				<p>Please find a library team-member to finalise this toy share.</p>
+			</div>
+		</div>
+	</div>
+	<div class="modal" id="locations-map">
+		<div class="container">
+			<div class="container-inner"></div>
+			<div class="body">
+				<div class="title">Where can I find toychests?</div>
+
+				<p>Toy-share sharing stations (toychests) are often located in the kid's section of libraries.</p>
+				<p>There are 5 toychests near the suburb of Randwick!</p>
+
+				<img src="images/randwick_map.png" class="image image-lg">
 			</div>
 		</div>
 	</div>
@@ -76,9 +101,9 @@
 		<div style="transform: translateZ(20px);">toy.share</div>
 	</div>
 	<ul id="tabs">
-		<li class="tab selected"><i class="fa fa-line-chart" aria-hidden="true"></i></li> List of Toys<br>
-		<span class="hide">.................</span><li class="tab"><i class="fa fa-binoculars" aria-hidden="true"></i></li> Toychests Near Me<br>
-		<span class="hide">..................</span><li class="tab"><i class="fa fa-random" aria-hidden="true"></i></li> Random Toy
+		<li class="tab list-tab selected"><i class="fa fa-line-chart" aria-hidden="true"></i></li> List of Toys<br>
+		<span class="hide">.................</span><li class="tab modal_open" id="locations-map"><i class="fa fa-binoculars" aria-hidden="true"></i></li> Toychests Near Me<br>
+		<span class="hide">.................</span><li class="tab modal_open random-tab" id="toy"><i class="fa fa-random" aria-hidden="true"></i></li> Random Toy
 	</ul>
 
 	<div class="subtitle">Your location: <span>Randwick</span></div>
@@ -86,6 +111,8 @@
 	<br>
 
 	<div id="posts"></div>
+
+	<br><br><br><br><br>
 </div>
 
 <div id="add">

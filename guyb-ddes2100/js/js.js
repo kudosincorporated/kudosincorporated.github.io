@@ -30,9 +30,11 @@ var names = [
 	'greenie'
 ];
 
+var amtOfPosts = 12;
+
 $(function() {
 	
-	for (let a=0; a < 12; a++) {
+	for (let a=0; a < amtOfPosts; a++) {
 		$('#posts').append('<div class="post modal_open" id="toy" data-tilt></div>');
 
 		$('#posts').find('.post').eq(a).append('<img src="'+rand(toys)+'" class="img">');
@@ -54,21 +56,44 @@ $(function() {
 		var name = $(this).find('.name').html();
 		var image = $(this).find('img').attr('src');
 
+		updateToy(colour, name, image);
+	})
+
+	$('.random-tab').on('click', function() {
+		var r = randInt(0,amtOfPosts-1);
+
+		var colour = $('.post').eq(r).css('background-color');
+		var name = $('.post').eq(r).find('.name').html();
+		var image = $('.post').eq(r).find('img').attr('src');
+
+		updateToy(colour, name, image);
+	})
+
+	function updateToy(colour, name, image) {
 		$('#toy .container').css({
 			'background-color':colour
 		})
 
-		$('#toy-name').css({
+		$('.toy-name').css({
 			'color':colour
 		})
 
-		$('#toy-name').html("stories about "+name);
+		$('.toy-name').html(name);
 
 		$('#toy-image').attr("src", image);
+	}
+
+	$('.list-tab').on('click', function() {
+		$('.post').fadeOut(300);
+
+		setTimeout(function() {
+			for (let z = 0; z < amtOfPosts; z++) {
+				setTimeout(function() {
+					$('.post').eq(z).slideDown(300);
+				}, z*400)
+			}
+		}, 800)
 	})
-
-
-
 
 
 

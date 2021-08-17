@@ -24,6 +24,7 @@ body {
 	background-image: url('../images/geometry2.png'); 
 	font-family: 'OpenSans', sans-serif;
 	font-size: 1.2rem;
+	height: 101vh;
 }
 
 * {
@@ -192,7 +193,8 @@ body {
 	overflow: hidden;
 }
 
-#add-post .title {
+#add-post .title,
+#qr-code .title {
 	color: #4da6ff;
 }
 
@@ -261,6 +263,17 @@ button {
 	padding: 0.75em 1em;
 	border-radius: 3px;
 	cursor: pointer;
+}
+
+.image {
+	width: 50%;
+	margin: 0 25%;
+}
+
+.image.image-lg {
+	width: 100%;
+	margin: 0;
+	border-radius: 6px;
 }
 
 /*
