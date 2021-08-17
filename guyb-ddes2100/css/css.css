@@ -205,7 +205,7 @@ body {
 	background-color: #fff;
 	content: "";
 	position: absolute;
-	top: -70%;
+	bottom: 10%;
 	left:  -80%;
 	height: 80rem;
 	width: 80rem;
