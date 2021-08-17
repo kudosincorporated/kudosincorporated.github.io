@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>index</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+	<link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+
+<div id="modal_bg">
+	<div class="modal" id="toy">
+		<div class="container">
+			<div class="container-inner"></div>
+			<img id="toy-image">
+			<div class="body">
+				<div id="toy-name" class="title"></div>
+
+				<p class="sentiment">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+					<br><br><span>Sarah McSarah, Kensington</span>
+				</p>
+
+				<p class="sentiment">
+					Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+					<br><br><span>John Johnson, Kingsford</span>
+				</p>
+
+				<br>
+
+				<button>Collect this toy!</button>
+			</div>
+		</div>
+	</div>
+	<div class="modal" id="add-post">
+		<div class="container">
+			<div class="container-inner"></div>
+			<div class="body">
+				<div class="title">Share a toy with Randwick!</div>
+
+				<br><br>
+
+				<label for="fname">Your name:</label><br>
+				<input type="text" id="fname" name="fname">
+
+				<br><br>
+
+				<label for="start">When did you pick this up?</label><br>
+				<input type="date" id="start" name="trip-start">
+
+				<br><br>
+
+				<label for="img">Upload an image:</label><br>
+				<input type="file" id="img" name="img" accept="image/*">
+
+				<br><br>
+
+				<label for="w3review">Your toy's story:</label><br>
+				<textarea id="w3review" name="w3review" rows="4" cols="40"></textarea>
+
+				<br><br>
+
+				<button>Submit</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div id="title" style="transform-style: preserve-3d;" data-tilt>
+		<div id="title-inner"></div>
+		<div style="transform: translateZ(20px);">toy.share</div>
+	</div>
+	<ul id="tabs">
+		<li class="tab selected"><i class="fa fa-line-chart" aria-hidden="true"></i></li> List of Toys<br>
+		<span class="hide">.................</span><li class="tab"><i class="fa fa-binoculars" aria-hidden="true"></i></li> Toychests Near Me<br>
+		<span class="hide">..................</span><li class="tab"><i class="fa fa-random" aria-hidden="true"></i></li> Random Toy
+	</ul>
+
+	<div class="subtitle">Your location: <span>Randwick</span></div>
+	<div class="subtitle">There are <span>12</span> toys to choose from!</div>
+	<br>
+
+	<div id="posts"></div>
+</div>
+
+<div id="add">
+	<span>Share a Toy!</span>
+	<div class="tab selected modal_open" id="add-post"><i class="fa fa-plus" aria-hidden="true"></i></div>
+</div>
+
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/tilt.jquery.js"></script>
+<script src="js/js.js"></script>
+</body>
+</html>
