@@ -3,52 +3,121 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>index</title>
+	<title>toy.share</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="stylesheet" href="css/normalize.css">
-
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 	<link rel="stylesheet" href="css/css.css">
 </head>
 <body>
 
-<div id="wrapper">
+<div id="modal_bg">
+	<div class="modal" id="toy">
+		<div class="container">
+			<div class="container-inner"></div>
+			<img id="toy-image">
+			<div class="body">
+				<div class="title">stories about <span class="toy-name">your toy</span></div>
 
-	<div id="sidebar">
-		<div class="block">
-			<div class="title">toyshare</div>
-			<img src="images/squiggly.png" id="squiggly">
-		</div>
+				<p class="sentiment">
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+					<br><br><span>Sarah McSarah, Kensington</span>
+				</p>
 
-		<br><br><br><br>
+				<p class="sentiment">
+					Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+					<br><br><span>John Johnson, Kingsford</span>
+				</p>
 
-		<div class="block">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-		</div>
+				<br>
 
-		<div id="footer">
-			<div class="block">
-				I'm looking for:
-				<div id="circles"></div>
+				<button class="modal_open" id="qr-code">Collect this toy!</button>
 			</div>
 		</div>
 	</div>
+	<div class="modal" id="add-post">
+		<div class="container">
+			<div class="container-inner"></div>
+			<div class="body">
+				<div class="title">Share a toy with Randwick!</div>
 
-	<div class="row">
-		<div class="col" style="width: 25%;">
-		</div>
-		<div class="col">
-			<div class="row" id="posts">
-				<div class="col">
-				</div>
-				<div class="col">
-				</div>
-				<div class="col">
-				</div>
+				<br><br>
+
+				<label for="fname">Your name:</label><br>
+				<input type="text" id="fname" name="fname">
+
+				<br><br>
+
+				<label for="start">When did you pick this up?</label><br>
+				<input type="date" id="start" name="trip-start">
+
+				<br><br>
+
+				<label for="img">Upload an image:</label><br>
+				<input type="file" id="img" name="img" accept="image/*">
+
+				<br><br>
+
+				<label for="w3review">Your toy's story:</label><br>
+				<textarea id="w3review" name="w3review" rows="4" cols="40"></textarea>
+
+				<br><br>
+
+				<button class="modal_open" id="qr-code">Submit</button>
 			</div>
 		</div>
 	</div>
+	<div class="modal" id="qr-code">
+		<div class="container">
+			<div class="container-inner"></div>
+			<div class="body">
+				<div class="title">Thank you!</div>
 
+				<img src="images/QRcode.png" class="image">
+
+				<p>Please find a library team-member to finalise this toy share.</p>
+			</div>
+		</div>
+	</div>
+	<div class="modal" id="locations-map">
+		<div class="container">
+			<div class="container-inner"></div>
+			<div class="body">
+				<div class="title">Where can I find toychests?</div>
+
+				<p>Toy-share sharing stations (toychests) are often located in the kid's section of libraries.</p>
+				<p>There are 5 toychests near the suburb of Randwick!</p>
+
+				<img src="images/randwick_map.png" class="image image-lg">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div id="title" style="transform-style: preserve-3d;" data-tilt>
+		<div id="title-inner"></div>
+		<div style="transform: translateZ(20px);">toy.share</div>
+	</div>
+	<ul id="tabs">
+		<li class="tab list-tab selected"><i class="fa fa-line-chart" aria-hidden="true"></i></li> Find a Toy<br>
+		<span class="hide">.................</span><li class="tab modal_open" id="locations-map"><i class="fa fa-binoculars" aria-hidden="true"></i></li> Toychests Near Me<br>
+		<span class="hide">.................</span><li class="tab modal_open random-tab" id="toy"><i class="fa fa-random" aria-hidden="true"></i></li> Random Toy
+	</ul>
+
+	<div class="subtitle">Your location: <span>Randwick</span></div>
+	<div class="subtitle">There are <span>12</span> toys to choose from!</div>
+	<br>
+
+	<div id="posts"></div>
+
+	<br><br><br><br><br>
+</div>
+
+<div id="add">
+	<span>Share a Toy!</span>
+	<div class="tab selected modal_open" id="add-post"><i class="fa fa-plus" aria-hidden="true"></i></div>
 </div>
 
 <script src="js/jquery-3.1.0.js"></script>
