@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Title</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+
+<div class="modal" id="example_modal">
+	<div class="title">
+		<span class="curletter"></span>
+	</div>
+
+	<div class="row">
+		<div class="col">
+			<div>Automatically converts 10a --> 1b.</div>
+			<button class="btn disabled">Buy (Cost: 1000a)</button>
+			<button class="btn offbeat">Upgrade (Cost: 1000a)</button>
+			<div class="upgrade"></div>
+		</div>
+		<div class="col">
+			<div>Automatically converts 10a --> 1b.</div>
+			<button class="btn disabled">Buy (Cost: 1000a)</button>
+			<button class="btn offbeat">Upgrade (Cost: 1000a)</button>
+			<div class="upgrade"></div>
+		</div>
+		<div class="col">
+			<div>Automatically converts 10a --> 1b.</div>
+			<button class="btn disabled">Buy (Cost: 1000a)</button>
+			<button class="btn offbeat">Upgrade (Cost: 1000a)</button>
+			<div class="upgrade"></div>
+		</div>
+	</div>
+</div>
+
+<div id="modal_bg"></div>
+
+<div class="modal_close" id="crossmark">✕</div>
+
+<div id="header">
+	ZProducer
+	<div class="subtitle" id="total">0</div>
+</div>
+<div id="tabmenu">
+	<ul class="tablist">
+		<li class="tab selected" id="farm">FARM</li>
+		<li class="tab" id="shop">SHOP</li>
+		<li class="tab" id="other">OTHER</li>
+	</ul>
+</div>
+<div id="main">
+	<div class="container" id="farm">
+		<div class="row">
+			<div class="col">
+				<div id="game_cover">
+					<div id="game"></div>
+					<canvas id="canvas"></canvas>
+				</div>
+			</div>
+			<div class="col">
+				<div id="inv"></div>
+			</div>
+		</div>
+	</div>
+	<div class="container" id="shop">
+		SHOP
+	</div>
+	<div class="container" id="other">
+		OTHER
+	</div>
+</div>
+
+<script src="js/jquery-3.1.0.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+<script src="js/js.js"></script>
+</body>
+</html>
