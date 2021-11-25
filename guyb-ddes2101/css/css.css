@@ -1,0 +1,70 @@
+body {
+	text-align: center;
+	padding-bottom: 25vh;
+	background-color: #1a1a1a;
+}
+
+#header {
+	position: relative;
+	height: 300px;
+	color: #ddd;
+	padding: 1em;
+}
+
+#rogo_photo {
+	height: 300px;
+	border-radius: 50%;
+}
+
+#header_title {
+	position: absolute;
+	top: calc(150px - 1em);
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+#header_title .subtitle {
+	font-size: 0.6em;
+}
+
+#rogo {
+	margin: 1em;
+}
+
+.rogo_button {
+	background-color: #ff5050!important;
+	color: #fff!important;
+}
+
+.rogo_button.disabled {
+	user-select: none;
+	pointer-events: none;
+	background-color: transparent!important;
+	box-shadow: none!important;
+	color: #666!important;
+}
+
+.rogo_button.disabled.chosen {
+	color: #fff!important;
+}
+
+.mdl-card {
+	text-align: left;
+	margin: 1em auto;
+	min-height: 0;
+
+	background-color: #333;
+}
+
+.mdl-card__title,
+.mdl-card__supporting-text {
+	color: #ddd;
+}
+
+.mdl-button {
+	margin: 0.5em;
+}
+
+#template_card {
+	display: none;
+}
