@@ -11,6 +11,7 @@ Games I've made
 | forager | 3rd/final v |
 | guyb-arts | uni assessment |
 | guyb-ddes2150 | uni assessment |
+| guyb-ddes2101 | uni assessment |
 | islandgen | perlin noise |
 | testworld | tunnel generator |
 | crafttest | crafting sim |
