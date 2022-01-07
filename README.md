@@ -20,3 +20,6 @@ Games I've made
 | mathstest | DOM/maths testing |
 | sidescr | uni assessment |
 | ultimatum | happiness/sadness incremental |
+| Soulless | Soulful prototype 1 |
+| SOULFULprototype | Soulful prototype 2 |
+| soulful | soulful game |
