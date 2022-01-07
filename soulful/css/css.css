@@ -1,0 +1,921 @@
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 8px;
+	user-select: none;
+}
+
+body {
+	background-color: #252525;
+	font-family: monospace;
+	font-size: 0;
+	color: white;
+	
+	background-image: none;
+	background-position: top center;
+	background-repeat: no-repeat;
+
+	/* there shouldn't be an overflow, or the arrow keys interfere with the gameplay */
+	overflow: hidden;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+#modal_bg {
+	opacity: 1;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+
+	overflow: hidden;
+
+	background-color: rgba(24, 24, 27, 0.95);
+	z-index: 99;
+}
+
+.modal {
+	position: relative;
+	font-size: 2rem;
+	text-align: center;
+	cursor: default;
+
+	display: none;
+}
+
+.panel {
+	text-align: left;
+	min-width: 500px;
+}
+
+.container {
+	position: relative;
+	background-color: transparent;
+	width: 100%;
+	height: 100vh;
+	margin: 0 auto;
+	padding: 32px;
+}
+
+#main {
+	width: 1080px;
+	margin: 0 auto;
+}
+
+#main #sidebarcol {
+	width: 280px;
+}
+
+.block {
+	background-color: hsl(184,49%,46%);
+	text-align: center;
+}
+
+.block.halfnhalf {
+	background-image: url('../images/numbers-export.png');
+	background-position: -224px -480px;
+}
+
+#livescover, #coinscover {
+	padding: 16px 0;
+	margin-bottom: 32px;
+}
+
+#game {
+	background-color: transparent;
+	position: relative;
+	height: 800px;
+	width: 800px;
+
+	overflow: hidden;
+
+	display: block;
+	margin: 0 auto;
+}
+
+.cnvs {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	transition: 0ms;
+}
+
+#hud {
+	text-align: center;
+	position: absolute;
+	top: 50%;
+	right: 0;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	width: 25%;
+}
+
+.red { color: #ff5050; }
+.green { color: #33cc33; }
+
+.drop {
+	display: inline-block;
+	border:  2px solid white;
+	padding: 1%;
+}
+
+.tile_desc {
+	color: gold;
+	font-style: italic;
+}
+
+#player {
+	background-image: url('../images/player-export.png');
+	background-position: 0 0;
+	background-size: 200%;
+}
+
+#player.hit {
+	background-position: 100% 100%;
+}
+
+#player.firegun {
+	background-position: 100% 0;
+}
+
+#player.magicblade {
+	background-position: 0 100%;
+}
+
+#player {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	height: 32px;
+	width: 32px;
+	transform: translateZ(10px);
+}
+
+.animate {
+	animation-name: animate;
+	animation-timing-function: ease;
+	animation-duration: 300ms;
+}
+
+@keyframes animate {
+	0% {
+		transform: scaleY(1) rotate(20deg);
+	}
+	50% {
+		transform: scaleY(0.5) rotate(-20deg);
+	}
+	100% {
+		transform: scaleY(1) rotate(0deg);
+	}
+}
+
+.death {
+	animation-name: death;
+	animation-timing-function: ease-out;
+	animation-duration: 3000ms;
+	opacity: 0;
+	animation-delay: 500ms;
+	animation-fill-mode: forwards;
+}
+
+@keyframes death {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.fade {
+	animation-name: fade;
+	animation-timing-function: ease;
+	animation-duration: 4000ms;
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+	60% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+#zzz {
+	position: absolute;
+	top: 50%;
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+
+.btn {
+	position: relative;
+	background-color: #6666ff;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+}
+
+.btn > .num {
+	margin: 0;
+}
+
+.btn.clr-btn {
+	background-color: transparent;
+}
+
+.btn:after {
+	content:  "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0,0,0,0.2);
+	opacity: 0;
+	pointer-events: none;
+}
+
+.btn:hover:after {
+	opacity: 1;
+}
+
+.modal .modal_close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: -32px;
+}
+
+
+
+
+
+
+
+
+
+/* Inventory */
+
+#inv {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.slot,
+.slot .img,
+.slot .amt {
+	transition: 150ms ease;
+}
+
+.slot {
+	position: relative;
+	display: inline-block;
+	height: 96px;
+	width: 64px;
+	vertical-align: bottom;
+	text-align: left;
+}
+
+.item {
+	background-image: url('../images/selected-export.png');
+	background-position: 0 0;
+	cursor: pointer;
+}
+
+.item * {
+	pointer-events: none;
+}
+
+.item .img {
+	position: relative;
+	top: 0;
+	left: 0;
+	margin: 16px;
+}
+
+.item .img:before {
+	content: "";
+	position: absolute;
+	top: -8px;
+	left: -8px;
+	height: 48px;
+	width: 48px;
+	background-color: #252525;
+	z-index: -1;
+}
+
+.item .amt {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: auto;
+}
+
+.item .extra {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: auto;
+}
+
+.item.selected {
+	margin-bottom: 16px;
+}
+
+.item.selected {
+	background-position: 0 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.panel_beneath {
+	position: absolute;
+	bottom: -100%;
+	left: 0;
+	right: 0;
+}
+
+#note_panel {
+	transition: 300ms ease;
+}
+
+#note_inner {
+	display: inline-block;
+	padding: 8px;
+	padding-right: 20px;
+	background-color: #252525;
+}
+
+.word {
+	display: inline-block;
+}
+
+.walloftext .num {
+	margin: 0;
+	margin-right: -16px;
+}
+
+.walloftext .num.m,
+.walloftext .num.w,
+.walloftext .num.n,
+.walloftext .num.q {
+	margin: 0;
+	margin-right: -12px;
+}
+
+
+#note_panel.panelon {
+	bottom: 0;
+}
+
+#runes_panel {
+	width: 50%;
+	left: 25%;
+
+	background-color: #252525;
+	transition: 300ms ease;
+
+	max-height: 50%;
+
+	background-color: #333;
+}
+
+#runes_block {
+	position: sticky;
+	top: 0;
+	left: 0;
+	z-index: 99;
+}
+
+#runes_panel.panelon {
+	bottom: 0;
+}
+
+#runes_panel.gowide {
+	width: 100%;
+	left: 0;
+}
+
+#runes_inner {
+	position: relative;
+	width: 300%;
+	height: 64px;
+	left: -100%;
+	margin: 0 auto;
+	transition: 300ms ease;
+	transition-delay: 300ms;
+}
+
+#runes_panel.gowide #runes_inner {
+	width: 100%;
+	left: 0;
+}
+
+/*#runes_inner:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	height: 100%;
+	width: 100%;
+	background-color: #252525;
+	transition: 300ms ease;
+	transition-delay: 300ms;
+	opacity: 1;
+	pointer-events: none;
+}
+
+#runes_panel.gowide #runes_inner:after {
+	opacity: 0;
+}*/
+
+
+
+
+
+
+.fixedlist {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#belt {
+	background-image: url('../images/numbers-export.png');
+	background-position: -256px 0;
+	height: 256px;
+	width: 256px;
+	position: relative;
+}
+
+#belt li {
+	position: absolute;
+	transition: 300ms ease;
+}
+
+#belt li:nth-of-type(1) {
+	top: 0;
+	left: calc(50% - 32px);
+}
+
+#belt li:nth-of-type(2) {
+	top: 80px;
+	left: calc(100% - 64px);
+}
+
+#belt li:nth-of-type(3) {
+	top: calc(100% - 64px);
+	left: calc(100% - 96px);
+}
+
+#belt li:nth-of-type(4) {
+	top: calc(100% - 64px);
+	left: 32px;
+}
+
+#belt li:nth-of-type(5) {
+	top: 80px;
+	left: 0;
+}
+
+.rune {
+	background-image: url('../images/numbers-export.png');
+	display: inline-block;
+	height: 64px;
+	width: 64px;
+	position: relative;
+
+	animation-name: animate;
+	animation-timing-function: ease;
+	animation-duration: 300ms;
+
+	cursor: pointer;
+}
+
+.hp { background-position: -320px -256px; }
+.agi { background-position: -384px -256px; }
+.lck { background-position: -448px -256px; }
+.pce { background-position: -256px -320px; }
+.vit { background-position: -320px -320px; }
+.crt { background-position: -384px -320px; }
+.str { background-position: -448px -320px; }
+
+.rune:after {
+	content: "";
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	background-image: none;
+}
+
+.rune:hover:after {
+	background-image: url('../images/numbers-export.png');
+	background-position: -256px -256px;
+}
+
+.table {
+	border-collapse: collapse;
+}
+
+.table tr td {
+	padding-bottom: 8px;
+}
+
+.table#stats_table tr td:last-of-type,
+.table#help_table tr td:last-of-type {
+	opacity: 0.5;
+}
+
+
+
+#info {
+	position: absolute;
+	z-index: 999;
+	pointer-events: none;
+	/*transform: translateY(-50%);*/
+	margin-left: 32px;
+
+	white-space: pre;
+	display: none;
+}
+
+#info #rune_desc {
+	display: inline-block;
+	height: 32px;
+	width: 128px;
+	background-image: url('../images/numbers-export.png');
+	background-size: 400%;
+	background-position: -256px -384px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.img {
+	display: inline-block;
+	height: 32px;
+	width: 32px;
+	background-image: url('../images/tiles_outline-export.png');
+	background-size: 1600%;
+	background-position: 0 0;
+	background-color: white;
+}
+
+.img.none {
+	background-position: -128px -288px;
+}
+
+/*								   L R 				*/
+/*.timber 	{ 	background-color: hsl(40, 50%, 60%);
+				background-position: -224px -160px; }
+.rock 		{ 	background-color: hsl(25, 60%, 50%);
+				background-position: -96px -160px; }
+.jute 		{ 	background-color: hsl(90, 60%, 60%);
+				background-position: -96px -64px; }
+.seeds 		{ 	background-color: hsl(60, 60%, 50%);
+				background-position: -192px -160px; }
+.scythe 	{ 	background-color: hsl(55, 95%, 55%);
+				background-position: -96px -128px; }
+.bridge 	{ 	background-color: hsl(10, 50%, 55%);
+				background-position: -160px -192px; }
+.hole 		{ 	background-color: hsl(25, 60%, 50%);
+				background-position: -64px -96px; }
+.sow 		{ 	background-color: hsl(40, 70%, 65%);
+				background-position: -32px -224px; }
+.tree 		{ 	background-color: hsl(90, 45%, 50%);
+				background-position: 0 0; }
+.grass 		{ 	background-color: hsl(90, 60%, 50%);
+				background-position: -32px -192px; }
+.plant 		{ 	background-color: hsl(280, 80%, 70%);
+				background-position: -64px -64px; }
+.coin 		{ 	background-color: hsl(55, 95%, 55%);
+				background-position: -192px -256px; }
+.river 		{ 	background-color: hsl(190, 60%, 50%);
+				background-position: -96px -192px; }
+.house 		{ 	background-color: hsl(55, 95%, 55%);
+				background-position: -32px -96px; }
+.market 	{ 	background-color: hsl(55, 95%, 55%);
+				background-position: -96px -96px; }
+.acorns 	{ 	background-color: hsl(25, 50%, 40%);
+				background-position: -160px -288px; }
+.crop 	{ 	background-color: hsl(255, 75%, 70%);
+				background-position: -64px -64px; }
+.bloodgrave { 	background-color: hsl(5, 90%, 50%);
+				background-position: -160px -96px; }
+.watergrave { 	background-color: hsl(190, 60%, 50%);
+				background-position: -160px -96px; }
+.greengrave { 	background-color: hsl(90, 45%, 50%);
+				background-position: -160px -96px; }
+.stonegrave { 	background-color: hsl(40, 50%, 70%);
+				background-position: -160px -96px; }*/
+
+.num {
+	display: inline-block;
+	height: 32px;
+	width: 32px;
+	background-image: url('../images/numbers-export.png');
+	background-size: 1600%;
+	background-position: -256px 0;
+	margin: 0 -4px;
+	vertical-align: middle;
+}
+
+.blank 		{ background-image: none; }
+
+.one 		{ background-position: 0 0; }
+.two 		{ background-position: -32px 0; }
+.three 		{ background-position: -64px 0; }
+.four 		{ background-position: -96px 0; }
+.five 		{ background-position: 0 -32px; }
+.six 		{ background-position: -32px -32px; }
+.seven 		{ background-position: -64px -32px; }
+.eight 		{ background-position: -96px -32px; }
+.nine 		{ background-position: 0 -64px; }
+.zero 		{ background-position: -32px -64px; }
+.dash 		{ background-position: -64px -64px; }
+.slash 		{ background-position: -96px -64px; }
+
+.plus 		{ background-position: 0 -96px; }
+.equals 	{ background-position: -32px -96px; }
+.hl 		{ background-position: -64px -96px; }
+.dude 		{ background-position: -96px -96px; }
+.dot 		{ background-position: 0 -128px; }
+.comma 		{ background-position: -32px -128px; }
+.colon 		{ background-position: -64px -128px; }
+.semi 		{ background-position: -96px -128px; }
+
+.apostrophe { background-position: -32px -96px; }
+.ltb 		{ background-position: -64px -96px; }
+.rtb 		{ background-position: -96px -96px; }
+
+.lsb 		{ background-position: 0 -160px; }
+.rsb 		{ background-position: -32px -160px; }
+.lb 		{ background-position: -64px -160px; }
+.rb 		{ background-position: -96px -160px; }
+.ra 		{ background-position: 0 -192px; }
+.ua 		{ background-position: -32px -192px; }
+.da 		{ background-position: -64px -192px; }
+.la 		{ background-position: -96px -192px; }
+
+.a 		{ background-position: -128px 0; }
+.b 		{ background-position: -160px 0; }
+.c 		{ background-position: -192px 0; }
+.d 		{ background-position: -224px 0; }
+.e 		{ background-position: -128px -32px; }
+.f 		{ background-position: -160px -32px; }
+.g 		{ background-position: -192px -32px; }
+.h 		{ background-position: -224px -32px; }
+.i 		{ background-position: -128px -64px; }
+.j 		{ background-position: -160px -64px; }
+.k 		{ background-position: -192px -64px; }
+.l 		{ background-position: -224px -64px; }
+.m 		{ background-position: -128px -96px; }
+.n 		{ background-position: -160px -96px; }
+.o 		{ background-position: -192px -96px; }
+.p 		{ background-position: -224px -96px; }
+.q 		{ background-position: -128px -128px; }
+.r 		{ background-position: -160px -128px; }
+.s 		{ background-position: -192px -128px; }
+.t 		{ background-position: -224px -128px; }
+.u 		{ background-position: -128px -160px; }
+.v 		{ background-position: -160px -160px; }
+.w 		{ background-position: -192px -160px; }
+.x 		{ background-position: -224px -160px; }
+.y 		{ background-position: -128px -192px; }
+.z 		{ background-position: -160px -192px; }
+.em 	{ background-position: -192px -192px; }
+.qm 	{ background-position: -224px -192px; }
+
+.heart 				{ background-position: -32px -352px; }
+.heart.heart_empty 	{ background-position: -96px -352px; }
+.grave 				{ background-position: -128px -352px; }
+
+.weapon 			{ background-position: -160px -416px; }
+.power 				{ background-position: -224px -448px; }
+.zone 				{ background-position: -192px -448px; }
+.kills 				{ background-position: -224px -416px; }
+.coins 				{ background-position: -128px -448px; }
+.collected 			{ background-position: -160px -448px; }
+
+.agi_sml 			{ background-position: -0px -928px; }
+.crt_sml 			{ background-position: -32px -928px; }
+.hp_sml 			{ background-position: -64px -928px; }
+.lck_sml 			{ background-position: -96px -928px; }
+.pce_sml 			{ background-position: -128px -928px; }
+.str_sml 			{ background-position: -160px -928px; }
+.vit_sml 			{ background-position: -192px -928px; }
+
+.arw_1 				{ background-position: -160px -960px; }
+.arw_2 				{ background-position: -352px -960px; }
+
+.fullheart 			{ background-position: 0 -352px; }
+.rixen 				{ background-position: 0 -384px; }
+.help 				{ background-position: 0 -960px; }
+.settings 			{ background-position: -32px -960px; }
+
+
+/*
+	0	0
+	1	32
+	2	64
+	3	96
+	4	128
+	5	160
+	6	192
+	7	224
+	8	256
+	9	288
+	10	320
+	11	352
+	12	384
+	13	416
+	14	448
+	15	480
+	16	512
+*/
+
+#lives {
+	/*white-space: pre;*/
+}
+
+.hearts .num.heart:nth-of-type(2n) {
+	transform: scaleX(-1.0);
+	margin-left: -24px;
+}
+
+#sidebar {
+	position: absolute;
+	top:  432px;
+	left: calc(50% - 400px - 64px);
+	transform: translateX(-100%) translateY(-50%);
+	text-align: right;
+}
+
+#sidebar .sidebar-panel {
+	margin: 16px;
+}
+
+
+
+
+
+
+
+#lives-choice {
+	font-size: 0;
+}
+
+.heart_tile {
+	display: inline-block;
+	height: 128px;
+	width: 128px;
+	background-image: url('../images/heart_tile.png');
+
+	transition: 300ms ease;
+
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	
+	cursor: pointer;
+}
+
+.heart_tile:hover {
+	background-position: 0 100%;
+}
+
+#difficulties > div,
+.convert#creative {
+	position: absolute;
+	width: 384px;
+	display: none;
+}
+
+#game-bar {
+	position: relative;
+	width: 800px;
+	margin: 0 auto;
+	background-image: url('../images/game-bar.png');
+	background-position: 0 100%;
+}
+
+.left { float: left; }
+.right { float: right; }
+
+#game-bar #riverarrow {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	padding-left: 4px;
+	margin-top: -8px;
+	transition: 300ms ease;
+}
+
+body.creative #inv .num {
+	opacity: 0;
+}
+
+#header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+.volume_slider {
+	display: inline-block;
+	font-size: 0;
+	width: 212px;
+	border: 4px solid white;
+	height: 32px;
+}
+
+.volume_slider .bop {
+	display: inline-block;
+	height: 24px;
+	width: 24px;
+	border: 4px solid #252525;
+	background-color: #333;
+	cursor: pointer;
+}
+
+.volume_slider .bop:hover,
+.mute:hover {
+	background-color: #666;
+}
+
+.volume_slider .bop.on {
+	background-color: white;
+}
+
+.volume_slider .bop:not(:last-of-type) {
+	margin-right: -4px;
+}
+
+.mute {
+	position: relative;
+	top: -8px;
+	cursor: pointer;
+}
+ 
+#youwin {
+	display: none;
+}
+
+.disabled {
+	pointer-events: none;
+}

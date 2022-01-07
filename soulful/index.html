@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>SOULFUL</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="css/normalize.css">
+
+	<link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+
+<div id="modal_bg">
+	<div class="modal" id="startscreen">
+		<div id="start-main">
+			<div class="convert">soulful</div>
+			<br>
+			<button class="btn thn-btn" id="startbtn"><span class="convert">start</span></button>
+		</div>
+		<div id="lives-choice" style="display: none;">
+			<div class="convert">difficulty</div>
+			<div id="easy" class="heart_tile hearts">
+				<span class="num heart"></span>
+				<span class="num heart"></span>
+				<span class="num heart"></span>
+				<span class="num heart"></span>
+				<span class="num heart"></span>
+				<span class="num heart"></span>
+			</div>
+			<div id="medi" class="heart_tile hearts">
+				<span class="num heart"></span>
+				<span class="num heart"></span>
+				<span class="num heart"></span>
+				<span class="num heart"></span>
+			</div>
+			<div id="hard" class="heart_tile hearts">
+				<span class="num heart"></span>
+				<span class="num heart"></span>
+			</div>
+			<div id="difficulties">
+				<div id="easy" class="convert">babymode</div>
+				<div id="medi" class="convert">normal</div>
+				<div id="hard" class="convert">very hard</div>
+			</div>
+
+			<!--<div style="margin: 64px;"></div>
+
+			<div id="creative" class="heart_tile">
+				<span class="num collected"></span>
+			</div>
+			<div id="creative" class="convert">creative</div>-->
+
+
+		</div>
+	</div>
+
+	<div class="modal" id="deathscreen">
+		<div id="youwin"><span class="convert">you win!</span></div>
+		<br>
+		<div><span class="convert">score: </span><span id="score"></span></div>
+		<br>
+		<button class="btn thn-btn" id="playAgain"><span class="convert">play again</span></button>
+	</div>
+
+	<div class="modal" id="help">
+		<button class="btn modal_close">
+			<div class="num x"></div>
+		</button>
+
+		<div class="row" style="width: auto;">
+			<div class="panel">
+				<table id="help_table" class="table" cellspacing="0" cellpadding="0">
+					<tr>
+						<td><span class="convert">move</span><span class="num blank"></span></td>
+						<td>
+							<span class="num ua"></span>
+							<span class="num la"></span>
+							<span class="num da"></span>
+							<span class="num ra"></span>
+						</td>
+					</tr>
+					<tr>
+						<td><span class="convert">look</span><span class="num blank"></span></td>
+						<td><span class="convert">wasd</span></td>
+					</tr>
+					<tr>
+						<td><span class="convert">action</span><span class="num blank"></span></td>
+						<td><span class="convert">z</span></td>
+					</tr>
+					<tr>
+						<td><span class="convert">detector</span><span class="num blank"></span></td>
+						<td><span class="convert">x</span></td>
+					</tr>
+					<tr>
+						<td><span class="convert">ability</span><span class="num blank"></span></td>
+						<td><span class="convert">c</span></td>
+					</tr>
+					<tr>
+						<td><span class="convert">inventory</span><span class="num blank"></span></td>
+						<td>
+							<span class="convert">v</span>
+							<span class="num plus"></span>
+							<span class="num semi"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<!--<div id="runesInfo">-->
+		</div>
+	</div>
+
+	<div class="modal" id="settings">
+		<button class="btn modal_close">
+			<div class="num x"></div>
+		</button>
+
+		<div class="panel">
+			<div class="convert">master volume</div>
+			<br>
+			<div class="num x mute" id="sounds_mute"></div>
+			<div class="volume_slider" id="sounds_slider">
+				<div class="bop on"></div>
+				<div class="bop on"></div>
+				<div class="bop on"></div>
+				<div class="bop on"></div>
+				<div class="bop on"></div>
+				<div class="bop"></div>
+				<div class="bop"></div>
+				<div class="bop"></div>
+				<div class="bop"></div>
+				<div class="bop"></div>
+			</div>
+			<br>
+			<br>
+			<br>
+			<div class="convert">music</div>
+			<br>
+			<div class="num x mute" id="music_mute"></div>
+			<div class="volume_slider" id="music_slider">
+				<div class="bop on"></div>
+				<div class="bop on"></div>
+				<div class="bop on"></div>
+				<div class="bop on"></div>
+				<div class="bop on"></div>
+				<div class="bop"></div>
+				<div class="bop"></div>
+				<div class="bop"></div>
+				<div class="bop"></div>
+				<div class="bop"></div>
+			</div>
+			<br>
+			<br>
+			<br>
+			<div class="convert">game stats</div>
+			<br>
+			<button class="btn thn-btn" id="reset"><span class="convert">reset</span></button>
+		</div>
+	</div>
+
+	<div class="modal" id="stats">
+		<button class="btn modal_close">
+			<div class="num x"></div>
+		</button>
+
+		<div class="panel">
+			<table id="stats_table" class="table" cellspacing="0" cellpadding="0">
+				<tr>
+					<td>
+						<span class="num power"></span>
+						<span class="num blank"></span>
+						<span class="convert">power</span>
+						<span class="num blank"></span>
+					</td>
+					<td>
+						<span id="power"></span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span class="num zone"></span>
+						<span class="num blank"></span>
+						<span class="convert">zone</span>
+						<span class="num blank"></span>
+					</td>
+					<td>
+						<span id="zone">0</span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span class="num kills"></span>
+						<span class="num blank"></span>
+						<span class="convert">kills</span>
+						<span class="num blank"></span>
+					</td>
+					<td>
+						<span id="kills">0</span>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<span class="num collected"></span>
+						<span class="num blank"></span>
+						<span class="convert">collected</span>
+						<span class="num blank"></span>
+					</td>
+					<td>
+						<span id="itemsCollected">0</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<!--<div id="info"></div>-->
+
+<!--<div id="hud">
+	<div class="panel">
+		<div class="num t"></div>
+		<div class="num i"></div>
+		<div class="num l"></div>
+		<div class="num e"></div>
+		<div class="num blank"></div>
+		<div class="num i"></div>
+		<div class="num n"></div>
+		<div class="num f"></div>
+		<div class="num o"></div>
+
+		<div id="values">
+			<div class="tile_name"></div>
+			<div class="isBlock"></div>
+			<div class="tile_drops"></div>
+			<div class="breaksInto"></div>
+			<div class="tile_desc"></div>
+		</div>
+	</div>
+</div>-->
+
+<div class="container">
+
+	<div id="main" class="row">
+		<div class="col">
+
+		<div id="game">
+			<div id="zzz" style="display: none;">
+				<div class="num z"></div>
+				<div class="num z"></div>
+				<div class="num z"></div>
+			</div>
+			<canvas id="canvas" class="cnvs"></canvas>
+			<canvas id="entity_canvas" class="cnvs"></canvas>
+			<canvas id="proj_canvas" class="cnvs"></canvas>
+			<canvas id="night_canvas" class="cnvs"></canvas>
+			<div id="player"></div>
+			<div id="note_panel" class="panel_beneath panelon">
+				<div id="note_inner" class="walloftext"></div>
+			</div>
+		</div>
+		<div id="game-bar">
+			<div id="riverarrow">
+				<div class="num arw_2"></div>
+			</div>
+		</div>
+
+		</div>
+		<!--<div class="col" id="sidebarcol">
+			<div id="sidebar">
+				<div class="block halfnhalf">
+					<span class="convert">life</span>
+					<span class="num slash"></span>
+					<span class="convert">coins</span>
+				</div>
+				<div class="row">
+					<div class="col">
+						<div id="livescover">
+							<div id="lives" class="hearts"></div>
+						</div>
+					</div>
+					<div class="col">
+						<div id="coinscover">
+							<span id="coins">0</span>
+							<span class="num coins"></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="block">
+					<span class="convert">bag</span>
+				</div>
+
+				<div id="inv"></div>
+			</div>
+		</div>-->
+	</div>
+</div>
+
+<div id="header">
+	<div class="left">
+		<span class="convert">soulful</span>
+	</div>
+	<div class="right">
+		<button class="btn clr-btn modal_open" id="help"><span class="num help"></span></button>
+		<button class="btn clr-btn modal_open" id="settings"><span class="num settings"></span></button>
+	</div>
+	<div style="clear: both;"></div>
+</div>
+
+<div id="runes_panel" class="panel_beneath">
+	<div id="runes_inner">
+		<div id="inv"></div>
+	</div>
+</div>
+
+<div id="sidebar">
+	<div class="sidebar-panel">
+		<div id="lives" class="hearts"></div>
+	</div>
+	<div class="sidebar-panel">
+		<span id="coins">0</span>
+		<span class="num coins"></span>
+	</div>
+</div>
+
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/easystar-0.4.4.min.js"></script>
+<script src="js/perlin.js"></script>
+<script src="js/howler.min.js"></script>
+<script src="js/js.js"></script>
+</body>
+</html>
