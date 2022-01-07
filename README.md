@@ -2,10 +2,19 @@
 
 Games I've made
 
+To access type in
+
+  kudosincorporated.github.io/ Title 
+
+for some, and
+
+  kudosincorporated.github.io/ Title /main.html or kudosincorporated.github.io/ Title /game.html
+
+for others.
+
 | Title | Desc |
 | --- | --- |
 | 80mil | Frogger clone |
-| Soulless | WIP |
 | forage | forest survival/collection game |
 | forage3 | 2nd v |
 | forager | 3rd/final v |
