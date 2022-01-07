@@ -810,8 +810,8 @@ const ENTITY = {
 		gungenthor: { sx: 9, sy: 23, attr: {
 			name: 'gungenthor',
 			grave: 'tree_4',
-			maxhp: 1,
-			hp: 1
+			maxhp: 12,
+			hp: 12
 		}},
 		you: { sx: 7, sy: 29, attr: {
 			name: 'you',
@@ -1261,6 +1261,8 @@ $(window).on('load', function() {
 
 							GAME.map.entities.splice(b, 1);
 							render(GAME.map, 'mid');
+						} else { //cant afford!
+							fail.play();
 						}
 					} else if (GAME.map.entities[b].whatIsIt == 'rune') {
 						var runeName = GAME.map.entities[b].attr.name;
@@ -2776,7 +2778,7 @@ $(window).on('load', function() {
 								cost: WEAPON[chosenWeapon].cost
 							});*/
 
-							if (a == 4) {
+							if (a == 4 && !GAME.player.scythe.hasFinder) {
 								nMap.addEntity('large_detail', hex+a-1+d.x, hex-1+d.y, { name: 'bazzar' });
 
 								nMap.addEntity('item', hex+a+d.x, hex+d.y, { name: 'pathmaker',
@@ -2803,7 +2805,7 @@ $(window).on('load', function() {
 							
 							nMap.addEntity('large_detail', hex+a-1+d.x, hex-1+d.y, { name: 'bazzar' });
 
-							if (a == 0) {
+							if (a == 0 && !GAME.player.scythe.hasPierce) {
 								nMap.addEntity('item', hex+a+d.x, hex+d.y, { name: 'canonball',
 									cost: 200
 								});
@@ -2816,7 +2818,7 @@ $(window).on('load', function() {
 								nMap.addEntity('detail',hex+a+d.x-1-4,hex+d.y,{name:'two'});
 								nMap.addEntity('detail',hex+a+d.x-4,hex+d.y,{name:'dbl_zero'});
 								nMap.addEntity('detail',hex+a+d.x+1-4,hex+d.y,{name:'g_bigcoin'});
-							} else if (a == 10) {
+							} else if (a == 10 && !GAME.player.scythe.hasReturn) {
 								nMap.addEntity('item', hex+a+d.x, hex+d.y, { name: 'boomerang',
 									cost: 200
 								});
@@ -5247,7 +5249,7 @@ $(window).on('load', function() {
 				}
 			}
 			console.log(enemyCount);
-			if (enemyCount <= 0) {
+			if (enemyCount <= 0 && !GAME.inRoom) {
 				GAME.fightingBoss = false;
 				$('#riverarrow').show();
 			}
@@ -5484,7 +5486,7 @@ $(window).on('load', function() {
 				});
 
 				bigBoom(cx, cy, 1000, GAME.canv.h, 12, 1, true, 0, 100, 50);
-				coin.play();
+				success.play();
 			}
 
 			//////////
