@@ -1,4 +1,11 @@
 
+
+
+//SOULFUL
+//7.01.2022
+
+
+
 var disableInput = false;
 var seedDisplacement = 0;
 var runePageOpen = false;
@@ -14,7 +21,7 @@ var SAVE = {
 var GAME = {
 	canv: {
 		size: 32,
-		h: 25 //unfortunately, it must stay at 25
+		h: 25
 	},
 	map: [],
 	nextSpot: [],
@@ -5948,10 +5955,6 @@ $(window).on('load', function() {
 	/*addItem('cornflower',3);
 	addItem('twig',3);*/
 
-
-
-	music.play();
-
 }); //end of on.load
 
 
@@ -6232,24 +6235,4 @@ function numToWord(num) {
 		default:
 			return num;
 	}
-}
-
-
-
-function FizzBuzz() {
-	var print;
-	for (let i = 1; i < 101; i++) {
-		print = '';
-		if (i % 3 == 0) {
-			print += 'Fizz';
-		}
-		if (i % 5 == 0) {
-			print += 'Buzz';
-		}
-		if (print == '') {
-			print += i;
-		}
-		console.log(print);
-	}
-
 }
