@@ -8,7 +8,7 @@ To access type in
 
 for some, and
 
-`kudosincorporated.github.io/ Title /main.html or kudosincorporated.github.io/ Title /game.html`
+`kudosincorporated.github.io/ Title /main.html` or `kudosincorporated.github.io/ Title /game.html`
 
 for others.
 
