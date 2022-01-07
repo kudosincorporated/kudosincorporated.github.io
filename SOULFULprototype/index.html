@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>solful</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="css/normalize.css">
+
+	<link rel="stylesheet" href="css/css.css">
+</head>
+<body>
+
+<div class="container">
+	<div id="hud">
+		<div class="panel">
+			<div class="num h"></div>
+			<div class="num u"></div>
+			<div class="num h"></div>
+			<div class="num qm"></div>
+
+			<p>
+				This is a prototype for a rougelike game.
+				<br><br>
+				Currently you can move around, be attacked, destroy terrain, build farms, fall asleep, and follow the river downwards to explore.
+				<br><br>
+				It's a WIP so there's no endgame, just mechanics.
+			</p>
+		</div>
+		<div class="panel">
+			<div class="num c"></div>
+			<div class="num o"></div>
+			<div class="num n"></div>
+			<div class="num t"></div>
+			<div class="num r"></div>
+			<div class="num o"></div>
+			<div class="num l"></div>
+			<div class="num s"></div>
+			<br>
+			<div class="num ua"></div>
+			<div class="num blank"></div>
+			<div class="num la"></div>
+			<div class="num blank"></div>
+			<div class="num da"></div>
+			<div class="num blank"></div>
+			<div class="num ra"></div>
+			<div class="num blank"></div> <span>to move around</span>
+			<br>
+			<div class="num w"></div>
+			<div class="num a"></div>
+			<div class="num s"></div>
+			<div class="num d"></div> <span>to look in direction</span>
+			<br>
+			<div class="num z"></div> <span>to interact</span>
+			<br>
+			<div class="num x"></div> <span>to toggle hit location</span>
+			<br>
+			<div class="num c"></div> <span>to go to sleep</span>
+			<br>
+			<div class="num v"></div> <span>use power</span>
+			<br>
+			<div class="num one"></div>
+			<div class="num dash"></div>
+			<div class="num nine"></div> <span>to select in hotbar</span>
+		</div>
+		<div class="panel">
+			<div class="num t"></div>
+			<div class="num i"></div>
+			<div class="num l"></div>
+			<div class="num e"></div>
+			<div class="num blank"></div>
+			<div class="num i"></div>
+			<div class="num n"></div>
+			<div class="num f"></div>
+			<div class="num o"></div>
+
+			<div id="values">
+				<div class="title tile_name"></div>
+				<div class="isBlock"></div>
+				<div class="tile_drops"></div>
+				<div class="breaksInto"></div>
+				<div class="tile_desc"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col" style="width: 25%;">
+			<p>
+				<div class="num l"></div>
+				<div class="num i"></div>
+				<div class="num v"></div>
+				<div class="num e"></div>
+				<div class="num s"></div>
+				<div class="num blank"></div>
+
+				<div id="lives"></div>
+			</p>
+
+			<p>
+				<div class="num w"></div>
+				<div class="num e"></div>
+				<div class="num a"></div>
+				<div class="num p"></div>
+				<div class="num o"></div>
+				<div class="num n"></div>
+				<div class="num blank"></div>
+			
+				<span class="title">fists</span>
+			</p>
+
+			<p>
+				<div class="num p"></div>
+				<div class="num o"></div>
+				<div class="num w"></div>
+				<div class="num e"></div>
+				<div class="num r"></div>
+				<div class="num blank"></div>
+			
+				<span class="title">metal detector</span>
+			</p>
+			<p>
+				<div class="num k"></div>
+				<div class="num i"></div>
+				<div class="num l"></div>
+				<div class="num l"></div>
+				<div class="num s"></div>
+				<div class="num blank"></div>
+
+				<span id="kills">0</span>
+			</p>
+
+			<p>
+				<div class="num c"></div>
+				<div class="num o"></div>
+				<div class="num i"></div>
+				<div class="num n"></div>
+				<div class="num s"></div>
+				<div class="num blank"></div>
+
+				<span id="coins">0</span>
+			</p>
+
+			<p>
+				<div class="num i"></div>
+				<div class="num n"></div>
+				<div class="num v"></div>
+				<div class="num e"></div>
+				<div class="num n"></div>
+				<div class="num t"></div>
+				<div class="num o"></div>
+				<div class="num r"></div>
+				<div class="num y"></div>
+			</p>
+
+			<p>
+				<div id="inv"></div>
+			</p>
+		</div>
+		<div class="col">
+			<div id="game">
+				<div id="zzz" style="display: none;">
+					<div class="num z"></div>
+					<div class="num z"></div>
+					<div class="num z"></div>
+				</div>
+				<canvas id="canvas" style="border: 1px solid white;"></canvas>
+				<div id="player"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/easystar-0.4.4.min.js"></script>
+<script src="js/perlin.js"></script>
+<script src="js/js.js"></script>
+</body>
+</html>
