@@ -1,14 +1,14 @@
 # KudosInc Github
 
-Games I've made
+## Games I've made
 
 To access type in
 
-  kudosincorporated.github.io/ Title 
+`kudosincorporated.github.io/ Title`
 
 for some, and
 
-  kudosincorporated.github.io/ Title /main.html or kudosincorporated.github.io/ Title /game.html
+`kudosincorporated.github.io/ Title /main.html or kudosincorporated.github.io/ Title /game.html`
 
 for others.
 
