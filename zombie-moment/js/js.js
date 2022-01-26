@@ -590,7 +590,9 @@ $(function() {
 		GAME.a.started = true;
 
 		window.setInterval(function() {
-			timerCycle();
+			if (!document.hidden) {
+				timerCycle();
+			}
 		}, 1000);
 	});
 	
