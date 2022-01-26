@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>index</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/css.css">
+
+	<style type="text/css">
+		body {
+			background-color: black;
+		}
+	</style>
+</head>
+<body>
+
+<div id="modal_bg">
+	<div class="modal" id="start_modal">
+		<button class="btn big-btn" id="start_button">Start</button>
+	</div>
+	<div class="modal" id="death_modal">
+		R.I.P.
+		<br>
+		You survived <span class="timer">00:00</span>
+		<br><br>
+		<span class="img health"></span> x<span class="num_of_health">0</span>
+		<span class="img score"></span> x<span class="num_of_score">0</span>
+	</div>
+</div>
+
+<div id="topmiddle">
+	<span class="timer">00:00</span>
+</div>
+
+<div id="topright">
+	Show debug: <input type="checkbox" id="acceleration" name="acceleration">
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/js.js"></script>
+</body>
+</html>

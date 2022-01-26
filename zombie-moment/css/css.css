@@ -1,0 +1,117 @@
+@font-face {
+	font-family: 'Gamer';
+	src: url(../Gamer.ttf);
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-family: 'Gamer', sans-serif;
+	font-size: 2rem;
+	height: 100vh;
+	color: white;
+	overflow: hidden;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+.container {
+	width: 80%;
+	margin: 0 auto;
+}
+
+#topmiddle {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%);
+	margin: 1rem;
+
+	font-size: 2em;
+}
+
+#topright {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 1rem;
+}
+
+#modal_bg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	opacity: 1;
+	z-index: 99;
+}
+
+.modal {
+	font-size: 2em;
+	position: relative;
+	text-align: center;
+	display: none;
+}
+
+.btn {
+	color: white;
+}
+
+.big-btn {
+	background-color: transparent;
+	border: 0;
+	font-size: 4em;
+	cursor: pointer;
+	transition: 300ms ease;
+}
+
+.big-btn:hover {
+	letter-spacing: 0.1em;
+}
+
+#death_modal {
+	background-color: black;
+	padding: 1em;
+}
+
+.img {
+	display: inline-block;
+	height: 64px;
+	width: 64px;
+	background-image: url('../moving_dude.png');
+	background-position: 0 0;
+	background-size: 1600%;
+	vertical-align: middle;
+}
+
+.img.health {
+	background-position: -512px -256px;
+}
+
+.img.score {
+	background-position: -768px -256px;
+}
