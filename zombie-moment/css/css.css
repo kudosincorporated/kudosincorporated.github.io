@@ -115,3 +115,7 @@ body {
 .img.score {
 	background-position: -768px -256px;
 }
+
+.img.zombie {
+	background-position: -256px 0;
+}
