@@ -26,6 +26,7 @@ var GAME = {
 		y: 540 //start y
 	},
 	s: { //stats
+		kills: 0,
 		pickups: {
 			health: 0,
 			score: 0
@@ -320,6 +321,9 @@ $(function() {
 							if (GAME.g.p.state.ragemode.bool) {
 								GAME.g.e.splice(i, 1);
 								GAME.g.d.push( new Entity('zlood_'+randInt(1, 8), this.x, this.y) );
+
+								GAME.s.kills++;
+								$('.kills').text(GAME.s.kills);
 							} else {
 								this.hp--;
 								if (this.hp < 0) {
