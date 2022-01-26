@@ -435,6 +435,22 @@ $(function() {
 					GAME.g.p.lastpressed = 'down';
 					GAME.g.p.down.bool = true;
 					break;
+				case 65: //left arrow key
+					GAME.g.p.lastpressed = 'left';
+					GAME.g.p.left.bool = true;
+					break;
+				case 68: //right arrow key
+					GAME.g.p.lastpressed = 'right';
+					GAME.g.p.right.bool = true;
+					break;
+				case 87: //up arrow key
+					GAME.g.p.lastpressed = 'up';
+					GAME.g.p.up.bool = true;
+					break;
+				case 83: //down arrow key
+					GAME.g.p.lastpressed = 'down';
+					GAME.g.p.down.bool = true;
+					break;
 			}
 		}
 	});
@@ -455,6 +471,18 @@ $(function() {
 					GAME.g.p.up.bool = false;
 					break;
 				case 40: //down arrow key
+					GAME.g.p.down.bool = false;
+					break;
+				case 65: //left arrow key
+					GAME.g.p.left.bool = false;
+					break;
+				case 68: //right arrow key
+					GAME.g.p.right.bool = false;
+					break;
+				case 87: //up arrow key
+					GAME.g.p.up.bool = false;
+					break;
+				case 83: //down arrow key
 					GAME.g.p.down.bool = false;
 					break;
 			}
