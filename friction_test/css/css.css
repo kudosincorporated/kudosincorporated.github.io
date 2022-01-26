@@ -33,9 +33,19 @@ body {
 	margin: 0 auto;
 }
 
+#topmiddle {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%);
+	margin: 1rem;
+
+	font-size: 2em;
+}
+
 #topright {
 	position: absolute;
 	top: 0;
 	right: 0;
-	margin: 1em;
+	margin: 1rem;
 }

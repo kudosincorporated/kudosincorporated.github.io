@@ -1,16 +1,22 @@
 var GAME = {
+	a: {
+		showDebug: false
+	},
 	g: {
 		t: 0, //tick
 		s: 20, //swap/switch player skin
+		b: 128, //border used for spawning pickups
 		d: [], //decoration
 		e: [], //enemies
+		c: [], //pickups
 		p: {} //player
 	},
 	c: { //canvas
 		h: 9, //height
 		w: 16, //width
 		s: 120, //size
-		r: 128 //spritesheet ratio
+		r: 128, //spritesheet ratio,
+		ss: 64, //general spritesize
 	},
 	p: { //default values
 		h: 64, //height
@@ -26,8 +32,10 @@ var GAME = {
 var BEING = {
 	player: {
 		sx: 0,
-		sy: 0,
-		maxhp: 10,
+		sy: 8,
+		h: GAME.p.h,
+		w: GAME.p.w,
+		maxhp: 100,
 		s: 2, //speed
 		f: 10, //friction multiplier
 		a: 2, //acceleration
@@ -38,6 +46,8 @@ var BEING = {
 	walker: {
 		sx: 4,
 		sy: 0,
+		h: GAME.c.ss,
+		w: GAME.c.ss,
 		maxhp: 1,
 		s: 0, //speed
 		f: 1, //friction multiplier
@@ -49,6 +59,8 @@ var BEING = {
 	runner: {
 		sx: 4,
 		sy: 8,
+		h: GAME.c.ss,
+		w: GAME.c.ss,
 		maxhp: 1,
 		s: 2, //speed
 		f: 1, //friction multiplier
@@ -57,6 +69,34 @@ var BEING = {
 		sl: 0.001, //overall slow effect. 0 = 0% speed, 1 = 100% speed.
 		ma: 500 //max acceleration
 	}
+}
+
+var ENTITY = {
+	blood_1: { sx: 8+0, sy: 0, h: GAME.c.ss, w: GAME.c.ss },
+	blood_2: { sx: 8+1, sy: 0, h: GAME.c.ss, w: GAME.c.ss },
+	blood_3: { sx: 8+2, sy: 0, h: GAME.c.ss, w: GAME.c.ss },
+	blood_4: { sx: 8+3, sy: 0, h: GAME.c.ss, w: GAME.c.ss },
+	blood_5: { sx: 8+4, sy: 0, h: GAME.c.ss, w: GAME.c.ss },
+	blood_6: { sx: 8+5, sy: 0, h: GAME.c.ss, w: GAME.c.ss },
+	blood_7: { sx: 8+6, sy: 0, h: GAME.c.ss, w: GAME.c.ss },
+	blood_8: { sx: 8+7, sy: 0, h: GAME.c.ss, w: GAME.c.ss },
+
+	zlood_1: { sx: 8+0, sy: 1, h: GAME.c.ss, w: GAME.c.ss },
+	zlood_2: { sx: 8+1, sy: 1, h: GAME.c.ss, w: GAME.c.ss },
+	zlood_3: { sx: 8+2, sy: 1, h: GAME.c.ss, w: GAME.c.ss },
+	zlood_4: { sx: 8+3, sy: 1, h: GAME.c.ss, w: GAME.c.ss },
+	zlood_5: { sx: 8+4, sy: 1, h: GAME.c.ss, w: GAME.c.ss },
+	zlood_6: { sx: 8+5, sy: 1, h: GAME.c.ss, w: GAME.c.ss },
+	zlood_7: { sx: 8+6, sy: 1, h: GAME.c.ss, w: GAME.c.ss },
+	zlood_8: { sx: 8+7, sy: 1, h: GAME.c.ss, w: GAME.c.ss },
+
+	brick_1: { sx: 8+0, sy: 2, h: GAME.c.ss, w: GAME.c.ss },
+	brick_2: { sx: 8+1, sy: 2, h: GAME.c.ss, w: GAME.c.ss },
+	brick_3: { sx: 8+2, sy: 2, h: GAME.c.ss, w: GAME.c.ss },
+	brick_4: { sx: 8+3, sy: 2, h: GAME.c.ss, w: GAME.c.ss },
+
+	health:  { sx: 8+0, sy: 4, h: GAME.c.ss, w: GAME.c.ss },
+	score:   { sx: 8+4, sy: 4, h: GAME.c.ss, w: GAME.c.ss }
 }
 
 $(function() {
@@ -71,15 +111,16 @@ $(function() {
 		spritesheet.src = 'moving_dude.png';
 
 	class Mover {
-		constructor(name, x, y) {
+		constructor(type, name, x, y) {
+			this.type = type;
 			this.name = name;
-			this.maxhp = BEING[this.name].maxhp;
 			this.hp = BEING[this.name].maxhp;
+			this.maxhp = BEING[this.name].maxhp;
 
 			this.facing = 0;
 			this.skin = 1;
-			this.h = GAME.p.h; //height
-			this.w = GAME.p.w; //width
+			this.h = BEING[this.name].h; //height
+			this.w = BEING[this.name].w; //width
 			this.s = BEING[this.name].s; //speed
 			this.f = BEING[this.name].f; //friction multiplier
 			this.a = BEING[this.name].a; //acceleration
@@ -88,6 +129,15 @@ $(function() {
 			this.ma = BEING[this.name].ma; //max acceleration
 			this.x = x; //start x
 			this.y = y; //start y
+
+			this.state = {
+				touching: {
+					bool: false
+				},
+				ragemode: {
+					bool: false
+				}
+			}
 
 			this.left = {
 				bool: false,
@@ -205,10 +255,138 @@ $(function() {
 					break;
 			}
 			
+			ctx.save();
+			if (this.state.touching.bool) {
+				ctx.filter = 'brightness(100)';
+			}
+			if (this.state.ragemode.bool) {
+				ctx.filter = 'saturate(500%)';
+			}
+
 			if (this.left.bool || this.right.bool || this.up.bool || this.down.bool) {
 				ctx.drawImage(spritesheet, this.skin*GAME.c.r + BEING[this.name].sx*GAME.c.r, this.facing*GAME.c.r + BEING[this.name].sy*GAME.c.r, GAME.c.r, GAME.c.r, this.x, this.y, this.h, this.w);
 			} else {
 				ctx.drawImage(spritesheet, 0 + BEING[this.name].sx*GAME.c.r, this.facing*GAME.c.r + BEING[this.name].sy*GAME.c.r, GAME.c.r, GAME.c.r, this.x, this.y, this.h, this.w);
+			}
+			ctx.restore();
+		}
+		placeHp() {
+			//health bar!
+			var progress = this.hp/this.maxhp;
+			var barwidth = this.w/2;
+			var barheight = 6;
+
+			if (progress > 0) {
+				ctx.fillStyle = '#111';
+				ctx.fillRect(this.x + barwidth/2, this.y + this.h, barwidth, barheight);
+				ctx.fillStyle = '#ff3333';
+				ctx.fillRect(this.x + barwidth/2 + barwidth*Math.abs(progress-1)/2, this.y + this.h, barwidth*progress, barheight);
+			}
+		}
+		colCheck() {
+			var iterator = 0;
+
+			for (let i = 0; i < GAME.g.e.length; i++) {
+				var e = GAME.g.e[i];
+
+				var pointX = this.x + this.w/2;
+				var pointY = this.y + this.h/2;
+				var rectX = e.x;
+				var rectY = e.y;
+				var rectWidth = e.w;
+				var rectHeight = e.h;
+
+				//if (GAME.g.t % 100 == 0) console.log(pointX+" "+pointY+" "+rectX+" "+rectY+" "+rectWidth+" "+rectHeight);
+
+				if (pointX > rectX && pointX < rectX + rectWidth) {
+					if (pointY > rectY && pointY < rectY + rectHeight) {
+						if (e.type == 'enemy') {
+							//bloodsplat
+							var ri = randInt(1, 8);
+							if (GAME.g.t % 10 == 0) GAME.g.d.push( new Entity('blood_'+ri, this.x, this.y) );
+							if (GAME.g.d.length > 99) {
+								GAME.g.d.shift();
+							}
+
+							if (GAME.g.p.state.ragemode.bool) {
+								GAME.g.e.splice(i, 1);
+								GAME.g.d.push( new Entity('zlood_'+randInt(1, 8), this.x, this.y) );
+							} else {
+								this.hp--;
+								if (this.hp < 0) {
+									//player dies
+									GAME.g.p.sl = 0;
+								}
+
+								iterator++;
+							}
+						}
+					}
+				}
+			}
+
+			if (iterator > 0 && this.hp > 0) {
+				this.state.touching.bool = true;
+			} else {
+				this.state.touching.bool = false;
+			}
+
+			//pickups!
+			for (let i = 0; i < GAME.g.c.length; i++) {
+				var c = GAME.g.c[i];
+
+				var pointX = this.x + this.w/2;
+				var pointY = this.y + this.h/2;
+				var rectX = c.x;
+				var rectY = c.y;
+				var rectWidth = c.w;
+				var rectHeight = c.h;
+
+				if (pointX > rectX && pointX < rectX + rectWidth) {
+					if (pointY > rectY && pointY < rectY + rectHeight) {
+						if (c.name == 'health') {
+							this.hp += 10;
+							if (this.hp > this.maxhp) this.hp = this.maxhp; //cant overheal
+							GAME.g.c.splice(i, 1);
+							GAME.g.c.push( new Entity('health', randInt(GAME.g.b, canvas.width-GAME.g.b), randInt(GAME.g.b, canvas.height-GAME.g.b)) );
+						} else if (c.name == 'score') {
+							GAME.g.p.sl = BEING.player.sl*2;
+							GAME.g.p.state.ragemode.bool = true;
+							window.setTimeout(function() {
+								GAME.g.p.sl = BEING.player.sl;
+								GAME.g.p.state.ragemode.bool = false;
+							}, 1000);
+							GAME.g.c.splice(i, 1);
+							GAME.g.c.push( new Entity('score', randInt(GAME.g.b, canvas.width-GAME.g.b), randInt(GAME.g.b, canvas.height-GAME.g.b)) );
+						}
+					}
+				}
+			}
+		}
+	}
+
+	class Entity {
+		constructor(name, x, y, attr) {
+			this.name = name;
+			this.x = x; 
+			this.y = y;
+			this.h = ENTITY[this.name].h;
+			this.w = ENTITY[this.name].w;
+
+			this.skin = 0;
+
+			this.attr = attr ? attr : {};
+		}
+		place() {
+			ctx.drawImage(spritesheet, ENTITY[this.name].sx*GAME.c.r + this.skin*GAME.c.r, ENTITY[this.name].sy*GAME.c.r, GAME.c.r, GAME.c.r, this.x, this.y, this.h, this.w);
+		}
+		swapSkin() {
+			if (GAME.g.t % GAME.g.s == 0) {
+				if (this.skin < 3) {
+					this.skin++;
+				} else {
+					this.skin = 0;
+				}
 			}
 		}
 	}
@@ -263,31 +441,61 @@ $(function() {
 
 	$('#acceleration').on('click', function() {
 		if ($(this).is(':checked')) {
-			
+			GAME.a.showDebug = true;
 		} else {
-
+			GAME.a.showDebug = false;
 		}
 	});
 
-	function draw() {
-		GAME.g.t++;
+	var sec = 0;
+	var min = 0;
 
+	function draw() {
+		//spawning enemies
 		if (GAME.g.t % 30 == 0) {
 			var r = Math.random();
 			if (r < 0.25) {
-				GAME.g.e.push( new Mover('runner', randInt(0, canvas.width), 0) );
+				GAME.g.e.push( new Mover('enemy', 'runner', randInt(0, canvas.width), 0) );
 			} else if (r < 0.5) {
-				GAME.g.e.push( new Mover('walker', canvas.width, randInt(0, canvas.height)) );
+				GAME.g.e.push( new Mover('enemy', 'walker', canvas.width, randInt(0, canvas.height)) );
 			} else if (r < 0.75) {
-				GAME.g.e.push( new Mover('walker', randInt(0, canvas.width), canvas.height) );
+				GAME.g.e.push( new Mover('enemy', 'walker', randInt(0, canvas.width), canvas.height) );
 			} else {
-				GAME.g.e.push( new Mover('walker', 0, randInt(0, canvas.height)) );
+				GAME.g.e.push( new Mover('enemy', 'walker', 0, randInt(0, canvas.height)) );
 			}
 
 			if (GAME.g.e.length > 99) {
 				GAME.g.e.shift();
 			}
+
+			//make it harder
+			BEING.runner.sl = BEING.runner.sl*1.0025;
+			BEING.walker.sl = BEING.walker.sl*1.001;
 		}
+
+		if (GAME.g.t % 60 == 0 && GAME.g.p.hp > 0) {
+			//stopwatch
+			sec = parseInt(sec);
+			min = parseInt(min);
+			
+			sec = sec + 1;
+
+			if (sec == 60) {
+				min = min + 1;
+				sec = 0;
+			}
+
+			if (sec < 10 || sec == 0) {
+				sec = '0' + sec;
+			}
+			if (min < 10 || min == 0) {
+				min = '0' + min;
+			}
+
+			$('.score').text(min+":"+sec);
+		}
+		
+		GAME.g.t++;
 
 		render();
 		function render() {
@@ -300,10 +508,22 @@ $(function() {
 			ctx.fillStyle = '#222034';
 			ctx.fillRect(1, 1, canvas.width-1*2, canvas.height-1*2);
 
+			//rendering decoration (floor layer)
+			for (let i = 0; i < GAME.g.d.length; i++) {
+				GAME.g.d[i].place();
+			}
+
+			//rendering pickups (floor+1 layer)
+			for (let i = 0; i < GAME.g.c.length; i++) {
+				GAME.g.c[i].swapSkin();
+				GAME.g.c[i].place();
+			}
+
 			//rendering movers
 			GAME.g.p.swapSkin();
 			GAME.g.p.move();
 			GAME.g.p.place();
+			GAME.g.p.colCheck();
 
 			for (let i = 0; i < GAME.g.e.length; i++) {
 				var e = GAME.g.e[i];
@@ -332,23 +552,35 @@ $(function() {
 				//ctx.fillStyle = 'gold';
 				//ctx.fillText(e.name + " " + e.x.toFixed(0) + " " + e.y.toFixed(0), 20, 120+(20*i));
 			}
+			
+			GAME.g.p.placeHp();
 
-			ctx.fillStyle = 'white';
-			ctx.fillText('player', 20, 20);
-			ctx.fillText('x '+GAME.g.p.x.toFixed(0), 20, 40);
-			ctx.fillText('y '+GAME.g.p.y.toFixed(0), 20, 60);
-			ctx.fillText(GAME.g.p.left.val, 100, 60);
-			ctx.fillText(GAME.g.p.right.val, 180, 60);
-			ctx.fillText(GAME.g.p.up.val, 140, 40);
-			ctx.fillText(GAME.g.p.down.val, 140, 80);
-			ctx.fillText(GAME.keydown.angles[GAME.g.p.facing], 140, 60);
-			ctx.fillText(GAME.g.p.lastpressed, 220, 40);
+			if (GAME.a.showDebug) {
+				ctx.fillStyle = 'white';
+				ctx.fillText('player', 20, 20);
+				ctx.fillText('x '+GAME.g.p.x.toFixed(0), 20, 40);
+				ctx.fillText('y '+GAME.g.p.y.toFixed(0), 20, 60);
+				ctx.fillText(GAME.g.p.left.val, 100, 60);
+				ctx.fillText(GAME.g.p.right.val, 180, 60);
+				ctx.fillText(GAME.g.p.up.val, 140, 40);
+				ctx.fillText(GAME.g.p.down.val, 140, 80);
+				ctx.fillText(GAME.keydown.angles[GAME.g.p.facing], 140, 60);
+				ctx.fillText(GAME.g.p.lastpressed, 220, 40);
+			}
 		}
 
 		window.requestAnimationFrame(draw);
 	}
 
-	GAME.g.p = new Mover('player', 400, 400);
+	GAME.g.p = new Mover('player', 'player', 960, 540);
+
+	GAME.g.c.push( new Entity('health', randInt(GAME.g.b, canvas.width-GAME.g.b), randInt(GAME.g.b, canvas.height-GAME.g.b)) );
+	GAME.g.c.push( new Entity('score', randInt(GAME.g.b, canvas.width-GAME.g.b), randInt(GAME.g.b, canvas.height-GAME.g.b)) );
+
+	for (let i=0;i<10;i++) {
+		var ri = randInt(1,4);
+		GAME.g.d.push( new Entity('brick_'+ri, randInt(0, canvas.width), randInt(0, canvas.height)) );
+	}
 
 	window.requestAnimationFrame(draw);
 
