@@ -16,8 +16,52 @@
 <body>
 
 <div id="modal_bg">
-	<div class="modal" id="start_modal">
-		<button class="btn big-btn" id="start_button">Start</button>
+	<div class="modal modal-full" id="start_modal">
+		<div class="upper">
+			<div class="panel">
+				<button class="btn big-btn start-button" id="start_button">Start</button>
+				<br>
+				<button class="btn" id="characters_button">Characters</button>
+				<br>
+				<button class="btn" id="classic_button">Classic mode<div class="info">No character select, no special zombies, no trees: just skill and a stopwatch.</button>
+			</div>
+		</div>
+		<div class="lower">
+			<div class="panel">
+				<div class="topheader"><button class="btn" id="up_button">^^^</button></div>
+
+				<div class="character unlocked selected" id="shank">
+					<span class="img"></span>
+					<div class="info">
+						Shank hates zombies. They ate his truck.
+					</div>
+				</div>
+				<div class="character" id="akiko">
+					<span class="img"></span>
+					<div class="info">
+						<span class="black">Unlock Akiko by collecting 25 health kits.</span>
+						<br>
+						Akiko loves medicine! Every health kit she collects makes the resulting heal stronger.
+					</div>
+				</div>
+				<div class="character" id="toddy">
+					<span class="img"></span>
+					<div class="info">
+						<span class="black">Unlock Toddy by collecting 50 pink teddies.</span>
+						<br>
+						Toddy is nothing without his fuzzy purple friend. Luckily, he sees double!
+					</div>
+				</div>
+				<div class="character" id="rr375">
+					<span class="img"></span>
+					<div class="info">
+						<span class="black">Unlock RR-375 by killing 500 zombies.</span>
+						<br>
+						RR-375 has been sent back in time to kill all zombies. "It" moves slower, but can regenerate health.
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div class="modal" id="death_modal">
 		R.I.P.
@@ -28,6 +72,8 @@
 		<span class="img score"></span> x<span class="num_of_score">0</span>
 		<br>
 		<span class="img zombie"></span> x<span class="kills">0</span>
+		<br>
+		<button class="btn" id="newGame">Play again</button>
 	</div>
 </div>
 

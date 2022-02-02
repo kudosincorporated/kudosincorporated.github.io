@@ -44,7 +44,7 @@ body {
 	top: 0;
 	left: 50%;
 	transform: translate(-50%);
-	margin: 1rem;
+	margin-top: 1rem;
 
 	font-size: 2em;
 }
@@ -77,20 +77,44 @@ body {
 	display: none;
 }
 
-.btn {
-	color: white;
+.modal.modal-full {
+	height: 100%;
+	width: 100%;
 }
 
-.big-btn {
+.btn {
+	position: relative;
+	color: white;
 	background-color: transparent;
 	border: 0;
-	font-size: 4em;
 	cursor: pointer;
 	transition: 300ms ease;
 }
 
-.big-btn:hover {
+.big-btn {
+	font-size: 4em;
+}
+
+.btn:hover {
 	letter-spacing: 0.1em;
+}
+
+.info {
+	letter-spacing: 0!important;
+	position: absolute;
+	top: 2em;
+	left: 50%;
+	transform: translate(-50%);
+	width: 600px;
+	height: 0px;
+	pointer-events: none;
+	overflow: hidden;
+	transition: 100ms ease;
+}
+
+*:hover > .info {
+	height: 200px;
+	transition: 800ms ease;
 }
 
 #death_modal {
@@ -102,20 +126,112 @@ body {
 	display: inline-block;
 	height: 64px;
 	width: 64px;
-	background-image: url('../moving_dude.png');
+	background-image: url('../css-images.png');
 	background-position: 0 0;
-	background-size: 1600%;
 	vertical-align: middle;
 }
 
 .img.health {
-	background-position: -512px -256px;
+	background-position: 0 0;
 }
 
 .img.score {
-	background-position: -768px -256px;
+	background-position: -64px 0;
 }
 
 .img.zombie {
+	background-position: -128px 0;
+}
+
+#shank .img {
+	background-position: -384px 0;
+}
+
+#akiko .img {
+	background-position: -512px 0;
+}
+
+#toddy .img {
+	background-position: -640px 0;
+}
+
+#rr375 .img {
+	background-position: -768px 0;
+}
+
+#shank.unlocked .img {
+	background-position: -448px 0;
+}
+
+#akiko.unlocked .img {
+	background-position: -576px 0;
+}
+
+#toddy.unlocked .img {
+	background-position: -704px 0;
+}
+
+#rr375.unlocked .img {
+	background-position: -832px 0;
+}
+
+.upper,
+.lower {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+	width: 100%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	transition: 300ms ease;
+}
+
+.lower {
+	top: 100%;
+}
+
+.topheader {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%);
+	margin-top: 4rem;
+}
+
+.character {
+	position: relative;
+	display: inline-block;
+	height: 64px;
+	width: 64px;
+	cursor: pointer;
+}
+
+.character.unlocked:hover {
+	top: -2px;
+}
+
+.character:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-image: url(../css-images.png);
+	vertical-align: middle;
 	background-position: -256px 0;
+	z-index: -1;
+}
+
+.character.selected:before {
+	background-position: -320px 0;
+}
+
+.black {
+	color: #15141f;
 }
