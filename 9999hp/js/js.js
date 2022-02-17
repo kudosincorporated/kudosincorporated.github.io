@@ -688,7 +688,7 @@ $(function() {
 
 									if (this.hp < 0) this.hp = 0;
 
-									$('.knighthp').html(this.hp);
+									$('.knighthp').html(this.hp.toFixed(0));
 
 									if (this.hp <= 0) {
 										//player dies
@@ -710,6 +710,7 @@ $(function() {
 											GAME.q.startingQuotes.push("Okay. Amazing.");
 											GAME.q.startingQuotes.push("Here's your final prize.");
 										}
+										
 									}
 
 									iterator++;
@@ -876,8 +877,14 @@ $(function() {
 				case 32: //spacebar
 
 				if (GAME.q.startingQuotes.length > 0) {
+					GAME.g.sliderMoving = false;
+
 					saySomethingSpecific(GAME.q.startingQuotes[0]);
 					GAME.q.startingQuotes.shift();
+
+					if (GAME.q.startingQuotes.length == 0) {
+						GAME.g.sliderMoving = true;
+					}
 
 					if (GAME.q.startingQuotes == 0 && !GAME.a.begun) {
 						$('#modal_bg').hide();
@@ -1061,6 +1068,8 @@ $(function() {
 							GAME.q.startingQuotes.push("KILL THEM!!!!!!!");
 							GAME.q.startingQuotes.push("...Ahem.");
 						}
+						
+						GAME.g.sliderMoving = false;
 
 					}
 
@@ -1497,7 +1506,7 @@ $(function() {
 
 		$('.level').html(GAME.g.level);
 		$('.summons').html(GAME.g.summons);
-		$('.knighthp').html(GAME.g.p.hp);
+		$('.knighthp').html(GAME.g.p.hp.toFixed(0));
 	}
 
 	function advanceLevel() {
