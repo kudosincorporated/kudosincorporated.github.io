@@ -7,7 +7,8 @@ var GAME = {
 		maxEntities: 199,
 		quoteChance: 0.33,
 		randomQuoteChance: 0.1,
-		quoteTiming: 5000
+		quoteTiming: 5000,
+		fpsModulator: 1
 	},
 	g: {
 		character: 'player',
@@ -1068,7 +1069,13 @@ $(function() {
 				break;
 
 				case 13:
-				//saySomething();
+				
+				if (GAME.a.fpsModulator == 1) {
+					GAME.a.fpsModulator = 2.5;
+				} else {
+					GAME.a.fpsModulator = 1;
+				}
+
 				break;
 			}
 		}
@@ -1262,9 +1269,9 @@ $(function() {
 
 			if (GAME.g.sliderMoving && !GAME.a.paused) {
 				if (GAME.g.goingRight) {
-					GAME.g.slider += GAME.g.increment;
+					GAME.g.slider += GAME.g.increment*GAME.a.fpsModulator;
 				} else {
-					GAME.g.slider -= GAME.g.increment;
+					GAME.g.slider -= GAME.g.increment*GAME.a.fpsModulator;
 				}
 			}
 
@@ -1324,6 +1331,8 @@ $(function() {
 		fps = times.length;
 		ctx.fillStyle = 'white';
 		ctx.fillText(fps, 10, 20);
+
+		ctx.fillText(GAME.a.fpsModulator, 10, 30);
 
 		window.requestAnimationFrame(draw);
 	}
