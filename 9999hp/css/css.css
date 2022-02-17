@@ -1,0 +1,234 @@
+@font-face {
+	font-family: 'Gamer';
+	src: url(../Gamer.ttf);
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-family: 'Gamer', monospace;
+	font-size: 2rem;
+	height: 100vh;
+	color: white;
+	overflow: hidden;
+
+	background-image: url('../bricks_bg.png');
+	background-repeat: repeat;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+.container {
+	width: 80%;
+	margin: 0 auto;
+}
+
+#topMiddle {
+	font-size: 2em;
+
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.side {
+	font-size: 3em;
+
+	display: inline-block;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: calc(50% - 580px);
+	text-align: center;
+}
+
+#sideLeft {
+	left: 0;
+}
+
+#sideRight {
+	right: 0;
+}
+
+.summons, .level, .knighthp {
+	font-size: 2em;
+}
+
+.knighthp {
+	color: #ff3333;
+}
+
+#modal_bg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	opacity: 1;
+	z-index: 99;
+}
+
+.modal {
+	font-size: 2em;
+	position: relative;
+	text-align: center;
+	display: none;
+}
+
+.modal.modal-full {
+	height: 100%;
+	width: 100%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.btn {
+	position: relative;
+	color: white;
+	background-color: transparent;
+	border: 0;
+	cursor: pointer;
+	transition: 300ms ease;
+}
+
+.big-btn {
+	font-family: 'Gamer', monospace;
+	font-size: 4em;
+}
+
+.btn:hover {
+	letter-spacing: 0.1em;
+}
+
+.info {
+	letter-spacing: 0!important;
+	position: absolute;
+	top: 2em;
+	left: 50%;
+	transform: translate(-50%);
+	width: 600px;
+	height: 0px;
+	pointer-events: none;
+	overflow: hidden;
+	transition: 100ms ease;
+}
+
+*:hover > .info {
+	height: 200px;
+	transition: 800ms ease;
+}
+
+canvas {
+	display: block;
+	margin: 0 auto;
+	border: 4px solid #39314b;
+}
+
+#canvas { border-bottom: 0; margin-top: 1vh; }
+#canvas2 { border-top: 0; }
+
+.text {
+	font-family: monospace;
+	font-size: 0.5em;
+	background-color: rgba(0,0,0,0.8);
+	padding: 1em;
+}
+
+
+
+
+
+
+#speech {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 200px;
+}
+
+#speech .bubble {
+	position: relative;
+	color: #39314b;
+	font-size: 2.5em;
+	display: inline-block;
+	padding: 0 0.5em;
+	background-color: #dff6f5;
+	border: 4px solid #39314b;
+	min-height: 1em;
+	margin: 32px;
+
+	top: -100%;
+	transition: 300ms ease;
+}
+
+#speech .bubble.visible {
+	top: 200px;
+}
+
+#speech .bubble:after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: -60px;
+	left: 0;
+	height: 64px;
+	width: 64px;
+	background-image: url('../moving_dude.png');
+	background-position: -64px -2752px;
+}
+
+#speech .bubble .desc-text {
+	font-size: 0.5em;
+	opacity: 0.5;
+}
+
+#topSideLeft {
+	transform: none;
+	top: 0;
+	left: 0;
+	padding-top: 1vh;
+}
+
+#summoner {
+	margin: 0 auto;
+}
+
+.pointer {
+	height: 64px;
+	width: 64px;
+	background-image: url('../moving_dude.png');
+	background-position: 0 -2752px;
+	transform: rotate(180deg) translateX(50%);
+	position: absolute;
+	top: -16px;
+	left: 50%;
+	z-index: 99;
+}

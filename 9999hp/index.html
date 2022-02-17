@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>index</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/css.css">
+
+	<style type="text/css">
+		body {
+			background-color: #8e478c;
+		}
+	</style>
+</head>
+<body>
+
+<div id="modal_bg">
+	<div class="modal" id="start_modal">
+		<!--<button class="btn big-btn start-button" id="start_button">Start</button>-->
+	</div>
+	<div class="modal" id="death_modal">
+		THE KNIGHT LIVES! GAME OVER!
+	</div>
+	<div class="modal" id="win_modal">
+		VICTORY!! THE KNIGHT IS DEFEATED! FOR REAL THIS TIME! NICE ONE!!
+	</div>
+	<div class="modal" id="level_modal">
+		THE KNIGHT IS DEFEATED... FOR NOW.
+	</div>
+	<div class="modal" id="wheel_modal">
+		<div class="pointer" id="wheel-pointer"></div>
+		<img src="wheel.png" id="wheel">
+	</div>
+</div>
+
+<div id="topMiddle">
+	THE KNIGHT HAS <span class="knighthp">9999</span>HP
+</div>
+
+<div class="side" id="topSideLeft">
+	<img src="summoner.png" id="summoner">
+</div>
+
+<div class="side" id="sideLeft">
+	LEVEL<br><span class="level">1</span>
+</div>
+
+<div class="side" id="sideRight">
+	SUMMONS LEFT<br><span class="summons">20</span>
+</div>
+
+<div id="speech">
+	<div class="bubble"><span class="bubble-text"></span></div>
+</div>
+
+<canvas id="canvas"></canvas>
+<canvas id="canvas2"></canvas>
+
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/howler.min.js"></script>
+<script src="js/js.js"></script>
+</body>
+</html>
