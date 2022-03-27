@@ -1,0 +1,127 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-family: 'Inconsolata', monospace;
+	font-size: 1.6rem;
+	padding-top: 50px;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+.container {
+	text-align: center;
+	padding: 0 25%;
+}
+
+#header {
+	background-color: white;
+	border-bottom: 1px dashed grey;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	z-index: 99;
+}
+
+
+
+
+
+.desc {
+	width: 50%;
+	margin: 0 auto;
+}
+
+#game {
+	text-align: center;
+}
+
+#game ul {
+	text-align: left;
+	display: inline-block;
+	vertical-align: top;
+	list-style-type: none;
+	padding: 0;
+}
+
+#game ul h4 {
+	text-align: center;
+}
+
+#game ul li {
+	padding: 20px;
+}
+
+.chx {
+	margin-right: 10px;
+}
+
+.pts {
+	font-variant: small-caps;
+	font-weight: bold;
+	background-color: black;
+	color: white;
+	white-space: pre;
+}
+
+.img {
+	display: block;
+	width: 150px;
+	margin: 0 auto;
+	margin-bottom: 10px;
+}
+
+#game ul li {
+	position: relative;
+}
+
+#game ul li.selected .txt {
+	background-color: yellow;
+	font-weight: bold;
+}
+
+#game ul:last-of-type {
+	display: block;
+	margin: 0 auto;
+	width: 100%;
+	text-align: center;
+	padding: 5% 0;
+	color: red;
+}
+
+#game ul:last-of-type li {
+	display: inline-block;
+	vertical-align: top;
+	text-align: left;
+}
+
+#game ul,
+#game ul:last-of-type li {
+	width: 265px;
+}
+
+#game ul:last-of-type li .pts {
+	background-color: red;
+}
+
+#footer {
+	padding-bottom: 5%;
+}
