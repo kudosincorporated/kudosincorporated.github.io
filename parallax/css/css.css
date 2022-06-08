@@ -1,0 +1,67 @@
+body {
+	font-family: sans-serif;
+	overflow: hidden;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+.middle {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateY(-50%) translateX(-50%);
+	width: 50%;
+	height: 50%;
+}
+
+.block {
+	position: absolute;
+	top: 20%;
+	left: 0;
+	height: 50%;
+	width: 20%;
+	background-color: white;
+	border: 1px solid grey;
+	padding: 1em;
+}
+
+.slide {
+	transition: none;
+}
+
+#canvas {
+	position: absolute;
+	left: 50%;
+	bottom: 20%;
+	transform: translateX(-50%);
+}
+
+.pavement {
+	background-image: url('../pavement.png');
+	height: 20%;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.backdrop {
+	background-image: url('../backdrop.png');
+	background-size: cover;
+	height: 80%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
