@@ -1,4 +1,15 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
 body {
+	font-size: 1.6rem;
 	font-family: sans-serif;
 	overflow: hidden;
 }
@@ -27,13 +38,23 @@ body {
 
 .block {
 	position: absolute;
-	top: 20%;
+	bottom: 20%;
+	margin-bottom: 80px;
 	left: 0;
-	height: 50%;
-	width: 20%;
+	height: 560px;
+	width: 480px;
+	padding: 40px;
 	background-color: white;
-	border: 1px solid grey;
-	padding: 1em;
+}
+
+.block:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 640px;
+	width: 480px;
+	background-image: url('../billboard.png');
 }
 
 .slide {
@@ -54,6 +75,7 @@ body {
 	position: absolute;
 	bottom: 0;
 	left: 0;
+	z-index: 99;
 }
 
 .backdrop {
@@ -64,4 +86,10 @@ body {
 	position: absolute;
 	top: 0;
 	left: 0;
+}
+
+img {
+	display: block;
+	width: 50%;
+	margin: 0 auto;
 }

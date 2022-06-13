@@ -12,6 +12,7 @@ var MOVING = {
 }
 var distance = 0;
 var pavement_move = 0;
+var flipped = false;
 
 var spritesheet = new Image();
 	spritesheet.src = 'me.png';
@@ -32,12 +33,13 @@ $(function() {
 			switch (key_code) {
 				case 37: //left arrow key
 					MOVING.left.bool = true;
+					flipped = true;
 					break;
 				case 38: //up arrow key
 					break;
 				case 39: //right arrow key
 					MOVING.right.bool = true;
-
+					flipped = false;
 					break;
 				case 40: //down arrow key
 					break;
@@ -76,6 +78,13 @@ $(function() {
 
 			var pos = 0;
 			var flip = 0;
+
+			if (flipped) {
+				flip = 64*8;
+			} else {
+				flip = 0;
+			}
+
 			if (MOVING.left.bool || MOVING.right.bool) {
 				pos = frame;
 
@@ -85,7 +94,6 @@ $(function() {
 				}
 
 				if (MOVING.left.bool) {
-					flip = 64*8;
 					distance -= 2;
 				}
 
@@ -131,7 +139,7 @@ $(function() {
 	//blocks
 	for (let i = 0; i < $('.block').length; i++) {
 		$('.block').eq(i).css({
-			'left':(i+0.75)*$(window).width()+'px'
+			'left':(i+1)*($(window).width() / 1.5)+'px'
 		});
 	}
 
