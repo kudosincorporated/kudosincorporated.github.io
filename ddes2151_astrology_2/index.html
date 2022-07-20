@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>index</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/css.css">
+
+	<style type="text/css">
+		body {
+			background-color: #0d1626;
+		}
+	</style>
+</head>
+<body>
+
+<div id="begin">
+	
+	<div>
+
+		<h1>Atmo</h1>
+
+		<button class="btn begin-btn" id="sky">View my zodiac</button>
+		<button class="btn begin-btn" id="cgi">View the sky</button>
+
+		<p>W, A, S, D keys to look. Up and down arrow to zoom.</p>
+
+	</div>
+</div>
+<canvas id="display" width="300" height="200"></canvas>
+<br>
+<canvas id="canvas" width="300" height="200" style="display: none;"></canvas>
+
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/fisheye.js"></script>
+<script src="js/js.js"></script>
+</body>
+</html>

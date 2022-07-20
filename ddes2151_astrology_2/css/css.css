@@ -1,0 +1,96 @@
+@font-face {
+	font-family: 'Andromeda-eR2n';
+	src: url(../fonts/Andromeda-eR2n.ttf);
+}
+
+@font-face {
+	font-family: 'Moon-Light';
+	src: url(../fonts/Moon-Light.otf);
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-size: 1.6rem;
+	height: 100vh;
+	text-align: center;
+	overflow: hidden;
+}
+
+body, button {
+	font-family: 'Moon-Light', monospace;
+	color: white;
+}
+
+h1 {
+	font-family: 'Andromeda-eR2n', sans-serif;
+	font-size: 5em;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+canvas {
+	display: block;
+	margin: 0 auto;
+}
+
+#begin {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	height: 100%;
+	width: 100%;
+	background-color: #3f68b2;
+
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;	
+}
+
+.btn {
+	display: inline-block;
+	background-color: #b06bca;
+	border: none;
+	height: 200px;
+	width: 200px;
+	margin: 10px;
+	text-transform: uppercase;
+	border-radius: 5%;
+	transition: 300ms ease;
+	cursor: pointer;
+}
+
+.btn:hover {
+	letter-spacing: 2px;
+	background-color: #f9b42e;
+}
+
+#cgi {
+	cursor: default;
+}
+
+#cgi.btn:hover {
+	background-color: #b06bca;
+	letter-spacing: 0;
+}
