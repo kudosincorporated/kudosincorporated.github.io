@@ -86,7 +86,7 @@ canvas {
 	text-transform: uppercase;
 	border-radius: 10px;
 	vertical-align: top;
-	transition: 300ms ease;
+	transition: 100ms ease;
 	cursor: pointer;
 }
 
@@ -96,8 +96,35 @@ canvas {
 	margin: 10px auto;
 }
 
-.btn:hover {
+.btn.circle-btn {
+	font-size: 1.5em;
+	height: 2em;
+	width: 2em;
+	border-radius: 50%;
+}
+
+.btn:active {
 	background-color: #f9b42e;
+}
+
+.btn.wip {
+	background-color: grey;
+}
+
+.btn.wip:active {
+	background-color: dimgrey;
+}
+
+.bottomleft {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	margin: 2em;
+	text-align: left;
+}
+
+.bottomleft pre {
+	margin: 0;
 }
 
 .bottomright {
