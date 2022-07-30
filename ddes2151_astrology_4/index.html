@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>index</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/css.css">
+
+	<style type="text/css">
+		body {
+			background-color: #123;
+		}
+	</style>
+</head>
+<body>
+
+<div class="fullscreen" id="darkbg"></div>
+
+<div class="fullscreen" id="canvi">
+	<div id="relativecanvi">
+		<canvas id="display" width="300" height="200"></canvas>
+		<canvas id="eye1" width="300" height="200"></canvas>
+		<canvas id="eye2" width="300" height="200"></canvas>
+		<canvas id="canvas" width="300" height="200" style="display: none;"></canvas>
+	</div>
+</div>
+
+<div class="fullscreen" id="goggles" style="display: none;">
+	<img src="img/goggles.png">
+</div>
+
+<div class="fullscreen" id="starinfo">
+	<button class="btn circle-btn huge" id="exitstar"><div class="symbol"><<</div></button>
+	<div class="insidebox">
+		<div class="row">
+			<div class="col">
+				<div id="starimage"></div>
+			</div>
+			<div class="col">
+				<br>
+				<br>
+				<br>
+				<br>
+				<div class="title">ORION</div>
+				<div class="subtitle">The Hunter</div>
+				<p style="font-family: sans-serif;">Orion is a prominent constellation located on the celestial equator and visible throughout the world. It is one of the most conspicuous and recognizable constellations in the night sky. It is named after Orion, a hunter in Greek mythology. Its brightest stars are blue-white Rigel (Beta Orionis) and red Betelgeuse (Alpha Orionis).</p>
+				<p>LOCATION: <span class="subtitle">Latitudes between +85° and −75°.</span></p>
+				<p>BEST VISIBLE: <span class="subtitle">21:00 (9 p.m.) during the month of January.</span></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="fullscreen" id="overlay">
+	<div class="topleft noshowelem">
+		<button class="btn circle-btn huge" id="selectPlace"><div class="symbol">O</div></button>
+	</div>
+	<div class="topcenter">
+		<button class="btn" id="noDistraction"></button>
+	</div>
+	<div class="topright noshowelem">
+		<button class="btn circle-btn huge" id="goBack"><div class="symbol"><<</div></button>
+	</div>
+	<div class="center noshowelem">
+	</div>
+	<div class="bottomleft noshowelem">
+		<div>
+			<div class="subtitle">PHOTOGRAPH 24/07/2022 10:38:00PM (C726781)</div>
+			<div class="title">Lowell Observatory, Arizona, USA</div>
+		</div>
+	</div>
+	<div class="bottomright noshowelem">
+		<div class="buttonslider"><button class="btn" id="showCoords"><div class="img"></div></button></div>
+		<div class="buttonslider"><button class="btn" id="showLines"><div class="img"></div></button></div>
+		<div class="buttonslider"><button class="btn circle-btn huge" id="showGoggles"><div class="img"></div></button></div>
+	</div>
+</div>
+
+<div class="fullscreen" id="begin">
+	<div>
+		<h1 id="sky">Atmo</h1>
+
+		<p>W, A, S, D keys to look.</p>
+		<p>Click the center of the screen to open star information.</p>
+		<p>Click the logo above to start.</p>
+	</div>
+</div>
+
+<div class="fullscreen" id="iphone"></div>
+
+<script src="js/jquery-3.1.0.js"></script>
+<script src="js/fisheye.js"></script>
+<script src="js/js.js"></script>
+</body>
+</html>
