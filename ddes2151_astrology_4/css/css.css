@@ -471,6 +471,8 @@ canvas {
 	top: 100%;
 	left: 0;
 	transition: 300ms ease;
+
+	overflow: hidden;
 }
 
 #starimage {

@@ -479,10 +479,7 @@ $(function() {
 				'top':'100%'
 			});
 
-			$('#exitstar').hide();
-			$('#goBack').show();
-
-			if (showElems) flipDisplay();
+			flipDisplay();
 
 			openStar = false;
 
@@ -492,7 +489,7 @@ $(function() {
 
 			console.log('...clicked a star...');
 
-			if (!openStar) {
+			if (!openStar && !showElems && !showGoggles) {
 
 				console.log('OPENED THE PAGE');
 
@@ -500,10 +497,7 @@ $(function() {
 					'top':'0%'
 				});
 
-				$('#exitstar').show();
-				$('#goBack').hide();
-
-				if (!showElems) flipDisplay();
+				flipDisplay();
 
 				openStar = true;
 
@@ -716,7 +710,7 @@ $(function() {
 			/*ctx.save();
 			ctx.beginPath();
 			ctx.strokeStyle = '#fff';
-			ctx.globalAlpha = 0.05;
+			ctx.globalAlpha = 0.1;
 			ctx.arc(EXAMPLESTAR.x, EXAMPLESTAR.y, EXAMPLESTAR.size, 0, 2*Math.PI);
 			ctx.stroke();
 			ctx.restore();*/
