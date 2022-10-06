@@ -80,7 +80,7 @@ body {
 .window {
 	background-color: #fefdfb;
 	border: 3px solid white;
-	min-width: 300px;
+	min-width: 400px;
 	width: 24%;
 	padding: 2%;
 	vertical-align: top;
