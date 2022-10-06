@@ -1,0 +1,166 @@
+@font-face {
+	font-family: 'InterTight';
+	src: url(../InterTight.ttf);
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+	user-select: none;
+}
+
+body {
+	font-family: 'InterTight', sans-serif;
+	color: #050003;
+	font-size: 1.6rem;
+	height: 100vh;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+#canvas {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: -999;
+}
+
+.item {
+	position: absolute;
+	display: inline-block;
+	transition: 500ms ease;
+}
+
+#heading .item:not(:last-of-type) {
+	position: relative;
+}
+
+.item:hover {
+	color: blue;
+}
+
+#heading {
+	text-align: center;
+	padding: 1%;
+}
+
+.title {
+	font-size: 3em;
+	font-weight: bold;
+	letter-spacing: 0.1em;
+}
+
+.window .title {
+	font-size: 2em;
+}
+
+.subtitle {
+	font-size: 0.8em;
+	opacity: 0.8;
+}
+
+.window {
+	background-color: #fefdfb;
+	border: 3px solid white;
+	min-width: 300px;
+	width: 24%;
+	padding: 2%;
+	vertical-align: top;
+	margin: 1%;
+}
+
+.window.image {
+	font-size: 0;
+	background-color: transparent;
+	border-color: transparent;
+	width: 18%;
+	padding: 0;
+}
+
+.window.image .title {
+	font-size: 30px;
+	position: absolute;
+	top: 0;
+	right: 100%;
+	width: 100%;
+	transform: translate(100%);
+	padding: 0 1em;
+	z-index: -1;
+}
+
+.window.image:hover .title {
+	right: 0;
+}
+
+.item.window:hover {
+	border: 3px solid blue;
+}
+
+.img {
+	width: 100%;
+}
+
+#topright {
+	position: fixed;
+	top: 0;
+	right: 0;
+	padding: 1%;
+	z-index: 999;
+}
+
+#topright button {
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+#topright button:hover {
+	color: red;
+}
+
+#footer {
+	padding: 1%;
+}
+
+body.static .window {
+	width: 900px;
+	border: none!important;
+}
+
+body.static .window.image {
+	width: 450px;
+}
+
+body.static .item {
+	display: block;
+	position: static;
+	transform: none!important;
+	margin: 0 auto!important;
+	cursor: default!important;
+}
+
+body.static .window.image .title {
+	position: static;
+	width: auto;
+	transform: none;
+	padding: 1em;
+}
