@@ -1,0 +1,211 @@
+@font-face {
+	font-family: 'Lato-Regular';
+	src: url(../font/Lato-Regular.ttf);
+}
+
+@font-face {
+	font-family: 'Akira-Expanded';
+	src: url(../font/Akira-Expanded.otf);
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html, body, .row, .col {
+	height: 100%;
+}
+
+body {
+	font-family: 'Lato-Regular', sans-serif;
+	font-size: 18px;
+	overflow: hidden;
+
+	cursor: default;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+#main {
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
+#main .page {
+	height: 80%;
+	width: 80%;
+	position: absolute;
+	top: 10%;
+	left: 10%;
+	padding: 1%;
+	transition: 300ms ease;
+}
+
+#main .page:not(:first-of-type) {
+	left: 100%;
+}
+
+#arrows .arrow {
+	font-family: 'Akira-Expanded', sans-serif;
+	height: 80%;
+	width: 10%;
+	position: absolute;
+	top: 10%;
+
+	text-align: center;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 3em;
+}
+
+#leftarrow {
+	z-index: 9;
+	margin: -2% 2%;
+}
+
+#main .page {
+	z-index: 99;
+}
+
+#rightarrow {
+	z-index: 999;
+	margin: 2%;
+}
+
+#arrows .arrow:first-of-type {
+	left: 0;
+}
+
+#arrows .arrow:last-of-type {
+	right: 0;
+}
+
+.btn {
+	font-size: 0.8em;
+	padding: 0.5em 1em;
+}
+
+.shadow {
+	background-color: white;
+	border: 5px solid black;
+
+	transition: 300ms ease;
+}
+
+.shadow.hover {
+	box-shadow: 5px 5px 0 black;
+	cursor: pointer;
+	user-select: none;
+}
+
+.shadow.hover:hover {
+	color: blue;
+	border-color: blue;
+	box-shadow: 10px 10px 0 blue;
+}
+
+.shadow.invert {
+	background-color: black;
+	border: 5px solid white;
+	color: white;
+}
+
+.shadow.invert.hover {
+	box-shadow: 5px 5px 0 white;
+}
+
+#main .page .title {
+	position: absolute;
+	font-family: 'Akira-Expanded', sans-serif;
+	font-size: 3em;
+	bottom: -12%;
+}
+
+#header {
+	height: 10%;
+	width: 80%;
+	position: absolute;
+	top: 0;
+	left: 10%;
+}
+
+#pagename {
+	position: absolute;
+	left: 50%;
+	top: 20%;
+	transform: translateX(-50%);
+	font-family: 'Akira-Expanded', sans-serif;
+	font-size: 2em;
+}
+
+#header .tabmenu {
+	text-align: right;
+}
+
+.tabmenu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.tabmenu li {
+	display: inline-block;
+	margin: 1%;
+}
+
+#main .page .row .col:first-of-type {
+	padding-right: 25%;
+}
+
+#main .page .row .col {
+	overflow: hidden;
+}
+
+#main .page .img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	transition: 300ms ease;
+}
+
+#main .page .img:hover {
+	width: 110%;
+	top: -5%;
+	left: -5%;
+}
+
+#smiley {
+	position: relative;
+}
+
+#smiley:before {
+	content: "😋";
+}
+
+#smiley:hover:before {
+	content: "😎";
+}
+
+#smiley:active:after {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	content: "👉👉";
+}
