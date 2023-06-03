@@ -1,0 +1,62 @@
+@font-face {
+	font-family: 'Linebeam';
+	src: url(../Linebeam.ttf);
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-size: 1.6rem;
+	height: 100vh;
+	color: white;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+canvas {
+	display: block;
+	margin: 0 auto;
+}
+
+.modal {
+	font-family: 'Linebeam';
+	text-shadow: 	0 1px 0 #000,
+					0 2px 0 #000,
+					0 3px 0 #000,
+					0 4px 0 #000,
+					0 5px 0 #000;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 3em;
+}
+
+#score {
+	font-size: 3em;
+}
