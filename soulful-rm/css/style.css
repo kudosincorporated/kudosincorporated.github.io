@@ -1,0 +1,104 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	background-color: #252525;
+	color: white;
+	font-size: 20px;
+	height: 100vh;
+	overflow: hidden;
+}
+
+#canvas {
+	display: block;
+	margin: 64px auto;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+#header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 32px;
+	padding: 32px;
+	text-align: center;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.word {
+	display: inline-block;
+	height: 32px;
+	width: 32px;
+	background-image: url('../text.png');
+	background-size: 256px;
+	margin-right: -12px;
+}
+
+.m, .w {
+	margin-right: -8px;
+}
+
+.c, .f, .j, .t {
+	margin-right: -16px;
+}
+
+.i, .l, .r {
+	margin-right: -20px;
+}
+
+.space 	{ opacity: 0; }
+.a 		{ background-position: -128px 0; }
+.b 		{ background-position: -160px 0; }
+.c 		{ background-position: -192px 0; }
+.d 		{ background-position: -224px 0; }
+.e 		{ background-position: -128px -32px; }
+.f 		{ background-position: -160px -32px; }
+.g 		{ background-position: -192px -32px; }
+.h 		{ background-position: -224px -32px; }
+.i 		{ background-position: -128px -64px; }
+.j 		{ background-position: -160px -64px; }
+.k 		{ background-position: -192px -64px; }
+.l 		{ background-position: -224px -64px; }
+.m 		{ background-position: -128px -96px; }
+.n 		{ background-position: -160px -96px; }
+.o 		{ background-position: -192px -96px; }
+.p 		{ background-position: -224px -96px; }
+.q 		{ background-position: -128px -128px; }
+.r 		{ background-position: -160px -128px; }
+.s 		{ background-position: -192px -128px; }
+.t 		{ background-position: -224px -128px; }
+.u 		{ background-position: -128px -160px; }
+.v 		{ background-position: -160px -160px; }
+.w 		{ background-position: -192px -160px; }
+.x 		{ background-position: -224px -160px; }
+.y 		{ background-position: -128px -192px; }
+.z 		{ background-position: -160px -192px; }
+.em 	{ background-position: -192px -192px; }
+.qm 	{ background-position: -224px -192px; }
