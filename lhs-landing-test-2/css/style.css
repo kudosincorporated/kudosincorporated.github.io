@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost&display=swap');
+@font-face {
+    font-family: 'coolvetica';
+    src: url("../coolvetica.otf") format("opentype");
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-family: 'Jost', sans-serif;
+	color: #151515;
+	font-size: 18px;
+	height: 100vh;
+}
+
+#header, h1, h2 {
+    font-family: 'coolvetica';
+}
+
+#wrapper {
+	width: 100%;
+	background: rgb(64,224,193);
+	background: linear-gradient(90deg, rgba(64,224,193,1) 0%, rgba(64,224,147,1) 35%, rgba(0,181,255,1) 100%);
+}
+
+.section {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#header {
+	position: fixed;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	z-index: 99;
+}
+
+.tabmenu {
+	list-style-type: none;
+	margin: 0 1em;
+}
+
+.tabmenu li {
+	display: inline-block;
+	margin: 0 0.5em;
+	cursor: pointer;
+}
+
+.btn {
+	background-color: #4d4dff;
+	border: 2px solid #4d4dff;
+	color: #fff;
+	padding: 0.5em 1em;
+	border-radius: 0.5em;
+	cursor: pointer;
+}
+
+.btn.outline {
+	background-color: transparent;
+	color: #4d4dff;
+}
+
+.btn:hover {
+	background-color: #151515;
+	border-color: #151515;
+}
+
+.btn.outline:hover {
+	background-color: #4d4dff;
+	border-color: #4d4dff;
+	color: #fff;
+}
+
+#pagename {
+	font-weight: 400;
+	margin: 0.5em;
+}
+
+#typed {
+	color: #4d4dff;
+	font-weight: 400;
+	font-size: 4.5em;
+	width: 50%;
+	margin-left: 50%;
+}
+
+#typed b, #typed i {
+	color: #151515;
+}
+
+.image_cover {
+	position: absolute;
+	height: 25vw;
+	width: 35vw;
+	overflow: hidden;
+	border-radius: 1em;
+}
+
+.thumbnail {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+}
+
+.image_cover:nth-of-type(1) {
+	height: 35vw;
+	width: 45vw;
+	top: 9%;
+	left: 2%;
+}
+
+.image_cover:nth-of-type(2) {
+	top: 62%;
+	left: 75%;
+}
+
+.image_cover:nth-of-type(3) {
+	top: 84%;
+	left: 19%;
+}
