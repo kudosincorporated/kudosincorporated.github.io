@@ -1,0 +1,42 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 10px;
+}
+
+body {
+	font-family: 'Jost', sans-serif;
+	background-color: #140152;
+	color: aliceblue;
+	font-size: 1.6rem;
+	height: 100vh;
+	text-align: center;
+	overflow: hidden;
+}
+
+.row {
+	display: table;
+	table-layout: fixed;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.col {
+	position: relative;
+	display: table-cell;
+	vertical-align: top;
+}
+
+.container {
+	width: 80%;
+	margin: 0 auto;
+}
+
+canvas {
+	display: block;
+	margin: 0 auto;
+}
