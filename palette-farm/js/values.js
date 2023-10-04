@@ -3,7 +3,13 @@
 
 var HEIGHT = 800;
 var WIDTH = 1000;
-var SIZE = 128;
+var MIN_SIZE = 48;
+var MAX_SIZE = 80;
+
+var MOUSE = {
+	x: 0,
+	y: 0,
+}
 
 var prettyColors = [
 	"#FF6B6B", // Red
@@ -64,6 +70,10 @@ function oscillate(value) {
 
 	// Use sine function with a phase shift to oscillate between 0 and 1 and back to 0
 	return 0.5 + 0.5 * Math.sin(value * Math.PI);
+}
+
+function valueOnWave(value) {
+  return Math.sin(value * Math.PI * 2);
 }
 
 function randNegOneOrOne() {
