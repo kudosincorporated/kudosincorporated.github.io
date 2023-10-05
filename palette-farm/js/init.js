@@ -12,9 +12,9 @@ $(function() {
 	GAME.slimes.push(new Slime(SIZE, SIZE, 250, 400, '#70e000'));
 	GAME.slimes.push(new Slime(SIZE, SIZE, 150, 500, '#4361ee'));*/
 
-	for (let i = 0; i < 10; i++) {
+	for (let i = 0; i < 19; i++) {
 		let size = randInt(MIN_SIZE, MAX_SIZE);
-		GAME.slimes.push(new Slime(size, size, randInt(0, WIDTH), randInt(MAX_SIZE*2, HEIGHT), rand(prettyColors)));
+		GAME.slimes.push(new Slime(size, size, randInt(MAX_SIZE*2, WIDTH-MAX_SIZE*2), randInt(MAX_SIZE*2, HEIGHT-MAX_SIZE*2), rand(prettyColors)));
 	}
 
 	window.requestAnimationFrame(gameLoop);
@@ -38,14 +38,28 @@ $(function() {
 				}
 			}
 
+			e.update(dt);
+
 			GAME.slimes.sort((a, b) => a.y - b.y);
 
-			e.update(dt);
 			if (e.held) {
 				e.drag(dt);
 			} else {
 				e.move(dt);
 			}
+
+			let deg = 0;
+			if (KEYDOWN.indexOf(81) >= 0) deg += 1/10;
+			if (KEYDOWN.indexOf(69) >= 0) deg -= 1/10;
+			e.rotate(dt, deg);
+
+			let cameraMoveX = 0;
+			let cameraMoveY = 0;
+			if (KEYDOWN.indexOf(87) >= 0) cameraMoveY -= 1/5;
+			if (KEYDOWN.indexOf(65) >= 0) cameraMoveX -= 1/5;
+			if (KEYDOWN.indexOf(83) >= 0) cameraMoveY += 1/5;
+			if (KEYDOWN.indexOf(68) >= 0) cameraMoveX += 1/5;
+			e.cameraMove(dt, cameraMoveX, cameraMoveY);
 		});
 	}
 
@@ -55,11 +69,12 @@ $(function() {
 		ctx.fillStyle = '#1e017e';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		ctx.fillStyle = '#11024b';
-		ctx.fillRect(0, 0, canvas.width, MAX_SIZE*2);
-
 		ctx.fillStyle = '#ff5050';
 		//ctx.fillRect(MOUSE.x, MOUSE.y, 5, 5);
+
+		GAME.slimes.forEach(function(e) {
+			e.renderShadow(ctx);
+		});
 
 		GAME.slimes.forEach(function(e) {
 			e.render(ctx);
@@ -96,5 +111,21 @@ $(function() {
 			e.held = false;
 		});
 	});
+
+	$(document).on('keydown', function(e) {
+		var key_code = e.which || e.keyCode;
+		if (KEYDOWN.indexOf(key_code) === -1) KEYDOWN.push(key_code);
+		updateKeycodeDOM();
+	});
+
+	$(document).on('keyup', function(e) {
+		var key_code = e.which || e.keyCode;
+		KEYDOWN = KEYDOWN.filter(item => item !== key_code);
+		updateKeycodeDOM();
+	});
+
+	function updateKeycodeDOM() {
+		$('#keycodes').text(KEYDOWN);
+	}
 
 });

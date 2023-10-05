@@ -31,16 +31,32 @@ class Slime {
 		this.squirm += 1/999*dt;
 		if (this.squirm > 1) this.squirm = 0;
 	}
+	rotate(dt, rotationAngleDegrees) {
+		const rotationAngleRadians = (rotationAngleDegrees*dt * Math.PI) / 180;
+
+		const canvasCenterX = WIDTH / 2;
+		const canvasCenterY = HEIGHT / 2;
+
+		const relativeX = this.x - canvasCenterX;
+		const relativeY = this.y - canvasCenterY;
+
+		this.x = relativeX * Math.cos(rotationAngleRadians) - relativeY * Math.sin(rotationAngleRadians) + canvasCenterX;
+		this.y = relativeX * Math.sin(rotationAngleRadians) + relativeY * Math.cos(rotationAngleRadians) + canvasCenterY;
+	}
+	cameraMove(dt, x, y) {
+		this.x -= x*dt;
+		this.y -= y*dt;
+	}
 	move(dt) {
-		if (this.x <= 0 || this.x >= WIDTH-this.w || this.y <= MAX_SIZE*2 || this.y >= HEIGHT) {
+		/*if (this.x <= 0 || this.x >= WIDTH-this.w || this.y <= 0 || this.y >= HEIGHT) {
 			this.vx = -this.vx;
 			this.vy = -this.vy;
 		}
 
 		if (this.x < 0) this.x = 0;
 		if (this.x > WIDTH-this.w) this.x = WIDTH-this.w;
-		if (this.y < MAX_SIZE*2) this.y = MAX_SIZE*2;
-		if (this.y > HEIGHT) this.y = HEIGHT;
+		if (this.y < 0) this.y = 0;
+		if (this.y > HEIGHT) this.y = HEIGHT;*/
 
 		this.x += this.vx*dt;
 		this.y += this.vy*dt;
@@ -50,7 +66,6 @@ class Slime {
 		this.y = lerp(this.y, MOUSE.y, 1/50*dt);
 	}
 	render(ctx) {
-
 		let sw = Math.abs(oscillate(this.progress)-1);
 		let sh = oscillate(this.progress);
 		let width = this.w - this.w/8 + sw*this.w/4;
@@ -60,11 +75,8 @@ class Slime {
 
 		ctx.translate(this.x, this.y);
 
-		ctx.fillStyle = 'rgba(0,0,0,0.15)';
-		ctx.fillRect(0, height/2, width, height/2);
-
 		//jump!
-		ctx.translate(this.w/2, this.w-oscillate(this.progress)*this.w*2);
+		ctx.translate(this.w/2, this.h-oscillate(this.progress)*this.h*2);
 
 		//wobble!
 		if (this.held) {
@@ -83,5 +95,14 @@ class Slime {
 		//ctx.fillRect(-3, -3, 6, 6);
 
 		ctx.restore();
+	}
+	renderShadow(ctx) {
+		let sw = Math.abs(oscillate(this.progress)-1);
+		let sh = oscillate(this.progress);
+		let width = this.w - this.w/8 + sw*this.w/4;
+		let height = this.h - this.w/8 + sh*this.w/4;
+		
+		ctx.fillStyle = 'rgba(0,0,0,0.15)';
+		ctx.fillRect(this.x, this.y+height/2, width, height/2);
 	}
 }

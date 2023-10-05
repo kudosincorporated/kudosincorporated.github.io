@@ -6,6 +6,8 @@ var WIDTH = 1000;
 var MIN_SIZE = 48;
 var MAX_SIZE = 80;
 
+var KEYDOWN = [];
+
 var MOUSE = {
 	x: 0,
 	y: 0,
