@@ -9,34 +9,27 @@ html {
 }
 
 body {
+	height: 100vh;
 	font-family: 'Jost', sans-serif;
+	font-size: 24px;
 	background-color: #140152;
 	color: aliceblue;
-	font-size: 1.6rem;
-	height: 100vh;
-	text-align: center;
 	overflow: hidden;
 }
 
-.row {
-	display: table;
-	table-layout: fixed;
-	border-collapse: collapse;
-	width: 100%;
+#wrapper {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.col {
-	position: relative;
-	display: table-cell;
-	vertical-align: top;
+#temp {
+	display: none;
 }
 
-.container {
-	width: 80%;
-	margin: 0 auto;
-}
-
-canvas {
-	display: block;
-	margin: 0 auto;
+#sidebar {
+	position: absolute;
+	top: 0;
+	left: 0;
 }

@@ -1,10 +1,11 @@
 
 
 
-var HEIGHT = 800;
-var WIDTH = 1000;
-var MIN_SIZE = 48;
-var MAX_SIZE = 80;
+var RATIO = 800;
+var HEIGHT = 1080;
+var WIDTH = 1920;
+var MIN_SIZE = 96;
+var MAX_SIZE = 128;
 
 var KEYDOWN = [];
 
@@ -80,4 +81,14 @@ function valueOnWave(value) {
 
 function randNegOneOrOne() {
 	return Math.random() < 0.5 ? -1 : 1;
+}
+
+function calculateDistance(x1, y1, x2, y2) {
+  const deltaX = x2 - x1;
+  const deltaY = y2 - y1;
+
+  // Use the Pythagorean theorem to calculate the distance
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+  return distance;
 }
