@@ -55,6 +55,8 @@ function getColor(color) {
 	var hsl;
 	var ran; //Variation(Randomness)
 
+	if (color == '') return '#252525';
+
 	switch (color) {
 		////////////////
 		//	Original
@@ -116,38 +118,30 @@ function getColor(color) {
 			hsl = [225,10,50];
 			ran = [50,10,20];
 			break;
+		case 'flowers':
+			hsl = [255,75,70];
+			ran = [150,50,20];
+			break;
 
 		////////////////
 		//	New
 		////////////////
 
-		case 'deadleaf':
-			hsl = [162,9,22];
-			ran = [30,40,10];
+		case 'ocean':
+			hsl = [195,60,45];
+			ran = [20,80,20];
 			break;
-		case 'deadrock':
-			hsl = [319,23,26];
-			ran = [25,15,8];
+		case 'hurt':
+			hsl = [0,100,66];
+			ran = [16,16,16];
 			break;
-		case 'swamp':
-			hsl = [71,39,21];
-			ran = [25,15,5];
+		case 'white':
+			hsl = [0,0,100];
+			ran = [0,0,0];
 			break;
-		case 'marigold':
-			hsl = [24,74,51];
-			ran = [25,15,5];
-			break;
-		case 'duskpink':
-			hsl = [354,63,60];
-			ran = [25,15,5];
-			break;
-		case 'forest':
-			hsl = [71,42,38];
-			ran = [145,25,27];
-			break;
-		case 'creek':
-			hsl = [165,74,48];
-			ran = [25,25,21];
+		case 'spark':
+			hsl = [0,75,50];
+			ran = [260,25,25];
 			break;
 
 		default:

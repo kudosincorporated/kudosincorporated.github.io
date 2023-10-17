@@ -10,15 +10,31 @@ html {
 
 body {
 	background-color: #252525;
-	color: white;
 	font-size: 20px;
 	height: 100vh;
+	padding-top: 32px;
 	overflow: hidden;
 }
 
 #canvas {
 	display: block;
-	margin: 64px auto;
+	margin: 0 auto;
+}
+
+#buttons {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	text-align: center;
+}
+
+button:hover {
+	background-color: aqua;
+}
+
+button.selected {
+	background-color: orange;
 }
 
 .row {

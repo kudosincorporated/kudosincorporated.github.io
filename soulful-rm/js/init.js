@@ -3,6 +3,13 @@ var dt;
 
 var spritesheet = new Image();
 
+function goTo(point) {
+	GAME.map = new Map();
+	GAME.map.clear();
+	WORLDPOS = point;
+	GAME.map.fillWorld();
+}
+
 $(function() {
 
 	//CANVAS
@@ -16,21 +23,19 @@ $(function() {
 	spritesheet.src = 'spritesheet.png';
 
 	//FIRST INITALISE
+	GAME.player = new Mover('player', MIDDLE, MIDDLE);
+	GAME.scythe = new Mover('scythe', MIDDLE, MIDDLE);
+	GAME.inventory = new Mover('inventory', 0, 0);
+	GAME.river_door = new Mover('river_door', RIVER_DOOR, HEIGHT-1);
+
 	noise.seed(Math.random());
 	GAME.map = new Map();
-	GAME.map.create();
-	GAME.map.addRiver();
-	GAME.map.updateAndSetGrid();
-	GAME.player = new Mover('player', Math.round(HEIGHT/2), Math.round(HEIGHT/2));
-	GAME.player.maxhp = 6;
-	GAME.player.hp = 6;
-	GAME.scythe = new Mover('scythe', Math.round(HEIGHT/2), Math.round(HEIGHT/2)-1);
-	GAME.inventory = new Mover('inventory', 0, 0);
+	GAME.map.fillWorld();
 
-	/*let allItems = Object.keys(TILE);
-	for (let i = 0; i < 16; i++) {
-		GAME.player.addItem(new Tile(allItems[i]), randInt(1,199));
-	}*/
+	let allItems = TILESET.collectables;
+	for (let i = 0; i < allItems.length; i++) {
+		//GAME.player.addItem(new Tile(allItems[i]), randInt(1,199));
+	}
 
 	//2ND WORLD
 	GAME.two = {};
@@ -64,10 +69,29 @@ $(function() {
 		if (Object.keys(GAME.two).length > 0) GAME.two.update(dt);
 		GAME.map.update(dt);
 
+		//Whatever chuck it in the update fn
+		GAME.map.checkCollisions();
+
+		//Stop keyboardlock softlock from renderHurt
+		if (GAME.player.progress == 0 && GAME.map.zap == 0) {
+			KEYBOARDLOCK = false;
+			GAME.player.animation = 'walking';
+			SPEED = DEFAULT_SPEED;
+
+			//Death
+			if (GAME.player.hp <= 0) {
+				NIGHTTIME = true;
+			}
+		}
+		//But still keep that thang locked if ur dead
+		if (GAME.player.hp <= 0) KEYBOARDLOCK = true;
+
 	}
 
 	function render() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = '#252525';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 		ctx.translate(SIZE*5, 0); //To fit UI
 
@@ -82,22 +106,31 @@ $(function() {
 		let horz = GAME.map.pos[0]*canv - GAME.map.dir[0]*canv*GAME.map.progress;
 		let vert = GAME.map.pos[1]*canv - GAME.map.dir[1]*canv*GAME.map.progress;
 		ctx.translate(horz, vert);
-		GAME.scythe.render(ctx);
-		GAME.player.render(ctx);
-		GAME.player.renderHitbox(ctx);
+		if (GAME.player.hp > 0) { //Sis is dead
+			if (GAME.map.zap == 0) {
+				GAME.scythe.render(ctx);
+				GAME.player.renderHitbox(ctx);
+			}
+			GAME.player.render(ctx);
+		}
+		if (NIGHTTIME) GAME.player.renderShadow(ctx);
 		ctx.translate(-horz, -vert);
 		ctx.translate(-SIZE*5, 0); //To fit UI
 
 		//UI
 		GAMEFN.renderPlayerHealth(ctx);
 		GAMEFN.renderMoney(ctx);
-		GAMEFN.renderTopRightUI(ctx);
-		GAMEFN.renderInventory(ctx);
+		GAMEFN.renderControlUI(ctx);
+		if (GAME.player.invIsOpen) GAMEFN.renderInventory(ctx);
 	}
 
 	//KEY PRESSES
 	$('body').on('keydown', function(e) {
+		if (KEYBOARDLOCK) return;
 		getKeyAndMove(e);
+
+		TURN++;
+		if (TURN > 64) TURN = 0; //64 don't matter, number is used for modulo
 
 		function getKeyAndMove(e) {
 			var key_code = e.which || e.keyCode;
@@ -132,9 +165,13 @@ $(function() {
 				case 90: //Z key
 					GAME.player.mine();
 					GAME.player.attack();
-					GAME.map.updateAndSetGrid();
 					break;
 				case 88: //X key
+					//TODO REMOVE
+					GAME.map.enemies.forEach(function(e) {
+						e.takeDamage(1);
+					});
+					GAME.map.deleteDeadEnemies();
 					break;
 				case 67: //C key
 					GAME.player.throwScythe();
@@ -152,12 +189,32 @@ $(function() {
 				case 70: //F key
 					GAME.player.place();
 					break;
+				case 82: //R key
+					GAME.player.toggleInventory();
+					break;
 				////////////////////////////////////////////////////////////////
 				default:
 					//Nothing
 			}
 		}
 	});
+
+
+	//TODO: Remove
+
+
+
+	//Buttons!
+	for (let i = 0; i <= 25; i++) {
+		$('#buttons').append('<button onclick="goTo('+i+')">'+i+'</button>');
+	}
+	$('#buttons button').eq(WORLDPOS).addClass('selected');
+	$('button').on('click', function() {
+		$('button').removeClass('selected');
+		$(this).addClass('selected');
+	});
+
+
 
 
 });
