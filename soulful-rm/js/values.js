@@ -11,6 +11,8 @@ const PERLIN = 8;
 const DEFAULT_SPEED = 25;
 var SPEED = 25;
 
+var KEYDOWN = [];
+
 var WORLDPOS = 0;
 var NIGHTTIME = false;
 var ROOM_NUMBER = -1;
@@ -169,7 +171,6 @@ const TILESET = {
 const TILE = {
 	ground: 	{ 	sx: 1, sy: 0, 	color: '' },
 	square: 	{ 	sx: 1, sy: 1, 	color: 'offwhite' },
-	door: 		{ 	sx: 11, sy: 9, 	color: 'offwhite' },
 
 	grass_1: 	{ 	sx: 4, sy: 4, 	color: 'foliage',	destroy: 'ground' },
 	grass_2: 	{ 	sx: 5, sy: 4, 	color: 'foliage', 	destroy: 'ground' },

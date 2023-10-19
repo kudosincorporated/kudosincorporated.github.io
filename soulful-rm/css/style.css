@@ -9,63 +9,41 @@ html {
 }
 
 body {
+	font-family: monospace;
 	background-color: #252525;
+	color: #eee;
 	font-size: 20px;
-	height: 100vh;
-	padding-top: 32px;
-	overflow: hidden;
 }
 
-#canvas {
-	display: block;
-	margin: 0 auto;
-}
-
-#buttons {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	text-align: center;
-}
-
-button:hover {
-	background-color: aqua;
-}
-
-button.selected {
-	background-color: orange;
-}
-
-.row {
-	display: table;
-	table-layout: fixed;
-	border-collapse: collapse;
-	width: 100%;
-}
-
-.col {
-	position: relative;
-	display: table-cell;
-	vertical-align: top;
-}
-
-#header {
+#logo {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
-	height: 32px;
-	padding: 32px;
+	margin: 16px;
+}
+
+#wrapper {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	text-align: center;
+	overflow: hidden;
 }
 
-.left {
-	float: left;
+#message {
+	display: none;
 }
 
-.right {
-	float: right;
+@media only screen and (max-width: 768px) {
+	#message {
+		display: block;
+	}
+	
+	#game {
+		display: none;
+	}
 }
 
 .word {

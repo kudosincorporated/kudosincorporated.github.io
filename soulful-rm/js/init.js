@@ -3,12 +3,26 @@ var dt;
 
 var spritesheet = new Image();
 
-function goTo(point) {
-	GAME.map = new Map();
-	GAME.map.clear();
-	WORLDPOS = point;
-	GAME.map.fillWorld();
-}
+//HOWLER (SOUNDS)
+Howler.volume(0.5);
+
+var SOUND = {
+	move: new Howl({ src: ['sounds/move.wav'] }),
+	coin: new Howl({ src: ['sounds/coin.wav'] }),
+	damage: new Howl({ src: ['sounds/damage.wav'] }),
+	attack: new Howl({ src: ['sounds/attack.wav'] }),
+	note: new Howl({ src: ['sounds/note.wav'] }),
+	boss: new Howl({ src: ['sounds/boss.wav'] }),
+	fail: new Howl({ src: ['sounds/fail.wav'] }),
+	success: new Howl({ src: ['sounds/success.wav'] }),
+	open: new Howl({ src: ['sounds/open.wav'] }),
+	chop: new Howl({ src: ['sounds/chop.wav'] }),
+	door: new Howl({ src: ['sounds/door.wav'] }),
+	scythe: new Howl({ src: ['sounds/scythe.wav'] }),
+	ominous: new Howl({ src: ['sounds/ominous.wav'] }),
+	bossmove: new Howl({ src: ['sounds/bossmove.wav'] }),
+	click: new Howl({ src: ['sounds/click.wav'] })
+};
 
 $(function() {
 
@@ -200,6 +214,19 @@ $(function() {
 	});
 
 
+	//KEYDOWN
+	$(document).on('keydown', function(e) {
+		var key_code = e.which || e.keyCode;
+		if (KEYDOWN.indexOf(key_code) === -1) KEYDOWN.push(key_code);
+	});
+
+	$(document).on('keyup', function(e) {
+		var key_code = e.which || e.keyCode;
+		KEYDOWN = KEYDOWN.filter(item => item !== key_code);
+	});
+
+
+
 	//TODO: Remove
 
 
@@ -214,7 +241,11 @@ $(function() {
 		$(this).addClass('selected');
 	});
 
-
-
-
 });
+
+function goTo(point) {
+	GAME.map = new Map();
+	GAME.map.clear();
+	WORLDPOS = point;
+	GAME.map.fillWorld();
+}

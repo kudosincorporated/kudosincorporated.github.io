@@ -55,6 +55,8 @@ var GAMEFN = {
 		GAME.inventory.lerpMovement(dt);
 	},
 	slideWorld: function(dir) {
+		SOUND.door.play();
+
 		if (ROOM_NUMBER == -1) {
 			if (dir[0] == 0 && dir[1] == 0) { //There is nothing more permanent than a working temporary solution
 				GAME.map = GAME.two;
@@ -189,7 +191,6 @@ var GAMEFN = {
 	},
 	renderControlUI(ctx) {
 		let fadedOpacity = 0.15;
-
 		ctx.save();
 
 		//Logo
@@ -208,52 +209,80 @@ var GAMEFN = {
 		ctx.translate(0, (HEIGHT-3)*SIZE);
 
 		//Controls
-		if (!GAME.player.invIsOpen) ctx.globalAlpha = fadedOpacity;
 		//Q
-		ctx.drawImage(spritesheet, ENTITY.q.sx*RATIO, ENTITY.q.sy*RATIO, RATIO, RATIO, 0, 0, SIZE, SIZE);
+		drawKeycap(ctx, 'q', 81, 0, 0);
 		//E
-		ctx.drawImage(spritesheet, ENTITY.e.sx*RATIO, ENTITY.e.sy*RATIO, RATIO, RATIO, SIZE*2, 0, SIZE, SIZE);
-		ctx.globalAlpha = 1;
+		drawKeycap(ctx, 'e', 69, SIZE*2, 0);
 		//W
-		ctx.drawImage(spritesheet, ENTITY.w.sx*RATIO, ENTITY.w.sy*RATIO, RATIO, RATIO, 1*SIZE, 0, SIZE, SIZE);
+		drawKeycap(ctx, 'w', 87, SIZE, 0);
 		//R
-		if (GAME.player.inventory.length == 0) ctx.globalAlpha = fadedOpacity;
-		ctx.drawImage(spritesheet, ENTITY.r.sx*RATIO, ENTITY.r.sy*RATIO, RATIO, RATIO, SIZE*3, 0, SIZE, SIZE);
-		ctx.globalAlpha = 1;
+		drawKeycap(ctx, 'r', 82, SIZE*3, 0);
 
 		ctx.translate(SIZE/2, SIZE);
 		
 		//A
-		ctx.drawImage(spritesheet, ENTITY.a.sx*RATIO, ENTITY.a.sy*RATIO, RATIO, RATIO, 0, 0, SIZE, SIZE);
+		drawKeycap(ctx, 'a', 65, 0, 0);
 		//S
-		ctx.drawImage(spritesheet, ENTITY.s.sx*RATIO, ENTITY.s.sy*RATIO, RATIO, RATIO, 1*SIZE, 0, SIZE, SIZE);
+		drawKeycap(ctx, 's', 83, SIZE, 0);
 		//D
-		ctx.drawImage(spritesheet, ENTITY.d.sx*RATIO, ENTITY.d.sy*RATIO, RATIO, RATIO, 2*SIZE, 0, SIZE, SIZE);
+		drawKeycap(ctx, 'd', 68, SIZE*2, 0);
 		//F
-		if (GAME.player.inventory.length == 0 || !GAME.player.invIsOpen) ctx.globalAlpha = fadedOpacity;
-		ctx.drawImage(spritesheet, ENTITY.f.sx*RATIO, ENTITY.f.sy*RATIO, RATIO, RATIO, SIZE*3, 0, SIZE, SIZE);
-		ctx.globalAlpha = 1;
+		drawKeycap(ctx, 'f', 70, SIZE*3, 0);
 		
 		ctx.translate(SIZE/2, SIZE);
 
 		//Z
-		ctx.drawImage(spritesheet, ENTITY.z.sx*RATIO, ENTITY.z.sy*RATIO, RATIO, RATIO, 0, 0, SIZE, SIZE);
-		//X
-		//ctx.drawImage(spritesheet, ENTITY.x.sx*RATIO, ENTITY.x.sy*RATIO, RATIO, RATIO, SIZE, 0, SIZE, SIZE);
+		drawKeycap(ctx, 'z', 90, 0, 0);
 		//C
-		if (GAME.player.weapon == '') ctx.globalAlpha = fadedOpacity;
-		ctx.drawImage(spritesheet, ENTITY.c.sx*RATIO, ENTITY.c.sy*RATIO, RATIO, RATIO, SIZE*2, 0, SIZE, SIZE);
-		ctx.globalAlpha = 1;
+		drawKeycap(ctx, 'z', 67, SIZE*2, 0);
 
 		ctx.translate(-SIZE, SIZE*2);
 		ctx.translate((HEIGHT+7)*SIZE, -SIZE*4);
 
 		//Arrow keys
-		ctx.drawImage(spritesheet, ENTITY.ua.sx*RATIO, ENTITY.ua.sy*RATIO, RATIO, RATIO, 1*SIZE, 0, SIZE, SIZE);
+		drawKeycap(ctx, 'ua', 38, SIZE, 0);
 		ctx.translate(-SIZE/2, 0);
-		ctx.drawImage(spritesheet, ENTITY.la.sx*RATIO, ENTITY.la.sy*RATIO, RATIO, RATIO, 0, 1*SIZE, SIZE, SIZE);
-		ctx.drawImage(spritesheet, ENTITY.da.sx*RATIO, ENTITY.da.sy*RATIO, RATIO, RATIO, 1*SIZE, 1*SIZE, SIZE, SIZE);
-		ctx.drawImage(spritesheet, ENTITY.ra.sx*RATIO, ENTITY.ra.sy*RATIO, RATIO, RATIO, 2*SIZE, 1*SIZE, SIZE, SIZE);
+		drawKeycap(ctx, 'la', 37, 0, SIZE);
+		drawKeycap(ctx, 'da', 40, SIZE, SIZE);
+		drawKeycap(ctx, 'ra', 39, SIZE*2, SIZE);
+
+		function drawKeycap(ctx, key, pressed, x, y) {
+			//Pressed
+			let minusFromHeight = 0;
+			if (KEYDOWN.indexOf(pressed) >= 0) minusFromHeight = SIZE/8;
+
+			//Opacity
+			let faded = 0.15;
+			if (!GAME.player.invIsOpen) {
+				if (key == 'q' || key == 'e') {
+					ctx.globalAlpha = faded;
+				}
+			}
+			if (GAME.player.inventory.length == 0 || !GAME.player.invIsOpen) {
+				if (key == 'f') {
+					ctx.globalAlpha = faded;
+				}
+			}
+			if (GAME.player.weapon == '') {
+				if (key == 'c') {
+					ctx.globalAlpha = faded;
+				}
+			}
+
+			ctx.drawImage(
+				spritesheet,
+				ENTITY[key].sx*RATIO,
+				ENTITY[key].sy*RATIO,
+				RATIO,
+				RATIO,
+				x,
+				y + minusFromHeight,
+				SIZE,
+				SIZE
+			);
+
+			ctx.globalAlpha = 1;
+		}
 
 		ctx.restore();
 	},
@@ -426,6 +455,12 @@ class Mover {
 		this.upgrades = [];
 	}
 	toggleInventory() {
+		if (this.invIsOpen) {
+			SOUND.click.play();
+		} else {
+			SOUND.note.play();
+		}
+
 		this.invIsOpen = !this.invIsOpen;
 	}
 	lerpMovement(dt) {
@@ -660,6 +695,8 @@ class Mover {
 		ctx.restore();
 	}
 	move(x, y) {
+		SOUND.move.play();
+
 		if (x == 0 && y < 0) this.dir = [0,-1];
 		if (x == 0 && y > 0) this.dir = [0,1];
 		if (y == 0 && x < 0) this.dir = [-1,0];
@@ -750,6 +787,8 @@ class Mover {
 	throwScythe() {
 		if (this.weapon == '') return;
 
+		SOUND.scythe.play();
+
 		this.weapon = '';
 		let sy = this.y;
 		let sx = this.x;
@@ -791,6 +830,14 @@ class Mover {
 		if (lx < 0 || lx > HEIGHT-1 || ly < 0 || ly > HEIGHT-1) return;
 
 		if (TILE[GAME.map.arr[lx][ly].type].destroy != undefined) {
+			if (GAME.map.arr[lx][ly].type.includes('door')) {
+				SOUND.door.play();
+			} else if (TILESET.burrows.indexOf(GAME.map.arr[lx][ly].type) >= 0) {
+				SOUND.open.play();
+			} else {
+				SOUND.chop.play();
+			}
+
 			//Add to inventory
 			if (
 				//Don't pick up a chest for infinite gold :|
@@ -824,7 +871,8 @@ class Mover {
 		var ly = this.y+this.dir[1];
 
 		if (GAME.map.arr[lx][ly].type == 'ground' && this.inventory.length > 0) {
-			console.log('inv is longer than 0');
+			SOUND.open.play();
+
 			let t = this.inventory[this.slot].tile;
 			GAME.map.arr[lx][ly] = new Tile(t.type);
 			GAME.map.updateAndSetGrid();
@@ -867,6 +915,7 @@ class Mover {
 					this.inventory.splice(i, 1);
 				}
 
+				if (this.slot < 0) this.slot = 0;
 				if (this.slot > this.inventory.length-1) this.slot = this.inventory.length-1;
 
 				return;
@@ -899,9 +948,21 @@ class Mover {
 	takeDamage(damage) {
 		this.hp -= damage;
 
+		if (!this.name.includes('atk')) {
+			if (this.name == 'player' && this.hp > 0) {
+				SOUND.damage.play();
+			}
+	
+			if (this.name != 'player') {
+				SOUND.attack.play();
+			}
+		}
+
 		//Place graves
 		if (this.hp <= 0) {
 			if (this.name == 'player') {
+				//SOUND TODO
+
 				KEYBOARDLOCK = true;
 				zapAtPoint(GAME.player.x, GAME.player.y, EXPLODE.boss, 500);
 				GAME.map.arr[GAME.player.x][GAME.player.y] = new Tile('headstone');
@@ -941,9 +1002,14 @@ class Mover {
 					GAME.scythe.ry = randomy;
 				}
 			}
+			if (this.phase != phase && phase != 2) {
+				SOUND.boss.play();
+			}
 			this.phase = phase;
 
 			if (this.phase == 2) {
+				SOUND.ominous.play();
+
 				NIGHTTIME = true;
 			}
 		}
@@ -966,9 +1032,11 @@ class Mover {
 				
 				//Floor item is a coin
 				if (TILESET.coins.indexOf(c.name) >= 0) {
+					SOUND.coin.play();
+
 					let valueOfCoin = c.name.charAt(c.name.length-1);
 					this.money += parseInt(valueOfCoin);
-						
+
 					GAME.map.collect.splice(i, 1);
 					i--;
 				}
@@ -976,6 +1044,8 @@ class Mover {
 				//Floor is an upgrade (THE SHOP/DOMER)
 				if (c.name.includes('upgrade')) {
 					if (GAME.player.money > SHOP[c.name].cost) {
+						SOUND.click.play();
+
 						GAME.player.money -= SHOP[c.name].cost;
 
 						GAME.player.upgrades.push(c.name);
@@ -988,6 +1058,8 @@ class Mover {
 
 						GAME.map.collect.splice(i, 1);
 						i--;
+					} else {
+						SOUND.fail.play();
 					}
 				}
 
@@ -997,12 +1069,16 @@ class Mover {
 		//Scythe
 		if (WORLDPOS != 0) {
 			if (this.x == GAME.scythe.x && this.y == GAME.scythe.y) {
+				SOUND.coin.play();
+
 				if (!SCYTHE_GAME) SCYTHE_GAME = true;
 				this.weapon = 'scythe';
 			}
 		}
 	}
 	adjustSlot(num) {
+		SOUND.click.play();
+
 		this.slot += num;
 		if (this.slot < 0) this.slot = this.inventory.length-1;
 		if (this.slot > this.inventory.length-1) this.slot = 0;
@@ -1021,6 +1097,8 @@ function zapAtPoint(x, y, props, speed) {
 }
 
 function spawnFrom(array, lx, ly, num) { //If num is undefined, choose a random number
+	SOUND.open.play();
+
 	let dirsArr = DIRS.slice(0); //Clone
 	dirsArr = dirsArr.sort(() => Math.random() - 0.5); //Shuffle
 	for (let i = 0; i < dirsArr.length; i++) { //Loop
@@ -1116,15 +1194,6 @@ function enemysTurn() {
 		let playerStandingOn = GAME.map.arr[GAME.player.x][GAME.player.y].type;
 		let enemyWalkArr = ENTITY[e.name].walk;
 
-		//Movement
-		if (TILESET.river.indexOf(playerStandingOn) >= 0) {
-			walkFunctions[enemyWalkArr[0]](i);
-		} else if (playerStandingOn == 'ground') {
-			walkFunctions[enemyWalkArr[1]](i);
-		} else {
-			walkFunctions[enemyWalkArr[2]](i);
-		}
-
 		//Attacks
 		switch (e.name) {
 			case 'xrrow':
@@ -1191,6 +1260,23 @@ function enemysTurn() {
 		//Projectile decay
 		if (e.name.includes('atk')) {
 			e.takeDamage(1);
+		}
+
+		//Movement
+		if (e.name == 'gungenthor') {
+			if (TURN % 4 == 0) {
+				SOUND.bossmove.play();
+			} else {
+				continue;
+			}
+		}
+
+		if (TILESET.river.indexOf(playerStandingOn) >= 0) {
+			walkFunctions[enemyWalkArr[0]](i);
+		} else if (playerStandingOn == 'ground') {
+			walkFunctions[enemyWalkArr[1]](i);
+		} else {
+			walkFunctions[enemyWalkArr[2]](i);
 		}
 	}
 

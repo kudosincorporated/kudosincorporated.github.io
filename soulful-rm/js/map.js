@@ -99,13 +99,15 @@ class Map {
 		}
 
 		if (total.length == 0) {
+			SOUND.success.play();
+
 			for (let a = summoningPositionX; a < summoningPositionX+3; a++) {
 				for (let b = summoningPositionY; b < summoningPositionY+3; b++) {
 					this.arr[a][b] = new Tile('ground');
-					this.collect.push(new Mover('heart_up', summoningPositionX+5, summoningPositionY+1));
-					zapAtPoint(summoningPositionX+5, summoningPositionY+1, EXPLODE.spark);
 				}
 			}
+			this.collect.push(new Mover('heart_up', summoningPositionX+5, summoningPositionY+1));
+			zapAtPoint(summoningPositionX+5, summoningPositionY+1, EXPLODE.spark);
 		}
 
 		//Exchanging an item
@@ -116,6 +118,8 @@ class Map {
 		if (exchangeT != 'ground') {
 			this.arr[exchangePositionX][exchangePositionY] = new Tile('ground');
 			if (Math.random() > CHANCE.alchemy.exchangeFail) {
+				SOUND.success.play();
+
 				let collects = TILESET.collectables.slice(0);
 				for (let i = 0; i < collects.length; i++) {
 					if (exchangeT == collects[i]) {
@@ -126,6 +130,8 @@ class Map {
 				this.arr[exchangePositionX][exchangePositionY+2] = new Tile( rand(collects) );
 				zapAtPoint(exchangePositionX, exchangePositionY+2, EXPLODE.spark);
 			} else {
+				SOUND.fail.play();
+
 				zapAtPoint(exchangePositionX, exchangePositionY+2, EXPLODE.fail);
 			}
 		}
@@ -138,10 +144,14 @@ class Map {
 		if (duplicateT != 'ground') {
 			this.arr[duplicatePositionX][duplicatePositionY] = new Tile('ground');
 			if (Math.random() > CHANCE.alchemy.duplicateFail) {
+				SOUND.success.play();
+
 				this.arr[duplicatePositionX-1][duplicatePositionY+2] = new Tile( duplicateT );
 				this.arr[duplicatePositionX+1][duplicatePositionY+2] = new Tile( duplicateT );
 				zapAtPoint(duplicatePositionX, duplicatePositionY+2, EXPLODE.spark);
 			} else {
+				SOUND.fail.play();
+
 				zapAtPoint(duplicatePositionX, duplicatePositionY+2, EXPLODE.fail);
 			}
 		}
