@@ -30,8 +30,13 @@ $(function() {
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 
-	canvas.height = HEIGHT*SIZE;
-	canvas.width = (HEIGHT+10)*SIZE;
+	var display = document.getElementById("display");
+
+	canvas.height = display.height = HEIGHT*SIZE;
+	canvas.width = display.width = (HEIGHT+10)*SIZE;
+
+	var fisheye = new Fisheye(display);
+	fisheye.setDistortion(FISHEYE_EFFECT, FISHEYE_EFFECT, FISHEYE_EFFECT);
 
 	//SPRITESHEET
 	spritesheet.src = 'spritesheet.png';
@@ -86,6 +91,9 @@ $(function() {
 		//Whatever chuck it in the update fn
 		GAME.map.checkCollisions();
 
+		//This as well Idgaf
+		GAME.map.deleteDeadEnemies();
+
 		//Stop keyboardlock softlock from renderHurt
 		if (GAME.player.progress == 0 && GAME.map.zap == 0) {
 			KEYBOARDLOCK = false;
@@ -136,6 +144,16 @@ $(function() {
 		GAMEFN.renderMoney(ctx);
 		GAMEFN.renderControlUI(ctx);
 		if (GAME.player.invIsOpen) GAMEFN.renderInventory(ctx);
+
+		//Final score
+		if (GAME.player.hp <= 0 || WORLDPOS == 25) {
+			if (GAME.map.progress == 0) { //Only show after animation
+				drawDetail(ctx, MIDDLE+3, HEIGHT-2, 'score');
+				drawNumber(ctx, FINAL_SCORE, (MIDDLE+6)*SIZE, (HEIGHT-2)*SIZE);
+			}
+		}
+
+		fisheye.draw(canvas);
 	}
 
 	//KEY PRESSES
@@ -181,11 +199,6 @@ $(function() {
 					GAME.player.attack();
 					break;
 				case 88: //X key
-					//TODO REMOVE
-					GAME.map.enemies.forEach(function(e) {
-						e.takeDamage(1);
-					});
-					GAME.map.deleteDeadEnemies();
 					break;
 				case 67: //C key
 					GAME.player.throwScythe();
@@ -224,12 +237,6 @@ $(function() {
 		var key_code = e.which || e.keyCode;
 		KEYDOWN = KEYDOWN.filter(item => item !== key_code);
 	});
-
-
-
-	//TODO: Remove
-
-
 
 	//Buttons!
 	for (let i = 0; i <= 25; i++) {

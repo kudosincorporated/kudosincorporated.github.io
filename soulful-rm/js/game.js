@@ -42,9 +42,21 @@ var GAMEFN = {
 		if (GAME.scythe.rx == GAME.scythe.x && GAME.scythe.ry == GAME.scythe.y && GAME.scythe.name == 'scythe_spin') {
 			GAME.scythe = new Mover('scythe', GAME.scythe.x, GAME.scythe.y);
 			for (let i = 0; i < GAME.map.enemies.length; i++) {
-				if (GAME.map.enemies[i].hitByScythe) {
-					GAME.map.enemies[i].hitByScythe = false;
-					GAME.map.enemies[i].getHit(GAME.player.power);
+				let e = GAME.map.enemies[i];
+				if (e.hitByScythe) {
+					e.hitByScythe = false;
+					e.getHit(GAME.player.power);
+
+					//Looting hits!
+					if (GAME.player.upgrades.indexOf('greedy_upgrade') >= 0) {
+						if (Math.random() < CHANCE.greed.loot) {
+							if (Math.random() < CHANCE.greed.heart) {
+								spawnFrom(TILESET.lifesteal, e.x, e.y, 1);
+							} else {
+								spawnFrom(TILESET.coins, e.x, e.y, 1);
+							}
+						}
+					}
 				}
 			}
 
@@ -111,6 +123,9 @@ var GAMEFN = {
 		} else {
 			NIGHTTIME = false;
 		}
+
+		//Calculate score every new map (only matters for walking into the final one)
+		FINAL_SCORE = calculateScore();
 
 		GAME.player.checkPickup(); //To pick up scythe if dropped
 	},
@@ -190,7 +205,6 @@ var GAMEFN = {
 		ctx.restore();
 	},
 	renderControlUI(ctx) {
-		let fadedOpacity = 0.15;
 		ctx.save();
 
 		//Logo
@@ -232,9 +246,10 @@ var GAMEFN = {
 		ctx.translate(SIZE/2, SIZE);
 
 		//Z
-		drawKeycap(ctx, 'z', 90, 0, 0);
+		//See renderHitbox();
 		//C
-		drawKeycap(ctx, 'z', 67, SIZE*2, 0);
+		drawKeycap(ctx, 'c', 67, SIZE*2, 0);
+		drawKeycap(ctx, 'scythe', -1, SIZE*3, 0);
 
 		ctx.translate(-SIZE, SIZE*2);
 		ctx.translate((HEIGHT+7)*SIZE, -SIZE*4);
@@ -245,44 +260,6 @@ var GAMEFN = {
 		drawKeycap(ctx, 'la', 37, 0, SIZE);
 		drawKeycap(ctx, 'da', 40, SIZE, SIZE);
 		drawKeycap(ctx, 'ra', 39, SIZE*2, SIZE);
-
-		function drawKeycap(ctx, key, pressed, x, y) {
-			//Pressed
-			let minusFromHeight = 0;
-			if (KEYDOWN.indexOf(pressed) >= 0) minusFromHeight = SIZE/8;
-
-			//Opacity
-			let faded = 0.15;
-			if (!GAME.player.invIsOpen) {
-				if (key == 'q' || key == 'e') {
-					ctx.globalAlpha = faded;
-				}
-			}
-			if (GAME.player.inventory.length == 0 || !GAME.player.invIsOpen) {
-				if (key == 'f') {
-					ctx.globalAlpha = faded;
-				}
-			}
-			if (GAME.player.weapon == '') {
-				if (key == 'c') {
-					ctx.globalAlpha = faded;
-				}
-			}
-
-			ctx.drawImage(
-				spritesheet,
-				ENTITY[key].sx*RATIO,
-				ENTITY[key].sy*RATIO,
-				RATIO,
-				RATIO,
-				x,
-				y + minusFromHeight,
-				SIZE,
-				SIZE
-			);
-
-			ctx.globalAlpha = 1;
-		}
 
 		ctx.restore();
 	},
@@ -534,7 +511,8 @@ class Mover {
 
 		//Hover effect
 		if (
-			this.name == 'river_door'
+			this.name == 'river_door' ||
+			this.name == 'heart_up'
 		) {
 			let hoverEffect = 0;
 
@@ -628,6 +606,7 @@ class Mover {
 	}
 	renderHealth(ctx) {
 		if (this.name.includes('atk')) return;
+		if (this.name == 'ghost') return;
 
 		let h = SIZE/8;
 		let w = SIZE*(this.hp/this.maxhp);
@@ -669,6 +648,20 @@ class Mover {
 			RATIO-2,
 			this.rx*SIZE + this.dir[0]*SIZE,
 			this.ry*SIZE + this.dir[1]*SIZE,
+			SIZE,
+			SIZE
+		);
+
+		//Indicator in controls!!!
+		drawKeycap(ctx, 'z', 90, -4*SIZE, (HEIGHT-1)*SIZE);
+		ctx.drawImage(
+			spritesheet,
+			1+indicator*RATIO,
+			1+0*RATIO,
+			RATIO-2,
+			RATIO-2,
+			-3*SIZE,
+			(HEIGHT-1)*SIZE,
 			SIZE,
 			SIZE
 		);
@@ -844,6 +837,7 @@ class Mover {
 				TILESET.loot.indexOf(GAME.map.arr[lx][ly].type) == -1 &&
 				TILESET.burrows.indexOf(GAME.map.arr[lx][ly].type) == -1
 			) {
+				STATS.itemsCollected++;
 				this.addItem(new Tile(GAME.map.arr[lx][ly].type), 1);
 			}
 
@@ -927,23 +921,6 @@ class Mover {
 
 		this.x += GAME.player.dir[0];
 		this.y += GAME.player.dir[1];
-
-		//Looting hits!
-		if (GAME.player.upgrades.indexOf('greedy_upgrade') >= 0) {
-			if (Math.random() < CHANCE.greed.loot) {
-				if (Math.random() < CHANCE.greed.heart) {
-					//TODO Add health up spawn
-				} else {
-					spawnFrom(TILESET.coins, this.x, this.y, 1);
-				}
-			}
-		}
-
-		//Place grave
-		if (this.name == 'player') return;
-		if (this.hp <= 0) {
-			spawnFrom(TILESET.coins, this.x, this.y); //They spawn coins! <3
-		}
 	}
 	takeDamage(damage) {
 		this.hp -= damage;
@@ -961,24 +938,33 @@ class Mover {
 		//Place graves
 		if (this.hp <= 0) {
 			if (this.name == 'player') {
-				//SOUND TODO
+				SOUND.ominous.play();
 
 				KEYBOARDLOCK = true;
 				zapAtPoint(GAME.player.x, GAME.player.y, EXPLODE.boss, 500);
 				GAME.map.arr[GAME.player.x][GAME.player.y] = new Tile('headstone');
 				GAME.map.collect = [];
 				GAME.map.enemies = [];
+
+				FINAL_SCORE = calculateScore();
+			} else if (this.name.includes('atk')) {
+				//Attacks don't have graves, coins, etc.
+				if (this.name == 'blood_dude_atk') GAME.map.enemies.push(new Mover('blood_dude', this.x, this.y));
+				if (this.name == 'water_dude_atk') GAME.map.enemies.push(new Mover('water_dude', this.x, this.y));
 			} else {
 				//Add grave
 				if (ENTITY[this.name].destroy != undefined) GAME.map.arr[this.x][this.y] = new Tile(ENTITY[this.name].destroy);
-				
-				//Specific interactions for enemies
-				if (this.name == 'blood_dude_atk') GAME.map.enemies.push(new Mover('blood_dude', this.x, this.y));
-				if (this.name == 'water_dude_atk') GAME.map.enemies.push(new Mover('water_dude', this.x, this.y));
+
+				//Drop coins!
+				spawnFrom(TILESET.coins, this.x, this.y); //They spawn coins! <3
 
 				if (this.name == 'gungenthor') {
 					zapAtPoint(this.x, this.y, EXPLODE.boss, 100);
+					GAME.map.enemies = [];
+					NIGHTTIME = false;
 				}
+
+				STATS.kills++;
 
 				GAME.map.updateAndSetGrid();
 			}
@@ -1036,6 +1022,7 @@ class Mover {
 
 					let valueOfCoin = c.name.charAt(c.name.length-1);
 					this.money += parseInt(valueOfCoin);
+					STATS.totalMoney += parseInt(valueOfCoin);
 
 					GAME.map.collect.splice(i, 1);
 					i--;
@@ -1063,6 +1050,28 @@ class Mover {
 					}
 				}
 
+				//Floor item is heart up
+				if (c.name == 'heart_up') {
+					SOUND.coin.play();
+					
+					GAME.player.maxhp += 2;
+					GAME.player.hp += 2;
+
+					GAME.map.collect.splice(i, 1);
+					i--;
+				}
+
+				//Floor item is lifesteal
+				if (c.name == 'lifesteal') {
+					if (GAME.player.hp < GAME.player.maxhp) {
+						SOUND.coin.play();
+						GAME.player.hp++;
+
+						GAME.map.collect.splice(i, 1);
+						i--;
+					}
+				}
+
 			}
 		}
 
@@ -1071,7 +1080,13 @@ class Mover {
 			if (this.x == GAME.scythe.x && this.y == GAME.scythe.y) {
 				SOUND.coin.play();
 
-				if (!SCYTHE_GAME) SCYTHE_GAME = true;
+				if (!SCYTHE_GAME) {
+					SCYTHE_GAME = true;
+					GAME.map.arr[MIDDLE-6][MIDDLE] = new Tile('ground');
+					GAME.map.arr[MIDDLE+6][MIDDLE] = new Tile('ground');
+					GAME.map.enemies.push(new Mover('rwck', MIDDLE-6, MIDDLE));
+					GAME.map.enemies.push(new Mover('rwck', MIDDLE+6, MIDDLE));
+				}
 				this.weapon = 'scythe';
 			}
 		}
@@ -1123,6 +1138,20 @@ function spawnFrom(array, lx, ly, num) { //If num is undefined, choose a random 
 	}
 }
 
+function calculateScore() {
+	let score = 0;
+
+	score += STATS.totalMoney; //1 score for every coin you've collected
+	score += STATS.kills*2; //2 score for every enemy killed
+	score += STATS.itemsCollected/(HEIGHT*HEIGHT/2); //1 extra score for every 625/2 tiles (half a map) you've destroyed
+	score += GAME.player.maxhp*10; //10 score for every half-heart of max health
+	score = score*(1+(WORLDPOS/25)); //Score multiplied by 1x to 2x depending on how far you travelled
+
+	console.log('score: '+score+' score.toFixed(0): '+score.toFixed(0));
+
+	return parseInt(score.toFixed(0));
+}
+
 function enemyOnThisTile(x, y) {
 	for (let i = 0; i < GAME.map.enemies.length; i++) {
 		if (x == GAME.map.enemies[i].x && y == GAME.map.enemies[i].y) {
@@ -1150,9 +1179,6 @@ function enemysTurn() {
 			let e = GAME.map.enemies[i];
 			e.x += e.dir[0];
 			e.y += e.dir[1];
-		},
-		random: function(i) { //Move randomly
-			enemyWalkTowardsPoint(i, randInt(0,HEIGHT-1), randInt(0,HEIGHT-1));
 		}
 	}
 
@@ -1271,6 +1297,10 @@ function enemysTurn() {
 			}
 		}
 
+		if (Math.random() < CHANCE.balkChance) {
+			continue;
+		}
+
 		if (TILESET.river.indexOf(playerStandingOn) >= 0) {
 			walkFunctions[enemyWalkArr[0]](i);
 		} else if (playerStandingOn == 'ground') {
@@ -1282,4 +1312,46 @@ function enemysTurn() {
 
 	easystar.calculate();
 	GAME.map.deleteDeadEnemies();
+}
+
+function drawKeycap(ctx, key, pressed, x, y) {
+	ctx.save();
+
+	//Pressed
+	let minusFromHeight = 0;
+	if (KEYDOWN.indexOf(pressed) >= 0) minusFromHeight = SIZE/8;
+
+	//Opacity
+	let faded = 0.25;
+	if (!GAME.player.invIsOpen) {
+		if (key == 'q' || key == 'e') {
+			ctx.globalAlpha = faded;
+		}
+	}
+	if (GAME.player.inventory.length == 0 || !GAME.player.invIsOpen) {
+		if (key == 'f') {
+			ctx.globalAlpha = faded;
+		}
+	}
+	if (GAME.player.weapon == '') {
+		if (key == 'c' || key == 'scythe') {
+			ctx.globalAlpha = faded;
+		}
+	}
+
+	ctx.drawImage(
+		spritesheet,
+		ENTITY[key].sx*RATIO,
+		ENTITY[key].sy*RATIO,
+		RATIO,
+		RATIO,
+		x,
+		y + minusFromHeight,
+		SIZE,
+		SIZE
+	);
+
+	ctx.globalAlpha = 1;
+
+	ctx.restore();
 }

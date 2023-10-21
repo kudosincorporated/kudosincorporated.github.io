@@ -67,10 +67,6 @@ class Map {
 	deleteDeadEnemies() {
 		for (let i = 0; i < this.enemies.length; i++) {
 			if (this.enemies[i].hp <= 0) {
-				if (this.enemies[i].name == 'gungenthor') {
-					NIGHTTIME = false;
-					GAME.map.enemies = [];
-				}
 				this.enemies.splice(i, 1);
 				i--;
 			}
@@ -211,22 +207,6 @@ class Map {
 			default:
 				//
 		}
-
-		function drawDetail(ctx, dx, dy, name) {
-			let w = ENTITY[name].w ? ENTITY[name].w : 1;
-			let h = ENTITY[name].h ? ENTITY[name].h : 1;
-			ctx.drawImage(
-				spritesheet,
-				ENTITY[name].sx*RATIO,
-				ENTITY[name].sy*RATIO,
-				w*RATIO,
-				h*RATIO,
-				dx*SIZE,
-				dy*SIZE,
-				w*SIZE,
-				h*SIZE,
-			);
-		}
 	}
 	renderZap(ctx) {
 		//Don't do anything if zap is zero
@@ -346,6 +326,56 @@ class Map {
 		if (WORLDPOS == 24) { //final boss
 			this.enemies = [];
 			this.enemies.push(new Mover('gungenthor', MIDDLE, MIDDLE+6));
+		}
+		if (WORLDPOS == 25) {
+			for (let j = -4; j <= 4; j++) {
+				this.arr[MIDDLE+j][HEIGHT-2] = new Tile('ground');
+			}
+			this.enemies.push(new Mover('ghost', MIDDLE, MIDDLE+1));
+		}
+
+		//BUILDINGS!
+		//Dungeons
+		let buildingsAllowed = false;
+		if (WORLDPOS >= 2 && WORLDPOS < 11) buildingsAllowed = true;
+		if (WORLDPOS >= 15 && WORLDPOS < 24) buildingsAllowed = true;
+
+		if (buildingsAllowed) {
+			let randomForDungeon = Math.random();
+			if (randomForDungeon < 0.25) {
+				this.putSmall(randInt(1, HEIGHT-4), randInt(1, HEIGHT-3));
+			} else if (randomForDungeon < 0.5) {
+				this.putStump(randInt(1, HEIGHT-4), randInt(1, HEIGHT-3));
+			} else if (randomForDungeon < 0.75) {
+				this.putCave(randInt(1, HEIGHT-4), randInt(1, HEIGHT-3));
+			} else {
+				//25% chance of no dungeon
+			}
+			//Tower
+			if (WORLDPOS % 4 == 0) {
+				this.putTower(randInt(MIDDLE-7, MIDDLE+3), randInt(1, HEIGHT-5));
+			}
+			//Shops
+			if (WORLDPOS % 10 == 0) {
+				this.putDomer(MIDDLE-10, MIDDLE-2);
+				this.putSpire(MIDDLE+8, MIDDLE-2);
+			} else {
+				//Domer
+				if (Math.random() < CHANCE.building.domer) {
+					this.putDomer(MIDDLE-10, MIDDLE-2);
+					CHANCE.building.domer = 0;
+				} else {
+					CHANCE.building.domer += CHANCE.building.domerInc;
+				}
+	
+				//Spire
+				if (Math.random() < CHANCE.building.spire) {
+					this.putSpire(MIDDLE+8, MIDDLE-3);
+					CHANCE.building.spire = 0;
+				} else {
+					CHANCE.building.spire += CHANCE.building.spireInc;
+				}
+			}
 		}
 
 		/*this.putTower(0, 9);
@@ -609,6 +639,17 @@ class Map {
 			}
 		}
 
+		//LAZY WAY OF MAKING ENEMIES!
+		for (let i = 7; i <= 7*3; i += 7) {
+			this.enemies.push(new Mover(rand(TILESET.enemy_tower), MIDDLE-8, i));
+			this.enemies.push(new Mover(rand(TILESET.enemy_tower), MIDDLE+8, i));
+		}
+
+		//THE BOSS!
+		this.enemies.push(new Mover('kong', MIDDLE, MIDDLE+4));
+
+		this.collect.push(new Mover('heart_up', MIDDLE, MIDDLE+5));
+
 		this.arr[MIDDLE][HEIGHT-2] = new Tile( 'exitdoor' );
 	}
 	setDomer() {
@@ -655,7 +696,7 @@ class Map {
 				if (et_t < 0.1) {
 					this.arr[x][y] = new Tile('river');
 				} else if (et_t < 0.2+Math.random()/20) {
-					if (Math.random() < 0.3) {
+					if (Math.random() < 0.4) {
 						this.arr[x][y] = new Tile(rand(TILESET.cave));
 					} else {
 						this.arr[x][y] = new Tile('ground');
@@ -676,6 +717,14 @@ class Map {
 		for (let i=Math.floor(HEIGHT/2); i < HEIGHT-2; i++) {
 			this.arr[Math.floor(HEIGHT/2)][i] = new Tile('river');
 		}
+
+		this.arr[MIDDLE][MIDDLE-1] = new Tile( rand(TILESET.loot) );
+		this.arr[MIDDLE-1][MIDDLE] = new Tile( rand(TILESET.collectables) );
+		this.arr[MIDDLE][MIDDLE] = new Tile( rand(TILESET.collectables) );
+		this.arr[MIDDLE+1][MIDDLE] = new Tile( rand(TILESET.collectables) );
+		this.arr[MIDDLE][MIDDLE+1] = new Tile( rand(TILESET.loot) );
+
+		this.enemies.push(new Mover('rwck', MIDDLE, MIDDLE));
 
 		this.arr[MIDDLE][HEIGHT-2] = new Tile( 'exitdoor' );
 	}
@@ -714,6 +763,12 @@ class Map {
 		this.arr[12][9] = new Tile( 'door_open' );
 		this.arr[12][15] = new Tile( 'door' );
 
+		this.arr[MIDDLE-4][MIDDLE-6] = new Tile(rand(TILESET.loot));
+		this.arr[MIDDLE][MIDDLE-6] = new Tile(rand(TILESET.loot));
+		this.arr[MIDDLE+4][MIDDLE-6] = new Tile(rand(TILESET.loot));
+
+		this.enemies.push(new Mover('rwck', MIDDLE, MIDDLE));
+
 		this.arr[MIDDLE][19] = new Tile( 'exitdoor' );
 	}
 	setStump() {
@@ -730,6 +785,9 @@ class Map {
 						this.arr[x][y] = new Tile( 'river' );
 					} else if (e < 0.4) {
 						this.arr[x][y] = new Tile( rand(TILESET.leaves) );
+						if (Math.random() < CHANCE.spawn.forage*5) {
+							this.arr[x][y] = new Tile( rand(TILESET.collectables) );
+						}
 					} else if (e < 0.5) {
 						this.arr[x][y] = new Tile( rand(TILESET.weeds) );
 					} else {
@@ -742,6 +800,8 @@ class Map {
 				}
 			}
 		}
+
+		this.enemies.push(new Mover('rwck', MIDDLE, MIDDLE+3));
 
 		this.arr[MIDDLE][MIDDLE+2] = new Tile( rand(TILESET.treewall) );
 		this.arr[MIDDLE-1][MIDDLE+1] = new Tile( rand(TILESET.treewall) );
@@ -1027,6 +1087,22 @@ class Map {
 		room.enterY = enterY;
 		room.name = setRoom;
 	}
+}
+
+function drawDetail(ctx, dx, dy, name) {
+	let w = ENTITY[name].w ? ENTITY[name].w : 1;
+	let h = ENTITY[name].h ? ENTITY[name].h : 1;
+	ctx.drawImage(
+		spritesheet,
+		ENTITY[name].sx*RATIO,
+		ENTITY[name].sy*RATIO,
+		w*RATIO,
+		h*RATIO,
+		dx*SIZE,
+		dy*SIZE,
+		w*SIZE,
+		h*SIZE,
+	);
 }
 
 function noiseAtPoint(x, y, p) {

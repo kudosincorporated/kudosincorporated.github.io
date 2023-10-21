@@ -15,11 +15,15 @@ body {
 	font-size: 20px;
 }
 
-#logo {
+#header {
 	position: absolute;
 	top: 0;
 	left: 0;
-	margin: 16px;
+	width: 100%;
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	padding: 32px;
 }
 
 #wrapper {

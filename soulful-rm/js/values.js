@@ -3,6 +3,7 @@ var easystar = new EasyStar.js();
 
 var GAME = {};
 
+//I know a bunch of global variables isn't best practice. Sue me.
 const HEIGHT = 25;
 const MIDDLE = Math.floor(HEIGHT/2);
 const SIZE = 32;
@@ -10,6 +11,8 @@ const RATIO = 64;
 const PERLIN = 8;
 const DEFAULT_SPEED = 25;
 var SPEED = 25;
+
+var FINAL_SCORE = 0; //Calculated on death or game end
 
 var KEYDOWN = [];
 
@@ -20,6 +23,13 @@ var KEYBOARDLOCK = false;
 var TURN = 0;
 var SCYTHE_GAME = false; //Did the player pick up the scythe at the start?
 var RIVER_DOOR = MIDDLE;
+var FISHEYE_EFFECT = 0.05;
+
+var STATS = {
+	totalMoney: 0,
+	kills: 0, 
+	itemsCollected: 0,
+}
 
 var ANIM = {
 	tick: 0,
@@ -42,6 +52,7 @@ const DIRS = [
 ];
 
 var CHANCE = {
+	balkChance: 0.05,
 	spawn: {
 		burrow: 0.025,
 		loot: 0.025,
@@ -54,8 +65,15 @@ var CHANCE = {
 		duplicateFail: 0.50,
 	},
 	greed: {
-		loot: 0.15,
-		heart: 0.25,
+		loot: 0.9999,
+		heart: 0.9999,
+	},
+	building: {
+		dungeon: 0.33,
+		domer: 0,
+		domerInc: 0.08,
+		spire: 0,
+		spireInc: 0.08,
 	}
 }
 
@@ -104,6 +122,7 @@ const TILESET = {
 	dense: ['weed_1','weed_2','weed_3','pebbles'],
 	light: ['grass_1','grass_2','ground','ground'],
 	cliff: ['cliff_1','cliff_2'],
+	lifesteal: ['lifesteal'],
 	coins: ['coin_1','coin_2','coin_3','coin_4','coin_5','coin_6','coin_7','coin_8'],
 	collectables: ['twig','bark','feather','leaf','dandelion','cornflower','berries','branch'],
 	loot: ['crate_1','vase_1','barrel_1','chest_1'],
@@ -160,6 +179,7 @@ const TILESET = {
 	enemy_forest_dense: ['derva','trull'],
 	enemy_tundra_light: ['xapmat','modnoc'],
 	enemy_tundra_dense: ['mozzie','dingo'],
+	enemy_tower: ['smarg','smarg','derva','trull'],
 	darkRooms: [
 		'setCave',
 		'setStump',
@@ -346,10 +366,12 @@ const TILE = {
 
 const ENTITY = {
 	player: 	{ sx: 16, sy: 0, hp: 2 },
+	ghost: 		{ sx: 16, sy: 0, destroy: 'headstone', walk: ['random', 'random', 'random'] },
 	scythe: 	{ sx: 16, sy: 4 },
 	scythe_spin:{ sx: 16, sy: 4, 	anim: [0,0] },
 	inventory: 	{ sx: 17, sy: 28 },
 	hitbox: 	{ sx: 2, sy: 0 },
+	hitbox_attack: { sx: 3, sy: 0 },
 	ua: 		{ sx: 8, sy: 0 },
 	la: 		{ sx: 9, sy: 0 },
 	da: 		{ sx: 10, sy: 0 },
@@ -376,7 +398,7 @@ const ENTITY = {
 	gyn: 		{ sx: 21, sy: 16, 	hp: 5, 	destroy: 'grave', 		walk: ['player',	'retreat',	'random'] }, //Purple
 	kong: 		{ sx: 22, sy: 16, 	hp: 5, 	destroy: 'grave', 		walk: ['random',	'player',	'retreat'] }, //Yellow
 
-	rwck: 		{ sx: 23, sy: 16, 	hp: 3, 	destroy: 'rock_4', 		walk: ['statue',	'player',	'player'] }, //Brown
+	rwck: 		{ sx: 23, sy: 16, 	hp: 1, 	destroy: 'rock_4', 		walk: ['player',	'player',	'retreat'] }, //Brown
 
 	creepa: 	{ sx: 16, sy: 20, 	hp: 1, 	destroy: 'barrel_2', 	walk: ['statue',	'player',	'player'] }, //
 	odango: 	{ sx: 17, sy: 20, 	hp: 1, 	destroy: 'chest_2', 	walk: ['statue',	'player',	'player'] }, //
@@ -446,6 +468,8 @@ const ENTITY = {
 	howtosummon:{ sx: 16, sy: 24, h: 3, w: 5 },
 	howtomagic: { sx: 21, sy: 24, h: 3, w: 1 },
 	howtogamble:{ sx: 22, sy: 24, h: 3, w: 2 },
+	
+	lifesteal:	{ sx: 0, sy: 12, 	anim: [0,2] },
 	heart_up:	{ sx: 11, sy: 26, 	anim: [0,0] },
 
 	river_door: { sx: 6, sy: 2 },
@@ -460,4 +484,5 @@ const ENTITY = {
 	explainexplode:		{ sx: 12, sy: 30, h: 1, w: 5 },
 
 	logo: { sx: 8, sy: 1, h: 2, w: 4 },
+	score: { sx: 12, sy: 26, h: 1, w: 3 },
 }
