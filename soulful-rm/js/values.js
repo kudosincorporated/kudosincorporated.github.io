@@ -65,8 +65,8 @@ var CHANCE = {
 		duplicateFail: 0.50,
 	},
 	greed: {
-		loot: 0.9999,
-		heart: 0.9999,
+		loot: 0.2,
+		heart: 0.25,
 	},
 	building: {
 		dungeon: 0.33,

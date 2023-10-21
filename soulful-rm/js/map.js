@@ -111,7 +111,7 @@ class Map {
 		let exchangePositionY = 13;
 
 		let exchangeT = this.arr[exchangePositionX][exchangePositionY].type;
-		if (exchangeT != 'ground') {
+		if (TILESET.collectables.indexOf(exchangeT) >= 0) {
 			this.arr[exchangePositionX][exchangePositionY] = new Tile('ground');
 			if (Math.random() > CHANCE.alchemy.exchangeFail) {
 				SOUND.success.play();
@@ -137,7 +137,7 @@ class Map {
 		let duplicatePositionY = 13;
 
 		let duplicateT = this.arr[duplicatePositionX][duplicatePositionY].type;
-		if (duplicateT != 'ground') {
+		if (TILESET.collectables.indexOf(duplicateT) >= 0) {
 			this.arr[duplicatePositionX][duplicatePositionY] = new Tile('ground');
 			if (Math.random() > CHANCE.alchemy.duplicateFail) {
 				SOUND.success.play();

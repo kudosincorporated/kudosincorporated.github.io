@@ -60,8 +60,10 @@ var GAMEFN = {
 				}
 			}
 
-			zapAtPoint(GAME.scythe.x, GAME.scythe.y, EXPLODE.gun, 25);
-			GAME.map.arr[GAME.scythe.x][GAME.scythe.y] = new Tile('cat');
+			if (GAME.player.upgrades.indexOf('greedy_upgrade') >= 0) {
+				zapAtPoint(GAME.scythe.x, GAME.scythe.y, EXPLODE.gun, 25);
+				GAME.map.arr[GAME.scythe.x][GAME.scythe.y] = new Tile('cat');
+			}
 		}
 
 		//Inventory
