@@ -808,6 +808,58 @@ class Map {
 		this.arr[MIDDLE][MIDDLE+1] = new Tile( 'exitdoor' );
 		this.arr[MIDDLE+1][MIDDLE+1] = new Tile( rand(TILESET.treewall) );
 	}
+	setWaterfall() {
+		for (let x = 0; x < HEIGHT; x++) {
+			for (let y = 0; y < HEIGHT; y++) {
+				let et = noiseAtPoint(x, y, PERLIN);
+				let t = circlePoint(x, y, HEIGHT);
+
+				if (t<0.2) {
+					this.arr[x][y] = new Tile(rand(TILESET.light));
+				} else if (t<0.31) {
+					if (Math.random() < 0.95) {
+						this.arr[x][y] = new Tile(rand(TILESET.dense));
+					} else {
+						this.arr[x][y] = new Tile(rand(TILESET.collectables));
+					}
+
+					if (t>0.25) {
+						if (Math.random() < 0.1) {
+							this.arr[x][y] = new Tile('cat');
+						}
+					}
+				} else if (t<0.36) {
+					this.arr[x][y] = new Tile('river');
+				} else if (t<0.4) {
+					this.arr[x][y] = new Tile(rand(TILESET.trees));
+				} else if (t<0.45) {
+					this.arr[x][y] = new Tile('domerwall');
+				}
+
+				//cave edges
+				for (let z=0; z < 3; z++) { //width
+					for (let x=0; x < 2; x++) { //height
+						this.arr[MIDDLE+z-1][MIDDLE+x-5] = new Tile( 'stump_'+z+x );
+					}
+				}
+
+				//river
+				var xdisp = 9;
+				var wwidt = 6;
+				if (x > xdisp && x < xdisp+wwidt && y > 0 && y < 6) {
+					if (y < 5) {
+						this.arr[x][y] = new Tile('waterfall');
+					} else {
+						this.arr[x][y] = new Tile('w_fall_end');
+					}
+				}
+			}
+		}
+
+		this.arr[MIDDLE][MIDDLE-4] = new Tile('murphy');
+
+		this.arr[MIDDLE][HEIGHT-6] = new Tile('exitdoor');
+	}
 	addTundra() {
 		let x = 0;
 		let y = 0;
@@ -885,7 +937,8 @@ class Map {
 				for (let i = 1; i < 4; i++) {
 					this.arr[rx][ry+i+change] = new Tile('waterfall');
 				}
-				this.arr[rx][ry+4+change] = new Tile('w_fall_end');
+				this.arr[rx][ry+4+change] = new Tile('w_fall_door');
+				this.createRoom(rx, ry+4+change, 'setWaterfall');
 				this.arr[rx][ry+5+change] = new Tile('river_anim');
 			} else {
 				for (let i = 0; i < 5; i++) {

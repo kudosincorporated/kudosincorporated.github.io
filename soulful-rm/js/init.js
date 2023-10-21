@@ -3,6 +3,9 @@ var dt;
 
 var spritesheet = new Image();
 
+//EASYSTAR
+var easystar = new EasyStar.js();
+
 //HOWLER (SOUNDS)
 Howler.volume(0.5);
 

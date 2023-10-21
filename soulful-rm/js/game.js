@@ -60,7 +60,8 @@ var GAMEFN = {
 				}
 			}
 
-			//TODO Add explosion upgrade
+			zapAtPoint(GAME.scythe.x, GAME.scythe.y, EXPLODE.gun, 25);
+			GAME.map.arr[GAME.scythe.x][GAME.scythe.y] = new Tile('cat');
 		}
 
 		//Inventory
@@ -790,9 +791,20 @@ class Mover {
 			sx += dir[0];
 			sy += dir[1];
 			let i = enemyOnThisTile(sx, sy);
+
+			//Unfortunately I cannot be bothered to make this code sexy right now :>)
+			let iu = enemyOnThisTile(sx, sy-1);
+			let il = enemyOnThisTile(sx-1, sy);
+			let id = enemyOnThisTile(sx, sy+1);
+			let ir = enemyOnThisTile(sx+1, sy);
+
 			if (TILE[GAME.map.arr[sx][sy].type].block || i >= 0) {
-				if (i >= 0) {
-					GAME.map.enemies[i].hitByScythe = true;
+				if (i >= 0) GAME.map.enemies[i].hitByScythe = true;
+				if (this.upgrades.indexOf('explode_upgrade') >= 0) {
+					if (iu >= 0) GAME.map.enemies[iu].hitByScythe = true;
+					if (il >= 0) GAME.map.enemies[il].hitByScythe = true;
+					if (id >= 0) GAME.map.enemies[id].hitByScythe = true;
+					if (ir >= 0) GAME.map.enemies[ir].hitByScythe = true;
 				}
 				sx -= dir[0];
 				sy -= dir[1];

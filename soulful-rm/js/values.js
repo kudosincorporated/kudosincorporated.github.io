@@ -1,9 +1,7 @@
-//EASYSTAR
-var easystar = new EasyStar.js();
-
 var GAME = {};
 
 //I know a bunch of global variables isn't best practice. Sue me.
+//Wow, that was aggressive! Sorry!
 const HEIGHT = 25;
 const MIDDLE = Math.floor(HEIGHT/2);
 const SIZE = 32;
@@ -11,6 +9,8 @@ const RATIO = 64;
 const PERLIN = 8;
 const DEFAULT_SPEED = 25;
 var SPEED = 25;
+
+//Do you think they bought it?
 
 var FINAL_SCORE = 0; //Calculated on death or game end
 
@@ -108,6 +108,11 @@ const EXPLODE = {
 	boss: {
 		color: 'bloody',
 		size: 1,
+		weight: 1,
+	},
+	gun: {
+		color: 'orange',
+		size: 0.15,
 		weight: 1,
 	},
 	power_upgrade: 		{ color: 'blue', size: 0.33, weight: 0.66, },
@@ -221,7 +226,8 @@ const TILE = {
 	river: 		{ 	sx: 8, sy: 4, 	color: 'blue' },
 	river_anim: { 	sx: 8, sy: 4, 	color: 'blue', 	anim: [2,0] },
 	waterfall: 	{ 	sx: 9, sy: 4, 	color: 'blue', 	anim: [0,0], 	block: true },
-	w_fall_end: { 	sx: 9, sy: 4, 	color: 'blue', 	anim: [0,0], 	block: true, 	overlay: [22,0] },
+	w_fall_end: { 	sx: 9, sy: 4, 	color: 'blue', 	anim: [0,0], 	block: false, 	overlay: [22,0] },
+	w_fall_door: { 	sx: 9, sy: 4, 	color: 'blue', 	anim: [0,0], 	block: false, 	overlay: [22,0], 	door: true, 	teleport: [MIDDLE,HEIGHT-7] },
 	ocean_1: 	{ 	sx: 11, sy: 4, 	color: 'ocean', 	block: true },
 	ocean_2: 	{ 	sx: 11, sy: 5, 	color: 'ocean', 	block: true },
 	ocean_3: 	{ 	sx: 11, sy: 6, 	color: 'ocean', 	block: true },
@@ -292,6 +298,9 @@ const TILE = {
 	treewall_2: { sx: 7, sy: 11, 	color: 'logcabin', 	block: true },
 
 	exitdoor: 	{ sx: 8, sy: 9, 	color: 'orange', 	door: true },
+
+	cat:		{ sx: 1, sy: 12, 	color: 'orange', 	anim: [1,2], 	destroy: 'ground' },
+	murphy:		{ sx: 2, sy: 12, 	color: '', 			anim: [1,2], 	block: true },
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -365,7 +374,7 @@ const TILE = {
 }
 
 const ENTITY = {
-	player: 	{ sx: 16, sy: 0, hp: 2 },
+	player: 	{ sx: 16, sy: 0, hp: 4 },
 	ghost: 		{ sx: 16, sy: 0, destroy: 'headstone', walk: ['random', 'random', 'random'] },
 	scythe: 	{ sx: 16, sy: 4 },
 	scythe_spin:{ sx: 16, sy: 4, 	anim: [0,0] },
