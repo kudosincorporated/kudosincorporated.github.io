@@ -1,0 +1,23 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #111;
+	color: white;
+	font-size: 50px;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+}
+
+#topleft {
+	position: fixed;
+	top: 0;
+	left: 0;
+}
