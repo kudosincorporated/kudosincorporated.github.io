@@ -1,0 +1,117 @@
+#game {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.tile {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+.tile,
+.image {
+	width: 64px;
+	height: 128px;
+}
+
+.tile.empty {
+	opacity: 0!important;
+	pointer-events: none;
+}
+
+.tile nav,
+.tile .choices,
+.tile .choices .option {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	height: 100%;
+	width: 100%;
+	transform: translate(0);
+}
+
+.tile .choices .option {
+	transition: 150ms ease;
+}
+
+.tile .choices .option {
+	opacity: 0;
+}
+
+.tile:hover .choices .option { opacity: 1; }
+.tile:hover .choices .up { transform: translateY(-100%); }
+.tile:hover .choices .right { transform: translateX(100%); }
+.tile:hover .choices .bottom { transform: translateY(100%); }
+.tile:hover .choices .left { transform: translateX(-100%); }
+
+.image {
+	display: inline-block;
+}
+
+nav {
+	height: 100%;
+	width: 100%;
+	background-image: url('../spritesheet_smooth.png');
+	background-size: 800%;
+	z-index: 9;
+}
+
+.tile .choices .option nav {
+	transform: scale(0.75);
+	opacity: 0.5;
+}
+
+@keyframes bounce {
+	0% {
+		transform: scaleY(0.75) scaleX(0.75);
+	}
+	25% {
+		transform: scaleY(0.5) scaleX(1.0);
+	}
+	75% {
+		transform: scaleY(1.0) scaleX(1.5);
+		margin-top: -5px;
+	}
+	100% {
+		transform: scaleY(1.0) scaleX(1.0);
+	}
+}
+
+.bounce {
+	animation-name: bounce;
+	animation-duration: 300ms;
+	animation-timing-function: ease;
+}
+
+@keyframes jiggle {
+	0% {
+		transform: rotate(0deg) scale(1);
+	}
+	20% {
+		transform:  rotate(-2deg) scale(0.95);
+	}
+	40% {
+		transform:  rotate(5deg) scale(0.8);
+	}
+	60% {
+		transform:  rotate(-5deg) scale(1.2);
+	}
+	80% {
+		transform:  rotate(2deg) scale(1.05);
+	}
+	100% {
+		transform:  rotate(0deg) scale(1);
+	}
+}
+
+.jiggle {
+	animation-name: jiggle;
+	animation-duration: 600ms;
+	animation-timing-function: ease;
+}

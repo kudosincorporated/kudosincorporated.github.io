@@ -1,0 +1,148 @@
+@font-face {
+	font-family: 'hellovetica';
+	src: url(../hellovetica.ttf);
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+html {
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	font-size: 20px;
+}
+
+body {
+	background-color: #012;
+	color: #eee;
+}
+
+#modal,
+#game {
+	height: 100%;
+	width: 100%;
+}
+
+#modal {
+	background-color: #123;
+	position: fixed;
+	top: 0;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	z-index: 99;
+}
+
+#header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+}
+
+.menu {
+	display: flex;
+	justify-content: space-between;
+	text-align: center;
+	padding: 1em;
+}
+
+.menu > div {
+	flex: 1;
+}
+
+.menu > div:first-of-type {
+	text-align: left;
+}
+
+.menu > div:last-of-type {
+	text-align: right;
+}
+
+.logo_container {
+	position: relative;
+	height: 64px;
+	width: 224px;
+}
+
+.logo_container img {
+	position: relative;
+	top: -64px;
+	left: -64px;
+}
+
+#logo {
+	position: relative;
+	width: 352px;
+	height: 192px;
+}
+
+#logo img {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+button,
+.close {
+	cursor: pointer;
+}
+
+button,
+.quote {
+	border-radius: 0.25em;
+}
+
+button {
+	background-color: #eee;
+	border: 1px solid;
+	color: #012;
+	padding: 0.5em 2em;
+}
+
+button:hover {
+	background-color: #999;
+	font-style: italic;
+}
+
+.close {
+	float: right;
+}
+
+.quote {
+	margin: 1em;
+	padding: 1em;
+	background-color: rgba(255,255,255,0.05);
+}
+
+#modal {
+	background: rgb(17,34,51);
+	background: -moz-radial-gradient(circle, rgba(17,34,51,1) 0%, rgba(0,17,34,1) 100%);
+	background: -webkit-radial-gradient(circle, rgba(17,34,51,1) 0%, rgba(0,17,34,1) 100%);
+	background: radial-gradient(circle, rgba(17,34,51,1) 0%, rgba(0,17,34,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#112233",endColorstr="#001122",GradientType=1);
+}
+
+#game {
+	background: rgb(20,39,57);
+	background: -moz-radial-gradient(circle, rgba(20,39,57,1) 0%, rgba(17,34,51,1) 100%);
+	background: -webkit-radial-gradient(circle, rgba(20,39,57,1) 0%, rgba(17,34,51,1) 100%);
+	background: radial-gradient(circle, rgba(20,39,57,1) 0%, rgba(17,34,51,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#142739",endColorstr="#112233",GradientType=1);
+}
