@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora&display=swap');
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Lora', serif;
+	display: flex;
+	justify-content: center;
+}
+
+#tree {
+	margin: 300px 0;
+}
+
+.children {
+	margin-left: 2em;
+}
+
+.label {
+	position: relative;
+	display: inline-block;
+	padding: 5px 10px;
+	margin-bottom: 5px;
+}
+
+.progress {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: -1;
+}
+
+.inner {
+	background-color: #eee;
+	height: 100%;
+	width: 100%;
+}
+
+.node.end > .label .inner {
+	width: 0%;
+}
+
+.node:not(.end) .label {
+	cursor: pointer;
+}
+
+.node:hover > .label:before {
+	content: "";
+	background-color: #333;
+	position: absolute;
+	top: 1em;
+	left: 0;
+	height: 1px;
+	width: 50vw;
+	transform: translateX(-100%);
+}
+
+.node:hover > .label .progress {
+	border: 1px solid;
+}
+
+#hl {
+	position: fixed;
+	top: 40%;
+	right: 0;
+}
