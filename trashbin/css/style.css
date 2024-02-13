@@ -5,10 +5,11 @@
 }
 
 html {
-	font-size: 10px;
+	font-size: 30px;
 }
 
 body {
+	background-color: #6a536e;
 	font-size: 1.6rem;
 	height: 100vh;
 	display: flex;
@@ -17,10 +18,12 @@ body {
 	overflow: hidden;
 }
 
-#sidebar {
+#canvas {
+	background-color: #333;
+}
+
+#fps {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
-	text-align: center;
 }
