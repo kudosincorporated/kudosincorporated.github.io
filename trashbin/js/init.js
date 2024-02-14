@@ -1,7 +1,9 @@
 var time;
 var dt;
+var fps;
+var SHOW_FPS = true;
 
-var spritesheet = new Image();	
+var spritesheet = new Image();
 
 var MOUSE_X = 0;
 var MOUSE_Y = 0;
@@ -38,10 +40,10 @@ var borders = [
 		colour: "#4b4158",
 		sx: 12,
 		sy: 0,
-		x: -WIDTH/2,
-		y: -HEIGHT/2,
-		w: WIDTH*2,
-		h: HEIGHT*2
+		x: 0,
+		y: 0,
+		w: WIDTH,
+		h: HEIGHT
 	})
 ];
 var paperwork = [];
@@ -60,7 +62,7 @@ for (let a = 0; a <= WIDTH; a += WIDTH/4) {
 			a === Math.floor(WIDTH/2) && b === Math.floor(HEIGHT/2)
 		) continue;
 
-		let rsx = randInt(4, 5);
+		let rsx = randInt(4, 7);
 		let rsy = randInt(1, 2);
 		decoration.push(new Mover({
 			type: "decoration",
@@ -71,24 +73,28 @@ for (let a = 0; a <= WIDTH; a += WIDTH/4) {
 			y: b-SIZE/2+1
 		}));
 
-		enemies.push(new Mover({
-			type: "enemy",
-			sx: 0,
-			sy: 6,
-			w: SIZE/2,
-			h: SIZE/2,
-			x: a-SIZE/2,
-			y: b-SIZE/2+1,
-			SPEED: BASE_SPEED/4 + BASE_SPEED/4*Math.random(),
-			angle: Math.PI * 2 * Math.random()
-		}));
-		enemies[enemies.length-1].velocityTowardsDirection();
+		if (a === 0 || b === 0 || a === WIDTH || b === HEIGHT) {
+
+		} else {
+			enemies.push(new Mover({
+				type: "enemy",
+				sx: 0,
+				sy: 6,
+				w: SIZE/2,
+				h: SIZE/2,
+				x: a-SIZE/2,
+				y: b-SIZE/2+1,
+				SPEED: BASE_SPEED/4 + BASE_SPEED/4*Math.random(),
+				angle: Math.PI * 2 * Math.random()
+			}));
+			enemies[enemies.length-1].velocityTowardsDirection();
+		}
 	}
 }
 
 let binCount = 0;
-for (let a = -WIDTH/2; a <= WIDTH*1.5; a += WIDTH*2) {
-	for (let b = -HEIGHT/2; b <= HEIGHT*1.5; b  += HEIGHT*2) {
+for (let a = 0; a <= WIDTH; a += WIDTH) {
+	for (let b = 0; b <= HEIGHT; b  += HEIGHT) {
 		bins.push(new Mover({
 			type: "bin",
 			colour: colours[binCount],
@@ -96,7 +102,7 @@ for (let a = -WIDTH/2; a <= WIDTH*1.5; a += WIDTH*2) {
 			sy: 8+binCount*2,
 			h: SIZE*2,
 			x: a - SIZE/2,
-			y: b - SIZE/2,
+			y: b - SIZE,
 			range: SIZE*2
 		}));
 		binCount++;
@@ -137,8 +143,7 @@ $(function() {
 		update(dt);
 		render();
 
-		const fps = Math.round(1000 / dt);
-		$('#fps').text(fps);
+		fps = Math.round(1000 / dt);
 	}
 
 	let player = players[0];
@@ -240,6 +245,12 @@ $(function() {
 		player.drawHolding(ctx);
 		
 		drawAbilityRecharge(ctx);
+
+		if (SHOW_FPS) {
+			ctx.font = "30px monospace";
+			ctx.fillStyle = "rgba(255, 255, 0, 0.5)";
+			ctx.fillText(fps, 0, 30);
+		}
 	}
 
 	const drawAbilityRecharge = (ctx) => {
