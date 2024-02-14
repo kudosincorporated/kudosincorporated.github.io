@@ -1,10 +1,15 @@
-var WIDTH = 1280;
-var HEIGHT = 720;
-var SIZE = 96;
-var RATIO = 64;
-var BASE_SPEED = 2/3;
+const WIDTH = 1920;
+const HEIGHT = 1080;
+const SIZE = 96;
+const RATIO = 64;
+const BASE_SPEED = 2/3;
 
-var SHOW_HITBOXES = false;
+const MAX_TIMER = 20000;
+var timer = MAX_TIMER;
+const BIN_INCREMENT = 2000;
+const ABILITY_DECREMENT = 1000;
+
+var score = 0;
 
 class Mover {
 	constructor(props = {}) {
@@ -72,38 +77,38 @@ class Mover {
 
 	sortStack() {
 		if (pressed.indexOf(32) !== -1) {
-			if (!this.hasState("recharging")) {
-				this.addState("recharging", this.abilityRechargeTime);
+			pressed = pressed.filter(item => item !== 32);
 
-				let numberOfPaper = [];
+			timer -= ABILITY_DECREMENT;
+
+			let numberOfPaper = [];
 	
-				while (this.holding.length > 0) {
-					let found = false;
-					for (let i = 0; i < numberOfPaper.length; i++) {
-						if (numberOfPaper[i].props.colour === this.holding[0].colour) {
-							numberOfPaper[i].amount++;
-							found = true;
-							break;
-						}
+			while (this.holding.length > 0) {
+				let found = false;
+				for (let i = 0; i < numberOfPaper.length; i++) {
+					if (numberOfPaper[i].props.colour === this.holding[0].colour) {
+						numberOfPaper[i].amount++;
+						found = true;
+						break;
 					}
-					if (!found) {
-						numberOfPaper.push({
-							props: this.holding[0],
-							amount: 1
-						});
-					}
-					this.holding.shift();
 				}
-				
-				while (numberOfPaper.length > 0) {
-					let i = randInt(0, numberOfPaper.length-1);
-	
-					for (let j = 0; j < numberOfPaper[i].amount; j++) {
-						this.holding.push(numberOfPaper[i].props);
-					}
-	
-					numberOfPaper.splice(i, 1);
-				}	
+				if (!found) {
+					numberOfPaper.push({
+						props: this.holding[0],
+						amount: 1
+					});
+				}
+				this.holding.shift();
+			}
+			
+			while (numberOfPaper.length > 0) {
+				let i = randInt(0, numberOfPaper.length-1);
+
+				for (let j = 0; j < numberOfPaper[i].amount; j++) {
+					this.holding.push(numberOfPaper[i].props);
+				}
+
+				numberOfPaper.splice(i, 1);
 			}
 		}
 	}
@@ -259,11 +264,11 @@ class Mover {
 
 	spawnPaper() {
 		if (!this.hasState("print")) {
-			this.addState("print");
+			this.addState("print", 500);
 			let r = randInt(0,3);
 			let speed = BASE_SPEED * randInt(2,5);
 			let angle = Math.random()*2*Math.PI;
-			if (Math.random() < 0.25) { // Chance of coloured paper
+			if (Math.random() < 0.15) { // Chance of coloured paper
 				paperwork.push(new Mover({
 					type: "paperwork",
 					colour: colours[r],
@@ -318,6 +323,7 @@ class Mover {
 				// Bins pick up paperwork
 				if (rect1.type === "bin" && rect2.type === "paperwork") {
 					if (rect1.colour === rect2.colour) {
+						timer += BIN_INCREMENT;
 						rect2.toBeDeleted = true;
 					}
 				}
@@ -337,6 +343,11 @@ class Mover {
 
 				// Player hits enemy
 				if (rect1.type === "player" && rect2.type === "enemy") {
+
+					rect2.x = Math.random() < 0.5 ? 0 : WIDTH;
+					rect2.y = Math.random() < 0.5 ? 0 : HEIGHT;
+
+					// Drop all paper
 					while (rect1.holding.length > 0) {
 						let speed = BASE_SPEED*5;
 						let angle = Math.random() * Math.PI * 2;
@@ -371,7 +382,7 @@ class Mover {
 	}
 
 	recalculateSpeed() {
-		this.SPEED = BASE_SPEED; // Math.pow(BASE_SPEED, 1-this.holding.length/25)
+		this.SPEED = Math.pow(BASE_SPEED, 1+this.holding.length/25);
 		if (this.SPEED < 0) this.SPEED = 0;
 	}
 	
@@ -429,7 +440,7 @@ class Mover {
 
 		ctx.restore();
 
-		if (SHOW_HITBOXES) {
+		if (pressed.indexOf(16) !== -1) {
 			ctx.strokeRect(
 				this.x,
 				this.y,
@@ -440,17 +451,33 @@ class Mover {
 		}
 	}
 
+	drawScore(ctx) {
+		ctx.textAlign = "center";
+		ctx.font = "500px Comic Sans MS";
+		ctx.fillText(score, this.x+this.w/2, this.y);
+		ctx.font = "50px Impact";
+		ctx.fillText("HOLDING PAPER", this.x+this.w/2, this.y-550);
+		ctx.font = "25px Impact";
+		ctx.globalAlpha = 0.5;
+		ctx.fillText("F5 TO RESTART", this.x+this.w/2, this.y-500);
+		ctx.globalAlpha = 1;
+	}
+
 	drawHolding(ctx) {
 		ctx.save();
-		ctx.translate(this.x, this.y-SIZE*0.55);
+		ctx.translate(this.x, this.y-this.h-SIZE/8);
 		this.holding.forEach((held, i) => {
-			ctx.fillStyle = held.colour;
 			ctx.rotate(-this.vx/999);
-			ctx.fillRect(
+			ctx.drawImage(
+				spritesheet,
+				held.sx*RATIO,
+				held.sy*RATIO,
+				SIZE*0.5/SIZE*RATIO,
+				SIZE*0.4/SIZE*RATIO,
 				0,
 				-i*SIZE/6,
-				SIZE/2,
-				SIZE*0.75/2
+				SIZE*0.5,
+				SIZE*0.4
 			);
 		});
 		ctx.restore();
@@ -465,7 +492,7 @@ class Mover {
 	drawMarker(ctx) {
 		ctx.save();
 
-		let w = SIZE/2;
+		let w = SIZE;
 		let x = this.x+this.w/2-w/2;
 		let y = this.y+this.h/2-w/2;
 		if (x < 0) x = 0;

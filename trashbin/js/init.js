@@ -1,7 +1,10 @@
 var time;
 var dt;
 var fps;
-var SHOW_FPS = true;
+
+var score_interval;
+
+var game_over = false;
 
 var spritesheet = new Image();
 
@@ -37,7 +40,7 @@ var players = [
 var borders = [
 	new Mover({
 		type: "border",
-		colour: "#4b4158",
+		colour: "white",
 		sx: 12,
 		sy: 0,
 		x: 0,
@@ -115,8 +118,8 @@ for (let i = 0; i < 5; i++) {
 		colour: "transparent",
 		sx: 4,
 		sy: 0,
-		x: randInt(0, WIDTH),
-		y: randInt(0, HEIGHT)
+		x: randInt(WIDTH/4, WIDTH-WIDTH/4),
+		y: randInt(HEIGHT/4, HEIGHT-HEIGHT/4)
 	}));
 }
 
@@ -129,12 +132,16 @@ $(function() {
 
 	spritesheet.src = 'spritesheet.png';
 
+	score_interval = setInterval(function() {
+		score++;
+	}, 1000);
+
 	spritesheet.onload = function() {
 		window.requestAnimationFrame(gameLoop);
 	}
 
 	function gameLoop() {
-		requestAnimationFrame(gameLoop);
+		if (!game_over) requestAnimationFrame(gameLoop);
 
 		var now = new Date().getTime();
 		dt = now - (time || now);
@@ -181,7 +188,6 @@ $(function() {
 
 		enemies.forEach(e => {
 			e.moveFromKeyboard(dt);
-			//e.moveRandomly();
 			e.update(dt);
 			e.updateStates(dt);
 			e.bounceOnBorder(border);
@@ -195,7 +201,7 @@ $(function() {
 			e.update(dt);
 			e.updateStates(dt);
 			e.bounceOnBorder(border);
-			//e.animationController();
+			e.animationController();
 		});
 
 		decoration.forEach(e => {
@@ -205,6 +211,23 @@ $(function() {
 			e.updateStates(dt);
 			e.bounceOnBorder(border);
 		});
+
+		// Decrease timer
+		timer -= 1 * dt;
+		if (timer < 0) {
+			timer = 0;
+			borders[0].x = 0;
+			borders[0].y = HEIGHT*0.75;
+
+			players[0].y = HEIGHT*0.75;
+			players[0].holding = [];
+			bins = [];
+			copiers = [];
+			decoration = [];
+			enemies = [];
+
+			game_over = true;
+		}
 
 		// Delete binned paperwork
 		for (let i = 0; i < paperwork.length; i++) {
@@ -219,6 +242,7 @@ $(function() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		border.drawColour(ctx);
+		border.drawScore(ctx);
 
 		paperwork.forEach(e => {
 			e.draw(ctx)
@@ -244,18 +268,37 @@ $(function() {
 		player.draw(ctx);
 		player.drawHolding(ctx);
 		
-		drawAbilityRecharge(ctx);
+		drawTimer(ctx);
 
-		if (SHOW_FPS) {
-			ctx.font = "30px monospace";
-			ctx.fillStyle = "rgba(255, 255, 0, 0.5)";
+		if (pressed.indexOf(16) !== -1) {
+			ctx.textAlign = "left";
+			ctx.font = "30px serif";
+			ctx.fillStyle = "yellow";
 			ctx.fillText(fps, 0, 30);
 		}
 	}
 
-	const drawAbilityRecharge = (ctx) => {
+	const drawTimer = (ctx) => {
+		const percentage = timer/MAX_TIMER;
+
 		ctx.save();
-		ctx.fillStyle = "white";
+
+		ctx.fillStyle = "#212123";
+		ctx.fillRect(
+			WIDTH/4-SIZE/8,
+			SIZE/4-SIZE/8,
+			WIDTH/2+SIZE/4,
+			SIZE/4+SIZE/4
+		);
+
+		ctx.fillStyle = "hsl("+(percentage*100)+", 75%, 50%)";
+		ctx.fillRect(
+			WIDTH/4 + WIDTH/2 * Math.abs(percentage-1) /2,
+			SIZE/4,
+			WIDTH/2 * percentage,
+			SIZE/4
+		);
+
 		ctx.strokeStyle = "white";
 		ctx.lineWidth = 4;
 		ctx.strokeRect(
@@ -264,13 +307,7 @@ $(function() {
 			WIDTH/2,
 			SIZE/4
 		);
-		const percentage = players[0].hasState("recharging") ? players[0].hasState("recharging").value/players[0].abilityRechargeTime : 0;
-		ctx.fillRect(
-			WIDTH/4 + WIDTH/2 * percentage /2,
-			SIZE/4,
-			WIDTH/2 * Math.abs(percentage-1),
-			SIZE/4
-		);
+		
 		ctx.restore();
 	}
 
