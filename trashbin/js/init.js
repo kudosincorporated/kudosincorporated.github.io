@@ -29,12 +29,7 @@ var players = [
 		h: SIZE/2,
 		x: WIDTH/2-SIZE/2,
 		y: HEIGHT/2-SIZE/2,
-		range: SIZE,
-		holding: [{
-			colour: "#ede19e",
-			sx: 8,
-			sy: 1
-		}]
+		range: SIZE
 	})
 ];
 var borders = [
@@ -200,7 +195,7 @@ $(function() {
 			e.decelerate(dt);
 			e.update(dt);
 			e.updateStates(dt);
-			e.bounceOnBorder(border);
+			e.stopOnBorder(border);
 			e.animationController();
 		});
 
@@ -209,11 +204,12 @@ $(function() {
 			e.decelerate(dt);
 			e.update(dt);
 			e.updateStates(dt);
-			e.bounceOnBorder(border);
+			e.stopOnBorder(border);
 		});
 
 		// Decrease timer
 		timer -= 1 * dt;
+		if (timer > MAX_TIMER) timer = MAX_TIMER;
 		if (timer < 0) {
 			timer = 0;
 			borders[0].x = 0;
@@ -314,6 +310,7 @@ $(function() {
 	$('body').on('keydown', function(e) {
 		var key_code = e.which || e.keyCode;
 		pressed.push(key_code);
+		if (!has_moved) has_moved = true;
 	});
 
 	$('body').on('keyup', function(e) {

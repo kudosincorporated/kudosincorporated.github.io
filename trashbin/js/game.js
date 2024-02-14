@@ -11,6 +11,8 @@ const ABILITY_DECREMENT = 1000;
 
 var score = 0;
 
+var has_moved = false;
+
 class Mover {
 	constructor(props = {}) {
 		this.type = "";
@@ -47,6 +49,10 @@ class Mover {
 	}
 
 	moveFromKeyboard(dt) {
+
+		let x = WIDTH/2 - players[0].w/2 - borders[0].x;
+		let y = HEIGHT/2 - players[0].h/2 - borders[0].y;
+
 		if (
 			pressed.indexOf(87) !== -1 || 	// W
 			pressed.indexOf(38) !== -1 		// Up
@@ -73,6 +79,12 @@ class Mover {
 			this.x -= players[0].SPEED * dt;
 			players[0].vx = lerp(players[0].vx, this.SPEED*25, this.SPEED/9999 * dt);
 		}
+
+		
+		if (y < 0) this.y -= players[0].SPEED * dt; // Up
+		if (x < 0) this.x -= players[0].SPEED * dt; // Left
+		if (y > HEIGHT) this.y += players[0].SPEED * dt; // Down
+		if (x > WIDTH) this.x += players[0].SPEED * dt; // Right
 	}
 
 	sortStack() {
@@ -229,22 +241,37 @@ class Mover {
 	}
 
 	bounceOnBorder(border) {
+		let bounce = false;
+
 		if (this.x < border.x) {
 			this.x = border.x;
-			this.vx = -this.vx;
+			bounce = true;
 		}
+		
 		if (this.x+this.w > border.x+border.w) {
 			this.x = border.x+border.w-this.w;
-			this.vx = -this.vx;
+			bounce = true;
 		}
+
 		if (this.y < border.y) {
 			this.y = border.y;
-			this.vy = -this.vy;
+			bounce = true;
 		}
+
 		if (this.y+this.h > border.y+border.h) {
 			this.y = border.y+border.h-this.h;
-			this.vy = -this.vy;
+			bounce = true;
 		}
+
+		if (bounce) {
+			this.angle = this.angle + Math.PI*Math.random();
+			this.velocityTowardsDirection();
+			this.incrementSpeed();
+		}
+	}
+
+	incrementSpeed() {
+		this.SPEED = Math.pow(this.SPEED, 0.95);
 	}
 
 	teleportOnBorder(border) {
@@ -455,11 +482,24 @@ class Mover {
 		ctx.textAlign = "center";
 		ctx.font = "500px Comic Sans MS";
 		ctx.fillText(score, this.x+this.w/2, this.y);
-		ctx.font = "50px Impact";
-		ctx.fillText("HOLDING PAPER", this.x+this.w/2, this.y-550);
-		ctx.font = "25px Impact";
-		ctx.globalAlpha = 0.5;
-		ctx.fillText("F5 TO RESTART", this.x+this.w/2, this.y-500);
+		if (game_over) {
+			ctx.font = "50px Impact";
+			ctx.fillText("HOLDING PAPER", this.x+this.w/2, this.y-550);
+			ctx.font = "25px Impact";
+			ctx.globalAlpha = 0.5;
+			ctx.fillText("F5 TO RESTART", this.x+this.w/2, this.y-500);
+		}
+		if (!has_moved) {
+			ctx.font = "50px Impact";
+			ctx.globalAlpha = 0.75;
+			ctx.fillStyle = "black";
+			ctx.fillText("HOLDING PAPER", this.x+this.w/2, this.y+150);
+			ctx.fillText("CTRL + MINUS / F11", this.x+this.w/2, this.y+this.h-200);
+			ctx.globalAlpha = 0.5;
+			ctx.fillText("WASD / ARROWS / LEFTCLICK", this.x+this.w/2, this.y+this.h-150);
+			ctx.globalAlpha = 0.25;
+			ctx.fillText("DELIVER COLOURED PAPER TO CORNERS", this.x+this.w/2, this.y+this.h-100);
+		}
 		ctx.globalAlpha = 1;
 	}
 
