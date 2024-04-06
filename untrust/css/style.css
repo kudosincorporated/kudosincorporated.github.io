@@ -21,8 +21,7 @@ body {
 
 body, button {
 	text-transform: uppercase;
-	font-family: sans-serif;
-	font-weight: bold;
+	font-family: 'Retro Gaming', monospace;
 	font-size: 30px;
 }
 
@@ -91,7 +90,7 @@ button:disabled {
 
 .box {
 	position: relative;
-	background-image: url(/spritesheet.png);
+	background-image: url(../spritesheet.png);
 	background-size: 1000%;
 	background-position: 100px 100px;
 	height: 100px;
@@ -99,7 +98,7 @@ button:disabled {
 }
 
 .icon {
-	background-image: url(/spritesheet.png);
+	background-image: url(../spritesheet.png);
 	background-size: 1000%;
 	height: 100px;
 	width: 100px;
