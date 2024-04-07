@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>index</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="loading" class="modal">
+	Loading JSON
+</div>
+
+<div id="hover" style="display: none;"></div>
+
+<div id="topleft">
+	<span class="cycle">?</span>
+</div>
+
+<p>
+	Gold: <span class="icon coin"></span><span class="gold">?</span>
+</p>
+<p>
+	Next Payment: <span class="icon coin"></span><span class="rentDue">?</span> <span class="timeUntilNext">?</span>
+</p>
+<p><div id="map"></div></p>
+<p>
+	<button id="forage">Forage</button>
+	<button id="payRent" style="display: none;">Pay</button>
+</p>
+
+<div id="choiceModal" class="modal" style="display: none;">
+	<div id="options"></div>
+	<button id="reroll">Reroll (<span class="rerollTokens">?</span>)</button>
+</div>
+
+<!-- Outside libraries -->
+<script src="js/lib/jquery-3.7.1.min.js"></script>
+<!-- Mine -->
+<script src="js/values.js"></script>
+<script src="js/game.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>
