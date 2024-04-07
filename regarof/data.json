@@ -97,7 +97,7 @@
 			"formatted": "Sharp Rock",
 			"rarity": "common",
 			"description": "A stone with a pointed or jagged edge.",
-			"tags": [ "abiotic" ],
+			"tags": [ "mineral" ],
 			"interest": 1,
 			"sell": 3,
 			"effect": "Gives +3 for each adjacent rock."
@@ -174,7 +174,7 @@
 			"formatted": "Dry Grass",
 			"rarity": "uncommon",
 			"description": "Grass that has dried out, often found in arid regions.",
-			"tags": [ "abiotic" ],
+			"tags": [ "grass" ],
 			"interest": 2,
 			"sell": 4,
 			"effect": "No effect."
@@ -185,7 +185,7 @@
 			"formatted": "Flint",
 			"rarity": "uncommon",
 			"description": "A hard, sedimentary rock used for making sparks.",
-			"tags": [ "abiotic" ],
+			"tags": [ "mineral" ],
 			"interest": 2,
 			"sell": 4,
 			"effect": "Gives x? where ? is adjacent empty slots."
@@ -196,7 +196,7 @@
 			"formatted": "Gold Shard",
 			"rarity": "uncommon",
 			"description": "A small fragment of gold.",
-			"tags": [ "abiotic" ],
+			"tags": [ "mineral" ],
 			"interest": 2,
 			"sell": 4,
 			"effect": "All adjacent items give x2 gold."
@@ -207,7 +207,7 @@
 			"formatted": "Bones",
 			"rarity": "uncommon",
 			"description": "Hard skeletal remains of animals.",
-			"tags": [ "abiotic" ],
+			"tags": [ "animal" ],
 			"interest": 2,
 			"sell": 5,
 			"effect": "Destroys adjacent flowers, gets +1 for each flower destroyed."
@@ -251,7 +251,7 @@
 			"formatted": "Charcoal",
 			"rarity": "uncommon",
 			"description": "Black residue from partially burned wood.",
-			"tags": [ "tree", "abiotic" ],
+			"tags": [ "tree" ],
 			"interest": 3,
 			"sell": 5,
 			"effect": "No effect."
@@ -273,7 +273,7 @@
 			"formatted": "Amber",
 			"rarity": "rare",
 			"description": "Fossilized tree resin often containing insects.",
-			"tags": [ "tree", "abiotic" ],
+			"tags": [ "tree" ],
 			"interest": 4,
 			"sell": 6,
 			"effect": "This item will get +1 or -1 x number of turns randomly each turn. Can't take money.",
@@ -285,7 +285,7 @@
 			"formatted": "Wood Moss",
 			"rarity": "rare",
 			"description": "Soft, green plant growth found on trees and rocks.",
-			"tags": [ "lichen" ],
+			"tags": [ "plant" ],
 			"interest": 3,
 			"sell": 6,
 			"effect": "Swaps interest and sell value each turn."
@@ -307,7 +307,7 @@
 			"formatted": "Thistle",
 			"rarity": "rare",
 			"description": "A prickly plant with purple or pink flowers.",
-			"tags": [ "fruit" ],
+			"tags": [ "flower" ],
 			"interest": 4,
 			"sell": 6,
 			"effect": "Gives x4 when in the center."
@@ -340,7 +340,7 @@
 			"formatted": "Woolly Mullein",
 			"rarity": "ultra rare",
 			"description": "A fuzzy-leaved plant often used in herbal remedies.",
-			"tags": [ "flower" ],
+			"tags": [ "plant" ],
 			"interest": 5,
 			"sell": 10,
 			"effect": "Randomly moves items."
@@ -351,7 +351,7 @@
 			"formatted": "Pebbles",
 			"rarity": "ultra rare",
 			"description": "Small, smooth stones found near water bodies.",
-			"tags": [ "abiotic" ],
+			"tags": [ "mineral" ],
 			"interest": 5,
 			"sell": 10,
 			"effect": "Gives x2 interest if there is a tree, rock and flower in your board."
@@ -373,7 +373,7 @@
 			"formatted": "Chanterelle",
 			"rarity": "common",
 			"description": "A golden-hued mushroom with a pleasant aroma.",
-			"tags": [],
+			"tags": [ "fungi" ],
 			"interest": 1,
 			"sell": 2,
 			"effect": "x2 sell price for adjacent items."
@@ -384,7 +384,7 @@
 			"formatted": "Gem Shard",
 			"rarity": "common",
 			"description": "A shimmering fragment from a precious stone.",
-			"tags": ["mineral"],
+			"tags": [ "mineral" ],
 			"interest": 1,
 			"sell": 2,
 			"effect": "All minerals get +1 interest."
@@ -395,10 +395,10 @@
 			"formatted": "Obsidian",
 			"rarity": "ultra rare",
 			"description": "A dark, glassy rock formed from volcanic lava.",
-			"tags": [],
+			"tags": [ "mineral" ],
 			"interest": 1,
 			"sell": 2,
-			"effect": "All items get x? interest where ? is empty slots."
+			"effect": "All items get x?/2 interest where ? is empty slots."
 		},
 		{
 			"id": "penny_bun",
@@ -406,7 +406,7 @@
 			"formatted": "Penny Bun",
 			"rarity": "common",
 			"description": "A meaty, flavorful mushroom prized in culinary arts.",
-			"tags": [],
+			"tags": [ "fungi" ],
 			"interest": 1,
 			"sell": 2,
 			"effect": "5% chance to convert adjacent to higher tier."
@@ -417,7 +417,7 @@
 			"formatted": "Acorn",
 			"rarity": "common",
 			"description": "The nut of an oak, containing a single seed.",
-			"tags": ["tree"],
+			"tags": [ "tree" ],
 			"interest": 1,
 			"sell": 2,
 			"effect": "Interest is equal to amount of tree items."
@@ -428,7 +428,7 @@
 			"formatted": "Green Berries",
 			"rarity": "common",
 			"description": "",
-			"tags": [],
+			"tags": [ "berry" ],
 			"interest": 1,
 			"sell": 2,
 			"effect": "x2 Interest in right-hand column."
@@ -439,7 +439,7 @@
 			"formatted": "Mint",
 			"rarity": "common",
 			"description": "A fragrant herb commonly used in cooking and beverages.",
-			"tags": [],
+			"tags": [ "herb" ],
 			"interest": 1,
 			"sell": 2,
 			"effect": "x2 Sell price in left-hand column."
@@ -450,7 +450,7 @@
 			"formatted": "Tooth",
 			"rarity": "common",
 			"description": "A sharp, calcified structure embedded in the jawbone.",
-			"tags": [],
+			"tags": [ "animal" ],
 			"interest": -1,
 			"sell": 2,
 			"effect": "Interest is -1. Grants +5 gold every 3 turns.",
@@ -462,7 +462,7 @@
 			"formatted": "Azalea",
 			"rarity": "common",
 			"description": "",
-			"tags": [],
+			"tags": [ "flower" ],
 			"interest": -1,
 			"sell": 2,
 			"effect": "Interest is -1. Grants +3 gold every 2 turns.",
@@ -474,7 +474,7 @@
 			"formatted": "Daisy",
 			"rarity": "uncommon",
 			"description": "",
-			"tags": [],
+			"tags": [ "flower" ],
 			"interest": 2,
 			"sell": 3,
 			"effect": "25% chance to convert adjacent rocks to poppies."
@@ -485,7 +485,7 @@
 			"formatted": "Opium",
 			"rarity": "uncommon",
 			"description": "",
-			"tags": [],
+			"tags": [ "plant" ],
 			"interest": 2,
 			"sell": 3,
 			"effect": "Gets +1 sell price each turn. 1% chance to be destroyed."
@@ -496,7 +496,7 @@
 			"formatted": "Circle Stone",
 			"rarity": "uncommon",
 			"description": "",
-			"tags": [],
+			"tags": [ "mineral" ],
 			"interest": 2,
 			"sell": 3,
 			"effect": "5% chance to give +1 interest and sell price."
@@ -507,7 +507,7 @@
 			"formatted": "Sage",
 			"rarity": "uncommon",
 			"description": "An aromatic herb with small green leaves used in cooking.",
-			"tags": [],
+			"tags": [ "herb" ],
 			"interest": 2,
 			"sell": 3,
 			"effect": "Sell price +1 when any item is added."
@@ -518,7 +518,7 @@
 			"formatted": "Lavender",
 			"rarity": "uncommon",
 			"description": "A fragrant shrub with purple flowers.",
-			"tags": [],
+			"tags": [ "herb" ],
 			"interest": 2,
 			"sell": 3,
 			"effect": "Interest +1 when any item is destroyed."
@@ -529,7 +529,7 @@
 			"formatted": "Smooth Stone",
 			"rarity": "rare",
 			"description": "A stone with a polished surface.",
-			"tags": [],
+			"tags": [ "mineral" ],
 			"interest": 2,
 			"sell": 3,
 			"effect": "Converts all berries to sharp rocks."
@@ -540,7 +540,7 @@
 			"formatted": "Buttercup",
 			"rarity": "ultra rare",
 			"description": "A bright yellow flower with glossy petals.",
-			"tags": [],
+			"tags": [ "flower" ],
 			"interest": 3,
 			"sell": 4,
 			"effect": "Gains +1 interest every 5 turns.",
@@ -552,10 +552,10 @@
 			"formatted": "Fly Agaric",
 			"rarity": "ultra rare",
 			"description": "A poisonous mushroom with distinctive red caps covered in white spots.",
-			"tags": [],
+			"tags": [ "fungi" ],
 			"interest": 3,
 			"sell": 4,
-			"effect": "Destroys all adjacent items and +1 to its own interest."
+			"effect": "Destroys all adjacent items and +5 to its own interest."
 		}
 	]
 }

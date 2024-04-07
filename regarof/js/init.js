@@ -207,7 +207,6 @@ $(function() {
 							let nItem = this.arr[n];
 							if (nItem.tags.indexOf('berry') !== -1) {
 								nItem.interest = nItem.interest*2;
-								nItem.chain.i += 'x2';
 							}
 						});
 					},
@@ -435,7 +434,7 @@ $(function() {
 
 						this.arr.forEach(item => {
 							if (item === null) return;
-							item.interest = item.interest * counter;
+							item.interest = Math.floor(item.interest * counter/2);
 						});
 					},
 					"penny_bun": () => {
@@ -529,7 +528,7 @@ $(function() {
 						let occupied = this.getNeighbourIndexes(i);
 						for (let i = 0; i < occupied.length; i++) {
 							this.arr[occupied[i]] = null;
-							item.counter++;
+							item.counter += 5;
 						}
 						item.interest = 1 + item.counter;
 					}
