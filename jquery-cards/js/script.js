@@ -7,17 +7,37 @@ const updateCards = (cards) => {
     $('#hand').html('');
     $('#tabs').html('');
 
-    for (let i = 0; i < cards.length; i++) {
-        $('#hand').append( returnCardDOM(cards[i]) );
-        $('#tabs').append( returnCardDOM(cards[i]) );
-    }
-
     let $lastPage = $('<div>').addClass('card').attr('id', 'lastPage');
-    $lastPage.append('Nothing revealed yet.');
+    let $lastPageIcon = $('<div>').addClass('card').attr('id', 'lastPageIcon');
+
+    for (let i = 0; i < cards.length; i++) {
+        const card = cards[i];
+
+        $('#hand').append( returnCardDOM(card) );
+        $('#tabs').append( returnCardDOM(card) );
+        
+        let $block = $('<div>').addClass('block');
+
+        let $name = $('<div>').addClass('name').text(card.name);
+        let $inverted = $('<div>').addClass('subtitle').text(card.inverted ? "Reversed" : "");
+        let $facing = $('<div>').text(card.facing);
+        let $reversed = $('<div>').text(card.reversed);
+        let $advice = $('<div>').text(card.advice);
+
+        $block.append($name);
+        $block.append($inverted);
+        if (!card.inverted) {
+            $block.append($facing);
+        } else {
+            $block.append($reversed);
+        }
+        $block.append($advice);
+
+        $lastPage.append($block);
+    }
     $('#hand').append($lastPage);
 
-    let $lastPageIcon = $('<div>').addClass('card').attr('id', 'lastPageIcon');
-    $lastPageIcon.append('?');
+    $lastPageIcon.append('≡');
     $('#tabs').append($lastPageIcon);
 
 }
@@ -67,6 +87,7 @@ $(function() {
 
         $('#hand').on('mousedown', '.card', function() {
             const index = $(this).index();
+            if (index === $('#hand .card').length-1) return;
             hand[index].flipped = !hand[index].flipped;
             $('#hand .card').eq(index).toggleClass('flipped');
             $('#tabs .card').eq(index).toggleClass('flipped');

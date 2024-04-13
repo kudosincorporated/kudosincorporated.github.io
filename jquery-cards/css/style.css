@@ -9,10 +9,13 @@
 }
 
 body {
+	background: rgb(25,25,112);
+	background: linear-gradient(0deg, rgba(25,25,112,1) 0%, rgba(17,17,17,1) 100%);
+	color: #ffffe6;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
 	align-items: center;
+	justify-content: start;
 	gap: 10px;
 	height: 100vh;
 	padding: 10px;
@@ -25,25 +28,33 @@ ul {
 }
 
 img {
-	object-fit: contain;
-	height: 100%;
-	width: 100%;
+	object-fit: cover;
+	height: 90%;
+	width: 90%;
 }
 
 .cards {
 	overflow: hidden;
+	height: 50%;
 	width: 100%;
+	max-width: 400px;
 }
 
 #hand {
-	height: 80%;
+	height: 70%;
 }
 
 #tabs {
-	height: 20%;
+	position: fixed;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	height: 15%;
+	width: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	gap: 10px;
 }
 
 .card {
@@ -51,9 +62,16 @@ img {
 	height: 100%;
 	width: 100%;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	cursor: pointer;
+	gap: 20px;
+	overflow: auto;
+	background-color: white;
+	border: 1px solid black;
+	box-shadow: 0 5px 10px black;
+	color: black;
+	border-radius: 5px;
 }
 
 .card .back {
@@ -67,23 +85,21 @@ img {
 	opacity: 0;
 }
 
-#tabs {
-	background-color: grey;
-	border-radius: 10px;
-}
-
-#tabs .card {
-	padding: 20px;
-}
-
-#tabs img {
-	height: 75%;
-}
-
-#tabs .card:hover {
-	background-color: lightgrey;
-}
-
 #lastPageIcon {
 	font-size: 3em;
+}
+
+.block {
+	width: 90%;
+}
+
+.name {
+	font-size: 2em;
+	font-weight: bold;
+}
+
+#hand .card {
+	margin: 20px;
+	width: calc(100% - 40px);
+	height: calc(100% - 40px);
 }
