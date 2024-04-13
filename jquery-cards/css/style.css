@@ -1,0 +1,89 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+.inverted img {
+	transform: scale(-1);
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	height: 100vh;
+	padding: 10px;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+img {
+	object-fit: contain;
+	height: 100%;
+	width: 100%;
+}
+
+.cards {
+	overflow: hidden;
+	width: 100%;
+}
+
+#hand {
+	height: 80%;
+}
+
+#tabs {
+	height: 20%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.card {
+	position: relative;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+.card .back {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+}
+
+.card:not(.flipped) .back {
+	opacity: 0;
+}
+
+#tabs {
+	background-color: grey;
+	border-radius: 10px;
+}
+
+#tabs .card {
+	padding: 20px;
+}
+
+#tabs img {
+	height: 75%;
+}
+
+#tabs .card:hover {
+	background-color: lightgrey;
+}
+
+#lastPageIcon {
+	font-size: 3em;
+}
