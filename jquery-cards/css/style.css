@@ -4,102 +4,129 @@
 	box-sizing: border-box;
 }
 
-.inverted img {
+.card.inverted .inner .front img {
 	transform: scale(-1);
 }
 
 body {
-	background: rgb(25,25,112);
-	background: linear-gradient(0deg, rgba(25,25,112,1) 0%, rgba(17,17,17,1) 100%);
-	color: #ffffe6;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: start;
-	gap: 10px;
 	height: 100vh;
-	padding: 10px;
-}
-
-ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+	overflow: hidden;
 }
 
 img {
-	object-fit: cover;
-	height: 90%;
-	width: 90%;
-}
-
-.cards {
-	overflow: hidden;
-	height: 50%;
+	object-fit: contain;
+	height: 100%;
 	width: 100%;
-	max-width: 400px;
-}
-
-#hand {
-	height: 70%;
-}
-
-#tabs {
-	position: fixed;
-	bottom: 10px;
-	left: 50%;
-	transform: translateX(-50%);
-	height: 15%;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 10px;
 }
 
 .card {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.card .inner {
 	position: relative;
 	height: 100%;
 	width: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 20px;
-	overflow: auto;
-	background-color: white;
-	border: 1px solid black;
-	box-shadow: 0 5px 10px black;
-	color: black;
-	border-radius: 5px;
+	transform-style: preserve-3d;
 }
 
-.card .back {
+.card .inner .front,
+.card .inner .back {
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translateX(-50%) translateY(-50%);
+	width: 100%;
+	height: 100%;
+	-webkit-backface-visibility: hidden; /* Safari */
+	backface-visibility: hidden;
 }
 
-.card:not(.flipped) .back {
-	opacity: 0;
+.card.flipped .inner .back {
+	transform: rotateY(180deg);
 }
 
-#lastPageIcon {
-	font-size: 3em;
-}
-
-.block {
-	width: 90%;
-}
-
-.name {
-	font-size: 2em;
-	font-weight: bold;
+#hand {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	height: 150px;
+	width: 100%;
 }
 
 #hand .card {
-	margin: 20px;
-	width: calc(100% - 40px);
-	height: calc(100% - 40px);
+	flex: 1;
+}
+
+#look {
+	height: calc(100% - 150px);
+}
+
+.card.selected {
+	position: relative;
+	top: -10px;
+}
+
+#hand .content {
+	display: none;
+}
+
+#look .icon {
+	display: none;
+}
+
+.icon {
+	font-size: 3em;
+}
+
+#look {
+	position: relative;
+}
+
+#look .card {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%);
+	animation: slide 300ms forwards;
+}
+
+@keyframes slide {
+	0% {
+		top: 90%;
+		opacity: 0.5;
+	}
+	100% {
+		top: 0;
+		opacity: 1;
+	}
+}
+
+#look .card {
+	max-width: 350px;
+	max-height: 600px;
+}
+
+.card {
+	padding: 10px;
+	background-color: white;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.card .inner {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#hand {
+	gap: 10px;
+	padding: 10px;
+}
+
+#look {
+	position: relative;
+	top: 10px;
 }
