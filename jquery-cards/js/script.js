@@ -44,21 +44,6 @@ const returnInfoDOM = (card) => {
     return $info;
 }
 
-const returnPageDOM = () => {
-    let $card = $('<div>').addClass('card lastPageEver');
-    let $inner = $('<div>').addClass('inner');
-    
-    let $icon = $('<div>').addClass('icon').text('?');
-    let $content = $('<div>').addClass('content desc');
-
-    $inner.append($icon);
-    $inner.append($content);
-
-    $card.append($inner);
-
-    return $card;
-}
-
 $(function() {
     $.getJSON("tarot-images.json", function(data) {
 
@@ -71,47 +56,52 @@ $(function() {
         // Assign reversed
         tarotCards.forEach(card => card.inverted = Math.random() < 0.5);
 
-        $('#hand').append(
-            returnPageDOM()
-        );
-        for (let i = 0; i < 3; i++) {
-            $('#hand').prepend(
-                returnCardDOM(tarotCards[i])
-            );
+        let drawn = 0;
+        let lastClicked = 0;
 
-            $('.desc').prepend(
-                returnInfoDOM(tarotCards[i])
-            );
-        }
+        // Start
+        $('#hand').prepend(returnCardDOM(tarotCards[drawn]));
+        $('#look').prepend(returnCardDOM(tarotCards[drawn]));
+        drawn++;
 
-        let latestCard = 0;
-
+        // Interaction
         $('#look').on('click', '.card', function() {
-            // Clicked card flipped
+
+            // Flip
             $(this).toggleClass('flipped');
-            $('#hand .card').eq(latestCard).toggleClass('flipped');
+
+            $('#hand .card').eq(lastClicked).toggleClass('flipped');
+
         });
 
         $('#hand').on('click', '.card', function() {
+
             const index = $(this).index();
-            if (latestCard === index) return;
-            latestCard = index;
+            const length = $('#hand .card').length;
 
-            // Remove duplicate cards
-            const search = $(this).find('.front img').attr('src');
-            $('#look .card').each(function() {
-                const src = $(this).find('.front img').attr('src');
-                if (search === src) $(this).remove();
-            });
+            if (index === length-1) {
+                const lastElement = $('#hand .card').eq(length-1);
 
-            // Append clicked card
-            $('#look').append(
-                $(this).clone()
-            );
+                drawn++;
+                const elementToInsert = returnCardDOM(tarotCards[drawn]);
 
-            // Clicked card selected
-            $('#hand .card').removeClass('selected');
-            $(this).addClass('selected');
+                elementToInsert.insertBefore(lastElement);
+
+                lastClicked = length-1;
+
+                // Clone card to Look
+                $('#look').html(
+                    elementToInsert.clone()
+                );
+            } else {
+                lastClicked = index;
+
+                // Clone card to Look
+                $('#look').html(
+                    $(this).clone()
+                );
+            }
+
         });
 
     });
