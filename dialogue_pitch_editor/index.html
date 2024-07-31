@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>dialogue</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+
+label,
+input {
+    display: block;
+    width: 300px;
+}
+
+    </style>
+</head>
+<body>
+
+<button id="play">Play Sounds</button>
+
+<div>
+    <label for="delay-slider">Delay (ms): </label>
+    <input type="range" id="delay-slider" min="1" max="500" value="150">
+    <span id="delay-value">150 ms</span>
+</div>
+
+<div>
+    <label for="speech-length-slider">Speech Length: </label>
+    <input type="range" id="speech-length-slider" min="1" max="20" value="10">
+    <span id="speech-length-value">10</span>
+</div>
+
+<div>
+    <label for="rate-slider">Rate: </label>
+    <input type="range" id="rate-slider" min="0.01" max="2.0" step="0.05" value="1.0">
+    <span id="rate-value">1x</span>
+</div>
+
+<button id="reset">Reset Sliders</button>
+
+<!-- Outside libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+<!-- Mine -->
+<script src="scripts.js"></script>
+</body>
+</html>
