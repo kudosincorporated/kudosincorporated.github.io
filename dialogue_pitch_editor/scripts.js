@@ -70,7 +70,7 @@ $('#play').on('click', function() {
         setTimeout(function() {
             // select a random sound and play it
             var random_index = Math.floor(Math.random() * num_of_sounds);
-            gibberish_sounds_lowered_slowed[random_index].rate(rate).play();
+            gibberish_sounds[random_index].rate(rate).play();
         }, i * delay);
     }
 });
