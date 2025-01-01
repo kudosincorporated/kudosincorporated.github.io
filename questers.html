@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Questers</title>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+
+//the true items
+
+function itembar() {
+	$("#list1").on('click', 'li', function () {
+		$(this).remove().appendTo('#list2');
+	});
+
+	$("#list2").on('click', 'li', function () {
+		if (document.getElementById("list1").getElementsByTagName("li").length == 5) {
+			//null
+		}
+		else {
+			$(this).remove().appendTo('#list1');
+		}
+	});
+}
+
+	function colorise() {
+		$("li:contains(Broken), li:contains(Weak), li:contains(Dull), li:contains(Shoddy), li:contains(Awkward)")
+		.css({
+			"color" : "gray",
+			"fontWeight" : "normal"
+		});
+		$("li:contains(Large), li:contains(Dangerous), li:contains(Savage), li:contains(Sharp), li:contains(Tiny), li:contains(Bulky), li:contains(Heavy), li:contains(Light), li:contains(Rapid), li:contains(Hasty), li:contains(Intimidating), li:contains(Powerful), li:contains(Strong), li:contains(Intense), li:contains(Furious), li:contains(Quick)")
+		.css({
+			"color" : "limegreen",
+			"fontWeight" : "bold"
+		});
+		$("li:contains(Keen), li:contains(Superior), li:contains(Forceful), li:contains(Deadly), li:contains(Agile), li:contains(Nimble), li:contains(Adept)")
+		.css({
+			"color" : "turquoise",
+			"fontWeight" : "bold"
+		});
+		$("li:contains(Murderous), li:contains(Manic), li:contains(Sighted), li:contains(Unpleasant), li:contains(Mystic), li:contains(Ruthless)")
+		.css({
+			"color" : "dodgerblue",
+			"fontWeight" : "bold"
+		});
+		$("li:contains(Arcane), li:contains(Frenzying), li:contains(Masterful), li:contains(Demonic), li:contains(Unreal)")
+		.css({
+			"color" : "coral",
+			"fontWeight" : "bold"
+		});
+		$("li:contains(Legendary), li:contains(Celestial), li:contains(Mythical)")
+		.css({
+			"color" : "orchid",
+			"fontWeight" : "bold",
+			"fontStyle" : "italic"
+		});
+		$("li:contains(Godly)")
+		.css({
+			"color" : "gold",
+			"fontWeight" : "bold",
+			"textDecoration" : "underline"
+		});
+		$("li:contains(Excalibur)")
+		.css({
+			"color" : "orange",
+			"text-shadow" : "0px 2px 5px gold",
+			"fontWeight" : "bold",
+			"font-size" : "1.5em"
+		});
+
+		$("li:contains(ATK)")
+		.css({
+			"background-color" : "coral"
+		});
+		$("li:contains(DEF)")
+		.css({
+			"background-color" : "cornflowerblue"
+		});
+		$("li:contains(HLT)")
+		.css({
+			"background-color" : "limegreen"
+		});
+		$("li:contains(LCK)")
+		.css({
+			"background-color" : "gold"
+		});
+
+		if ($("#list1 li:contains(ATK)")) {
+			clickDamage = 10 + (3 * $("#list1 li:contains(ATK)").length);
+		}
+
+		if ($("#list1 li:contains(DEF)")) {
+			defence = 0 + (1 * $("#list1 li:contains(DEF)").length);
+		}
+
+		if ($("#list1 li:contains(HLT)")) {
+			healthregen = 0 + (2 * $("#list1 li:contains(HLT)").length);
+		}
+
+		if ($("#list1 li:contains(LCK)")) {
+			luck = 0 + (1 * $("#list1 li:contains(LCK)").length);
+		}
+	}
+
+	function dispClicker() {
+		document.getElementById("clicker").style.display = "block";
+		document.getElementById("inventory").style.display = "none";
+		document.getElementById("tabClicker").style.fontWeight = "bold";
+		document.getElementById("tabInventory").style.fontWeight = "normal";
+	}
+
+	function dispInventory() {
+		document.getElementById("clicker").style.display = "none";
+		document.getElementById("inventory").style.display = "block";
+		document.getElementById("tabClicker").style.fontWeight = "normal";
+		document.getElementById("tabInventory").style.fontWeight = "bold";
+	}
+
+	var clicks = 0;
+	var gems = 0;
+	var coins = 0;
+	var shops = 0;
+	var shopCost = 15;
+	var knights = 0;
+	var knightCost = 100;
+	var mages = 0;
+	var mageCost = 500;
+	var health = 100;
+	var healthValue = 100;
+	var playerHealth = 100;
+	var playerHealthValue = 100;
+	var slashBought = 0;
+	var slashLevel = 0;
+
+	var clickDamage = 10;
+	var defence = 0;
+	var healthregen = 0;
+	var luck = 0;
+
+	function add() {
+		clicks++;
+		document.getElementById("inc").innerHTML = clicks;
+	}
+
+	function randGem() {
+		if (Math.random() * 100 <= 10) {
+		var gemArray = [1, 2, 3, 4, 5];
+		var gemCount = gemArray[Math.floor(Math.random() * gemArray.length)];
+			gems = gems + gemCount;
+			document.getElementById("gems").innerHTML = gems;
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			li.appendChild(document.createTextNode("You find "));
+			li.appendChild(document.createTextNode(gemCount));
+			li.appendChild(document.createTextNode(" gems."));
+			li.style.color = "orangered";
+			ul.appendChild(li);
+		}
+	}
+
+	function buyShop() {
+		if (clicks >= shopCost) {
+			shops++;
+			clicks = clicks - shopCost;
+			shopCost = Math.floor(15 * Math.pow(1.05,shops));
+			document.getElementById("inc").innerHTML = clicks;
+			document.getElementById("shops").innerHTML = shops;
+			document.getElementById("shopCost").innerHTML = shopCost;
+		}
+	}
+
+	function shop() {
+		if (shops >= 1) {
+			clicks = clicks + shops;
+			document.getElementById("inc").innerHTML = clicks;
+
+			var health = document.getElementById("health");
+			health.value -= (shops * 0.25);
+			document.getElementById("healthValue").innerHTML = (health.value).toFixed(0);
+		}
+	}
+
+	window.setInterval(function(){
+		shop();
+	}, 10000);
+	
+	function buyKnight() {
+		if (clicks >= knightCost) {
+			knights++;
+			clicks = clicks - knightCost;
+			knightCost = Math.floor(100 * Math.pow(1.05,knights));
+			document.getElementById("inc").innerHTML = clicks;
+			document.getElementById("knights").innerHTML = knights;
+			document.getElementById("knightCost").innerHTML = knightCost;
+		}
+	}
+
+	function knight() {
+		if (knights >= 1) {
+			clicks = clicks + knights;
+			document.getElementById("inc").innerHTML = clicks;
+
+			var health = document.getElementById("health");
+			health.value -= (knights * 0.25);
+			document.getElementById("healthValue").innerHTML = (health.value).toFixed(0);
+		}
+	}
+
+	window.setInterval(function(){
+		knight();
+	}, 2000);
+
+	function buyMage() {
+		if (clicks >= mageCost) {
+			mages++;
+			clicks = clicks - mageCost;
+			mageCost = Math.floor(500 * Math.pow(1.05,mages));
+			document.getElementById("inc").innerHTML = clicks;
+			document.getElementById("mages").innerHTML = mages;
+			document.getElementById("mageCost").innerHTML = mageCost;
+		}
+	}
+
+	function mage() {
+		if (mages >= 1) {
+			clicks = clicks + mages;
+			document.getElementById("inc").innerHTML = clicks;
+
+			var health = document.getElementById("health");
+			health.value -= (mages * 0.25);
+			document.getElementById("healthValue").innerHTML = (health.value).toFixed(0);
+		}
+	}
+
+	window.setInterval(function(){
+		mage();
+	}, 250);
+
+	function newEnemy() {	
+		var descArray = [
+"Crazed",
+"Stupid",
+"Brainless",
+"Deadly",
+"Mischievous",
+"Evil",
+"Enraged",
+"Angry",
+"Fearsome",
+"Insane"
+		];
+		var desc = descArray[Math.floor(Math.random() * descArray.length)];
+		
+		var nameArray = [
+"goblin",
+"orc",
+"troll",
+"elf",
+"wizard",
+"spectre",
+"ghost",
+"imp",
+"demon",
+"dragon",
+"vampire",
+"serpent",
+"werewolf",
+"zombie",
+"dwarf",
+"slime"
+		];
+		var name = nameArray[Math.floor(Math.random() * nameArray.length)];
+
+		document.getElementById("newEnemy").innerHTML = (desc + " " + name);
+	}
+
+	function death() {
+		var health = document.getElementById("health");
+		if (health.value <= 0) {
+			health.value = 100;
+			document.getElementById("healthValue").innerHTML = 100;
+
+			newEnemy();
+
+			var coinArray = [1, 2, 3, 4, 5];
+			var coinCount = coinArray[Math.floor(Math.random() * coinArray.length)];
+			coinCount = coinCount + luck;
+			coins = coins + coinCount;
+			document.getElementById("coins").innerHTML = coins;
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			li.appendChild(document.createTextNode("You gain "));
+			li.appendChild(document.createTextNode(coinCount));
+			li.appendChild(document.createTextNode(" coins."));
+			li.style.color = "orange";
+			ul.appendChild(li);
+		}
+	}
+
+	window.setInterval(function(){
+		death();
+	}, 10);
+
+	function walk() {
+
+		var health = document.getElementById("health");
+		health.value -= clickDamage;
+		document.getElementById("healthValue").innerHTML = (health.value).toFixed(0);
+
+	if (healthregen >= 1) {
+		if (Math.random() * 100 <= 5) {
+			var playerHealth = document.getElementById("playerHealth");
+			playerHealth.value += healthregen;
+			document.getElementById("playerHealthValue").innerHTML = playerHealth.value;
+
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			li.appendChild(document.createTextNode("You regenerate "));
+			li.appendChild(document.createTextNode(healthregen));
+			li.appendChild(document.createTextNode(" health."));
+			li.style.color = "limegreen";
+			ul.appendChild(li);
+		}
+	}
+
+		if (Math.random() * 100 <= 10) {
+			var damageArray = [1, 2, 3, 4, 5];
+			var damage = damageArray[Math.floor(Math.random() * damageArray.length)];
+
+			if (damage >= defence) {
+				damage -= defence;
+			}
+
+			var playerHealth = document.getElementById("playerHealth");
+			playerHealth.value -= damage;
+			document.getElementById("playerHealthValue").innerHTML = playerHealth.value;
+		}
+
+		var rand = Math.floor(Math.random() * 100);
+		if (rand <= 5) {
+			genItem();
+		}
+		else {
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			var myArray = ["You wander a bit further.", "You move to the next room.", "The fight is over.", "Your hands are bloodstained.", "The next door beckons.", "You fight with vigour.", "Your armour is battle-worn.", "You fight endlessly.", "You smell battle.", "You walk down a hallway.", "The door slams behind you.", "You smell treasure.", "All is quiet, finally."];
+			var char1 = myArray[Math.floor(Math.random() * myArray.length)];
+			li.appendChild(document.createTextNode(char1));
+			ul.appendChild(li);
+		}
+
+		if (document.getElementById("playerHealth").value == 0) {
+			clicks = 0;
+		
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			ul.innerHTML = "";
+			li.appendChild(document.createTextNode("You're dead! Heal up!"));
+			li.style.color = "red";
+			ul.appendChild(li);
+		}
+	}
+
+	function clearLog() {
+	var ul = document.getElementById("log");
+	var li = document.createElement("li");
+	ul.innerHTML = "";
+	li.appendChild(document.createTextNode("Log cleared."));
+	ul.appendChild(li);
+	}
+
+	function seeBarracks() {
+		if (clicks >= 15 || shops >= 1) {
+			document.getElementById("barracks").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		seeBarracks();
+	}, 10);
+
+	function seeMarket() {
+		if (coins >= 5) {
+			document.getElementById("market").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		seeMarket();
+	}, 10);
+	
+	function seeTradingPost() {
+		if (gems >= 1) {
+			document.getElementById("tradingPost").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		seeTradingPost();
+	}, 10);
+
+	function seeKnights() {
+		if (clicks >= 50 || shops >= 1) {
+			document.getElementById("knightCover").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		seeKnights();
+	}, 10);
+
+	function seeMages() {
+		if (clicks >= 100 || knights >= 1) {
+			document.getElementById("mageCover").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		seeMages();
+	}, 10);
+
+	function total(){
+		var total = ((0.1 * shops) + (0.5 * knights) + (4 * mages)).toFixed(1);
+		document.getElementById("total").innerHTML = total;
+	};
+
+	window.setInterval(function(){
+		total();
+	}, 10);
+
+	//saving
+	// loading
+
+	window.onload = setTimeout( function() {
+		setInterval( function() {
+			save();
+		}, 1000);
+	}, 1000);
+
+	function save() {
+	var playerHealth = document.getElementById("playerHealth").value;
+	var playerHealthValue = document.getElementById("playerHealthValue").innerHTML;
+
+	var save = {
+		clicks: clicks,
+		gems: gems,
+		coins: coins,
+		shops: shops,
+		shopCost: shopCost,
+		knights: knights,
+		knightCost: knightCost,
+		mages: mages,
+		mageCost: mageCost,
+		playerHealth: playerHealth,
+		playerHealthValue: playerHealthValue,
+		slashBought: slashBought,
+		slashLevel: slashLevel
+		};
+		localStorage.setItem("save",JSON.stringify(save));
+
+			//the list
+
+		var items = document.querySelectorAll("#list li");
+		var array = Array.prototype.map.call(items, function(item) {
+			return item.textContent;
+		});
+		localStorage.setItem("list", JSON.stringify(array));
+
+			//the runes (List1)
+
+		var runes = document.querySelectorAll("#list1 li");
+		var runesarray = Array.prototype.map.call(runes, function(rune) {
+			return rune.textContent;
+		});
+		localStorage.setItem("list1", JSON.stringify(runesarray));
+
+			//the runes (List2)
+
+		var runes2 = document.querySelectorAll("#list2 li");
+		var runesarray2 = Array.prototype.map.call(runes2, function(rune2) {
+			return rune2.textContent;
+		});
+		localStorage.setItem("list2", JSON.stringify(runesarray2));
+	}
+
+	function load() {
+		var savegame = JSON.parse(localStorage.getItem("save"));
+
+		if (typeof savegame.clicks !== "undefined") clicks = savegame.clicks;
+		if (typeof savegame.gems !== "undefined") gems = savegame.gems;
+		if (typeof savegame.coins !== "undefined") coins = savegame.coins;
+		if (typeof savegame.shops !== "undefined") shops = savegame.shops;
+		if (typeof savegame.shopCost !== "undefined") shopCost = savegame.shopCost;
+		if (typeof savegame.knights !== "undefined") knights = savegame.knights;
+		if (typeof savegame.knightCost !== "undefined") knightCost = savegame.knightCost;
+		if (typeof savegame.mages !== "undefined") mages = savegame.mages;
+		if (typeof savegame.mageCost !== "undefined") mageCost = savegame.mageCost;
+
+		if (typeof savegame.playerHealth !== "undefined") playerHealth = savegame.playerHealth;
+		if (typeof savegame.playerHealthValue !== "undefined") playerHealthValue = savegame.playerHealthValue;
+		if (typeof savegame.slashBought !== "undefined") slashBought = savegame.slashBought;
+		if (typeof savegame.slashLevel !== "undefined") slashLevel = savegame.slashLevel;
+
+		document.getElementById("inc").innerHTML = clicks;
+		document.getElementById("gems").innerHTML = gems;
+		document.getElementById("coins").innerHTML = coins;
+		document.getElementById("shops").innerHTML = shops;
+		document.getElementById("shopCost").innerHTML = shopCost;
+		document.getElementById("knights").innerHTML = knights;
+		document.getElementById("knightCost").innerHTML = knightCost;
+		document.getElementById("mages").innerHTML = mages;
+		document.getElementById("mageCost").innerHTML = mageCost;
+
+		document.getElementById("playerHealth").value = playerHealth;
+		document.getElementById("playerHealthValue").innerHTML = playerHealthValue;
+
+		document.getElementById("slashLevel").innerHTML = slashLevel;
+
+		//the list
+
+		var saved = JSON.parse(localStorage.getItem("list")) || [];
+		saved.forEach(addLi);
+
+		//the runes (List1)
+
+		var savedrunes = JSON.parse(localStorage.getItem("list1")) || [];
+		savedrunes.forEach(addLi1);
+
+		//the runes (List2)
+
+		var savedrunes2 = JSON.parse(localStorage.getItem("list2")) || [];
+		savedrunes2.forEach(addLi2);
+	}
+
+	function addLi1(text) {
+		var ulList1 = document.getElementById("list1");
+		var li = document.createElement("li");
+		li.appendChild(document.createTextNode(text));
+		ulList1.appendChild(li);
+	}
+
+	function addLi2(text) {
+		var ulList2 = document.getElementById("list2");
+		var li = document.createElement("li");
+		li.appendChild(document.createTextNode(text));
+		ulList2.appendChild(li);
+	}
+
+	function addLi(text) {
+		var ul = document.getElementById("list");
+		var li = document.createElement("li");
+		li.appendChild(document.createTextNode(text));
+		ul.appendChild(li);
+	}
+
+	function del() {
+		localStorage.removeItem("save");
+		localStorage.removeItem("list");
+		localStorage.removeItem("list1");
+		localStorage.removeItem("list2");
+		location.reload();
+	}
+
+	//items
+	
+	function genItem() {
+		var ulList = document.getElementById("list");
+		var liList = document.createElement("li");
+	
+		var adjArray = [
+"Broken",
+"Weak",
+"Dull",
+"Shoddy",
+"Awkward",
+
+"Large",
+"Dangerous",
+"Savage",
+"Sharp",
+"Tiny",
+"Bulky",
+"Heavy",
+"Light",
+"Rapid",
+"Hasty",
+"Intimidating",
+"Powerful",
+"Strong",
+"Intense",
+"Furious",
+"Quick",
+
+"Keen",
+"Superior",
+"Forceful",
+"Deadly",
+"Agile",
+"Nimble",
+"Murderous",
+"Manic",
+"Sighted",
+"Unpleasant",
+"Arcane",
+"Adept",
+
+"Mystic",
+"Ruthless",
+"Frenzying",
+"Masterful",
+"Demonic",
+"Celestial",
+"Legendary",
+"Unreal",
+"Mythical",
+
+"Godly"
+		];
+		var adj = adjArray[Math.floor(Math.random() * adjArray.length)];
+		
+		var itemArray = [
+"Bola",
+"Boomerang",
+"Bow",
+"Crossbow",
+"Longbow",
+"Slingshot",
+"Dagger",
+"Tomahawk",
+
+"Spear",
+"Club",
+"Halberd",
+"Lance",
+"Sabre",
+"Sword",
+"Longsword",
+"Sheild",
+
+"Spellbook",
+"Runestone",
+"Gemstone",
+"Orbstone",
+"Staff",
+"Wand",
+"Scepter",
+"Robe"
+		];
+		var item = itemArray[Math.floor(Math.random() * itemArray.length)];
+
+		liList.appendChild(document.createTextNode(adj + " " + item));
+
+			ulList.appendChild(liList);
+
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+
+			li.appendChild(document.createTextNode("You loot a "));
+			li.appendChild(document.createTextNode(liList.innerHTML));
+			li.appendChild(document.createTextNode("."));
+
+			ul.appendChild(li);
+
+			colorise();
+
+	}
+
+var complete = 0;
+
+function delItem() {
+$(function() {
+	$("#list li").click(
+		function() {
+			$(this).closest("li").remove();
+			gems = gems + 10;
+			document.getElementById("gems").innerHTML = gems;
+		});
+});
+}
+
+function healthPotion() {
+	if (coins >= 5 && document.getElementById("playerHealth").value < 100) {
+
+		var playerHealth = document.getElementById("playerHealth");
+		playerHealth.value += 20;
+		document.getElementById("playerHealthValue").innerHTML = playerHealth.value;
+
+		coins = coins - 5;
+		document.getElementById("coins").innerHTML = coins;
+	}
+}
+
+function excalibur() {
+	if (clicks >= 1000 && coins >= 300 && gems >= 300) { //testing
+
+		clicks = clicks - 1000;
+		document.getElementById("inc").innerHTML = clicks;
+
+		coins = coins - 300;
+		document.getElementById("coins").innerHTML = coins;
+
+		gems = gems - 300;
+		document.getElementById("gems").innerHTML = gems;
+
+		var ulList = document.getElementById("list");
+		var liList = document.createElement("li");
+
+		liList.appendChild(document.createTextNode("Excalibur"));
+
+		ulList.appendChild(liList);
+
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+
+			li.appendChild(document.createTextNode("You loot Excalibur."));
+			li.style.fontSize = "1.5em";
+			li.style.color = "orange";
+			li.style.textShadow = "0px 2px 5px gold";
+			ul.appendChild(li);
+
+		colorise();
+	}
+}
+
+
+//abilities
+
+function buySlash() {
+	if (coins >= 100) {
+		slashBought = 1;
+		coins = coins - 100;
+		document.getElementById("coins").innerHTML = coins;
+		document.getElementById("slashCover").style.display = "block";
+		document.getElementById("buySlash").style.display = "none";
+	}
+}
+
+function seeSlash() {
+	if (slashBought != 0) {
+		document.getElementById("slashCover").style.display = "block";
+		document.getElementById("buySlash").style.display = "none";
+	}
+	if (slashLevel == 8) {
+		document.getElementById("slashLevel").innerHTML = "100 (Max. Level)";
+	}
+}
+
+function levelSlash() {
+	if (coins >= 50 && slashLevel <= 7) {
+		slashLevel++;
+		coins = coins - 50;
+		document.getElementById("coins").innerHTML = coins;
+		document.getElementById("slashLevel").innerHTML = 20 + (slashLevel * 10);
+	}
+	if (slashLevel == 8) {
+		document.getElementById("slashLevel").innerHTML = "100 (Max. Level)";
+	}
+}
+
+function slash() {
+	document.getElementById("slash").disabled = true;
+	setTimeout(function(){document.getElementById("slash").disabled = false;}, 5000);
+
+	var health = document.getElementById("health");
+	var slashProgress = document.getElementById("slashProgress");
+
+	var slashDamage = (20 + (slashLevel * 10));
+
+	health.value -= slashDamage;
+	document.getElementById("healthValue").innerHTML = health.value;
+
+	var decrease = setInterval(
+		function() {
+			slashProgress.value -= 1;
+		},
+	50);
+
+	setTimeout(function() {
+		slashProgress.value = 100;
+		clearInterval(decrease);
+	}, 5000);
+
+			var ul = document.getElementById("log");
+			var li = document.createElement("li");
+			li.appendChild(document.createTextNode("You slash at the enemy."));
+			ul.appendChild(li);
+}
+
+	function canBuySlash() {
+		if (coins >= 10 && slashBought != 1) {
+			document.getElementById("buySlash").style.display = "block";
+		}
+		if (slashBought != 0) {
+			document.getElementById("canUpgradeSlash").style.display = "block";
+		}
+	}
+
+	window.setInterval(function(){
+		canBuySlash();
+	}, 10);
+
+function seeRunes() {
+	var list1length = document.getElementById("list1").getElementsByTagName("li").length;
+	var list2length = document.getElementById("list2").getElementsByTagName("li").length;
+
+	if (list1length >= 1 || list2length >= 1) {
+		document.getElementById("runepage").style.display = "block";
+	}
+}
+
+function buyRune() {
+	if (gems >= 100) {
+		gems = gems - 100;
+		document.getElementById("gems").innerHTML = gems;
+
+		var ulList2 = document.getElementById("list2");
+		var li = document.createElement("li");
+
+			var runeArray = ["ATK", "DEF", "HLT", "LCK"];
+			var rune = runeArray[Math.floor(Math.random() * runeArray.length)];
+			li.appendChild(document.createTextNode(rune));
+			ulList2.appendChild(li);
+
+		colorise();
+	}
+}
+
+</script>
+
+</head>
+
+<style type="text/css">
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+  #runepage {
+    display: none;
+  }
+
+  #buySlash {
+    display: none;
+  }
+
+  #canUpgradeSlash {
+    display: none;
+  }
+
+  #inventory {
+    display: none;
+  }
+
+  #barracks {
+    display: none;
+  }
+
+  #market {
+    display: none;
+  }
+
+  #knightCover {
+    display: none;
+  }
+
+  #mageCover {
+    display: none;
+  }
+
+  #tradingPost {
+    display: none;
+  }
+
+  #slashCover {
+    display: none;
+  }
+
+	body {
+		font-family: "Nunito", sans-serif;
+		margin: 0;
+		background-color: #eee;
+		cursor: default;
+	}
+
+	h1, h3 {
+		margin: 0;
+		padding: 10px 0;
+		color: #444;
+		font-size: 3em;
+	}
+
+	h3 {
+		padding: 0;
+		font-size: 2em;
+	}
+
+	#inventory {
+		display: none;
+	}
+
+	#barracks {
+		display: none;
+	}
+
+	#market {
+		display: none;
+	}
+
+	#knightCover {
+		display: none;
+	}
+
+	#mageCover {
+		display: none;
+	}
+
+	#tradingPost {
+		display: none;
+	}
+
+	#slashCover {
+		display: none;
+	}
+
+	#cover {
+		background-color: white;
+		min-height: 100vh;
+		height: 100%;
+		padding: 0 20px;
+	}
+
+	#inc {
+		font-size: 50px;
+	}
+
+	section {
+		max-width: 450px;
+		text-align: center;
+		margin-bottom: 20px;
+		padding: 15px;
+		background-color: white;
+		border: 1px solid #ccc;
+	}
+
+	section section {
+		margin: 10px auto;
+		border: 1px solid #ddd;
+		box-shadow: none;
+	}
+
+	.left {
+		float: left;
+		width: 50%;
+	}
+
+	.right {
+		float: right;
+		width: 50%;
+	}
+
+	.leftcol {
+		float: left;
+		width: 450px;
+	}
+
+	.rightcol {
+		margin-left: 470px;
+	}
+
+	.clearfix {
+		clear: both;
+	}
+
+	@media screen and (max-width: 1000px) {
+		.leftcol {
+			width: 100%;
+		}
+
+		.rightcol {
+			width: 100%;
+			margin-left: 0;
+		}
+	}
+
+	#bottom {
+		float: right;
+		text-align: right;
+		margin: 10px -10px;
+	}
+
+	#tabmenu {
+		padding: 0 0 0 10px;
+		margin: 0 -20px;
+		margin-bottom: 0;
+		background-color: cornflowerblue;
+	}
+
+	#tabmenu li {
+		display: inline-block;
+		list-style-type: none;
+	}
+
+	#tabmenu li a {
+		display: inline-block;
+		padding: 10px;
+		margin: 0;
+		color: white;
+		font-size: 1.1em;
+	}
+
+	#tabmenu li:nth-last-child(-n+2) {
+		float: right;
+	}
+
+	a {
+		color: cornflowerblue;
+		cursor: pointer;
+	}
+
+	#log {
+		margin: 5px;
+		padding: 0;
+		list-style-type: none;
+		display: flex;
+		flex-direction: column-reverse;
+		list-style-type: none;
+	}
+
+	#log li:nth-last-child(n+10) {
+		display: none;
+	}
+
+	.button, .sb {
+		display: inline-block;
+		background-color: white;
+		border: 1px solid #666;
+		border-radius: 4px;
+		color: black;
+		padding: 5px 10px;
+		font-size: 1em;
+		user-select: none;
+		transition: 300ms;
+	}
+
+	.button:active {
+		padding: 5px 20px;
+	}
+
+	.sb {
+		border-radius: 2px;
+		padding: 2px 5px;
+		font-size: 0.9em;
+		margin: 0;
+	}
+
+	.margin {
+		padding: 10px 0;
+	}
+
+	#logo {
+		display: block;
+		margin: 0 auto;
+		width: 150px;
+		height: 150px;
+		background-size: cover;
+		opacity: 0.8;
+		padding-top: 10px;
+		pointer-events: none;
+	}
+
+	.grey {
+		color: #aaa;
+		font-size: 12px;
+	}
+	
+	#list {
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+	}
+
+	#list li {
+		font-weight: bold;
+		display: inline-block;
+		padding: 5px;
+		margin: 2px;
+		border-radius: 4px;
+		cursor: default;
+		user-select: none; 
+	}
+
+	#list li:hover {
+		background-color: rgba(0,0,0,0.05);
+	}
+
+	.broken {
+		color: gray;
+		font-weight: normal;
+	}
+	.common {
+		color: limegreen;
+		font-weight: bold;
+	}
+	.uncommon {
+		color: turquoise;
+		font-weight: bold;
+	}
+	.scarce {
+		color: dodgerblue;
+		font-weight: bold;
+	}
+	.rare {
+		color: coral;
+		font-weight: bold;
+	}
+	.legendary {
+		color: orchid;
+		font-weight: bold;
+		font-style: italic;
+	}
+	.godly {
+		color: gold;
+		font-weight: bold;
+		font-style: italic;
+		text-decoration: underline;
+	}
+
+	progress {
+		width: 90%;
+		height: 10px;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+	}
+
+	progress::-webkit-progress-value {
+			transition: 200ms;
+	}
+
+	progress::-webkit-progress-bar {
+		background-color: #ddd;
+	}
+
+	#playerHealth::-webkit-progress-value {
+		background-color: #5cd65c;
+	}
+
+	#playerHealth {
+		color: #5cd65c;
+	}
+
+	#health::-webkit-progress-value {
+		background-color: cornflowerblue;
+	}
+
+	#health {
+		color: cornflowerblue;
+	}
+
+	#slashProgress::-webkit-progress-value {
+		background-color: coral;
+	}
+
+	#slashProgress {
+		display: inline-block;
+		margin: 5px 0;
+		color: coral;
+		width: 80px;
+		height: 8px;
+	}
+
+	#slash {
+		display: inline-block;
+	}
+
+	.button:disabled {
+		color: #999;
+		border: 1px solid #ccc;
+	}
+
+	pre {
+		text-transform: uppercase;
+	}
+
+	#gems {
+		color: orangered;
+		font-weight: bold;
+	}
+
+	#coins {
+		color: orange;
+		font-weight: bold;
+	}
+
+.list {
+	padding: 0;
+	display: flex;
+	min-height: 62px;
+	margin: 5px 0;
+}
+
+.list li {
+	background-color: white;
+	margin: 0 5px;
+	display: inline-block;
+	list-style-type: none;
+	height: 60px;
+	width: 60px;
+	text-align: center;
+	line-height: 60px;
+	overflow: hidden;
+	border-radius: 50%;
+	transition: 300ms;
+}
+
+.list li:hover {
+	transform: scale(1.1);
+}
+
+#list1 {
+	display: block;
+	text-align: center;
+}
+
+#list2 {
+	display: block;
+	text-align: left;
+	min-height: 70px;
+}
+
+#runestorage {
+	/* not in use */
+}
+
+#runes {
+	position: relative;
+	border: 4px dashed orange;
+	height: 260px;
+	width: 260px;
+	border-radius: 50%;
+	margin: 30px auto;
+}
+
+#list1 li {
+	position: absolute;
+	margin-left: -5px;
+	border-radius: 30px;
+}
+
+#list1 li:nth-of-type(1) {
+	top: -25px;
+	left: calc(50% - 25px);
+}
+
+#list1 li:nth-of-type(2) {
+	top: 65px;
+	left: calc(50% + 100px);
+}
+
+#list1 li:nth-of-type(3) {
+	top: 200px;
+	left: calc(50% + 50px);
+}
+
+#list1 li:nth-of-type(4) {
+	top: 200px;
+	left: calc(50% - 100px);
+}
+
+#list1 li:nth-of-type(5) {
+	top: 65px;
+	left: calc(50% - 150px);
+}
+
+#runekey .godly, #runekey .legendary, #runekey .broken {
+		font-weight: bold;
+		font-style: normal;
+		text-decoration: none;
+}
+
+</style>
+
+<body onload="load(), seeSlash(), itembar(), colorise()">
+<div id="cover">
+
+<ul id="tabmenu">
+	<li><b><a id="tabClicker" onclick="dispClicker(), colorise()">Clicker</a></b></li>
+	<li><a id="tabInventory" onclick="dispInventory(), colorise(), delItem(), seeRunes()">Inventory</a></li>
+
+	<span title="Reloads the page.">
+	<li>
+		<a onclick="del()">Reset</a>
+	</li>
+	</span>
+
+	<span title="This process is done automatically!">
+	<li>
+		<a onclick="save()">Save</a>
+	</li>
+	</span>
+</ul>
+
+<div id="bottom">
+	<div class="grey">Guy Briggs 2018</div>
+	<div class="grey">version 9</div>
+</div>
+
+	<h1>Questers</h1>
+	<div>An incremental... dungeon-crawler?</div>
+	<div class="margin"></div>
+
+<div id="game">
+
+<div id="clicker">
+
+<div class="leftcol">
+	<section>
+		<div id="inc">0</div>
+		<span>Acclaim</span>
+		<div title="acclaim/damage per second">(<span id="total">0.0</span> aps)</div>
+		<div class="margin"><a class="button" onclick="add(), walk(), randGem()">Fight</a></div>
+
+		<div id="slashCover">
+			<button id="slash" class="button" onclick="slash()">Slash</button>
+			<progress id="slashProgress" value="100" max="100"></progress>
+		</div>
+	</section>
+
+	<section>
+		<div class="left">
+			<pre>PLAYER</pre>
+			<progress id="playerHealth" value="100" max="100"></progress>
+			<pre><span id="playerHealthValue">100</span></pre>
+		</div>
+		<div class="right">
+			<pre><span id="newEnemy">THE DOOR GUARDIAN</span></pre>
+			<progress id="health" value="100" max="100"></progress>
+			<pre><span id="healthValue">100</span></pre>
+		</div>
+		<div class="clearfix"></div>
+	</section>
+	</section>
+
+	<section>
+		<a onclick="clearLog()">Clear Log</a>
+		<ul id="log">
+			<li>You enter the dungeon.</li>
+		</ul>
+	</section>
+</div>
+
+<div class="rightcol">
+	<section id="market">
+		<h3>Market</h3>
+			<div>Coins: <span id="coins">0</span></div>
+
+			<section>
+			<div class="margin"><span class="button" onclick="healthPotion()">Buy Health Potion</span></div>
+			<div>Power: 20 HP</div>
+			<div>Cost: 5 coins</div>
+			</section>
+
+			<section id="buySlash">
+				<div class="margin"><span class="button" onclick="buySlash()">Buy Ability: Slash</span></div>
+				<div>Damage: 20 HP</div>
+				<div>Cost: 100 coins</div>
+			</section>
+
+			<section id="canUpgradeSlash">
+				<div class="margin"><a class="button" onclick="levelSlash()">Upgrade Ability: Slash</a></div>
+				<div>Current damage: <span id="slashLevel">20</span>
+				<div>Cost: 50 coins</div>
+			</section>
+	</section>
+
+	<section id="barracks">
+		<h3>Barracks</h3>
+
+		<section id="rogueCover">
+			<div class="margin"><a class="button" onclick="buyShop()">Hire Rogue (<span id="shops">0</span>)</a></div>
+			<div title="acclaim/damage per second">Power: 0.1 aps / 0.025 dps</div>
+			<div>Cost: <span id="shopCost">15</span> acclaim</div>
+		</section>
+		<section id="knightCover">
+			<div class="margin"><a class="button" onclick="buyKnight()">Hire Knight (<span id="knights">0</span>)</a></div>
+			<div title="acclaim/damage per second">Power: 0.5 aps / 0.125 dps</div>
+			<div>Cost: <span id="knightCost">100</span> acclaim</div>
+		</section>
+		<section id="mageCover">
+			<div class="margin"><a class="button" onclick="buyMage()">Hire Mage (<span id="mages">0</span>)</a></div>
+			<div title="acclaim/damage per second">Power: 4 aps / 1 dps</div>
+			<div>Cost: <span id="mageCost">500</span> acclaim</div>
+		</section>
+	</section>
+</div>
+</div>
+
+<div id="inventory">
+
+<div class="leftcol">
+	<section>
+		<h3>Items</h3>
+		<div class="grey">Click on an item to sell it for gems.</div>
+		<ul id="list">
+		</ul>
+	</section>
+
+	<section>
+		<h3>Item Key</h3>
+			<div>Broken <span class="broken">(R0)</span></div>
+			<div>Common <span class="common">(R1)</span></div>
+			<div>Uncommon <span class="uncommon">(R2)</span></div>
+			<div>Scarce <span class="scarce">(R3)</span></div>
+			<div>Rare <span class="rare">(R4)</span></div>
+			<div>Legendary <span class="legendary">(R5)</span></div>
+			<div>Godly <span class="godly">(R6)</span></div>
+	</section>
+
+	<section id="tradingPost">
+		<h3>Trading Post</h3>
+			<div>Gems: <span id="gems">0</span></div>
+
+			<section>
+				<div class="margin"><span class="button" onclick="excalibur()">Loot Excalibur</span>
+				<div class="grey">Does nothing, buy at own risk. haha.</div></div>
+				<div>Cost: 1000 acclaim, 300 coins, 300 gems</div>
+			</section>
+
+			<section>
+				<div class="margin"><span class="button" onclick="buyRune(), itembar(), seeRunes()">Loot Rune</span></div>
+				<div>Cost: 100 gems</div>
+			</section>
+	</section>
+</div>
+
+<div class="rightcol">
+	<div id="runepage">
+	<section>
+		<h3>Runes</h3>
+		<div class="grey">Click a rune to equip it to the rune circle.</div>
+	<div id="runes">
+		<ul id="list1" class="list">
+		</ul>
+	</div>
+
+	<div id="runestorage">
+		<ul id="list2" class="list">
+		</ul>
+	</div>
+	</section>
+
+	<section id="runekey">
+		<h3>Rune Key</h3>
+			<div><span class="rare">ATK</span> +3 Click Damage</div>
+			<div><span class="scarce">DEF</span> +1 Defence</div>
+			<div><span class="common">HLT</span> +2 Health Regen</div>
+			<div><span class="godly">LCK</span> Increases Luck</div>
+			
+			<div><span class="legendary"></span></div>
+			<div><span class="uncommon"></span></div>
+			<div><span class="broken"></span></div>
+	</section>
+	</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
