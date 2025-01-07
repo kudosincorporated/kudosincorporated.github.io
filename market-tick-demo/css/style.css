@@ -1,0 +1,13 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+canvas {
+	background-color: #d2ef31;
+}
+
+.slider {
+	width: 300px;
+}
