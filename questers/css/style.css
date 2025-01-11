@@ -36,8 +36,7 @@ body {
 	flex: 1;
 }
 
-.col > *:first-of-type, /* covers the weapon wheels + the log */
-.tabmenu {
+.col > *:first-of-type {
 	flex: 0;
 }
 
@@ -245,10 +244,6 @@ button .subtitle {
 	background-color: rgba(0,0,0,0.05);
 }
 
-.characters .character:first-of-type {
-	background-color: rgba(0,0,0,0.1);
-}
-
 #player .inner {
 	background-color: limegreen;
 }
@@ -368,4 +363,15 @@ button.tabbed:disabled:after {
 
 #market button.ware:active {
 	padding: 5px 10px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	font-size: 0.75em;
+	margin: 0 10px;
+	flex: 0;
+	text-align: right;
+	padding: 15px;
 }

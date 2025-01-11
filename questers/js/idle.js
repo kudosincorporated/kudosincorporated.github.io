@@ -5,10 +5,15 @@ class Idle {
         this.tickspeed = 1/100;
         this.ticks = 0;
 
+        this.buttonStrength = 5;
+
         this.healingPercent = 0.1; // healer
         this.goldAdded = 2; // goldmaster
         this.goldTaken = 10; // gemsmith
         this.gemsAdded = 3;
+
+        this.fightExtraClick = 100;
+        this.timeExtraClick = 1;
 
         this.jobs = [
             {
@@ -54,9 +59,9 @@ class Idle {
                 }
             },
             {
-                name: "merchant",
+                name: "boxer",
                 colorClass: "coral",
-                description: "More merchants lower prices.",
+                description: "Manual clicking is stronger everywhere.",
                 doJob: () => {
                     // TODO
                 }
@@ -141,6 +146,8 @@ class Idle {
     }
 
     updateButtons() {
+        $('.timeClick').attr('disabled', this.belt.length <= 0);
+
         $('#idle button').attr('disabled', true);
 
         // minus
@@ -192,15 +199,22 @@ class Idle {
         return count;
     }
 
-    extraButtonStrength() {
-        let count = this.hasPerson("sheathed rune");
+    extraFightStrength() { // fight
+        let count = this.hasPerson("boxer");
         if (count == null) return 0;
-        count *= this.extraStrength;
+        count *= this.fightExtraClick;
+        return count;
+    }
+
+    extraTimeStrength() { // time
+        let count = this.hasPerson("boxer");
+        if (count == null) return 0;
+        count *= this.timeExtraClick;
         return count;
     }
     
     getLucky() {
-        let faerieCount = this.hasPerson("faerie rune");
+        let faerieCount = this.hasPerson("prophet");
         if (faerieCount) {
             for (let i = 0; i < faerieCount; i++) {
                 if (Math.random() < 0.01) {

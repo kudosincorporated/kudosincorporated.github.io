@@ -20,8 +20,32 @@ class Character {
         this.valuables = {};
         this.addValuable("gold", CALC.numOfItem(this.level, 1, 5000, 1));
         this.addValuable("gems", CALC.numOfItem(this.level, 1, 500, 0.9));
-        this.addValuable("water", CALC.numOfItem(this.level, 1, 1, 0.25));
-        this.addValuable("devotion", CALC.numOfItem(this.level, 1, 1, 0.1));
+        this.addValuable("water", CALC.numOfItem(this.level, 1, 1, 0.5));
+        this.addValuable("devotion", CALC.numOfItem(this.level, 1, 1, 0.25));
+
+        this.lvl = 0;
+        this.exp = 0;
+        this.maxExp = this.getMaxExp();
+    }
+
+    getMaxExp() {
+        return (this.lvl + 1) + (this.lvl * 0.1);
+    }
+
+    addExperience(exp) {
+        this.exp += exp;
+        if (this.exp >= this.maxExp) {
+            this.lvl++;
+            this.exp = 0;
+            this.maxExp = this.getMaxExp(); // TODO is this balanced? lol
+
+            // levelled up
+            let adjustedLevel = LOWEST_L_VALUE + this.lvl/100; // TODO extricate?
+            this.maxHp = CALC.getHp(adjustedLevel);
+
+            if (playerGame == null) return;
+            playerGame.log('Levelled up! You now have ' + this.maxHp.toFixed(0) + ' maximum health.', 'chartreuse'); // Level up
+        }
     }
 
     returnDOM() {

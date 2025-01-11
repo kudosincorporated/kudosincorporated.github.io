@@ -71,10 +71,18 @@ $(function() {
     playerGame.log('Perk: Weapons you loot are +1 rarity.', 'entrance');
 
     // fight button
-    $('.fight').on('click', function() {
-        if (PAUSED && playerGame.units[0].hp > 0) PAUSED = false;
+    $('.fightClick').on('click', function() {
+        if (PAUSED && playerGame.units[0].hp > 0) PAUSED = false; // game start
 
-        playerGame.timeUntilSwitch -= playerGame.buttonStrength;
+        const extra = idle.extraFightStrength();
+
+        playerGame.timeUntilSwitch -= playerGame.buttonStrength + extra;
+    });
+
+    $('.timeClick').on('click', function() {
+        const extra = idle.extraTimeStrength();
+
+        idle.timer -= idle.buttonStrength + extra;
     });
 
     // clicking weapons to sell
@@ -98,7 +106,7 @@ $(function() {
         clickTab(id);
     });
 
-    clickTab(); // init
+    clickTab(); // init, TODO remove
 
     function clickTab(id = 'asdfghjkl') {
         $('.page').hide();

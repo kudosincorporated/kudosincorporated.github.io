@@ -138,8 +138,12 @@ class Game {
                 this.log('<b>Heal up!</b>', 'gems-bg');
                 PAUSED = true;
             } else { // enemy is slain
+                // experience gain
+                const expGain = this.units[0].level;
+                const expProgress = this.attacking.units[0].exp / this.attacking.units[0].maxExp * 100;
                 this.log('Looted: The ' + this.units[0].name + '.');
-
+                this.attacking.units[0].addExperience(expGain);
+                
                 // looting process
                 // valuables
                 let valuablesArray = Object.keys(this.units[0].valuables);
