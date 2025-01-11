@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>index</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="loading">
+	Loading...
+</div>
+
+<!--<div id="testing">
+	<div class="block">
+		<button id="addWeapon" disabled>add weapon</button>
+		<button id="logSomething">log something</button>
+		<button id="resetView">reset view</button>
+		<button id="killEnemy" disabled>kill enemy</button>
+		<button id="enemyPrintout">printout enemies at each level</button>
+		<button id="addWater">add water</button>
+	</div>
+</div>
+
+<div id="readout_cover">
+	<div class="block">
+		<div id="enemyReadout"></div>
+	</div>
+</div>-->
+
+<div class="row">
+	<div id="player" class="col">
+		<div class="block">
+			<h1 class="attacker"></h1>
+			<div class="subtitle">attacking</div>
+			<div class="canvas_cover">
+				<canvas class="zdog-player" width="500" height="500"></canvas>
+				<div class="opponent_cover">
+					<div class="opponent"></div>
+					<button class="fight">
+						<div>Fight</div>
+						<div class="subtitle">Cost: none</div>
+					</button>
+				</div>
+				<div class="timer">
+					<div class="progress">
+						<div class="inner"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="block">
+			<div class="characters"></div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="block" id="log_cover">
+			<div id="log"></div>
+		</div>
+
+		<div class="row tabmenu">
+			<div class="col"><button id="dungeon">Dungeon</button></div>
+			<div class="col"><button id="cult">Followers</button></div>
+		</div>
+
+		<div id="dungeon" class="page">
+			<div class="block" id="event_cover" >
+				<h2>Event</h2>
+				<div id="event"></div>
+			</div>
+			<div class="block">
+				<div class="canvas_cover" id="movement_canvas_cover">
+					<canvas class="zdog-dungeon" width="500" height="500"></canvas>
+					<div class="topleft">
+						<button>
+							<div>Travel North-West</div>
+							<div class="subtitle">Cost: <span class="water">•1 water</span></div>
+						</button>
+					</div>
+					<div class="topright">
+						<button>
+							<div>Travel North-East</div>
+							<div class="subtitle">Cost: <span class="water">•1 water</span></div>
+						</button>
+					</div>
+					<div class="bottomright">
+						<button>
+							<div>Travel South-East</div>
+							<div class="subtitle">Cost: <span class="water">•1 water</span></div>
+						</button>
+					</div>
+					<div class="bottomleft">
+						<button>
+							<div>Travel South-West</div>
+							<div class="subtitle">Cost: <span class="water">•1 water</span></div>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="cult" class="page">
+
+			<div class="block">
+				<table id="idle"></table>
+				<div class="timer" id="idle-timer">
+					<div class="progress">
+						<div class="inner"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="block" id="market">
+				<div class="row">
+					<div class="col">
+						<div id="buying">
+							<button class="ware" disabled>
+								<div>Weapons</div>
+								<div><i>Click a weapon in your inventory to sell it for <span class="gems">•10 gems</span></i></div>
+							</button>
+						</div>
+					</div>
+					<div class="col">
+						<div id="selling">
+							<button class="ware" id="armament">
+								<div>Armament</div>
+								<div class="subtitle">Reward:<br><span class="coral">Random Weapon</span></div>
+								<div class="subtitle">Cost: <span class="gold">•500 gold</span></div>
+							</button>
+							<button class="ware" id="lifeblood">
+								<div>Lifeblood</div>
+								<div class="subtitle">Reward:<br><span class="water">•1 water</span></div>
+								<div class="subtitle">Cost: <span class="gold">•100 gold</span></div>
+							</button>
+							<button class="ware" id="miracle">
+								<div>Miracle</div>
+								<div class="subtitle">Reward:<br><span class="devotion">•1 devotion</span></div>
+								<div class="subtitle">Cost: <span class="gems">•25 gems</span></div>
+							</button>
+							<button class="ware" id="infusion">
+								<div>Infusion</div>
+								<div class="subtitle">Reward:<br><span class="limegreen">Heal 100% Health</span></div>
+								<div class="subtitle">Cost: <span class="gems">•10 gems</span></div>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div id="enemy" class="col">
+		<div class="block">
+			<h1 class="attacker"></h1>
+			<div class="subtitle">attacking</div>
+			<div class="canvas_cover">
+				<canvas class="zdog-enemy" width="500" height="500"></canvas>
+				<div class="opponent_cover">
+					<div class="opponent"></div>
+				</div>
+				<div class="timer">
+					<div class="progress">
+						<div class="inner"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="block">
+			<div class="characters"></div>
+		</div>
+	</div>
+</div>
+
+<!-- Outside libraries -->
+<script src="js/lib/jquery-3.7.1.min.js"></script>
+<script src="https://unpkg.com/zdog@1/dist/zdog.dist.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<!-- Mine -->
+<script src="js/helper.js"></script>
+<script src="js/balancing.js"></script>
+<script src="js/weapon.js"></script>
+<script src="js/character.js"></script>
+<script src="js/dungeon.js"></script>
+<script src="js/idle.js"></script>
+<script src="js/game.js"></script>
+<script src="js/init.js"></script>
+</body>
+</html>

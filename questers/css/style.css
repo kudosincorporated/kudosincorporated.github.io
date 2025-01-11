@@ -1,0 +1,371 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+}
+
+body {
+	min-height: 100vh;
+	display: flex;
+}
+
+.row {
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+}
+
+.col {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.col > * {
+	flex: 1;
+}
+
+.page {
+	display: flex;
+	flex-direction: column;
+}
+
+.page > * {
+	flex: 1;
+}
+
+.col > *:first-of-type, /* covers the weapon wheels + the log */
+.tabmenu {
+	flex: 0;
+}
+
+body {
+	font-family: "Nunito", serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	background-color: #151515;
+}
+
+body,
+button {
+	color: #eee;
+}
+
+p {
+	margin: 15px 0;
+}
+
+table {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+table tr {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 5px;
+}
+
+table tr td:first-of-type {
+	flex: 1;
+	text-align: left;
+}
+
+button {
+	background-color: transparent;
+	border: 1px solid;
+	padding: 5px 10px;
+	cursor: pointer;
+	transition: 300ms ease;
+}
+
+button:hover {
+	background-color: rgba(255,255,255,0.05);
+}
+
+button:active {
+	padding: 5px 20px;
+}
+
+button:disabled {
+	opacity: 0.25;
+	pointer-events: none;
+}
+
+.tabmenu button {
+	transition: 0s;
+}
+
+.tabmenu {
+	margin: 10px;
+}
+
+.subtitle {
+	font-style: italic;
+	opacity: 0.25;
+}
+
+button .subtitle {
+	color: grey;
+	opacity: 1;
+}
+
+.gems { color: crimson; }
+.grey { color: grey; }
+.limegreen { color: limegreen; }
+.turquoise { color: turquoise; }
+.dodgerblue { color: dodgerblue; }
+.coral { color: coral; }
+.orchid { color: orchid; }
+.gold { color: gold; }
+.water { color: cornflowerblue; }
+.orange { color: orange; }
+.devotion { color: aquamarine; }
+
+.chartreuse { color: chartreuse; }
+.crimson { color: crimson; }
+.hotpink { color: hotpink; }
+.aquamarine { color: aquamarine; }
+.palegreen { color: palegreen; }
+.whitesmoke { color: whitesmoke; }
+.slateblue { color: slateblue; }
+
+.gems-bg { background-color: crimson; }
+.grey-bg { background-color: grey; }
+.limegreen-bg { background-color: limegreen; }
+.turquoise-bg { background-color: turquoise; }
+.dodgerblue-bg { background-color: dodgerblue; }
+.coral-bg { background-color: coral; }
+.orchid-bg { background-color: orchid; }
+.gold-bg { background-color: gold; }
+.water-bg { background-color: cornflowerblue; }
+.orange-bg { background-color: orange; }
+
+.infusive-bg { background-color: chartreuse; }
+.golden-bg { background-color: gold; }
+.scholarly-bg { background-color: crimson; }
+.unstable-bg { background-color: hotpink; }
+.large-bg { background-color: aquamarine; }
+.faerie-bg { background-color: palegreen; }
+.sheathed-bg { background-color: whitesmoke; }
+
+.hallway { color: turquoise; }
+.outpost { color: gold; }
+.market { color: orange; }
+.entrance { color: palegreen; }
+
+.hallway-bg { background-color: turquoise; }
+.outpost-bg { background-color: gold; }
+.market-bg { background-color: orange; }
+.entrance-bg { background-color: palegreen; }
+
+#testing {
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 9;
+	font-size: 1vh;
+}
+
+#readout_cover {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 9;
+	background-color: black;
+	margin-right: 300px;
+}
+
+#enemyReadout .group {
+	display: flex;
+}
+
+.block {
+	position: relative;
+	border: 1px solid #444;
+	margin: 10px;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+}
+
+#inv {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 5px;
+}
+
+.item {
+	display: inline-block;
+	white-space: nowrap;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.item:hover {
+	background: rgba(255,255,255,0.025);
+}
+
+.progress {
+	background-color: rgba(0,0,0,0.25);
+	width: 100%;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.progress .inner {
+	background-color: cornflowerblue;
+	min-height: 10px;
+	margin: 0 auto;
+	transition: 300ms ease;
+}
+
+.timer .progress .inner {
+	background-color: rgba(255,255,255,0.1)!important;
+	margin-top: 5px;
+	transition: 0ms;
+}
+
+.characters {
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}
+
+.character {
+	flex: 1;
+	background-color: rgba(0,0,0,0.05);
+}
+
+.characters .character:first-of-type {
+	background-color: rgba(0,0,0,0.1);
+}
+
+#player .inner {
+	background-color: limegreen;
+}
+
+.canvas_cover {
+	position: relative;
+	min-height: 500px;
+	min-width: 500px;
+}
+
+.opponent_cover {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+}
+
+.opportunity {
+	background-color: rgba(255,255,255,0.05);
+	width: 150px;
+	min-height: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#dungeon-flat {
+	display: flex;
+	flex-direction: column;
+}
+
+#dungeon-flat .d-row {
+	display: flex;
+}
+
+.room {
+	background-color: white;
+	aspect-ratio: 1 / 1;
+}
+
+.room.empty {
+	background-color: black;
+	opacity: 0.1;
+}
+
+.topleft { position: absolute; top: 0; left: 0; }
+.topright { position: absolute; top: 0; right: 0; }
+.bottomright { position: absolute; bottom: 0; right: 0; }
+.bottomleft { position: absolute; bottom: 0; left: 0; }
+
+.topleft button { border-bottom: none; border-right: none; }
+.topright button { border-bottom: none; border-left: none; }
+.bottomright button { border-top: none; border-left: none; }
+.bottomleft button { border-top: none; border-right: none; }
+
+#log {
+	min-height: 200px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.message {
+	width: 100%;
+}
+
+.icon {
+	display: inline-block;
+	height: 1em;
+	width: 1em;
+	border-radius: 2px;
+	vertical-align: middle;
+	transform: translateY(-10%);
+}
+
+.diamond {
+	transform: translateY(-10%) rotate(45deg) scale(0.75);
+	margin: 0 5px;
+}
+
+#loading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 99;
+	background-color: #151515;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+button.tabbed {
+	font-size: 0;
+}
+
+button.tabbed:after {
+	content: "View Dungeon";
+	font-size: 1rem;
+}
+
+button.tabbed:disabled:after {
+	color: transparent;
+}
+
+#market .row .col {
+	display: block;
+}
+
+#market .ware {
+	aspect-ratio: 1 / 1;
+}
+
+#market button.ware:active {
+	padding: 5px 10px;
+}
